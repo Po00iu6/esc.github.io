@@ -10,7 +10,10 @@ body{
     flex-wrap: wrap;
     justify-content: start;
     align-content: center;
+    scrollbar-width: none;
 }
+
+
 h1{
     display: flex;
     justify-content: center;
