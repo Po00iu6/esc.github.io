@@ -34,13 +34,17 @@ h1{
     min-width: 50vw;
     max-width: 90vw;
     min-height: 50px;
-    background-color: #ffbefa8e;
+    background-color: #ffffff8f;
     backdrop-filter: blur(50px);
     box-shadow: 0 5px 15px rgba(255, 169, 248, 0.333);
     border-radius: 5px;
     border-width: 1px;
     border-color: rgb(255, 255, 255);
     border-style: solid;
+    
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: 1px;
     
     z-index: 1;
 }
