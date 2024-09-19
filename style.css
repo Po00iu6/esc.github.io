@@ -28,8 +28,8 @@ h1{
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    text-align: center;
+    align-items: self-start;
+    text-align: start;
 
     margin: 10px 20px;
     padding: 10px 20px;
