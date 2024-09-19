@@ -45,8 +45,7 @@ h1{
     border-color: rgb(255, 255, 255);
     border-style: solid;
     
-    font-size: 1.1rem;
-    font-weight: 500;
+    font-family: Noto Sans SC,-apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif,inherit;
     letter-spacing: 1px;
     
     z-index: 1;
@@ -65,6 +64,10 @@ h1{
 
 
 @media screen and (max-width:900px) {
+    .t1{
+        font-weight: 540;
+        font-size: 14px;
+    }
     .bg1{
         position:fixed;
         width: 100vw;
@@ -76,6 +79,10 @@ h1{
     }
 }
 @media screen and (min-width:901px) {
+    .t1{
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
     .bg1{
         position:fixed;
         width: 100vw;
