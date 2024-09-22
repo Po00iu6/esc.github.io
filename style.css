@@ -29,6 +29,7 @@ h1{
     flex-wrap: wrap;
     justify-content: center;
     align-items: self-start;
+    align-self: center;
     text-align: start;
 
     margin: 10px 20px;
