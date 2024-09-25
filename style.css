@@ -90,9 +90,9 @@ header{
     display: flex;
     position:fixed;
     width: 100vw;
-    background-color: rgba(255,255,255,0.05);
+    background-color: rgba(0, 0, 0, 0.2);
     backdrop-filter:blur(50px);
-    box-shadow: 0 5px 15px rgba(255, 169, 248, 0.333);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     z-index: 3;
     flex-wrap: wrap;
 }
@@ -102,11 +102,44 @@ header{
     font-weight: 400;
     color: white;
     letter-spacing: 1px;
-    line-height: 50px;
+    line-height: 30px;
+    margin-top: 5px;
+    margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;
+    cursor: pointer;
 }
-
+.ph:hover{
+    animation: fontaction 0.5s;
+    color: rgb(255, 255, 200);
+}
+.wj{
+    font-size:1.1rem;
+    font-weight: 400;
+    color:yellow;
+    letter-spacing: 1px;
+    line-height: 30px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.wj:hover{
+    animation: fontaction 0.5s;
+    color:rgb(230, 230, 0);
+}
+@keyframes fontaction{
+    0%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(2px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
 
 
 
