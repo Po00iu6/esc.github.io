@@ -1,1 +1,1 @@
-document.getElementById("dd").volume=0.3;
+document.getElementById("dd").volume=0.1;
