@@ -84,6 +84,30 @@ img{
 
 
 
+pre{
+    color: #cccccc;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-color: rgb(220, 220, 220);
+    background-color: #1f1f1f;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 header{

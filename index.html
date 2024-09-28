@@ -83,6 +83,28 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">公式：[1,n]的约数中有p的数的个数为[n/p]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;*(其中[]表示向下取整)。<br><br>当p很大时，在一个区间范围内，[n/pi]保持不变，因此遍历时可以直接从pi跳到pj，其中pj=[n/(n/pi)]+1，区间长度为j-i。
+<pre style="display: block;">
+<code>
+<span style="color: #c586c0;">#include</span> <span style="color: #ce915b;">&lt;iostream&gt</span>;
+<span style="color: #c586c0;">using</span> <span style="color: #569cd6;">namespace</span> <span style="color:#19b36b">std</span>;
+<span style="color: #c586c0;">#define</span> <span style="color: #569cd6;">LL long long
+LL</span> <span style="color: #9cdcfe;">ans,n</span>;
+<span style="color: #569cd6;">int</span> <span style="color: #dbd700;">main()</span>
+<span style="color: #dbd700;">{</span>
+    cin>><span style="color: #9cdcfe;">n</span>;
+    <span style="color: #c586c0;">for(</span><span style="color: #569cd6;">LL</span> <span style="color: #9cdcfe;">i</span>=1,<span style="color: #9cdcfe;">j</span>;<span style="color: #9cdcfe;">i</span>&lt;=<span style="color: #9cdcfe;">n</span>;<span style="color: #9cdcfe;">i</span>=<span style="color: #9cdcfe;">j</span>)
+    <span style="color: #c586c0;">{</span>
+        <span style="color: #9cdcfe;">j</span>=<span style="color: #9cdcfe;">n</span>/<span style="color: #569cd6;">(</span><span style="color: #9cdcfe;">n</span>/<span style="color: #9cdcfe;">i</span><span style="color: #569cd6;">)</span>+1;
+        <span style="color: #9cdcfe;">ans</span>+=<span style="color: #569cd6;">(</span><span style="color: #9cdcfe;">n</span>/<span style="color: #9cdcfe;">i</span><span style="color: #569cd6;">)</span>*<span style="color: #569cd6;">(</span><span style="color: #9cdcfe;">j</span>-<span style="color: #9cdcfe;">i</span><span style="color: #569cd6;">)</span>;
+    <span style="color: #c586c0;">}</span>
+    cout&lt;&lt;<span style="color: #9cdcfe;">ans</span>;
+    <span style="color: #c586c0;">return</span> 0;
+<span style="color: #dbd700;">}</span>
+</code>
+</pre>
+    </div>
+    <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/09/27/198629752/09f0aab8de6e5cc0db270c73e691dab6_4050763231451550108.png" alt="时间复杂度">应尽量避免除法运算。还有循环如果能用while就用while。</div>
     <div class="t1">如果遇到10^6这样的大数据，能写快读就写快读。</div>
     <div class="t1">cin读取数字时可以把数字的符号一起读进去，也就是说，当你要读入一个数字表达式，那么可以直接用cin读入，连数字的正负判断都省了。</div>
