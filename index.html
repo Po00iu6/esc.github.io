@@ -83,9 +83,18 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">字符串用scanf读入时，如果有空格，那么可能会出现一些棘手的问题。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;头文件&lt;string&gt;，用于定义string类型。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;头文件&lt;cstring&gt;，里面包含了字符串的相关函数，比如strlen()、strcpy()、fgets()、sscanf()。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;输入结束时getchar()会返回EOF，即End Of File。控制台中可以使用(Windows)Ctrl+Z或者(Linux)Ctrl+D来输入EOF表示输入结束。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;string类型的字符串可以直接进行比较，比较是按照字典序进行的。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;fgets()来读入一行字符串并存入字符数组中，而gets()有溢出的风险所以不使用。<code>fgets(s,sizeof(s),stdin);</code>这条语句制定了字符数组的最大读入数量，因此是安全的。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;sscanf()和scanf()是很接近的。比如，<code>sscanf(s,"%d",&a);</code>就可以从s字符串中读入一个整数a。他们的区别是，scanf()是从标准输入中读入，而sscanf()是从给定的一个字符串中读入，所以要求提供字符数组的名称，表示从哪个字符串里面读入信息。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;同理，<code>sprintf(s,"%d",a);</code>就可以将一个int类型的数a输出到字符串s中而不是标准输出。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;s.substr(pos,len)：截取字符串s，从第pos个位置开始len个字符，并返回这个字符串。<br>&nbsp;&nbsp;&nbsp;&nbsp;s.insert(pos,str)：在字符串s的第pos个字符之前，插入字符串str，并返回这个字符串。<br>&nbsp;&nbsp;&nbsp;&nbsp;s.find(str,[pos])：在字符串s中从第pos个字符开始寻找str，并返回位置，如果找不到返回-1。pos可以省略，默认值是0；<br>&nbsp;&nbsp;&nbsp;&nbsp;*要注意的是find函数查找子串但是找不到时，它会返回一个常量string::npos，但是由于它不一定是一个int类型的常量，因此要强制转换成int类型才能直接输出-1。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;另外还要注意字符串能赋值一个常量，但不能像下面这样赋值↓
+        <pre>
+
+<span><span style="color: #569cd6;">string</span> <span style="color: #9cdcfe;">a,b</span>;</span>
+<span><span style="color: #9cdcfe;">a</span>=<span style="color: #ce915b;">"LUOGU"</span>;</span>
+<span><span style="color: #9cdcfe;">b</span>=<span style="color: #9cdcfe;">a</span>;<span style="color: #19b36b;">//这一步是错误操作</span></span>
+        </pre>
+    </div>
+
     <div class="t1">公式：[1,n]的约数中有p的数的个数为[n/p]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;*(其中[]表示向下取整)。<br><br>当p很大时，在一个区间范围内，[n/pi]保持不变，因此遍历时可以直接从pi跳到pj，其中pj=[n/(n/pi)]+1，区间长度为j-i。
 <pre style="display: block;">
-<code>
+
 <span style="color: #c586c0;">#include</span> <span style="color: #ce915b;">&lt;iostream&gt</span>;
 <span style="color: #c586c0;">using</span> <span style="color: #569cd6;">namespace</span> <span style="color:#19b36b">std</span>;
 <span style="color: #c586c0;">#define</span> <span style="color: #569cd6;">LL long long
@@ -101,10 +110,9 @@ LL</span> <span style="color: #9cdcfe;">ans,n</span>;
     cout&lt;&lt;<span style="color: #9cdcfe;">ans</span>;
     <span style="color: #c586c0;">return</span> 0;
 <span style="color: #dbd700;">}</span>
-</code>
+
 </pre>
     </div>
-    <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/09/27/198629752/09f0aab8de6e5cc0db270c73e691dab6_4050763231451550108.png" alt="时间复杂度">应尽量避免除法运算。还有循环如果能用while就用while。</div>
     <div class="t1">如果遇到10^6这样的大数据，能写快读就写快读。</div>
     <div class="t1">cin读取数字时可以把数字的符号一起读进去，也就是说，当你要读入一个数字表达式，那么可以直接用cin读入，连数字的正负判断都省了。</div>
@@ -132,7 +140,6 @@ LL</span> <span style="color: #9cdcfe;">ans,n</span>;
     <div class="t1">G是一个非连通无向图(没有重边和自环)，共有28条边，则该图至少有(  )个顶点。<br><br>解：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最优情况下是8个顶点的完全图，外加1个孤立顶点。即共有9个顶点。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/23/198629752/de892d9f522b3dbd49e60532b643533c_4417491289934517107.png" alt="8个顶点的完全图">最后的边数就是1+2+3+4+5+6+7+8=28。</div>
     <div class="t1">在写并查集的代码时，并查集的初始化f[i]=i,其中i∈[a,b],则输入的一对节点(x,y)也应该在[a,b]范围内。因为如果超出这个范围，x的父节点会被默认指向为0或其他未知数字。</div>
     <div class="t1">没有路径压缩的并查集时间复杂度为线性的O(n),路径压缩后的为O(1)。</div>
-    <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1">如要补充，请联系管理员......</div>
