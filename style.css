@@ -236,6 +236,18 @@ header{
 
 
 @media screen and (max-width:900px) {
+    .ph{
+        font-size: 14px;
+        line-height: 16px;
+    }
+    .wj{
+        font-size: 14px;
+        line-height: 16px;
+    }
+    .db{
+        font-size: 14px;
+        line-height: 16px;
+    }
     .t1{
         font-weight: 540;
         font-size: 14px;
