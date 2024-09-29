@@ -36,7 +36,7 @@ h1{
     padding: 10px 20px;
 
     min-width: 70vw;
-    max-width: 90vw;
+    max-width: 80vw;
     min-height: 50px;
     background-color: #ffffff8f;
     backdrop-filter: blur(50px);
@@ -90,11 +90,28 @@ pre{
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
     border-color: rgb(220, 220, 220);
     background-color: #1f1f1f;
+    text-wrap: wrap;
+    overflow-x: scroll;
+    max-width: 80%;
 }
+
+pre::-webkit-scrollbar{
+    background-color: #ffffff;
+    width: 5px;
+    height: 5px;
+}
+pre::-webkit-scrollbar-thumb{
+    background-color: #929292;
+    border-radius: 10px;
+}
+
+
+
+
+
 
 
 
