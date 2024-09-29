@@ -93,7 +93,7 @@ pre{
     padding: 10px;
     border-color: rgb(220, 220, 220);
     background-color: #1f1f1f;
-    text-wrap: wrap;
+    /* text-wrap: wrap; */
     overflow-x: scroll;
     max-width: 80%;
 }
@@ -120,10 +120,15 @@ pre::-webkit-scrollbar-thumb{
 code{
     background-color: #eee;
     border-radius: 3px;
-    font-family: courier, monospace;
     padding: 0 3px;
 }
 
+
+.__code{
+    background-color: #1f1f1f;
+    border-radius: 0px;
+    padding: 0 3px;
+}
 
 
 

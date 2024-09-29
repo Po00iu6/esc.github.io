@@ -83,7 +83,11 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
-    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1260">1260：【例9.4】拦截导弹(Noip1999)</a>这道题目是典型的求 最长不上升子序列 和 最长下降子序列 的题目，具体代码如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/f9380e628310dba1074bde3f982cc994_4117213231434843130.png" alt="拦截导弹"><br>当时错了好几遍都没过，致错原因还是太理所当然的认为是暴力求解，但其实由题意可得，答案是求最长不上升子序列和最长下降子序列。<br><br>这是一个代码模板，要求背会。考试能保证类似的题能拿一半的分。</div>
+    <div class="t1">动态规划最短路径问题<br><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1261">1261：【例9.5】城市交通路网</a>这道题是一道经典dp，建议烂熟于心。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/513612dea4e03294e7f64b38ffd8f2a4_456798892526461554.png" alt="城市交通路网"><br><code>memset(arr,0x3f,sizeof(arr));</code>memset用0x3f初始化数组代表无穷大，因为memset函数初始化特点是按字节去逐个初始化。</div>
+
+    <div class="t1">最长上升子序列（LIS）<br><br>最长不下降子序列（LNDS）<br><br>最长下降子序列（LDS）<br><br>最长不上升子序列（LNIS）</div>
+
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1260">1260：【例9.4】拦截导弹(Noip1999)</a>这道题目是典型的求 最长不上升子序列 和 最长下降子序列 的题目，具体代码如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/f9380e628310dba1074bde3f982cc994_4117213231434843130.png" alt="拦截导弹"><br>当时错了好几遍都没过，致错原因还是太理所当然的认为是暴力求解，但其实由题意可得，答案是求最长不上升子序列和最长下降子序列。<br><br>这是一个代码模板，要求背会。考试能保证类似的题能拿一半的分。<br><br><a href="https://www.luogu.com.cn/problem/P1020">P1020 [NOIP1999 提高组] 导弹拦截</a>洛谷的这道题是升级版。<br>对于最小划分数有：<br>不升子序列：lower_bound<br>不降子序列：upper_bound<br>严格上升子序列：对所有数取相反数，upper_bound<br>严格下降子序列：对所有数取相反数，lower_bound<br><pre><b style="color: rgb(51, 255, 0);">Dilworth 定理</b><br>原链最长长度=反链划分数最小值：<br><br>上升子序列⇔不升子序列<br>下降子序列⇔不降子序列</pre><br>题解如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/c9a4c200879f825f3558433fcff69c1d_5668380233911982326.png" alt="迪尔沃斯定理"></div>
 
     <div class="t1">如果用scanf读入字符串不方便，害怕出错，那么就写stread()，即字符串快读，写法与数字快读同理。<br>
         <pre>
@@ -109,7 +113,7 @@
 <pre>
 
 <span>#include</span> <span>&lt;iostream&gt</span>;
-<span>using</span> <span>namespace</span> <spantd</span>;
+<span>using</span> <span>namespace</span> <span>std</span>;
 <span>#define</span> <span>LL</span> <span>long long</span>
 <span>LL</span> <span>ans</span>,<span>n</span>;
 <span>int</span> <span>main()</span>
@@ -153,7 +157,6 @@
     <div class="t1">G是一个非连通无向图(没有重边和自环)，共有28条边，则该图至少有(  )个顶点。<br><br>解：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最优情况下是8个顶点的完全图，外加1个孤立顶点。即共有9个顶点。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/23/198629752/de892d9f522b3dbd49e60532b643533c_4417491289934517107.png" alt="8个顶点的完全图">最后的边数就是1+2+3+4+5+6+7+8=28。</div>
     <div class="t1">在写并查集的代码时，并查集的初始化f[i]=i,其中i∈[a,b],则输入的一对节点(x,y)也应该在[a,b]范围内。因为如果超出这个范围，x的父节点会被默认指向为0或其他未知数字。</div>
     <div class="t1">没有路径压缩的并查集时间复杂度为线性的O(n),路径压缩后的为O(1)。</div>
-    <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1">如要补充，请联系管理员......</div>
     <div class="t1">如要补充，请联系管理员......</div>

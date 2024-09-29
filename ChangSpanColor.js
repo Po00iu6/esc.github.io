@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // 将span的颜色更改为绿色  
             spans[i].style.color = '#6a9955';
         }
+        if (spans[i].textContent.trim() === "std") {  
+            // 将span的颜色更改为绿色  
+            spans[i].style.color = '#6a9955';
+        }
         // 检查span的文本内容是否包含"string"  
         if (spans[i].textContent.trim() === "string") {  
             // 将span的颜色更改为绿色  
@@ -44,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 将span的颜色更改为绿色  
             spans[i].style.color = '#ce916a'; 
         }
-        if (spans[i].textContent.trim() === "s"||spans[i].textContent.trim() === "ch"||spans[i].textContent.trim() === "a"||spans[i].textContent.trim() === "b"||spans[i].textContent.trim() === "ans"||spans[i].textContent.trim() === "n"||spans[i].textContent.trim() === "i"||spans[i].textContent.trim() === "j") {  
+        if (spans[i].textContent.trim() === "s"||spans[i].textContent.trim() === "ch"||spans[i].textContent.trim() === "a"||spans[i].textContent.trim() === "b"||spans[i].textContent.trim() === "ans"||spans[i].textContent.trim() === "n"||spans[i].textContent.trim() === "i"||spans[i].textContent.trim() === "j"||spans[i].textContent.trim() === "v[10001][10001]"||spans[i].textContent.trim() === "f[10001]"||spans[i].textContent.trim() === "c[10001]"||spans[i].textContent.trim() === "f"||spans[i].textContent.trim() === "v[i][j]"||spans[i].textContent.trim() === "memset(f,0x3f,sizeof(f))") {  
             // 将span的颜色更改为绿色  
             spans[i].style.color = '#9cdcfe'; 
         }
