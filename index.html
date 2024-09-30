@@ -83,6 +83,54 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">动态规划+最优路径典中典的题目，这道题实在是太典了，建议记住。<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1266">1266：【例9.10】机器分配</a>
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+using namespace std;
+int n,m;
+int a[10001][10001];
+int dp[10001][10001];
+int vis[10001][10001];
+void print(int x,int y)
+{
+    if(x==0)return;
+    print(x-1,y-vis[x][y]);
+    cout&lt;&lt;x&lt;&lt;" "&lt;&lt;vis[x][y]&lt;&lt;endl;
+}
+int main()
+{
+    cin&gt;n&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=m;j++)
+        {
+            cin&gt;a[i][j];
+        }
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=m;j++)
+        {
+            for(int k=0;k&lt;=j;k++)
+            {
+                if(dp[i-1][j-k]+a[i][k]&gt;=dp[i][j])
+                {
+                    dp[i][j]=dp[i-1][j-k]+a[i][k];
+                    vis[i][j]=k;
+                }
+            }
+        }
+    }
+    cout&lt;&lt;dp[n][m]&lt;&lt;endl;
+    print(n,m);
+    return 0;
+}
+    </pre>
+    这是一个三重循环的动态规划，i外层代表当前公司，j代表要选的机器数，k代表还剩几台机器能够选。最后vis[i][j]记录公司选的机器数k，然后递归打印公司x和机器数vis[x][y]。
+    </div>
+
     <div class="t1">模版题：<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1265">1265：【例9.9】最长公共子序列</a>
         <pre>
 #include &lt;cstring&gt;
