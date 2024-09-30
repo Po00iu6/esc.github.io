@@ -83,6 +83,42 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">模版题：<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1265">1265：【例9.9】最长公共子序列</a>
+        <pre>
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+using namespace std;
+string a,b;
+int dp[1001][1001];
+int main()
+{
+    cin&gt;&gt;a&gt;&gt;b;
+    int n=a.size(),m=b.size();
+    a=' '+a;
+    b=' '+b;
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=m;j++)
+        {
+            if(a[i]==b[j])
+            {
+                dp[i][j]+=dp[i-1][j-1]+1;
+            }
+            else
+            {
+                dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+            }
+        }
+    }
+    cout&lt;&lt;dp[n][m];
+    return 0;
+}
+        </pre>
+        建议直接背会。dp[i][j]的意思是，i的前面和j的前面有多少公共的部分，如果a[i]==b[j]，那么dp[i][j]+=dp[i-1][j-1]+1，那如果不相等，就继承i与j前面最大的公共部分。
+    </div>
+
     <div class="t1">字符类型数组，一个字符占1byte大小，八位。实际上，能开的最大长度是2146793727。<code>char s[2146793727];</code><br>字符串类型数组，一个字符串能存储4049个字符（多了会卡死），但字符串类型的数组最大长度为268349215<code>string b[268349215];</code><br>int 类型数组，一个int类型的变量占4个字节，是字符的四倍，所以int类型数组的最大长度大概是字符类型的四分之一，为536698431<code>int a[536698431];</code><br>long long类型数组，一个long long类型的变量占8个字节，所以longlong类型数组的最大长度大概是268349215<code>long long c[268349215];</code><br>浮点数，float和double类型的变量就像是int和longlong，而数组最大长度也分别和int和longlong相同，为536698431和268349215<code>float e[536698431];<br>double f[268349215];</code><br>布尔类型，布尔类型的变量也只占一个字节，所以数组最大长度和char一样为2146793727<code>bool d[2146793727];</code><br>*以上总结的各类型数组最大长度仅为最大能编译的长度</div>
 
     <div class="t1">动态规划最短路径问题<br><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1261">1261：【例9.5】城市交通路网</a>这道题是一道经典dp，建议烂熟于心。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/513612dea4e03294e7f64b38ffd8f2a4_456798892526461554.png" alt="城市交通路网"><br><code>memset(arr,0x3f,sizeof(arr));</code>memset用0x3f初始化数组代表无穷大，因为memset函数初始化特点是按字节去逐个初始化。</div>
