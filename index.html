@@ -83,6 +83,81 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">
+        一维数组求“最大连续子序列和”的解法：
+        <br><b>优化解法1：（递推）</b>
+        <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001],maxn;
+int main()
+{
+    cin&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;a[i];
+    }
+    //-----------------------
+    for(int i=1;i&lt;=n;i++)
+    {
+        int sum=0;
+        for(int j=i;j&lt;=n;j++)
+        {
+            sum+=a[j];
+            maxn=sum&gt;maxn?sum:maxn;
+        }
+    }
+    //----------------------
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+    </pre>
+    两个注释线夹着的循环可以改为这种写法：（最朴素的解法）
+    <pre>
+for(int i=1;i<=n;i++)
+{
+    for(int j=i;j<=n;j++)
+    {
+        int sum=0;
+        for(int k=i;k<=j;k++)
+        {
+            sum+=a[k];
+        }
+        maxn=sum>maxn?sum:maxn;
+    }
+}
+    </pre>
+    这两种是等价的，但前者能少一个循环。
+    <br><b>优化解法2：利用前缀和求区间和</b>
+    <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001],maxn,w[10001];
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+        w[i]=w[i-1]+a[i];
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=i;j&lt;=n;j++)
+        {
+            maxn=maxn&gt;(w[j]-w[i-1])?maxn:(w[j]-w[i-1]);
+        }
+    }
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+    </pre>
+    这里用w数组在输入的时候就顺带把前缀和全都求出来了，然后要求出某个区间的前缀和，那就用区间的右端点的前缀和与左端点的前缀和相加就能得到答案。(但要注意左端点的头也得算在内，要i-1)。如图解：
+    <img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/175dac2c567043cd0c76c462fa3e903c_1093202781834302723.png" alt="区间图解">
+    <br>
+    效仿二维的话，那就初始化二维前缀和，也就是<code>w[i][j]=w[i-1][j]+w[i][j-1]+a[i][j];</code>把上面、下面和自身加起来就是当前的前缀和。
+    </div>
+
     <div class="t1">动态规划+最优路径典中典的题目，这道题实在是太典了，建议记住。<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1266">1266：【例9.10】机器分配</a>
     <pre>
 #include &lt;iostream&gt;
