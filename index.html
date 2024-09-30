@@ -83,6 +83,7 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">调试的那些打印语句别忘了注释掉！否则0分等着你！</div>
     <div class="t1">
         二维数组求“最大连续子矩阵和”的解法：<br><br>
         <b>暴力解法：</b>6层循环即可，外两层是左上角，中间两层是右下角，内两层是枚举累加左上到右下的和。<br><br>
@@ -300,6 +301,47 @@ int main()
     <div class="t1">动态规划最短路径问题<br><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1261">1261：【例9.5】城市交通路网</a>这道题是一道经典dp，建议烂熟于心。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/513612dea4e03294e7f64b38ffd8f2a4_456798892526461554.png" alt="城市交通路网"><br><code>memset(arr,0x3f,sizeof(arr));</code>memset用0x3f初始化数组代表无穷大，因为memset函数初始化特点是按字节去逐个初始化。</div>
 
     <div class="t1">最长上升子序列（LIS）<br><br>最长不下降子序列（LNDS）<br><br>最长下降子序列（LDS）<br><br>最长不上升子序列（LNIS）</div>
+
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1091">P1091 [NOIP2004 提高组] 合唱队形</a>这道题是一道令人迷惑的题目，我做了2次，错了2次，而且全错，0分。不说了，代码放这了，自己看吧，啥时候忘了啥时候回来瞅一眼。
+        <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001],up[10001],down[10001];
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+        up[i]=1;down[i]=1;
+    }
+    for(int i=2;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;i;j++)
+        {
+            if(a[i]&gt;a[j]){up[i]=max(up[i],up[j]+1);}
+        }
+    }
+    //这两个循环不等价，当时我还不信，硬是写一块去，结果WA了4个点。
+    for(int i=n-1;i&gt;=1;i--)
+    {
+        for(int j=i+1;j&lt;=n;j++)
+        {
+            if(a[i]&gt;a[j]){down[i]=max(down[i],down[j]+1);}
+        }
+    }
+    int ans=-0x3f3f3f3f;
+    for(int i=1;i&lt;=n;i++)
+    {
+        ans=max(ans,up[i]+down[i]-1);
+    }
+    cout&lt;&lt;n-ans&lt;&lt;endl;
+    return 0;
+}
+        </pre>
+    </div>
+
+    <div class="t1"><p>对于<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1283">1283：登山</a>这道题目我真是服了，</p><img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/4d6f33c3b441e2a2080df38abe0eec24_6549954258408915795.png" alt="登山">就是这句具有迷惑性的话，直接让我0分。让我们来思考一下这句话的含义，首先不能连续爬相同的山，那么我们会很容易想到他下山的时候有没有可能会爬相同的山？那是不是就是非严格单调子序列？其实不是，我们反证法可以得出，如果他经过了2个相同高度的山，那么分2种情况，一种是在爬山(或下山)过程中经过的，很显然根据题目可知不会有这种情况。那么另外一种就是一个在爬的过程中经过一遍，一个在下山过程中经过一遍，但又由于，上山属于单调增，下山属于单调减，因此这种情况完全可以忽略不计，因为他们根本不可能同时在一个严格单调序列里面。<p>因此这道题就是<a href="https://www.luogu.com.cn/problem/P1091">P1091 [NOIP2004 提高组] 合唱队形</a>的变形，只不过最终的答案不再是n-ans，而是直接输出ans，其他都不需要改。也就是说这就转化成了一个数学证明题：求证同时经过两座山并且还得同时位于一个单调序列种的情况不可能出现。</p></div>
 
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1260">1260：【例9.4】拦截导弹(Noip1999)</a>这道题目是典型的求 最长不上升子序列 和 最长下降子序列 的题目，具体代码如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/f9380e628310dba1074bde3f982cc994_4117213231434843130.png" alt="拦截导弹"><br>当时错了好几遍都没过，致错原因还是太理所当然的认为是暴力求解，但其实由题意可得，答案是求最长不上升子序列和最长下降子序列。<br><br>这是一个代码模板，要求背会。考试能保证类似的题能拿一半的分。<br><br><a href="https://www.luogu.com.cn/problem/P1020">P1020 [NOIP1999 提高组] 导弹拦截</a>洛谷的这道题是升级版。<br>对于最小划分数有：<br>不升子序列：lower_bound<br>不降子序列：upper_bound<br>严格上升子序列：对所有数取相反数，upper_bound<br>严格下降子序列：对所有数取相反数，lower_bound<br><pre><b style="color: rgb(51, 255, 0);">Dilworth 定理</b><br>原链最长长度=反链划分数最小值：<br><br>上升子序列⇔不升子序列<br>下降子序列⇔不降子序列<br><br>*如果定理不会用(或没把握)，那就返璞归真，用最朴素的解法求答案。</pre><br>题解如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/c9a4c200879f825f3558433fcff69c1d_5668380233911982326.png" alt="迪尔沃斯定理"></div>
 
