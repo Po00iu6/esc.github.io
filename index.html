@@ -84,6 +84,54 @@
     <br>
     <!--  -->
     <div class="t1">
+        二维数组求“最大连续子矩阵和”的解法：<br><br>
+        <b>暴力解法：</b>6层循环即可，外两层是左上角，中间两层是右下角，内两层是枚举累加左上到右下的和。<br><br>
+        <b>优化解法1：一维前缀和优化</b>
+        跟一维数组求“最大连续子区间”的优化解法是一样的，只不过把<code>w[i]=w[i-1]+a[i];</code>改成了<code>w[i][j]=w[i][j-1]+a[i][j]</code>然后对循环以及部分内容稍微改动就完事了。<br><br>
+        <b>优化解法2：二维前缀和优化</b>
+        <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001][10001],w[10001][10001],maxn=-0x3f3f3f3f;
+//maxn建议赋值为负数，因为矩阵当中可能会出现负的数。
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {
+            cin&gt;&gt;a[i][j];
+            w[i][j]=w[i-1][j]+w[i][j-1]+a[i][j]-w[i-1][j-1];
+        }
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {//------枚举左上角--------
+
+            for(int k=i;k&lt;=n;k++)
+            {
+                for(int t=j;t&lt;=n;t++)
+                {//--------枚举右下角---------
+
+                    int sum=w[k][t]-w[k][j-1]-w[i-1][t]+w[i-1][j-1];
+                    maxn=maxn&gt;sum?maxn:sum;
+
+                }
+            }
+
+        }
+    }
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+        </pre>
+        图解：
+        <img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/bbf70b405981e8ae02468e701a216a77_3706323876176022470.png" alt="矩阵图解">如图，我们的二维前缀和优化相当于求(i-1,j-1)到(k,t)之间的前缀和。也就是我用红色线条画的那部分。那么那部分的前缀和sum就等于我用w[k][t]减去(区1+区2+区3)的前缀和，那么公式也就是<code>sum=w[k][t]-(w[k][j-1]-w[i-1][j-1])+(w[i-1][t]-w[i-1][j-1])+w[i-1][j-1];</code>最后化简后就成了这样子：<code>sum=w[k][t]-w[k][j-1]-w[i-1][t]+w[i-1][j-1];</code><br><p>*这也就是<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1282">1282：最大子矩阵</a>的解法</p>（这道题妥妥模板题。我还硬啃了2小时，艹！）
+    </div>
+
+    <div class="t1">
         一维数组求“最大连续子序列和”的解法：
         <br><b>优化解法1：（递推）</b>
         <pre>
@@ -155,7 +203,12 @@ int main()
     这里用w数组在输入的时候就顺带把前缀和全都求出来了，然后要求出某个区间的前缀和，那就用区间的右端点的前缀和与左端点的前缀和相加就能得到答案。(但要注意左端点的头也得算在内，要i-1)。如图解：
     <img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/175dac2c567043cd0c76c462fa3e903c_1093202781834302723.png" alt="区间图解">
     <br>
-    效仿二维的话，那就初始化二维前缀和，也就是<code>w[i][j]=w[i-1][j]+w[i][j-1]+a[i][j];</code>把上面、下面和自身加起来就是当前的前缀和。
+    一维和二维的处理方式有点不一样，见参考：<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1282">1282：最大子矩阵</a>
+    </div>
+
+    <div class="t1"><b>二维前缀和的计算方法</b><br>在二维数组中，我们首先定义一个同等大小的二维数组dp，其中dp[i][j]表示从原数组左上角(1,1)到(i,j)形成的子矩阵的元素和。计算dp[i][j]的状态转移方程如下：
+<code>dp[i][j] = dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1] + arr[i][j];</code>
+    <b>*即，自身前缀和=左+上+自身-左上。</b>
     </div>
 
     <div class="t1">动态规划+最优路径典中典的题目，这道题实在是太典了，建议记住。<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1266">1266：【例9.10】机器分配</a>

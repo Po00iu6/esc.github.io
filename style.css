@@ -118,9 +118,11 @@ pre::-webkit-scrollbar-thumb{
 
 
 code{
-    background-color: #eee;
+    background-color: #0c0c0c;
+    color: rgb(198, 255, 162);
     border-radius: 3px;
-    padding: 0 3px;
+    padding: 3px;
+    line-height: 1.2rem;
 }
 
 
