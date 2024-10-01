@@ -48,7 +48,6 @@ h1{
     
     font-family: Noto Sans SC,-apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif,inherit;
     letter-spacing: 1px;
-    line-height: 1.3rem;
     
     z-index: 1;
 }
@@ -254,6 +253,7 @@ header{
     .t1{
         font-weight: 540;
         font-size: 14px;
+        line-height: 1.3rem;
     }
     .bg1{
         position:fixed;
@@ -269,6 +269,7 @@ header{
     .t1{
         font-weight: 500;
         font-size: 1.1rem;
+        line-height: 1.6rem;
     }
     .bg1{
         position:fixed;
