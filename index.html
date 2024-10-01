@@ -83,6 +83,28 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><p>对拍时使用<code>rand()</code>函数生成伪随机数的方法。</p><p>头文件是<code>#include &lt;cstdlib&gt;</code></p>接下来是代码：
+        <pre>
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cstdlib&gt;
+
+int getRand(int min, int max) {
+    return (rand() % (max - min + 1)) + min;
+}
+
+int main() {
+    srand(time(0)); // 使用当前时间作为种子
+    for (int i = 0; i &lt; 10; i++) {
+        int r = getRand(2, 20); // 生成2到20之间的随机整数
+        std::cout &lt;&lt; r &lt;&lt; std::endl;
+    }
+    return 0;
+}
+        </pre>
+        建议写一个自己的解题代码，再写一个暴力的代码，之后再写一个随机数生成数据的代码。<br><br>即，用随机数生成数据，然后用暴力算法测试数据答案，最后用自己的解题代码测试答案与暴力解法是否相等，如果不相等，说明代码存在漏洞。
+    </div>
+    
     <div class="t1"><b>别忘了加上文件读写。</b><p>文件读写的头文件是<code>#include &lt;stdio.h&gt;</code>。</p>开头加上这句<code>freopen("demo.in","r",stdin);<br>freopen("demo.out","w",stdout);</code>否则等着爆0。<br>结尾建议加上这句<code>fclose(stdin);<br>fclose(stdout);</code></div>
 
     <div class="t1">调试的那些打印语句别忘了注释掉！否则0分等着你！</div>
