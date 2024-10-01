@@ -83,6 +83,9 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">经常忘记题目叫输出的是啥，比如叫你求最大值，而且输出格式是“max=最大值”，结果我只输出了最大值，那么全0分。</div>
+
+    <div class="t1">01背包：每种物品只选一次。(逆推)<code>二维：dp[i][j]=max(dp[i-1][j],dp<b style="color: rgb(255, 79, 188);">[i-1]</b>[j-w[i]]+c[i])<br>一维：dp[j]=max(dp[j],dp[j-w[i]]+c[i])</code><br>完全背包：每种物品数量无限。(顺推)<code><p>二维：dp[i][j]=max(dp[i-1][j],dp<b style="color: rgb(255, 79, 188);">[i]</b>[j-w[i]]+c[i])<br>一维：dp[j]=max(dp[j],dp[j-w[i]]+c[i]);</p></code><br>多重背包：每种物品数量有限。(二维可顺可逆，一维要逆推)<br><code><p>二维：dp[i][j]=max(dp[i][j],dp<b style="color: rgb(255, 79, 188);">[i-1]</b>[j-k*w[i]]+k*c[i]);<br>一维：dp[j]=max(dp[j],dp[j-k*v[i]]+k*w[i]);</p></code></p><br>**01背包dp[i][j]的意思是，考虑前i个物品且背包容量为j的情况下能够获得的最大价值。当优化成一维dp[i]时，表示考虑前i件物品能达到的最大价值。<br>**完全背包：含义与01背包相同，只不过第i种物品可以取无数次。<br><br>*背包的数组优化，仅仅在空间上进行了优化。</div>
 
     <div class="t1">Linux主要命令，一定要熟练掌握，否则赛场两眼一摸黑。<br><br><p><code>mkdir</code>：创建文件夹。</p><p><code>touch</code>：创建文件。</p><p><code>cd</code>：切换目录。</p><p><code>ls</code>：列出当前文件夹下的内容。</p><p><code>cat</code>：显示文件内容，而且是全部显示。</p><p><code>more</code>：查看文件内容，但是翻页查看。</p><p><code>cp [-r] [被复制] [复制到哪]</code>：复制文件文件夹，参数<code>-r</code>可以复制文件夹。</p><p><code>mv [被移动] [目的地]</code>：移动文件文件夹。</p><p><code>rm [-r -f] [参数1......参数n]</code>：删除文件，<code>-r</code>删除文件夹，<code>-f</code>强制删除。</p></div>
 
