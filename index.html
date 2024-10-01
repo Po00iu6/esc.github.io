@@ -345,6 +345,8 @@ int main()
 
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1260">1260：【例9.4】拦截导弹(Noip1999)</a>这道题目是典型的求 最长不上升子序列 和 最长下降子序列 的题目，具体代码如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/f9380e628310dba1074bde3f982cc994_4117213231434843130.png" alt="拦截导弹"><br>当时错了好几遍都没过，致错原因还是太理所当然的认为是暴力求解，但其实由题意可得，答案是求最长不上升子序列和最长下降子序列。<br><br>这是一个代码模板，要求背会。考试能保证类似的题能拿一半的分。<br><br><a href="https://www.luogu.com.cn/problem/P1020">P1020 [NOIP1999 提高组] 导弹拦截</a>洛谷的这道题是升级版。<br>对于最小划分数有：<br>不升子序列：lower_bound<br>不降子序列：upper_bound<br>严格上升子序列：对所有数取相反数，upper_bound<br>严格下降子序列：对所有数取相反数，lower_bound<br><pre><b style="color: rgb(51, 255, 0);">Dilworth 定理</b><br>原链最长长度=反链划分数最小值：<br><br>上升子序列⇔不升子序列<br>下降子序列⇔不降子序列<br><br>*如果定理不会用(或没把握)，那就返璞归真，用最朴素的解法求答案。</pre><br>题解如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/c9a4c200879f825f3558433fcff69c1d_5668380233911982326.png" alt="迪尔沃斯定理"></div>
 
+    <div class="t1">题目都说了最大上升，上升，怎么能写成小于等于？应该是严格递增的呀。</div>
+
     <div class="t1">如果用scanf读入字符串不方便，害怕出错，那么就写stread()，即字符串快读，写法与数字快读同理。<br>
         <pre>
 <span class="">string</span> <span>stread()</span>
