@@ -83,7 +83,103 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1004">P1004 [NOIP2000 提高组] 方格取数</a>因为是2个人走，所以要用4维数组，dp[i][j][k][p]，ij表示第一个人走的，kp表示第二个人走的。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define LL long long
+LL n,a[40][40],ans,dp[11][11][11][11];
+void print()
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {
+            cout&lt;&lt;a[i][j]&lt;&lt;" ";
+        }cout&lt;&lt;endl;
+    }cout&lt;&lt;endl;
+}
+LL max(LL a,LL b)
+{
+    return a&gt;b?a:b;
+}
+void f()
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {
+            for(int k=1;k&lt;=n;k++)
+            {
+                for(int p=1;p&lt;=n;p++)
+                {
+                    dp[i][j][k][p]=max(dp[i-1][j][k-1][p],max(dp[i][j-1][k][p-1],max(dp[i-1][j][k][p-1],dp[i][j-1][k-1][p])))+a[i][j];
+                    if(i!=k&&j!=p)<span>//如果第一个人没走过，那第二个人就走过来。</span>
+                    {
+                        dp[i][j][k][p]+=a[k][p];
+                    }	
+                }
+            }
+        }
+    }
+    ans=dp[n][n][n][n];
+}
+int main()
+{
+    cin&gt;&gt;n;
+    LL x,y,v;
+    while(cin&gt;&gt;x&gt;&gt;y&gt;&gt;v&&(x!=0||y!=0||v!=0))
+    {
+        a[x][y]=v;
+    }
+    f();
+    cout&lt;&lt;ans&lt;&lt;endl;
+}
+    </pre>当时情况没有考虑周全，导致暴力求解WA了2个点。暴力做法的代码在这里了<a href="https://www.luogu.com.cn/record/179790417">暴力代码</a>
+    </div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2758">P2758 编辑距离</a>确定状态，转移方程，注意边界条件。<br>致错原因：未处理边界。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int dp[2001][2001];
+string a,b;
+int main()
+{
+    cin&gt;&gt;a&gt;&gt;b;
+    a=" "+a;b=" "+b;
+    <b style="color: red;">for(int i=1;i&lt;=a.length();i++)
+    {<span>//当其中一个串为0时，最小操作次数就是不为零的那个串的长度咯！</span>
+        dp[i][0]=i;
+    }
+    for(int i=1;i&lt;=b.length();i++)
+    {
+        dp[0][i]=i;
+    }</b>
+    for(int i=1;i&lt;=a.length();i++)
+    {
+        for(int j=1;j&lt;=b.length();j++)
+        {
+            if(a[i]==b[j])dp[i][j]=dp[i-1][j-1];
+            else
+            {
+                <span>//我可以增删改三选一，三选一找最小值。</span>
+                dp[i][j]=min(dp[i-1][j-1],min(dp[i-1][j],dp[i][j-1]))+1;
+            }
+        }
+    }
+    cout&lt;&lt;dp[a.length()][b.length()]&lt;&lt;endl;
+    return 0;
+}
+    </pre>
+    </div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1275">1275：【例9.19】乘积最大</a>像这种动态规划的题目不要用瞪眼法，瞪眼法看不出来的，需要先用小数据枚举，找规律，找状态转移方程。<br>致错原因：区间定义错误。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1274">1274：【例9.18】合并石子</a>状态转移方程，dp[i][j]表示从第i堆石子到第j堆石子合并的最小价值。</div>
     <div class="t1">二维数组最大开5000*5000，否则可能出现MLE的情况。如果数据范围拿不准，就用vector吧。</div>
     <div class="t1">
         各个数据类型大小(单位字节Byte,B)：<br>short 2<br>int 4<br>long 4<br>long long 8<br>char 1<br>double 8<br><br>1MB=1024kb=1024*1024B。
@@ -104,7 +200,7 @@ for(int i=1;i&lt;=n;i++)
         {
             dp[i]=max(dp[i],dp[j]+p[i]);
         }
-        <b style="color: red;">ans=max(ans,dp[i]);</b>//&lt;------- 
+        <b style="color: red;">ans=max(ans,dp[i]);</b>//&lt;------- 应该是在这，之前写到上边括号里头了。
     }
 }
 cout&lt;&lt;ans&lt;&lt;endl;
