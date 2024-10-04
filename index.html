@@ -83,6 +83,99 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1302">1302：股票买卖</a>致错原因：数组忘记改名了，导致同一个数组用了2遍。<a href="https://blog.csdn.net/lq1990717/article/details/125284609#:~:text=%E8%AE%A2%E9%98%85%E4%B8%93%E6%A0%8F.%20%E3%80%90%E9%A2%98%E7%9B%AE%E9%93%BE">题解</a>我写的是解法一的优化版，下次忘了就回来看看。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1301">1301：大盗阿福</a>常规做法会超时，必须优化。<a href="https://blog.csdn.net/weq2011/article/details/127170491#:~:text=%E9%98%BF%E7%A6%8F%E6%98%AF%E4%B8%80%E5%90%8D%E7%BB%8F%E9%AA%8C%E4%B8%B0%E5%AF%8C%E7%9A%84">题解</a>这个作者写的很全，有2种优化，1.一维数组+压缩循环。2.滚动数组+压缩循环。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1300">1300：鸡蛋的硬度</a>很难想。<a href="https://blog.csdn.net/lq1990717/article/details/125259551">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1299">1299：糖果</a>致错原因：还是不会找状态转移方程。dp[i][j]表示取前i个数的余数为j时的最大值。<a href="https://blog.csdn.net/qq_40802813/article/details/123556631#:~:text=1299%EF%BC%9A%E7%B3%96%E6%9E%9C%20%E6%97%B6%E9%97%B4">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1297">1297：公共子序列</a>这道题和最长公共子序列那道题很像，但就是有一点点不一样，不知道为什么，竟然这都能AC？<pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+using namespace std;
+string a,b;
+int dp[501][501];
+int f(string a,string b)
+{
+    memset(dp,0,sizeof(0));
+    a=" "+a;
+    b=" "+b;
+    for(int i=1;i&lt;a.length();i++)
+    {
+        for(int j=1;j&lt;b.length();j++)
+        {
+            if(a[i]==b[j])
+            {
+                <span>//增加</span>
+                dp[i][j]=dp[i-1][j-1]+1;
+            }
+            else
+            {
+                <span>//继承</span>
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    return dp[a.length()-1][b.length()-1];
+}
+int main()
+{
+    while(cin&gt;&gt;a&gt;&gt;b)
+    {
+        cout&lt;&lt;f(a,b)&lt;&lt;endl;
+    }
+    return 0;
+}
+    </pre>容易忽视的问题：当你在字符串前面加上空格时，字符串长度也会增加，因此ij不能循环到s.length()了，输出也不能输出到s.length()。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1434">P1434 [SHOI2002] 滑雪</a>这道题是动态规划+记忆化搜索。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+using namespace std;
+int r,c,a[201][201],maxn,dp[200][200];
+int dir[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+int dfs(int x,int y)
+{
+    <span>//如果来过，那么直接返回当前点出发的长度。就不需要再走一遍了。</span>
+    if(dp[x][y])return dp[x][y];
+    <span>//如果没来过，那么算上这个点，从这个点开始进行搜索。</span>
+    dp[x][y]=1;
+    for(int i=0;i&lt;4;i++)
+    {
+        int ux=x+dir[i][0],uy=y+dir[i][1];
+        if(ux&gt;=1&&ux&lt;=r&&uy&gt;=1&&uy&lt;=c&&a[ux][uy]&lt;a[x][y])
+        {
+            dfs(ux,uy);
+            dp[x][y]=max(dp[x][y],dp[ux][uy]+1);
+        }
+    }
+    return dp[x][y];
+}
+int main()
+{
+    cin&gt;&gt;r&gt;&gt;c;
+    for(int i=1;i&lt;=r;i++)
+    {
+        for(int j=1;j&lt;=c;j++)
+        {
+            cin&gt;&gt;a[i][j];
+        }
+    }
+    for(int i=1;i&lt;=r;i++)
+    {
+        for(int j=1;j&lt;=c;j++)
+        {
+            maxn=max(maxn,dfs(i,j));
+        }
+    }
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+</pre>如果仅仅用记忆化搜索，那么只能拿90分，其中一个点超时。优化：如果你已经找到一条对于该点出发来说的最长路径，那么下次遇到这个点的时候就可以不用搜索，直接返回这条路径的长度即可，最后用这个长度加上你之前走过的长度就是当前点的答案。省下了大量时间。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1854">P1854 花店橱窗布置</a><p>这是一个不一样的动态规划，不会做，就看题解了。结果发现题解代码和<a href="https://www.luogu.com.cn/problem/P2066">P2066 机器分配</a>一模一样，可以去对比一下。</p>我觉得好的题解是这个<a href="https://blog.csdn.net/lq1990717/article/details/125213307">信息学奥赛一本通 1279：【例9.23】橱窗布置(flower) | 洛谷 P1854 花店橱窗布置</a></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1278">1278：【例9.22】复制书稿(book)</a>这这道题很难，当时没做出来，就这样吧。
     <pre>
 #include &lt;iostream&gt;
@@ -466,12 +559,12 @@ void print(int x,int y)
 }
 int main()
 {
-    cin&gt;n&gt;m;
+    cin&gt;&gt;n&gt;&gt;m;
     for(int i=1;i&lt;=n;i++)
     {
         for(int j=1;j&lt;=m;j++)
         {
-            cin&gt;a[i][j];
+            cin&gt;&gt;a[i][j];
         }
     }
     for(int i=1;i&lt;=n;i++)
