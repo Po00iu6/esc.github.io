@@ -83,6 +83,54 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1278">1278：【例9.22】复制书稿(book)</a>这这道题很难，当时没做出来，就这样吧。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+int m,k,a[1001],s[1001],dp[1001][1001];
+void show(int t,int x)
+{
+    int i;
+    int sum=0;
+    if(t==0)return;
+    for(i=t;i&gt;=1&&sum+a[i]&lt;=x;i--)
+    {
+        sum+=a[i];
+    }
+    show(i,x);
+    cout&lt;&lt;i+1&lt;&lt;" "&lt;&lt;t&lt;&lt;endl;
+}
+int main()
+{
+    cin&gt;&gt;m&gt;&gt;k;
+    for(int i=1;i&lt;=m;i++)
+    {
+        cin&gt;&gt;a[i];
+        s[i]=a[i]+s[i-1];
+    }
+    memset(dp,0x3f,sizeof(dp));
+    for(int i=1;i&lt;=m;i++)
+    {
+        dp[i][1]=s[i];
+    }
+    for(int i=1;i&lt;=m;i++)
+    {//i表示抄写的人数。 
+        for(int j=2;j&lt;=k;j++)
+        {//前j本书分配给i个人抄写。 
+            for(int h=j;h&lt;=i;h++)
+            {//最后一个人需要抄写h~i本书。 
+                dp[i][j]=min(dp[i][j],max(dp[h-1][j-1],s[i]-s[h-1]));
+            }
+        }
+    }
+    show(m,dp[m][k]);
+    return 0;
+}
+</pre>
+</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1004">P1004 [NOIP2000 提高组] 方格取数</a>因为是2个人走，所以要用4维数组，dp[i][j][k][p]，ij表示第一个人走的，kp表示第二个人走的。
     <pre>
 #include &lt;iostream&gt;
