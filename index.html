@@ -83,6 +83,52 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1363">1363：小球(drop)</a>这道题可以暴力遍历。<a href="https://www.cnblogs.com/sxrekord/p/small_ball.html#:~:text=1363%EF%BC%9A%E5%B0%8F%E7%90%83%20(d">题解</a>*然而我还傻傻模拟了一棵树。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1364">1364：二叉树遍历(flist)</a>这么简单的题也能错？我真的服了。致错原因：没有加if判断。<a href="https://www.cnblogs.com/sxrekord/p/binary_tree_traversal.html">题解</a>就只这两个if判断<pre>
+if(p&gt;l)print(l,p-1);
+if(p&lt;r)print(p+1,r);</pre>*函数名和题解的不一样。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/pic/1340.gif">1340：【例3-5】扩展二叉树</a>写的时候发现全错，但答案是对的，后来发现自己忘记把新创建的节点赋值为NULL，然后再判断要不要创建新节点。<br>这是正确写法，重点标红：<pre>void crt(tree &p)
+{
+    char x=getchar();
+    <b style="color: red;">p=NULL;</b><span>//先赋值为NULL。</span>
+    <b style="color: red;">if(x=='.')return;</b><span>//再看看要不要创建新的。</span>
+    <b style="color: red;">p=new node;</b><span>//如果要，那么就创建新的。</span>
+    p->l=NULL;p->r=NULL;
+    p->data=x;
+    crt(p->l);
+    crt(p->r);
+}</pre>如果反过来写虽然输出是对的，但判题机给我判错，我想可能是因为我没有把p赋值为NULL，导致输出时某些不可见字符被输出了出来导致错误。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1339">1339：【例3-4】求后序遍历</a>第一次就想写出来不就成了天才了？(自我安慰)<a href="https://blog.csdn.net/qq_39053800/article/details/108182882">题解</a></div>
+    <div class="t1">创建链表。<pre>struct node
+{
+    int data;<span>//数据。</span> 
+    node *next,*pre;<span>//前指针、后指针。 </span>
+};
+node *head,*p,*r;<span>//创建头、中、尾指针。</span>  </pre></div>
+<div class="t1">
+链表新增以及移动的几个步骤：<br>
+1.申请新节点。<br>
+2.赋值数据。<br>
+3.当前节点的下一个置为NULL，前一个节点的下一个置为自己。<br>
+4.指针后移，即前一个变成自己。<br>
+<pre>
+p=new node;
+p->data=x;
+p->next=NULL;
+r->next=p;
+r=p;
+</pre>在此之前还需要<code>head=new node;<br>r=head;</code>最后指针p归位<code>p=head->next;</code>
+</div>
+    <div class="t1">二叉树的存储结构，可以用数组，也可以用指针。两种方式都差不多，总之就是模拟。<br>这个是指针方式：<code>
+typedef struct node;<br>
+typedef node *tree;<br>
+struct node<br>
+{<br>
+	&nbsp;&nbsp;*tree lchild,rchild;<br>
+	&nbsp;&nbsp;int data;<br>
+};<br>
+tree bt;<br>
+    </code></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1306">1306：最长公共子上升序列</a>据说这道题是一道模板题。总之我不会，就算是看了题解还是不会。<p><a href="https://blog.csdn.net/lq1990717/article/details/124222748">君义_noip</a>的题解第一个还写错了，也没看懂在写啥。</p><p><a href="https://www.cnblogs.com/-Ackerman/p/11232960.html#:~:text=%E5%A6%82%E6%9E%9C%E6%98%AF%E6%B1%82%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E4%B8%8B%E9%99%8D">-Ackermanの博客</a>的题解还算比较清晰，但没时间看了，暂时就过吧。</p></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1305">1305：Maximum sum</a>这是一个动态规划之最大连续子段和问题。没学过，不会。<p><a href="https://blog.csdn.net/lq1990717/article/details/124162300#:~:text=%E8%A7%A3%E6%B3%951%EF%BC%9A%20%E8%A6%81%E5%9C%A8%E6%95%B4%E4%B8%AA%E5%BA%8F">题解</a>看的似懂非懂。</p></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1107">P1107 [BJWC2008] 雷涛的小猫</a>始终不知道自己哪错了，拿了80分，稀里糊涂看了题解。</div>
@@ -769,6 +815,8 @@ int main()
     <!--  -->
     <!--  -->
 </body>
+<script src="./Canvas.js"></script>
+<!-- <script src="./Canvas2.js"></script> -->
 <script src="./Volume.js"></script>
 <script src="./Unit.js"></script>
 <script src="./ChangSpanColor.js"></script>

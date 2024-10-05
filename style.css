@@ -4,7 +4,7 @@
 }
 body{
     overflow-x: hidden;
-    background-color: #000000d6;
+    /* background-color: #000000d6; */
     display: flex;
     flex-direction:column;
     flex-wrap: wrap;
@@ -232,7 +232,9 @@ header{
 
 
 
-
+.bg1{
+    z-index: -1;
+}
 
 
 
