@@ -83,6 +83,11 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">群友提供的Dijkstra算法的通解：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/06/198629752/c6aebb59e6f1a42ec6bb8ba938758d66_7600648732841161930.jpg" alt="Dijkstra">目前我确实看不懂，后面再说吧。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1344">1344：【例4-4】最小花费</a>这道题属于是板子题了，我得背一下板子，否则后面真的学不下去。(因为前面啥板子都没背过，这个Dijkstra算法难写，没办法那就背吧。)<a href="https://blog.csdn.net/weixin_61017400/article/details/124343916">Dijkstra算法模板</a><p><a href="https://www.luogu.com.cn/training/444587#problems">Dijkstra算法刷题题单</a>我觉得这块还是得练练，要不然后面真不知道要怎么进行下去。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1343">1343：【例4-2】牛的旅行</a><p>这道题看了<a href="https://www.cnblogs.com/jzxnl/p/11397149.html">题解</a>，觉得很简单，但实际做起来发现结果居然不对，始终不知道哪错了。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1343">1343：【例4-2】牛的旅行</a>这道题还是求最短路，只不过是求整个牧场最短路当中最大的那个。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1342">1342：【例4-1】最短路径问题</a><p>这道题错的稀里糊涂，我也不知道为啥。第一次写的时候输出了个0.00，其实不是0，而是被省略了小数，这很显然是一个异常的答案。后来找到了原因，原来是memset初始化double类型的数组时不能用0x3f，具体原因见<a href="https://blog.csdn.net/PoPoQQQ/article/details/38926889">博文</a>，而应该赋值成0x7f，否则最终结果连0.1都不到。最后这道题我也是AC了。</p><br><p><a href="https://blog.csdn.net/lq1990717/article/details/123321240#:~:text=%E8%AE%A2%E9%98%85%E4%B8%93%E6%A0%8F.%20%E3%80%90%E9%A2%98%E7%9B%AE%E9%93%BE">Floyed算法求最短路</a>可以说是最基础的了。</p></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1375">1375：骑马修栅栏(fence)</a>记录欧拉路要在回溯阶段存储，否则会出现错误。另外，起始点不一定是1。题目中说“输出第一个数较小的”意思就是开始的节点度数最小，那么我们的最终代码就出来了：<pre>
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
