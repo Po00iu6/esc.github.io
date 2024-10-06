@@ -83,6 +83,83 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1371">1371：看病</a>这道题看似很简单，其实坑点一大堆。其中一个点还超时。<a href="https://blog.csdn.net/lq1990717/article/details/128490063#:~:text=1371%EF%BC%9A%E7%9C%8B%E7%97%85%20%E6%97%B6%E9%97%B4">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1370">1370：最小函数值(minval)</a><p>这道题不难，主要是刚开始读题可能会理解错，这道题的意思是对函数值排序，不是叫你对解出的x值排序。这是<a href="https://www.cnblogs.com/tflsnoi/p/14150443.html#:~:text=1370%EF%BC%9A%E6%9C%80%E5%B0%8F%E5%87%BD%E6%95%B0%E5%80%BC">题解</a></p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1373">1373：鱼塘钓鱼(fishing)</a><p>这道题挺难的，因为我不会。但是<a href="https://blog.csdn.net/Wchenchen0/article/details/81259412">题解</a>很好看。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1369">1369：合并果子(fruit)</a>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈，我对了！我对了！<br>我终于对了一道题了！！！哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈......<br><b>需要注意的是，要分成函数写，否测会WA，不知道为啥，写成顺序结构会WA，但封装成函数就AC了(挠头~)。</b><p>*也可以直接用<code>priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt;</code>来解出答案。(也不知道比赛时叫不叫用)</p><pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define LL long long
+LL n,a[30001],ans;
+void swap(LL &a,LL &b)
+{
+    LL tmp=a;a=b;b=tmp;
+}
+void _init()
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+        int p=i;
+        while(p!=1)
+        {
+            if(a[p/2]&gt;a[p])
+            {
+                swap(a[p/2],a[p]);
+            }
+            else break;
+            p=p/2;
+        }
+    }
+}
+void put(int x)
+{
+    a[++n]=x;int p=n;
+    while(p!=1)
+    {
+        if(a[p/2]&gt;a[p])
+        {
+            swap(a[p/2],a[p]);
+        }
+        else break;
+        p=p/2;
+    }
+}
+int get()
+{
+    LL res=a[1];
+    a[1]=a[n--];
+    for(int i=1;i&lt;=n;i++)
+    {
+        int p=i;
+        while(p!=1)
+        {
+            if(a[p/2]&gt;a[p])
+            {
+                swap(a[p/2],a[p]);
+            }
+            else break;
+            p=p/2;
+        }
+    }
+    return res;
+}
+int main()
+{
+    cin&gt;&gt;n;
+    _init();
+    while(1)
+    {
+        if(n==1)break;
+        LL a=get();
+        LL b=get();
+        put(a+b);
+        ans+=(a+b);
+    }
+    cout&lt;&lt;ans&lt;&lt;endl;
+    return 0;
+}
+    </pre></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1368">1368：对称二叉树(tree_c)</a>二叉树的题目好难啊，这道题还是不会。<a href="https://blog.csdn.net/lq1990717/article/details/127680193">题解</a></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1367">1367：查找二叉树(tree_a)</a>致错原因：题目描述的问题，与我无瓜~，™也没说1号必须是根节点呀？<a href="https://blog.csdn.net/qq_39053800/article/details/108318606">题解</a>如此简单的一道题，我又双叒做错了。</div> 
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1365">1365：FBI树(fbi)</a><p>这道题不会，我看的<a href="https://www.cnblogs.com/tflsnoi/p/14110703.html#:~:text=%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E7%AC%A8%E5%8A%9E%E6%B3%95%E5%BB%BA%E6%A3%B5%E6%A0%91">题解</a></p></div>
