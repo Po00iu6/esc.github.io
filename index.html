@@ -83,7 +83,55 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
-    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1375">1375：骑马修栅栏(fence)</a>记录欧拉路要在回溯阶段存储，否则会出现错误。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1375">1375：骑马修栅栏(fence)</a>记录欧拉路要在回溯阶段存储，否则会出现错误。另外，起始点不一定是1。题目中说“输出第一个数较小的”意思就是开始的节点度数最小，那么我们的最终代码就出来了：<pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+int f,n;
+int arr[2001],top=1;
+int g[2001][2001],du[2001];
+void dfs(int xi)
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        if(g[xi][i])
+        {
+            g[xi][i]--;g[i][xi]--; 
+            dfs(i);
+        }
+    }
+    arr[top++]=xi;<span>//回溯阶段存储路径</span>
+}
+int main()
+{
+    cin&gt;&gt;f;
+    int start=0x3f3f3f3f;<span>//就像我说的，起始节点不一定是1，所以要初始时赋值为一个很大的数，后面找最小的节点编号。</span> 
+    for(int i=1,x,y;i&lt;=f;i++)
+    {
+        cin&gt;&gt;x&gt;&gt;y;
+        g[x][y]++;g[y][x]++;
+        du[x]++;du[y]++;
+        n=x&gt;n?x:n;<span>//找到最大的点的编号。</span>
+        n=y&gt;n?y:n;
+        start=start&lt;x?start:x;<span>//找到最小的点</span>
+        start=start&lt;y?start:y;
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        if(du[i]%2==1)
+        {
+            start=i;
+            break;
+        }
+    }
+    dfs(start);
+    for(int i=top-1;i&gt;=1;i--)
+    {<span>//到序输出</span>
+        cout&lt;&lt;arr[i]&lt;&lt;endl;
+    }
+    return 0;
+}
+    </pre>说白了还是最基础的邻接矩阵存图，没什么难的，但要是不注意题目说的是啥，那就容易爆0。(当时我还在想500进制表示法是啥来着，但现在看来啥用也没有。)</div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1374">1374：铲雪车(snow)</a><p>看到这道题我第一时间想到的是建立一个图。结果当我看到<a href="https://blog.csdn.net/lq1990717/article/details/129891715#:~:text=%E9%93%B2%E9%9B%AA%E8%BD%A6%E5%8F%AF%E4%BB%A5%E5%9C%A8%E4%BB%BB%E6%84%8F%E4%BA%A4%E5%8F%89">题解</a>的时候立刻小脑萎缩。</p>致错原因：做题前没有充分分析题目。有些题目要用数学方法证明，如果能证明出来，那么题目会非常简单，但如果证明不出来，那么就只能模拟。但通常像这种题目，模拟难度往往很高。*我也不会模拟。</div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1341">1341：【例题】一笔画问题</a>致错原因：这是无向图，有度，没有入度和出度之分，直接用度就好了。使用邻接矩阵解决。<p><a href="https://blog.csdn.net/Wchenchen0/article/details/81283700">题解</a>仅供参考。</p>原本深入浅出的那本书上讲的挺好的，到这里怎么我的编程能力还退化了呢？</div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1372">1372：小明的账单</a>这道题挺简单，但要注意的是要对每个账单设置一个id，已经弹出的账单保证不再弹出。<a href="https://blog.csdn.net/lq1990717/article/details/128502439#:~:text=ybt%201372%EF%BC%9A%E5%B0%8F">题解</a>使用优先队列priority_queue可以快速完成。不建议使用多重集合multiset。</div>
