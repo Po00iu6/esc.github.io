@@ -83,6 +83,10 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">局部变量一定要初始化，轻则TLE，重则RE，其间就是WA。</div>
+    <div class="t1">cout输出字符串占时间，而且占的不少，容易超时。建议用printf输出字符串！！！(后来经过调查，原来是endl的问题，endl占的时间比较多，以后换行就用'\n'吧，尽量别用endl了，endl不仅仅是换行，endl还要清除缓存区，所以慢得多)</div>
+    <div class="t1">千万不要忘记检查代码输出格式，比如把“YES”写成“Yes”结果直接0分，幸好不是在赛场上，否则直接见祖宗！<br><br>图论当中要注意在删除点的时候，推荐使用二维矩阵，因为二维表会出问题。<br><br><code>memset(g[i],0,sizeof(g[i]))</code>可以对一个数组的某一个维度单独初始化，这个操作我才知道！<br><br>如何输入当中给你的是无法用cin和scanf区分的数据，那么就把这串数据当成字符串来处理输入，之后转成自己想要的数据。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1345">1345：【例4-6】香甜的黄油</a>这道题我也是不会，要求用SPFA解决，反正不会，目前走一步看一步吧。<a href="https://blog.csdn.net/qq_42914633/article/details/98882991">题解</a></div>
     <div class="t1">群友提供的Dijkstra算法的通解：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/06/198629752/c6aebb59e6f1a42ec6bb8ba938758d66_7600648732841161930.jpg" alt="Dijkstra">目前我确实看不懂，后面再说吧。</div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1344">1344：【例4-4】最小花费</a>这道题属于是板子题了，我得背一下板子，否则后面真的学不下去。(因为前面啥板子都没背过，这个Dijkstra算法难写，没办法那就背吧。)<a href="https://blog.csdn.net/weixin_61017400/article/details/124343916">Dijkstra算法模板</a><p><a href="https://www.luogu.com.cn/training/444587#problems">Dijkstra算法刷题题单</a>我觉得这块还是得练练，要不然后面真不知道要怎么进行下去。</p></div>
     <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1343">1343：【例4-2】牛的旅行</a><p>这道题看了<a href="https://www.cnblogs.com/jzxnl/p/11397149.html">题解</a>，觉得很简单，但实际做起来发现结果居然不对，始终不知道哪错了。</p></div>
