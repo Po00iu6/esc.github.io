@@ -83,6 +83,7 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">常见的优化技巧<img src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png" alt="优化技巧"></div>
     <div class="t1">局部变量一定要初始化，轻则TLE，重则RE，其间就是WA。</div>
     <div class="t1">cout输出字符串占时间，而且占的不少，容易超时。建议用printf输出字符串！！！(后来经过调查，原来是endl的问题，endl占的时间比较多，以后换行就用'\n'吧，尽量别用endl了，endl不仅仅是换行，endl还要清除缓存区，所以慢得多)</div>
     <div class="t1">千万不要忘记检查代码输出格式，比如把“YES”写成“Yes”结果直接0分，幸好不是在赛场上，否则直接见祖宗！<br><br>图论当中要注意在删除点的时候，推荐使用二维矩阵，因为二维表会出问题。<br><br><code>memset(g[i],0,sizeof(g[i]))</code>可以对一个数组的某一个维度单独初始化，这个操作我才知道！<br><br>如何输入当中给你的是无法用cin和scanf区分的数据，那么就把这串数据当成字符串来处理输入，之后转成自己想要的数据。</div>
