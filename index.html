@@ -83,6 +83,18 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1714">P1714 切蛋糕</a>这道题需要前缀和+单调序列，当时我以为不能是单调队列，于是我的代码就写成了这样：<a href="https://www.luogu.com.cn/record/181183317">代码</a>后来看了题解才知道，必须得是单调队列，而且还得要前缀和。于是后来改成了这样<a href="https://www.luogu.com.cn/record/181185448">代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1886">P1886 滑动窗口 /【模板】单调队列</a><P>滑动窗口这道题需要注意，这道题中有一个位置容易错。请看 <a href="https://www.luogu.com.cn/record/181171733">代码</a> ，这里的
+        <pre>
+while((!mindq.empty())&&i-k>=mindq.front())
+{
+    mindq.pop_front();
+}
+while((!maxdq.empty())&&i-k>=maxdq.front())
+{
+    maxdq.pop_front();
+}
+    </pre>其中<code>i-k>=mindq.front()</code>可以写成<code>mindq.back()-mindq.front()>=k-1</code>但是不能写成<code>mindq.back()-mindq.front()>=k</code>因为当我们的区间的序列长度已经等于k的时候，我们就应该把<code>front()</code>pop掉，因为后面还要push一个i，这就意味着如果我们的序列长度等于k，那么后面再加入i的时候长度就会大于k，因此代码才这么写。<br>&nbsp;&nbsp;&nbsp;&nbsp;*当然，你要是把push语句放前面的话那就没事了。</P></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3467">P3467 [POI2008] PLA-Postering</a>这道题需要有反向思维，既然海报数一个一个加不好办，那么我们就反向减。具体思路见题解。<a href="https://www.luogu.com.cn/problem/solution/P3467">题解</a>代码很简单，但这个思路绝了！<b>选自题解的一句核心句：因为题目要求海报不可超出建筑物链，那么我们即可用单调栈维护：初始海报数为建筑物数，入栈建筑物链的高度序列，当栈顶大于即将入栈元素时弹栈，若最后弹栈元素与即将入栈元素等高，需要的海报数-1；</b></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1578">P1578 奶牛浴场</a><p>小心！这道题和<a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a>不一样。这道题的数据范围不适用悬线法，否则会MLE！经过我查找题解，发现某年的国家队wzk大佬的论文《浅谈用极大化思想解决最大子矩形问题》，一共有两种：1.悬线法 2.通过障碍点找子矩形。我们也只能用第二种了。<a href="https://www.luogu.com.cn/problem/solution/P1578">题解</a>太绝喵了！我正在研究中......</p><br><br>这道题抄都能抄错，l和1长得太像啦！很容易把l抄成1。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a><p>这是一道经典的求区间边界的题目，可以用悬线法求解，悬线怎么理解？当时我想了一天，后来遇到<a href="https://www.luogu.com.cn/problem/P1578">奶牛浴场</a>这道题我才醒悟。你可以理解为PS的裁剪工具，如图：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/09/198629752/7b03d2e7bb2ca7c0f5bc82d4033c2195_2942403461030409694.png" alt="PS"></p>悬线就是裁剪边缘的框框，框住了哪里，哪里就要被保留，其余的就被裁剪掉了。这两道题悬线的概念就是这么理解的。<br><br>我们设置一个h数组记录从第(i,j)这一点向上能到达的最大长度，碰到障碍物或者边界就break。l数组记录左边最远到达的长度，r数组记录右边。*此时你会问了，为什么没有down数组记录下面到达的最远位置？A:因为不需要，那样做太多余了，我们的for循环是从上往下遍历的，而且答案也是从上往下遍历的，我们迟早要遍历到下边，因此down数组没有任何作用。最后的最大面积就是答案，面积=底乘高，底=(l+r-1),为什么要减一，因为l和r在一个点重合了，高=h，那么面积=h*(l+r-1)，之后取最大值就是最终结果。</div>
