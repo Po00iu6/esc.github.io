@@ -50,6 +50,20 @@ h1{
     letter-spacing: 1px;
     
     z-index: 1;
+
+
+    /* background-color: rgba(255, 255, 255, 0.603); 半透明背景色   */
+    border: 1px solid #ccc; /* 边框 */  
+    /* border-radius: 10px; 边框圆角   */
+    /* backdrop-filter: blur(8px); 毛玻璃效果   */
+    transition: background-color 0.3s, box-shadow 0.3s; /* 过渡效果 */  
+    
+}
+
+.t1:hover{
+    
+  background-color: rgba(255, 255, 255, 0.7); /* 鼠标悬停时的背景色，带有淡淡的紫色 */  
+  box-shadow: 0 0 10px rgba(255, 0, 225, 0.595); /* 淡淡的紫色幽光效果 */  
 }
 
 
@@ -111,7 +125,9 @@ pre::-webkit-scrollbar-thumb{
 
 
 
-
+ol{
+    margin: 5%;
+}
 
 
 

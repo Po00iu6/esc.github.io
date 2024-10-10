@@ -83,6 +83,25 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1496">P1496 火烧赤壁</a>这道题足足硬控了我2小时。就为了一个lower_bound问东问西。结果用手一模拟啥问题都没了。这个故事告诉我们，不懂的代码可以模拟来理解。<a href="https://www.luogu.com.cn/record/181275467">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3397">P3397 地毯</a>这道题的数据范围没问题，当时数组开的刚刚好，结果CE了，后来一查发现竟然是数组里面有一项是<code>b[x2+1][y2+1]+=1;</code>说明数组需要多开一点，要不然这个+1操作会越界。<br><p>关于二维差分我找到了一个帖子：<a href="https://zhuanlan.zhihu.com/p/439268614">二维差分</a><br>二维差分核心就这两条<img src="https://upload-bbs.miyoushe.com/upload/2024/10/10/198629752/cbe6a648473cfcabf33e2ba1b4195110_7117397826006467220.png" alt="差分"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/10/198629752/92e38cf14e320067068a165dfc6dd7b3_9089620150170481597.png" alt="差分">不要以为和二维前缀和一样，要注意还是有点不一样的地方：<b>第二张图的最后一个算式</b></p><a href="https://www.luogu.com.cn/record/181266744">题解</a>*另外，差分需要满足叠加，如果不满足那么就不能用差分解题喽~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2367">P2367 语文成绩</a>差分的经典题型，手推一遍理解差分含义。记住差分公式。<ol>
+        <li>
+            构建差分数组b[i]=a[i]-a[i-1]；
+        </li>
+        <li>
+            对区间修改时直接对差分数组修改，若加x，则在首端加x，末端+1的位置减x。
+        </li>
+        <li>
+            对差分数组求前缀和之后的数组就是修改后的原数组。
+        </li>
+    </ol><br>*面对大数据大范围大范围修改时，差分更有优势，否则你会TLE。<a href="https://www.luogu.com.cn/record/181254236">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1314">P1314 [NOIP2011 提高组] 聪明的质监员</a>这道题目前我还不会哦~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1719">P1719 最大加权矩形</a>区区普及，还能难倒我？这道题跟以前哪道题很像？</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8218">P8218 【深进1.例1】求区间和</a><p>致错原因：☝️🤓诶，数组开小了，如此低级的错误我还能犯，呜呜呜~，一定要看好题目区间啊！！！有时候区间开小了都不给你CE，给你个WA让你去猜吧。</p></div>
+    <div class="t1">前缀和、查分与离散化<img src="https://upload-bbs.miyoushe.com/upload/2024/10/10/198629752/02af59cc5778c715efddc10c4a043e46_5468453292179555448.png" alt="第二章"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1725">P1725 琪露诺</a>这道题用动态规划+单调队列优化。<a href="https://www.luogu.com.cn/record/181197716">题解</a>如果仅仅用动态规划只能拿80分，剩下的就TLE了。<a href="https://www.luogu.com.cn/record/181189437">80分的题解</a></div>
+    <div class="t1">注意函数返回值，如果该返回的没有返回，结果会TLE。而且在本机上跑的是正确的，在评测机上就会TLE。因此这个错误很重要。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1714">P1714 切蛋糕</a>这道题需要前缀和+单调序列，当时我以为不能是单调队列，于是我的代码就写成了这样：<a href="https://www.luogu.com.cn/record/181183317">代码</a>后来看了题解才知道，必须得是单调队列，而且还得要前缀和。于是后来改成了这样<a href="https://www.luogu.com.cn/record/181185448">代码</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1886">P1886 滑动窗口 /【模板】单调队列</a><P>滑动窗口这道题需要注意，这道题中有一个位置容易错。请看 <a href="https://www.luogu.com.cn/record/181171733">代码</a> ，这里的
         <pre>

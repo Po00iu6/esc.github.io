@@ -4,9 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .glass-div {  
+  width: 300px; /* 宽度 */  
+  height: 200px; /* 高度 */  
+  background-color: rgba(255, 255, 255, 0.5); /* 半透明背景色 */  
+  border: 1px solid #ccc; /* 边框 */  
+  border-radius: 10px; /* 边框圆角 */  
+  backdrop-filter: blur(8px); /* 毛玻璃效果 */  
+  transition: background-color 0.3s, box-shadow 0.3s; /* 过渡效果 */  
+}  
+  
+.glass-div:hover {  
+  background-color: rgba(255, 200, 255, 0.2); /* 鼠标悬停时的背景色，带有淡淡的紫色 */  
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.2); /* 淡淡的紫色幽光效果 */  
+}
+.polished-edge {  
+  width: 200px;  
+  height: 100px;  
+  background-color: #f0f0f0; /* 浅灰色背景 */  
+  border-radius: 10px; /* 圆角，可以根据需要调整 */  
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); /* 阴影，增强立体感 */  
+  /* 可以添加更多的样式来进一步模拟效果，比如渐变背景等 */  
+}
+    </style>
 </head>
-<body>
-    
+<body style="background-image: url(https://act-upload.mihoyo.com/wiki-user-upload/2024/06/04/258999284/23f4eda8992fa5e132abf8f58d26b191_5480996041355880417.png);">
+    <div class="glass-div">
+        <div class="polished-edge"></div>
+    </div>
 </body>
-<script src="./Canvas.js"></script>
 </html>
