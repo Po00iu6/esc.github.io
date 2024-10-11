@@ -83,6 +83,9 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3406">P3406 海底高铁</a>这道题是前缀和+差分，首先进行差分，求解一个区间经过了多少次，但这道题不同的是，他告诉你了进过了第几段区间，而不是从几到几，因此差分不需要再尾部+1的位置-1，而是要直接在尾部-1。前缀和+贪心求解最终答案即可。<br>*这道题可以加深自己对前缀和与差分的认识。<br><a href="https://www.luogu.com.cn/record/181468218">题解</a><img src="https://upload-bbs.miyoushe.com/upload/2024/10/11/198629752/3b735a0db14f78be46234d68ed2be073_1895195961999785588.png" alt="前缀和与差分">如图，其中的t就是差分后累加的每个阶段的结果。(还是那句话，这个差分的是段，而不是点，所以直接尾部-1，而不是尾部+1处-1。)。每个阶段的t代表了这个区间经过了多少遍，然后用这个t乘以我的花费，对于IC卡，你可能也注意到了，每次i只经过一次，因此刚好利用程序顺序结构处理了IC卡的问题。<p>如果还不理解可以去题解那边去看看，记得亲自用手推一遍dalao的代码。</p></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3017">P3017 [USACO11MAR] Brownie Slicing G</a>不会...题解没看懂。<a href="https://www.luogu.com.cn/problem/solution/P3017">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2004">P2004 领地选择</a>这道题挺简单的，但我提交了几遍才AC，因为这道题说了领地大小了，因此我们只需要枚举右上角，那么左下角就根据领地边长C算出来了，时间复杂度O(n²)。<br>易错点：遍历循环边界忘记加一，计算出的右下角忘记减一。出错的位置我在↓题解标出来了。<a href="https://www.luogu.com.cn/record/181395934">题解</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1884">P1884 [USACO12FEB] Overplanting S</a>这道题是典型的二维离散化。要注意题目中要求是笛卡尔坐标，也就是说输入数据当中的y轴一定要颠倒过来，否则输出答案就是0，我当时还调试了好一会才发现错误。数组大小需要大一点。<a href="https://www.luogu.com.cn/record/181389465">AC代码</a>*和一维离散化很像~</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1955">P1955 [NOI2015] 程序自动分析</a>离散化端点x和y，然后lower_bound将原来的x和y转化成下标，之后根据a[i].z是否是相等，来判断是否要在x和y之间连边。连完边之后我们遍历整个a[]数组，判断a[i].z是否不相等，如果不相等，那么判断x和y有没有连边，如果连了边，那么说明与不相等相矛盾，这时直接输出NO，然后break。否则输出YES。<br><br>致错原因：把return 0写到了while(t--)里面，导致多组数据只能读入一组。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1496">P1496 火烧赤壁</a>这道题足足硬控了我2小时。就为了一个lower_bound问东问西。结果用手一模拟啥问题都没了。这个故事告诉我们，不懂的代码可以模拟来理解。<a href="https://www.luogu.com.cn/record/181275467">题解</a></div>
