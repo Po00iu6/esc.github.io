@@ -83,6 +83,49 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2880">P2880 [USACO07JAN] Balanced Lineup G</a>还是奶牛牧场这道题，但是ST表，ST表我刚学，还是得背板子啊。<a href="https://www.luogu.com.cn/record/181971452">AC代码</a>需要2个数组，分别存储最大值和最小值，ST表可以存储最大值和最小值，但要么只能存最大、要么只能存最小，所以要想两个都存，就必须要开2个数组。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1045">P1045 [NOIP2003 普及组] 麦森数</a>思路挺简单，主要是高精度不会的话得需要复习一下了。<a href="https://www.luogu.com.cn/record/181931701">AC代码</a>其中为了输出位数，指数化成了对数log表示。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1226">P1226 【模板】快速幂</a>经典算法快速幂<br><a href="https://www.luogu.com.cn/record/181914237">递归写法</a><a href="https://www.luogu.com.cn/record/181919030">非递归写法</a>主要利用了二分法和倍增法。<br>递归法是将指数二分。<br>非递归法是将底数倍增。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1966">P1966 [NOIP2013 提高组] 火柴排队</a>这可能是我第一次理解归并排序<a href="https://www.luogu.com.cn/record/181909327">AC代码</a>如果代码看不懂就去看题解区大佬的代码，毕竟这个没有注释。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1908">P1908 逆序对</a>归并排序求逆序对<a href="https://www.luogu.com.cn/record/181836523">AC代码</a><img src="https://upload-bbs.miyoushe.com/upload/2024/10/13/198629752/220c2cdbf5a1a991f296bebb20abd02b_8699420978560025386.png" alt="解释">代码解释如图。详细见Database中的深入浅出。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1177">P1177 【模板】排序</a>
+    <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int a[100010],b[100001],n;
+void mergersort(int l,int r){
+    if(l==r)return;<span>//如果撞到了一起则返回 </span>
+    int mid=(l+r)/2;
+    mergersort(l,mid);mergersort(mid+1,r);<span>//分治 </span>
+    for(int i=l,j=l,k=mid+1;i&lt;=r;i++)<span>//排序</span> 
+        if(j==mid+1) b[i]=a[k++];
+        else if(k==r+1) b[i]=a[j++];
+        else b[i]=a[j]&lt;a[k]?a[j++]:a[k++];
+    for(int i=l;i&lt;=r;i++)a[i]=b[i];<span>//覆盖</span> 
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;a[i];
+    mergersort(1,n);
+    for(int i=1;i&lt;=n;i++)cout&lt;&lt;a[i]&lt;&lt;" ";
+    return 0;
+}
+    </pre>这是经过压行的归并排序，十分简洁，了解主要分治思想最关键。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11184?contestId=200686">P11184 带余除法</a>CSP-J模拟赛，这道题需要用数学方法来做，当时提交时候用的暴力枚举除数，结果1个MLE、3个AC，其他TLE。正解应该是这样的：<a href="https://www.luogu.com.cn/record/181818460">AC代码</a>我们用商的边界相减就能得到余数的种类。比如10/5=2、10/3=3，那么我们就用5-3等于2，那么余数一共有2种。</div>
+    <div class="t1">每场考试都要写read，否则就算答案对了，也得TLE</div>
+    <div class="t1">归并排序算法当中有一步叫做合并，具体实现步骤看这：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/13/198629752/7bbd924ea0156296fd8c66c79982ccbd_6907507698226923087.png" alt="合并">这里用到了3个指针+3个数组，c是结果数组，a和b是被合并的数组。最终结果c数组呈单调增。</div>
+    <div class="t1">分治与倍增<img src="https://upload-bbs.miyoushe.com/upload/2024/10/13/198629752/6a87b1b1252ffef69e94285a33b20729_9207826495284927265.png" alt="分治与倍增"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5937">P5937 [CEOI1999] Parity Game</a>这道题是并查集、找关系，如果冲突，那么就输出答案，否则继续判断。通过将数据离散化来达到降低复杂度的效果。<a href="https://www.luogu.com.cn/record/181785320">题解代码</a>题解区的代码讲的太难懂，我用我的理解写到了注释上面。总的意思来说，就是给每个区间端点设立两种状态，如果不冲突，那么就合并，否则就输出冲突的位置结束程序。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4375">P4375 [USACO18OPEN] Out of Sorts G</a>这道题如果只改写代码，那么只能拿到50分。<a href="https://www.luogu.com.cn/problem/solution/P4375">@Meepo的题解</a>代码写的很简单，大意就是找到需要往后面交换的数字的个数。<a href="https://www.luogu.com.cn/record/181623321">我的题解(注释非常清晰)</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1904">P1904 天际线</a>这道题暴力就能AC，但是我们为了练习离散化，还是用离散化比较好。<br>
+        <ol>
+            <li>明确离散对象：左右区间l和r。</li>
+            <li>二分对象：高度</li>
+        </ol><a href="https://www.luogu.com.cn/record/181594387">题解代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3029">P3029 [USACO11NOV] Cow Lineup S</a>这道题使用单调队列和离散化求解，离散化就用map就能实现了。<a href="https://www.luogu.com.cn/record/181574982">题解代码</a>我觉得这是最容易理解的代码了。<a href="https://upload-bbs.miyoushe.com/upload/2024/10/12/198629752/051492f6386b9f247fa787df63c07633_8572214169970926441.png">我与AI的聊天记录</a>这是AI的回答，非常容易理解</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4552">P4552 [Poetize6] IncDec Sequence</a>这道题已经是一道数学题了。<br>不要模拟，模拟不出来，看看题目颜色，绿色！这道题需要先用数学思想推一下，最后总结出公式再写代码，代码很短。<a href="https://www.luogu.com.cn/record/181563937">我的AC代码</a>这告诉我们一个道理，有些题目你最好先试试能不能总结出公式，如果不能，那就模拟。<a href="https://www.luogu.com.cn/problem/solution/P4552">别人的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2882">P2882 [USACO07MAR] Face The Right Way G</a>这道题需要利用二进制的异或运算。差分数组为二进制异或差分。这是一道很典的题目。这道题不好理解的地方在于题目中说每次可以将K头牛转向，但没有说这个K是不变的，因此刚开始我以为这个K会变，结果看了题解才知道原来K是一个定值。这道题翻译过来就是给定一个01串、一个K，每次对某个长度为K的区间进行翻转，使得所有0变成1。求翻转的最小次数还有最小次数对应的K。<br><a href="https://www.luogu.com.cn/record/181558002">题解</a>其中的now相当于对区间进行前缀异或了(说白了就是对区间取反)，这样的做法时间复杂度可以降至O(n²)。题目范围5000，O(n²)的复杂度下，5000*5000=25000000&lt;400000000可以在一秒内通过本题。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/record/181548562">P1083 [NOIP2012 提高组] 借教室</a>这道题有一个坑点，输入的数据是有序的，也就是可以使用二分答案！呜呜呜~<br>二分+前缀和+差分配合使用。<br>别忘了memset初始化tmp数组。<a href="https://www.luogu.com.cn/record/181548562">题解</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3406">P3406 海底高铁</a>这道题是前缀和+差分，首先进行差分，求解一个区间经过了多少次，但这道题不同的是，他告诉你了进过了第几段区间，而不是从几到几，因此差分不需要再尾部+1的位置-1，而是要直接在尾部-1。前缀和+贪心求解最终答案即可。<br>*这道题可以加深自己对前缀和与差分的认识。<br><a href="https://www.luogu.com.cn/record/181468218">题解</a><img src="https://upload-bbs.miyoushe.com/upload/2024/10/11/198629752/3b735a0db14f78be46234d68ed2be073_1895195961999785588.png" alt="前缀和与差分">如图，其中的t就是差分后累加的每个阶段的结果。(还是那句话，这个差分的是段，而不是点，所以直接尾部-1，而不是尾部+1处-1。)。每个阶段的t代表了这个区间经过了多少遍，然后用这个t乘以我的花费，对于IC卡，你可能也注意到了，每次i只经过一次，因此刚好利用程序顺序结构处理了IC卡的问题。<p>如果还不理解可以去题解那边去看看，记得亲自用手推一遍dalao的代码。</p></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3017">P3017 [USACO11MAR] Brownie Slicing G</a>不会...题解没看懂。<a href="https://www.luogu.com.cn/problem/solution/P3017">题解</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P2004">P2004 领地选择</a>这道题挺简单的，但我提交了几遍才AC，因为这道题说了领地大小了，因此我们只需要枚举右上角，那么左下角就根据领地边长C算出来了，时间复杂度O(n²)。<br>易错点：遍历循环边界忘记加一，计算出的右下角忘记减一。出错的位置我在↓题解标出来了。<a href="https://www.luogu.com.cn/record/181395934">题解</a></div>
