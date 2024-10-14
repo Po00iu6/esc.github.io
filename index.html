@@ -83,6 +83,34 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1228">P1228 地毯填补问题</a>分治算法的典型，主要是太费时间了，这道题需要找好位置之间的关系来递归求解。<a href="https://www.luogu.com.cn/problem/solution/P1228"></a>题解区</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1257">P1257 平面上的最接近点对</a>令我吃惊的是，暴力居然真的能过！<a href="https://www.luogu.com.cn/record/182016281">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2415">P2415 集合求和</a>纯数学方法就行了，这道题原本我还想二分，结果一看题解，居然是数学推导。<a href="https://www.luogu.com.cn/problem/solution/P2415">题解区</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7167">P7167 [eJOI2020 Day1] Fountain</a>这道题要用二分+ST表，ST表存储最大值，使用二分查找最大值。没错，二分最大值不一定非要序列有序，ST表是可以被二分的！<a href="https://www.luogu.com.cn/record/182012406">AC代码</a>查询ST表最大值
+    <pre>
+int query_max(int A,int B)
+{<span>//ST表的查询，建议直接背会</span>
+	int x=log_2[B-A+1];
+	return max(rmax[A][x],rmax[B-(1&lt;&lt;x)+1][x]);
+}
+    </pre>构建ST表
+<pre>
+for(int i=2;i<=n;i++)
+{
+    log_2[i]=log_2[i>>1]+1;
+}
+for(int i=1;i<=n;i++)
+{
+    rmax[i][0]=d[i];
+}
+for(int j=1;(1&lt;&lt;j)&lt;=n;j++)
+{
+    for(int i=1;i&lt;=n-(1&lt;&lt;j)+1;i++)
+    {
+        rmax[i][j]=max(rmax[i][j-1],rmax[i+(1&lt;&lt;j-1)][j-1]);
+    }
+}
+</pre></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P2880">P2880 [USACO07JAN] Balanced Lineup G</a>还是奶牛牧场这道题，但是ST表，ST表我刚学，还是得背板子啊。<a href="https://www.luogu.com.cn/record/181971452">AC代码</a>需要2个数组，分别存储最大值和最小值，ST表可以存储最大值和最小值，但要么只能存最大、要么只能存最小，所以要想两个都存，就必须要开2个数组。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1045">P1045 [NOIP2003 普及组] 麦森数</a>思路挺简单，主要是高精度不会的话得需要复习一下了。<a href="https://www.luogu.com.cn/record/181931701">AC代码</a>其中为了输出位数，指数化成了对数log表示。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1226">P1226 【模板】快速幂</a>经典算法快速幂<br><a href="https://www.luogu.com.cn/record/181914237">递归写法</a><a href="https://www.luogu.com.cn/record/181919030">非递归写法</a>主要利用了二分法和倍增法。<br>递归法是将指数二分。<br>非递归法是将底数倍增。</div>
