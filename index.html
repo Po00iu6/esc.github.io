@@ -83,6 +83,271 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1">手写max太慢，容易TLE，具体原理我也不清楚，反正<code>#define max(a,b) (a>b?a:b)</code>这个以后就不要用了。以后就用algorithm里面的max函数就好了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1253">P1253 扶苏的问题</a>手写max容易超时，眼都快看花了，后面看了讨论区才知道手写max太慢。😓这个代码建议多看几遍，毕竟线段树挺重要的。这个线段树代码支持修改、查找、最大值比较操作，知识点还算全。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cctype&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+<span>//#define max(a,b) (a&gt;b?a:b)</span>
+<span>//总结，能不用就不用，用了就会超时。 </span>
+#define ll long long
+ll a[4000001];
+struct node{
+    ll data,add=0;
+    bool set=0;
+}tree[4000501];
+inline void build(ll root,ll l,ll r){
+    ll num;
+    if(l==r){
+        tree[root].data=a[l];
+        num=max(num,root);
+        return;
+    }
+    ll m=(l+r)&gt;&gt;1;
+    build(root&lt;&lt;1,l,m);
+    build((root&lt;&lt;1)+1,m+1,r);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+inline void pushdown(ll root){
+    if(tree[root].set){
+        tree[root].set=0;
+        tree[root].add=0;
+        tree[root&lt;&lt;1].add=0;
+        tree[root&lt;&lt;1].set=1;
+        tree[root&lt;&lt;1].data=tree[root].data;
+        tree[(root&lt;&lt;1)+1].add=0;
+        tree[(root&lt;&lt;1)+1].set=1;
+        tree[(root&lt;&lt;1)+1].data=tree[root].data;
+    }
+    else
+    {
+        tree[root&lt;&lt;1].add+=tree[root].add;
+        tree[root&lt;&lt;1].data+=tree[root].add;
+        tree[(root&lt;&lt;1)+1].add+=tree[root].add;
+        tree[(root&lt;&lt;1)+1].data+=tree[root].add;
+        tree[root].add=0;
+    }
+}
+inline ll query(ll root,ll l,ll r,ll ql,ll qr){
+    ll ans=-1e18;
+    if(l&lt;=ql&&r&gt;=qr)return tree[root].data;
+    pushdown(root);
+    ll m=(ql+qr)&gt;&gt;1;
+    if(l&lt;=m)ans=max(ans,query(root&lt;&lt;1,l,r,ql,m));
+    if(r&gt;m)ans=max(ans,query((root&lt;&lt;1)+1,l,r,m+1,qr));
+    return ans;
+}
+inline void update(ll root,ll L,ll R,ll l,ll r,ll k)
+{
+    if(L&lt;=l&&R&gt;=r)
+    {
+        tree[root].add+=k;tree[root].data+=k;
+        return;
+    }
+    pushdown(root);
+    ll m=(l+r)&gt;&gt;1;
+    if(L&lt;=m)update(root&lt;&lt;1,L,R,l,m,k);
+    if(R&gt;m)update((root&lt;&lt;1)+1,L,R,m+1,r,k);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+inline void reset(ll root,ll L,ll R,ll l,ll r,ll k)
+{
+    if(L&lt;=l&&R&gt;=r)
+    {
+        tree[root].add=0;tree[root].data=k;tree[root].set=1;
+        return;
+    }
+    pushdown(root);
+    ll m=(l+r)&gt;&gt;1;
+    if(L&lt;=m)reset(root&lt;&lt;1,L,R,l,m,k);
+    if(R&gt;m)reset((root&lt;&lt;1)+1,L,R,m+1,r,k);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+ll read()
+{
+    ll s=0,w=1;char ch=getchar();
+    while(!isdigit(ch)){<span>//使用isdigit()函数被忘了引用cctype </span>
+        if(ch=='-')w=-1;
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';
+        ch=getchar();
+    }
+    return s*w;
+}
+int main()
+{
+    ll n,q,l,r,x,op;
+    n=read();q=read();
+    for(int i=1;i&lt;=n;i++)
+    {
+        a[i]=read();
+    }
+    build(1,1,n);
+    while(q--)
+    {
+        op=read();
+        if(op==1)
+        {<span>//把(l,r)的所有数修改成x。 </span>
+            l=read();r=read();x=read();
+            reset(1,l,r,1,n,x);
+        }
+        else if(op==2)
+        {<span>//对(l,r)区间的每个数加x。 </span>
+            l=read();r=read();x=read();
+            update(1,l,r,1,n,x);
+        }
+        else
+        {<span>//查询(l,r)区间的最大值。 </span>
+            l=read();r=read();
+            printf("%lld\n",query(1,l,r,1,n));
+        }
+    }
+    return 0;
+}
+</pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1438">P1438 无聊的数列</a>在线段树当中算是一个进阶题了吧。我想我得把这个记下来，这道题是区间加上一个等差数列，那么我们是选择使用线段树+差分完成的。这个是结构体版本的，只需要2个数组就能完成。<pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define ll long long
+ll data[100010];
+struct point{<span>//结构体定义节点</span>
+    ll sum;
+    ll tag;
+}a[400001];
+inline int ls(int root){
+    <span>//左孩子</span>
+    return root&lt;&lt;1;
+}
+inline int rs(int root){
+    <span>//右孩子</span>
+    return root&lt;&lt;1|1;
+}
+inline void up(int root){
+    <span>//相当于pushup</span>
+    a[root].sum=a[ls(root)].sum+a[rs(root)].sum;
+}
+void build(int root,int l,int r){
+    <span>//构建线段树</span>
+    a[root].tag=0;int mid=(l+r)&gt;&gt;1;
+    if(l==r){
+        a[root].sum=data[l];
+        return;
+    }
+    build(ls(root),l,mid);build(rs(root),mid+1,r);
+    up(root);
+}
+inline void pd(int root,int l,int r){
+    <span>//下加，pushdown</span>
+    int mid=(l+r)&gt;&gt;1;
+    a[ls(root)].tag+=a[root].tag;
+    a[rs(root)].tag+=a[root].tag;
+    a[ls(root)].sum+=a[root].tag*(mid-l+1);
+    a[rs(root)].sum+=a[root].tag*(r-mid);
+    a[root].tag=0;
+}
+void add(int root,int l,int r,int ql,int qr,ll x){
+    <span>//单点添加元素</span>
+    if(ql&lt;=l&&qr&gt;=r){
+        a[root].tag+=x;
+        a[root].sum+=(r-l+1)*x;
+        return;
+    }
+    int mid=(l+r)&gt;&gt;1;
+    pd(root,l,r);
+    if(ql&lt;=mid)add(ls(root),l,mid,ql,qr,x);
+    if(qr&gt;mid)add(rs(root),mid+1,r,ql,qr,x);
+    up(root);
+    return;
+}
+ll query(int root,int l,int r,int ql,int qr){
+    if(ql&lt;=l&&qr&gt;=r){<span>//单点查询</span>
+        return a[root].sum;
+    }
+    int mid=(l+r)&gt;&gt;1,res=0;
+    pd(root,l,r);
+    if(ql&lt;=mid)res+=query(ls(root),l,mid,ql,qr);
+    if(qr&gt;mid)res+=query(rs(root),mid+1,r,ql,qr);
+    return res;
+}
+int main()
+{
+    int n,m,opt,l,r,K,D,p;
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;data[i];
+    }
+    for(int i=n-1;i&gt;0;i--)
+    {
+        data[i+1]=data[i+1]-data[i];
+    }
+    build(1,1,n);
+    while(m--)
+    {
+        cin&gt;&gt;opt;
+        switch(opt)
+        {
+            case 1:{
+                cin&gt;&gt;l&gt;&gt;r&gt;&gt;K&gt;&gt;D;
+                add(1,1,n,l,l,K);
+                if(l+1&lt;=r)add(1,1,n,l+1,r,D);
+                if(r&lt;n)add(1,1,n,r+1,r+1,-(K+D*(r-l)));
+                break;
+            }
+            case 2:{
+                cin&gt;&gt;p;
+                cout&lt;&lt;query(1,1,n,1,p)&lt;&lt;'\n';
+                break;
+            }
+        }
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3870">P3870 [TJOI2009] 开关</a>算是模板题了，不过因为我刚学线段树，所以不会做。<a href="https://www.luogu.com.cn/problem/solution/P3870">题解区</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3372">P3372 【模板】线段树 1</a>这道题需要数组开大点，否则WA。<a href="https://www.luogu.com.cn/record/182406256">AC代码</a></div>
+    <div class="t1">线段树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/555e5110f45b475c11cb40f875bd6a7a_1581579760085853751.png" alt="线段树"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2278">P2278 [HNOI2003] 操作系统</a>这道题非常考验思维啊。输入数据已经按到达时间从小到大排序。首先刚开始没有东西的时候，我们加入第一个任务。其次，你们还是看题解区吧。<a href="https://www.luogu.com.cn/problem/solution/P2278">题解区</a>总之这道题跟上一道是一样的需要一个变量充当时间线。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4053">P4053 [JSOI2007] 建筑抢修</a>我们按照时间T1排序，然后再循环中把T1加起来作为当前时间，然后把抢修时间加入优先队列，如果当前时间小于优先队列当中最小的(最紧急)抢修时间，那么我们就修，否则不修了，pop()掉，把这个东西所需时间减掉。最后代码：<a href="https://www.luogu.com.cn/problem/solution/P4053">题解区大佬思路牛啊。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2827">P2827 [NOIP2016 提高组] 蚯蚓</a>如果你用C++自带的priority_queue，别忘了STL的许多函数常数都是比较大的，也就是说这玩意会超时！害我改了半天。<a href="https://blog.csdn.net/I_have_a_world/article/details/119207142">CSDN的大佬的操作很神奇。</a>可以准备三个队列，第一个存放原来的蚯蚓，第二个和第三个存放切割后的蚯蚓，这三个都是单调不增的。<br><b>证明：由于最开始蚯蚓取的是最大值，则分割后的小蚯蚓存入另外两个队列后仍然最大，且后面入队的蚯蚓都比她们小，这是因为蚯蚓都在变长，相对长度不变。</b>这样一来三个队列的最大值直接进行队头比较就好了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2168">P2168 [NOI2015] 荷马史诗</a>代码挺简单，主要是哈夫曼树不太好看出来，而且也不好想。可能还是我刷题太少了。<a href="https://www.luogu.com.cn/record/182332052">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1090">P1090 [NOIP2004 提高组] 合并果子 / [USACO06NOV] Fence Repair G</a>2024年S组要是来个这样的题多好啊，简直是送分啊，不要白不要。<a href="https://www.luogu.com.cn/record/182308166">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3378">P3378 【模板】堆</a>可以使用priority_queue&lt;int , vector&lt;int&gt; , greater&lt;int&gt; &gt;秒杀。但我们毕竟是来学算法的，所以来讲一下堆吧。最重要的是这个<ol>
+        <li>
+            编号为x节点的父节点是[x/2]。
+        </li>
+        <li>
+            编号为x节点的左子节点是2x，右子节点是2x+1。
+        </li>
+        <li>
+            对于大根堆而言，父节点的值一定大于等于子节点的值；小根堆反之。
+        </li>
+    </ol>修复二叉堆，直接找到要修复的节点，让她与父节点交换，直到满足第三条性质。删除堆顶元素，直接让堆顶与堆尾交换，然后修复二叉堆。</div>
+    <div class="t1">二叉堆<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/0fb55586daf283dcdc56be51b1614d07_837307545986593437.png" alt="二叉堆"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1074">P1074 [NOIP2009 提高组] 靶形数独</a>搜索题，感觉很简单，但其实我也不知道为什么错，我的代码可能没错，只不过时间复杂度是阶乘级别的。因此这道题我是抄的。<a href="https://www.luogu.com.cn/problem/solution/P1074">感谢 @学无止境 的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2324">P2324 [SCOI2005] 骑士精神</a>这道题是启发式A*搜索算法，我抄的题解。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5507">P5507 机关</a>这道题我不会，抄的。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1379">P1379 八数码难题</a>累晕了，不想看了~我直接抄的题解，不过这道题看起来应该不难。<a href="https://www.luogu.com.cn/problem/solution/P1379">@hidden_er的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1763">P1763 埃及分数</a>迭代加深搜索我不会，所以是抄的。<a href="https://www.luogu.com.cn/problem/solution/P1763">感谢 @王熙文 的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1120">P1120 小木棍</a>这道题可谓是把剪枝剪到了极致！<a href="https://www.luogu.com.cn/record/182203529">我之前的答案</a><a href="https://www.luogu.com.cn/record/182205234">AC之后的答案</a>木棍需要从最大值枚举，枚举到所有木棍最大加和。如果不是最大加和的因数就continue，而且从大到小枚举......具体见题解。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1433">P1433 吃奶酪</a>搜索拿不了满分，最多拿90分，不过在赛场上已经够了。其中搜索的一个新技巧是遇到卡时情况时，可以强制退出。<pre>
+cnt++;
+if(cnt>=10000000)<span>//卡时，则直接退出程序。</span>
+{
+    printf("%.2lf",ans);
+    exit(0);<span>//结束程序需要用头文件cstdlib</span>
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1036">P1036 [NOIP2002 普及组] 选数</a>一道普及的题目我调了半天。最后发现是参数写错了。<code>dfs(x+1,i+1,z+a[i]);</code>这里应该是i+1而不是y+1。<a href="https://www.luogu.com.cn/record/182199160">AC代码</a>如果按照常规搜索，那么会有重复，为了避免重复，我们dfs要有3个参数<ol>
+        <li>当前选了多少数</li>
+        <li>考虑下一个是哪里</li>
+        <li>加和是多少</li>
+    </ol></div>
+    <div class="t1">进阶搜索<img src="https://upload-bbs.miyoushe.com/upload/2024/10/15/198629752/aa21ff8dbbb240259aa361fe8086648c_3557376428275539776.png" alt="进阶搜索"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7562">P7562 [JOISC 2021 Day4] イベント巡り 2 (Event Hopping 2)</a>这道题我就是抄代码也是我抄不来的。不过题目很好理解，主要是代码很难写。<a href="https://www.luogu.com.cn/problem/solution/P7562">感谢@AquariusZhao的题解</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P6648">P6648 [CCC2019] Triangle: The Data Structure</a>看来还是我肤浅了，ST表要是考得难，就会这样难。<a href="https://www.luogu.com.cn/problem/solution/P6648">题解</a>看不懂，不过觉得应该是多维ST表，这是啥我没学过啊！<a href="https://blog.csdn.net/weixin_41162823/article/details/98471161">二维ST表</a><a href="https://www.luogu.com.cn/problem/P2216">二维ST表例题：P2216 [HAOI2007] 理想的正方形</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1816">P1816 忠诚</a>这道题是一道令人喜庆的ST表问题，而且考的是模板！我一遍就AC了（其实MLE了4个点）。<br><br>*总结：ST表不能开太大，我试了一下，这个题目数据我们rmin只需要开[m][16]即可。<br>（其实我也不知道为什么开这么小能过，因为模板上是这么写的，赛场上保险一点还是开到[m][64]吧。）<a href="https://www.luogu.com.cn/record/182134693">AC代码</a></div>
