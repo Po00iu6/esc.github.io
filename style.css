@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", "Noto Sans", "Noto Sans CJK SC", "Noto Sans CJK", "Source Han Sans", "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif;
 }
 body{
     overflow-x: hidden;
@@ -93,23 +94,29 @@ img{
 }
 
 
-
+hr{
+    border-style: solid;
+    border-color: white;
+}
 
 
 
 
 pre{
-    line-height: 18px;
-    color: #cccccc;
+    font-family:Menlo,Monaco,Consolas,"Courier New",monospace !important;
+    /* line-height: 20px; */
+    color: #BBBBBB;
     border-style: solid;
     border-width: 1px;
     border-radius: 5px;
     padding: 10px;
     border-color: rgb(220, 220, 220);
-    background-color: #1f1f1f;
+    background-color: #1E1E1E;
     /* text-wrap: wrap; */
     overflow-x: scroll;
+
     max-width: 80%;
+    max-height: 100vh;
 }
 
 pre::-webkit-scrollbar{

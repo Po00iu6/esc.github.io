@@ -53,4 +53,55 @@ document.addEventListener('DOMContentLoaded', function() {
             spans[i].style.color = '#9cdcfe'; 
         }
     }  
+
+
+    //------------------------------------------
+
+    // 获取所有的b标签  
+    const aTags = document.getElementsByTagName('a');  
+  
+    // 遍历每一个b标签  
+    for (let i = 0; i < aTags.length; i++) {  
+        const aTag = aTags[i];  
+        const textContent = aTag.textContent || aTag.innerText; // 兼容不同浏览器的文本内容获取  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('省选/NOI-')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#9D3DCF';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('提高+/省选-')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#3498DB';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }   
+        
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('普及-')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#F39C11';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
+    }  
 });
