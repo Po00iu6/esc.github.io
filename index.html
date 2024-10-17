@@ -100,7 +100,12 @@ int main()
     cout&lt;&lt;ans;
     return 0;
 }
-    </pre>因为题目中没有说输入的x和y一定是x小于y，她只是说了：“居民区x和y之间存在道路”。这也就是本题的坑点。导致我WA零分！所以输入数据要判断x如果大于y就交换她俩。<br><hr style="width: 100%;">那为什么建图就AC了呢？其实原因就在于建图的建了无向边，恰好规避了这个顺序问题。</div>
+    </pre>因为题目中没有说输入的x和y一定是x小于y，她只是说了：“居民区x和y之间存在道路”。这也就是本题的坑点。导致我WA零分！所以输入数据要判断x如果大于y就交换她俩。<br><hr style="width: 100%;">那为什么建图就AC了呢？其实原因就在于建图的建了无向边，恰好规避了这个顺序问题。其实这道题的数据也比较水，如果我来个这个数据：<pre>
+5 1
+1 5
+3 5
+2 3
+4 2</pre>这个数据按道理老说应该输出1，但是却输出了4，也就是说，我们这个代码是会WA的，之所以AC了，是因为数据太水了。这都能过，我也是服了。比赛时保险起见还是建图比较好。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3810">P3810 【模板】三维偏序（陌上花开）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>省选代码都可长了~连一个模板都要这么长！<pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
