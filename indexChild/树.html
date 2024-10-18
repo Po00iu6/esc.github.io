@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
+    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
+    <meta name="renderer" content="webkit">
+    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
+    <meta name="description" content="OIer的错题集,ESC,ESC.html">
+
+    <!-- bing sitmap system -->
+    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
+    <!--  -->
+
+    <title>错题集</title>
+
+    <link rel="stylesheet" href="../style.css">
+
+    <!--  -->
+    <style>
+        @media screen and (max-width:600px) {
+            .bg1{
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/d3113e73faffc515e72539f3e8d998c2_7061186901508087499.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+            }
+        }
+        @media screen and (min-width:601px){
+            .bg1{
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/fb0219b8bf0517d8ad3aebc681c296f9_6957711108532561904.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+    }
+        }
+    </style>
+    <!--  -->
+</head>
+<body>
+    <header id="_header">
+        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+            NOI
+        </div> -->
+        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+            物理
+        </div> -->
+        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+            化学
+        </div> -->
+        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+            生物
+        </div> -->
+        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+            OIWiki
+        </div> -->
+    </header>
+    
+    <!--  -->
+    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay loop style="display: none;"></audio>
+    <!--  -->
+    <div class="bg1"></div>
+    <div class="bg2"></div>
+    <div class="bg3"></div>
+    <div class="bg4"></div>
+    <div class="bg5"></div>
+    <div class="bg6"></div>
+    <div class="bg7"></div>
+    <div class="bg8"></div>
+    <!--  -->
+
+
+    <div class="op">
+        <h1>下拉查看OI错题</h1>
+    </div>
+
+
+
+    <br>
+    <h1>错题集</h1>
+    <br>
+    <hr style="z-index: 1;">
+    <br>
+    <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3128">P3128 [USACO15DEC] Max Flow P</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>果然，还是套公式好用！这道题前一部分是直接套用熟练剖分的算法模板，后一部分也就是dfs3是遍历整棵树，回溯过程中去做和的累加，循环外去记录最大值。<b>典型模板：树上差分</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+int n,m,k,ans,power[maxn];<span>//power是差分数组</span>
+int fa[maxn],dep[maxn],top[maxn],sz[maxn],son[maxn];
+void dfs1(int u,int father){
+    fa[u]=father;sz[u]=1;dep[u]=dep[father]+1;
+    for(int i=0;i&lt;linker[u].size();i++){
+        int v=linker[u][i];
+        if(v==father)continue;
+        dfs1(v,u);
+        sz[u]+=sz[v];
+        if(sz[son[u]]&lt;sz[v])son[u]=v;
+    }
+}
+void dfs2(int u,int t){
+    top[u]=t;
+    if(!son[u])return;
+    dfs2(son[u],t);
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]==fa[u]||linker[u][i]==son[u])continue;
+        dfs2(linker[u][i],linker[u][i]);
+    }
+}
+void swap(int &x,int &y){
+    int tmp=x;x=y;y=tmp;
+}
+int lca(int x,int y){
+    while(top[x]!=top[y]){
+        if(dep[top[x]]&lt;dep[top[y]])swap(x,y);
+        x=fa[top[x]];
+    }
+    return dep[x]&lt;dep[y]?x:y;
+}
+<span>//--------从这往上都是模板-----------</span>
+
+void dfs3(int u,int f){<span>//这个的意思就是遍历整棵树</span>
+    for(int i=0;i&lt;linker[u].size();i++)
+    {
+        if(linker[u][i]==f)continue;
+        dfs3(linker[u][i],u);
+        power[u]+=power[linker[u][i]];<span>//回溯阶段累加</span>
+    }
+    ans=max(ans,power[u]);<span>//记录最大值</span>
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1,x,y;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    dfs1(1,0);
+    dfs2(1,1);
+    for(int i=1,x,y;i&lt;=k;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        int l=lca(x,y);
+        ++power[x];++power[y];<span>//做差分，跟之前学的差不多</span>
+        --power[l];--power[fa[l]];
+    }
+    dfs3(1,0);<span>//差分完了就累加</span>
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3379">P3379 【模板】最近公共祖先（LCA）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>树链剖分挺简单的。<br><b>1.树链剖分：</b><pre>
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+int n,m,s;
+int fa[maxn],dep[maxn],top[maxn],sz[maxn],son[maxn];
+void dfs1(int u,int father){<span>//求出fa、sz、dep、son</span>
+    fa[u]=father;sz[u]=1;dep[u]=dep[father]+1;
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]==father)continue;
+        dfs1(linker[u][i],u);
+        sz[u]+=sz[linker[u][i]];
+        if(sz[son[u]]&lt;sz[linker[u][i]])son[u]=linker[u][i];
+    }
+}
+void dfs2(int u,int t){<span>//求出链头top</span>
+    top[u]=t;
+    if(!son[u])return;
+    dfs2(son[u],t);
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]==fa[u]||linker[u][i]==son[u])continue;
+        dfs2(linker[u][i],linker[u][i]);
+    }
+}
+void swap(int &x,int &y){
+    int tmp=x;x=y;y=tmp;
+}
+int lca(int x,int y){<span>//通过链头向上跳，找最近公共祖先。</span>
+    while(top[x]!=top[y]){
+        if(dep[top[x]]&lt;dep[top[y]])swap(x,y);
+        x=fa[top[x]];
+    }
+    return dep[x]&lt;dep[y]?x:y;
+}
+int main(){
+    cin&gt;n&gt;m&gt;s;
+    for(int i=1,x,y;i&lt;n;i++){
+        cin&gt;x&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    dfs1(s,0);
+    dfs2(s,s);
+    int x,y;
+    while(m--){
+        cin&gt;x&gt;y;
+        cout&lt;&lt;lca(x,y)&lt;&lt;'\n';
+    }
+    return 0;
+}</pre><br><b>2.倍增：</b><pre>
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+int n,m,s,x,y;
+int fa[maxn][30],dep[maxn];
+void dfs(int u,int father){
+    fa[u][0]=father;
+    dep[u]=dep[father]+1;
+    <span>//fa数组的初始化，可以考虑在dfs的时候一块弄，不过这样会略微超时，所以我把fa数组初始化提出来了。见下文__init()函数</span>
+<span>//	for(int i=1;i&lt;=19;i++){</span>
+<span>//		fa[u][i]=fa[fa[u][i-1]][i-1];</span>
+<span>//	}</span>
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]!=father)dfs(linker[u][i],u);
+    }
+}
+void swap(int &x,int &y){
+    int tmp=x;x=y;y=tmp;
+}
+int lca(int u,int v){
+    if(dep[u]&lt;dep[v])swap(u,v);
+    for(int i=19;i&gt;=0;i--){
+        if(dep[fa[u][i]]&gt;=dep[v]){
+            u=fa[u][i];
+        }
+    }
+    if(u==v)return v;
+    for(int i=19;i&gt;=0;i--){
+        if(fa[u][i]!=fa[v][i]){
+            u=fa[u][i];v=fa[v][i];
+        }
+    }
+    return fa[u][0];
+}
+void __init(){
+    for(int i=1;i&lt;20;i++){
+        for(int j=1;j&lt;=n;j++){
+            fa[j][i]=fa[fa[j][i-1]][i-1];
+        }
+    }
+}
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    dfs(s,0);
+    __init();<span>//把fa数组提出来处理，虽然仍会TLE，但比之前好一点。</span>
+    while(m--){
+        cin&gt;&gt;x&gt;&gt;y;
+        cout&lt;&lt;lca(x,y)&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre><br><b>3.tarjan算法</b><pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+vector&lt;pair&lt;int,int&gt; &gt; query[maxn];
+int fa[maxn],vis[maxn],ans[maxn],n,m,s,x,y;
+int find(int u){
+    if(u==fa[u])return u;
+    return fa[u]=find(fa[u]);
+}
+void tarjan(int u){
+    vis[u]=true;
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(!vis[linker[u][i]]){
+            tarjan(linker[u][i]);
+            fa[linker[u][i]]=u;
+        }
+    }
+    for(int i=0;i&lt;query[u].size();i++){
+        int v=query[u][i].first,q=query[u][i].second;
+        if(vis[v])ans[q]=find(v);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        query[x].push_back({y,i});
+        query[y].push_back({x,i});
+    }
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    tarjan(s);
+    for(int i=1;i&lt;=m;i++){
+        cout&lt;&lt;ans[i]&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre><br><br>总结：数列剖分比较易于理解，而且不超时，但比较麻烦。倍增算法易于理解但是超时。tarjan算法不好理解，但是是最高效的。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1395">P1395 会议</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>典型的找树的重心的问题啊！！！但我不会呜呜呜。<pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 10000010
+int n,f[maxn],size[maxn],center,sum,dep[maxn];<span>//center为重心</span>
+vector&lt;int&gt; G[maxn];
+queue&lt;int&gt; q;
+void getcenter(int u,int fa){
+    size[u]=1;f[u]=0;
+    for(int i=0;i&lt;G[u].size();i++){
+        int v=G[u][i];
+        if(v==fa)continue;
+        getcenter(v,u);
+        size[u]+=size[v];
+        f[u]=max(f[u],size[v]);<span>//f[u]保存了点u的最大子树大小</span>
+    }
+    f[u]=max(f[u],n-size[u]);
+    <span>//size[u]计算完之后，计算树中除了该点的部分，并和之前的f[u]取较大值</span>
+    if(f[u]&lt;f[center]||(f[u]==f[center]&&u&lt;center)){
+        center=u;<span>//如果f[u]较小，更新找到的重心</span>
+    }
+}
+void bfs(){
+    q.push(center);
+    while(!q.empty()){
+        int u=q.front();q.pop();
+        for(int i=0;i&lt;G[u].size();i++){
+            int v=G[u][i];
+            if(dep[v]||v==center)continue;
+            dep[v]=dep[u]+1;<span>//深度</span>
+            sum+=dep[v];<span>//总距离要加上这个点的深度</span>
+            q.push(v);
+        }
+    }
+}
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1,x,y;i&lt;=n-1;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        G[x].push_back(y);
+        G[y].push_back(x);
+    }
+    center=0;f[0]=0x3f3f3f3f;
+    getcenter(1,0);<span>//求重心</span>
+    bfs();<span>//从重心开始求距离</span>
+    cout&lt;&lt;center&lt;&lt;' '&lt;&lt;sum;
+    return 0;
+}
+    </pre>代码还是挺好理解的哦~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1099">P1099 [NOIP2007 提高组] 树网的核</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>找直径，我们可以跑两遍DFS，随便找一点DFS到最远端，然后在最远端开始DFS找对于这个最远端来说的最远端。这两个最远端的距离就是直径。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#define M 500005
+using namespace std;
+int n,m,x,y,z,k,id,top,ans=2e9;
+int dis[M],fa[M],head[M];
+bool mark[M];
+struct node{
+    int to,w,nxt;
+}E[M&lt;&lt;1];
+void add(int u,int v,int w){
+    E[++id]=((node){v,w,head[u]});
+    head[u]=id;<span>//存图</span>
+}
+void dfs(int f,int x){
+    fa[x]=f;
+    if(dis[x]&gt;dis[k])k=x;
+    for(int i=head[x];i;i=E[i].nxt){
+        int y=E[i].to;
+        if(y==f||mark[y])continue;
+        dis[y]=dis[x]+E[i].w;
+        dfs(x,y);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
+        add(x,y,z);add(y,x,z);
+    }
+    dis[1]=1;dfs(0,1);
+    dis[k]=0;dfs(0,k);
+    top=k;<span>//k表示最远的端点</span>
+    for(int i=top,j=top,l=1,r=0;i;i=fa[i]){
+        while(dis[j]-dis[i]&gt;m)j=fa[j];
+        <span>//进行尺取，选路径。</span>
+        x=max(dis[top]-dis[j],dis[i]);
+        <span>//路径两端点到直径端点的最小贡献.</span>
+        ans=min(ans,x);
+    }
+    for(int i=top;i;i=fa[i])mark[i]=1;
+    <span>//标记直径，重新计算每个点的贡献。</span>
+    for(int i=top;i;i=fa[i]){
+        k=i;dis[k]=0;
+        dfs(fa[i],i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        ans=max(ans,dis[i]);<span>//每个点的贡献，仔细想想为什么是对的。</span>
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5908">P5908 猫猫和企鹅</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>这普及的题目啊，就一个字，“细节”！<pre>
+#include &lt;iostream&gt;
+using namespace std;
+long long p[4000001];
+long long ans,n,d,x,y;
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;d;
+    for(int i=1;i&lt;=n-1;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        if(x&gt;y)int tmp=x,x=y,y=tmp;
+        p[y]=p[x]+1;
+        if(p[y]&lt;=d)ans++;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>因为题目中没有说输入的x和y一定是x小于y，她只是说了：“居民区x和y之间存在道路”。这也就是本题的坑点。导致我WA零分！所以输入数据要判断x如果大于y就交换她俩。<br><hr style="width: 100%;">那为什么建图就AC了呢？其实原因就在于建图的建了无向边，恰好规避了这个顺序问题。其实这道题的数据也比较水，如果我来个这个数据：<pre>
+5 1
+1 5
+3 5
+2 3
+4 2</pre>这个数据按道理老说应该输出1，但是却输出了4，也就是说，我们这个代码是会WA的，之所以AC了，是因为数据太水了。这都能过，我也是服了。比赛时保险起见还是建图比较好。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3810">P3810 【模板】三维偏序（陌上花开）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>省选代码都可长了~连一个模板都要这么长！<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 1000006
+int n,k,cnt[maxn];<span>// n是元素数量，k是最大属性值，cnt数组用于存储结果</span>
+struct Data
+{
+    int x,y,z;
+    <span>// 重载小于运算符，用于排序</span>
+    int operator &lt; (const Data &o)const{
+        return x!=o.x?(x&lt;o.x):(y!=o.y?(y&lt;o.y):(z&lt;o.z));
+    }
+    <span>// 重载等于运算符，用于比较两个元素是否相等</span>
+    int operator == (const Data &o)const{
+        return x==o.x&&y==o.y&&z==o.z;
+    }
+}data[maxn];
+
+<span>// 树状数组（线段树）的定义</span>
+struct Seg{
+    struct Node{
+        int val;
+        Node *ch[2];
+        Node(int val=0):val(val){
+            ch[0]=ch[1]=NULL;
+        }
+    };
+    Node *rt;
+    Seg(){
+        rt=NULL;
+    }
+    <span>// 修改操作，在树状数组中的指定位置增加或减少值</span>
+    void Modify(Node *&now,int pos,int val,int nl,int nr){
+        if(!now)now=new Node();
+        if(nl==nr){
+            now-&gt;val+=val;
+            return;
+        }
+        int mid=(nl+nr)&gt;&gt;1;
+        if(pos&lt;=mid)Modify(now-&gt;ch[0],pos,val,nl,mid);
+        else Modify(now-&gt;ch[1],pos,val,mid+1,nr);
+        now-&gt;val=(now-&gt;ch[0]?now-&gt;ch[0]-&gt;val:0)+(now-&gt;ch[1]?now-&gt;ch[1]-&gt;val:0);
+    }
+    <span>// 查询操作，获取树状数组中指定区间的和</span>
+    int Query(Node *now,int l,int r,int nl,int nr){
+        if(!now)return 0;
+        if(l==nl&&r==nr)return now-&gt;val;
+        int mid=nl+nr&gt;&gt;1;
+        if(r&lt;=mid)return Query(now-&gt;ch[0],l,r,nl,mid);
+        else if(l&gt;mid)return Query(now-&gt;ch[1],l,r,mid+1,nr);
+        return Query(now-&gt;ch[0],l,mid,nl,mid)+Query(now-&gt;ch[1],mid+1,r,mid+1,nr);
+    }
+};
+Seg tree[maxn];<span>// 树状数组数组，用于处理每个x值的y,z坐标统计</span>
+int LB(int x){
+    return x&(-x);
+}
+void Modify(int posx,int posy,int val){
+    for(int i=posx;i&lt;=k;i+=LB(i)){
+        tree[i].Modify(tree[i].rt,posy,val,1,k);
+    }
+}
+int Query(int x,int y){
+    int ret=0;
+    for(int i=x;i;i-=LB(i))ret+=tree[i].Query(tree[i].rt,1,y,1,k);
+    return ret;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;data[i].x&gt;&gt;data[i].y&gt;&gt;data[i].z;
+    }
+    sort(data+1,data+n+1);<span> // 按x,y,z排序 </span>
+    int sum=1;<span>// 用于处理相同元素的数量</span>
+    for(int i=1;i&lt;=n;i++){
+        if(data[i+1]==data[i]){
+            sum++;<span>// 如果下一个元素与当前元素相同，增加sum</span>
+            continue;
+        }
+        Modify(data[i].y,data[i].z,sum);<span>// 在树状数组中记录当前元素</span>
+        int res=Query(data[i].y,data[i].z);<span>// 查询小于等于当前y,z的点的数量</span>
+        cnt[res]+=sum;
+        sum=1;<span>// 重置sum</span>
+    }
+    for(int i=1;i&lt;=n;i++)cout&lt;&lt;cnt[i]&lt;&lt;'\n';
+    return 0;
+}
+    </pre></div>
+    <div class="t1">树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/18/198629752/4ac1d4603e95ddbde0301655b6273856_5867892361830757225.png" alt="树"></div>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+</body>
+<script src="../CanvasFor_index.js"></script>
+<!-- <script src="./Canvas2.js"></script> -->
+<script src="../Volume.js"></script>
+<script src="../Unit.js"></script>
+<script src="../ChangSpanColor.js"></script>
+<script src="../a_blank.js"></script>
+</html>

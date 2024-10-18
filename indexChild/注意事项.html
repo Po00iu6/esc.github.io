@@ -21,25 +21,18 @@
 
     <title>错题集</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="../style.css">
 
     <!--  -->
     <style>
-        a{
-            text-decoration: none;
-            font-size: large;
-            font-weight: bolder;
-            color:black;
-
-        }
         @media screen and (max-width:600px) {
             .bg1{
-        background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/570fc67f4b580da77f9af206eb3bc0a5_7858946434453008095.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/cb5ee9ac9ade73fac79e9aee96bbf57b_4631184775587555783.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
             }
         }
         @media screen and (min-width:601px){
             .bg1{
-        background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/94fe58803161e06dd1e2fcea8ba56a41_8214787202754590749.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/87af0dd34625112fff236ef22d0ab236_1735523603442183421.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
     }
         }
     </style>
@@ -79,32 +72,21 @@
 
 
     <div class="op">
-        <h1>下拉查看OI错题<br>の目录</h1>
+        <h1>下拉查看OI错题</h1>
     </div>
 
 
 
     <br>
-    <h1>错题集の目录</h1>
+    <h1>错题集</h1>
     <br>
     <hr style="z-index: 1;">
     <br>
-    <div class="t1"><a href="./indexChild/最短路.html">最短路</a></div>
-    <div class="t1"><a href="./indexChild/树.html">树</a></div>
-    <div class="t1"><a href="./indexChild/树状数组与字典树.html">树状数组与字典树</a></div>
-    <div class="t1"><a href="./indexChild/线段树.html">线段树</a></div>
-    <div class="t1"><a href="./indexChild/二叉堆.html">二叉堆</a></div>
-    <div class="t1"><a href="./indexChild/进阶搜索.html">进阶搜索</a></div>
-    <div class="t1"><a href="./indexChild/分治与倍增.html">分治与倍增</a></div>
-    <div class="t1"><a href="./indexChild/前缀和差分与离散化.html">前缀和、差分与离散化</a></div>
-    <div class="t1"><a href="./indexChild/常见优化技巧.html">常见优化技巧</a></div>
-    <div class="t1"><a href="./indexChild/图论算法杂项.html">图论算法杂项</a></div>
-    <div class="t1"><a href="./indexChild/子序列问题.html">子序列问题</a></div>
-    <div class="t1"><a href="./indexChild/动态规划和一些杂项.html">动态规划和一些杂项</a></div>
-    <div class="t1"><a href="./indexChild/注意事项.html">注意事项</a></div>
-    <div class="t1"><a href="./indexChild/CSP-S组初赛.html">CSP-S组初赛</a></div>
-    <div class="t1"><a href="./oldindex.html">老页面</a>整个网站进行了整理，老页面并没有被删除，只不过放一边了~</div>
     <!--  -->
+    <div class="t1">常见的优化技巧<img src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png" alt="优化技巧"></div>
+    <div class="t1">局部变量一定要初始化，轻则TLE，重则RE，其间就是WA。</div>
+    <div class="t1">cout输出字符串占时间，而且占的不少，容易超时。建议用printf输出字符串！！！(后来经过调查，原来是endl的问题，endl占的时间比较多，以后换行就用'\n'吧，尽量别用endl了，endl不仅仅是换行，endl还要清除缓存区，所以慢得多)</div>
+    <div class="t1">千万不要忘记检查代码输出格式，比如把“YES”写成“Yes”结果直接0分，幸好不是在赛场上，否则直接见祖宗！<br><br>图论当中要注意在删除点的时候，推荐使用二维矩阵，因为二维表会出问题。<br><br><code>memset(g[i],0,sizeof(g[i]))</code>可以对一个数组的某一个维度单独初始化，这个操作我才知道！<br><br>如何输入当中给你的是无法用cin和scanf区分的数据，那么就把这串数据当成字符串来处理输入，之后转成自己想要的数据。</div>
     <!--  -->
     <!--  -->
     <!--  -->
@@ -114,5 +96,5 @@
 <script src="../Volume.js"></script>
 <script src="../Unit.js"></script>
 <script src="../ChangSpanColor.js"></script>
-<!-- <script src="../a_blank.js"></script> -->
+<script src="../a_blank.js"></script>
 </html>

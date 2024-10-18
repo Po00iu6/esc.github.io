@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
+    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
+    <meta name="renderer" content="webkit">
+    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
+    <meta name="description" content="OIer的错题集,ESC,ESC.html">
+
+    <!-- bing sitmap system -->
+    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
+    <!--  -->
+
+    <title>错题集</title>
+
+    <link rel="stylesheet" href="../style.css">
+
+    <!--  -->
+    <style>
+        @media screen and (max-width:600px) {
+            .bg1{
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/3f4456be956d1ed85d015bc7c5bf425b_7004527570536077424.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+            }
+        }
+        @media screen and (min-width:601px){
+            .bg1{
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/b8ff75701944821b8f4ec112d993ba91_4267191183881486260.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+    }
+        }
+    </style>
+    <!--  -->
+</head>
+<body>
+    <header id="_header">
+        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+            NOI
+        </div> -->
+        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+            物理
+        </div> -->
+        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+            化学
+        </div> -->
+        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+            生物
+        </div> -->
+        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+            OIWiki
+        </div> -->
+    </header>
+    
+    <!--  -->
+    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay loop style="display: none;"></audio>
+    <!--  -->
+    <div class="bg1"></div>
+    <div class="bg2"></div>
+    <div class="bg3"></div>
+    <div class="bg4"></div>
+    <div class="bg5"></div>
+    <div class="bg6"></div>
+    <div class="bg7"></div>
+    <div class="bg8"></div>
+    <!--  -->
+
+
+    <div class="op">
+        <h1>下拉查看OI错题</h1>
+    </div>
+
+
+
+    <br>
+    <h1>错题集</h1>
+    <br>
+    <hr style="z-index: 1;">
+    <br>
+    <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3373">P3373 【模板】线段树 2</a>这个模板代码我调了半天才发现其中一个+号不小心写成了*号，就连鲨笔AI都查不出来。<pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define int long long
+struct node{
+    int mul,add,val;
+}tree[4000011];
+int a[1000001],p;
+void pushdown(int root,int l,int r){
+    int m=(l+r)&gt;&gt;1;
+    tree[root&lt;&lt;1].val=(tree[root&lt;&lt;1].val*tree[root].mul+tree[root].add*(m-l+1))%p;
+    tree[root&lt;&lt;1|1].val=(tree[root&lt;&lt;1|1].val*tree[root].mul+tree[root].add*(r-m))%p;
+    tree[root&lt;&lt;1].mul=(tree[root&lt;&lt;1].mul*tree[root].mul)%p;
+    tree[root&lt;&lt;1|1].mul=(tree[root&lt;&lt;1|1].mul*tree[root].mul)%p;
+    tree[root&lt;&lt;1].add=(tree[root&lt;&lt;1].add*tree[root].mul+tree[root].add)%p;
+    tree[root&lt;&lt;1|1].add=(tree[root&lt;&lt;1|1].add*tree[root].mul+tree[root].add)%p;
+    tree[root].add=0;
+    tree[root].mul=1;
+}
+void build(int root,int l,int r){
+    tree[root].mul=1;
+    tree[root].add=0;
+    if(l==r){
+        tree[root].val=a[l];
+    }
+    else{
+        int m=(l+r)&gt;&gt;1;
+        build(root&lt;&lt;1,l,m);
+        build(root&lt;&lt;1|1,m+1,r);
+        tree[root].val=tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val;
+    }
+    tree[root].val%=p;
+    return;
+}
+void updateC(int root,int l,int r,int ql,int qr,int k){
+    if(qr&lt;l||r&lt;ql){
+        return;
+    }
+    if(ql&lt;=l&&r&lt;=qr){
+        tree[root].val=(tree[root].val*k)%p;
+        tree[root].mul=(tree[root].mul*k)%p;
+        tree[root].add=(tree[root].add*k)%p;
+        return;
+    }
+    pushdown(root,l,r);
+    int m=(l+r)&gt;&gt;1;
+    updateC(root&lt;&lt;1,l,m,ql,qr,k);
+    updateC(root&lt;&lt;1|1,m+1,r,ql,qr,k);
+    tree[root].val=(tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val)%p;
+}
+void updateJ(int root,int l,int r,int ql,int qr,int k){
+    if(qr&lt;l||r&lt;ql){
+        return;
+    }
+    if(ql&lt;=l&&r&lt;=qr){
+        tree[root].add=(tree[root].add+k)%p;
+        tree[root].val=(tree[root].val+k*(r-l+1))%p;
+        return;
+    }
+    pushdown(root,l,r);
+    int m=(l+r)&gt;&gt;1;
+    updateJ(root&lt;&lt;1,l,m,ql,qr,k);
+    updateJ(root&lt;&lt;1|1,m+1,r,ql,qr,k);
+    tree[root].val=(tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val)%p;
+}
+int query(int root,int l,int r,int ql,int qr){
+    if(qr&lt;l||r&lt;ql){
+        return 0;
+    }
+    if(ql&lt;=l&&r&lt;=qr){
+        return tree[root].val;
+    }
+    pushdown(root,l,r);
+    int m=(l+r)&gt;&gt;1;
+    return (query(root&lt;&lt;1,l,m,ql,qr)+query(root&lt;&lt;1|1,m+1,r,ql,qr))%p;
+}
+int n,q,op,x,y,k;
+signed main()
+{
+    cin&gt;&gt;n&gt;&gt;q&gt;&gt;p;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+    }
+    build(1,1,n);
+    while(q--)
+    {
+        cin&gt;&gt;op;
+        if(op==1){
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;k;
+            updateC(1,1,n,x,y,k);
+        }
+        else if(op==2){
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;k;
+            updateJ(1,1,n,x,y,k);
+        }
+        else{
+            cin&gt;&gt;x&gt;&gt;y;
+            cout&lt;&lt;query(1,1,n,x,y)%p&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre>这个故事告诉我们要仔细检查。<p>这个代码是仿照<a href="https://www.luogu.com.cn/problem/solution/P3373">@zhuwanman</a>的代码抄的~</p></div>
+    <div class="t1">手写max太慢，容易TLE，具体原理我也不清楚，反正<code>#define max(a,b) (a>b?a:b)</code>这个以后就不要用了。以后就用algorithm里面的max函数就好了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1253">P1253 扶苏的问题</a>手写max容易超时，眼都快看花了，后面看了讨论区才知道手写max太慢。😓这个代码建议多看几遍，毕竟线段树挺重要的。这个线段树代码支持修改、查找、最大值比较操作，知识点还算全。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cctype&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+<span>//#define max(a,b) (a&gt;b?a:b)</span>
+<span>//总结，能不用就不用，用了就会超时。 </span>
+#define ll long long
+ll a[4000001];
+struct node{
+    ll data,add=0;
+    bool set=0;
+}tree[4000501];
+inline void build(ll root,ll l,ll r){
+    ll num;
+    if(l==r){
+        tree[root].data=a[l];
+        num=max(num,root);
+        return;
+    }
+    ll m=(l+r)&gt;&gt;1;
+    build(root&lt;&lt;1,l,m);
+    build((root&lt;&lt;1)+1,m+1,r);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+inline void pushdown(ll root){
+    if(tree[root].set){
+        tree[root].set=0;
+        tree[root].add=0;
+        tree[root&lt;&lt;1].add=0;
+        tree[root&lt;&lt;1].set=1;
+        tree[root&lt;&lt;1].data=tree[root].data;
+        tree[(root&lt;&lt;1)+1].add=0;
+        tree[(root&lt;&lt;1)+1].set=1;
+        tree[(root&lt;&lt;1)+1].data=tree[root].data;
+    }
+    else
+    {
+        tree[root&lt;&lt;1].add+=tree[root].add;
+        tree[root&lt;&lt;1].data+=tree[root].add;
+        tree[(root&lt;&lt;1)+1].add+=tree[root].add;
+        tree[(root&lt;&lt;1)+1].data+=tree[root].add;
+        tree[root].add=0;
+    }
+}
+inline ll query(ll root,ll l,ll r,ll ql,ll qr){
+    ll ans=-1e18;
+    if(l&lt;=ql&&r&gt;=qr)return tree[root].data;
+    pushdown(root);
+    ll m=(ql+qr)&gt;&gt;1;
+    if(l&lt;=m)ans=max(ans,query(root&lt;&lt;1,l,r,ql,m));
+    if(r&gt;m)ans=max(ans,query((root&lt;&lt;1)+1,l,r,m+1,qr));
+    return ans;
+}
+inline void update(ll root,ll L,ll R,ll l,ll r,ll k)
+{
+    if(L&lt;=l&&R&gt;=r)
+    {
+        tree[root].add+=k;tree[root].data+=k;
+        return;
+    }
+    pushdown(root);
+    ll m=(l+r)&gt;&gt;1;
+    if(L&lt;=m)update(root&lt;&lt;1,L,R,l,m,k);
+    if(R&gt;m)update((root&lt;&lt;1)+1,L,R,m+1,r,k);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+inline void reset(ll root,ll L,ll R,ll l,ll r,ll k)
+{
+    if(L&lt;=l&&R&gt;=r)
+    {
+        tree[root].add=0;tree[root].data=k;tree[root].set=1;
+        return;
+    }
+    pushdown(root);
+    ll m=(l+r)&gt;&gt;1;
+    if(L&lt;=m)reset(root&lt;&lt;1,L,R,l,m,k);
+    if(R&gt;m)reset((root&lt;&lt;1)+1,L,R,m+1,r,k);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+ll read()
+{
+    ll s=0,w=1;char ch=getchar();
+    while(!isdigit(ch)){<span>//使用isdigit()函数被忘了引用cctype </span>
+        if(ch=='-')w=-1;
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';
+        ch=getchar();
+    }
+    return s*w;
+}
+int main()
+{
+    ll n,q,l,r,x,op;
+    n=read();q=read();
+    for(int i=1;i&lt;=n;i++)
+    {
+        a[i]=read();
+    }
+    build(1,1,n);
+    while(q--)
+    {
+        op=read();
+        if(op==1)
+        {<span>//把(l,r)的所有数修改成x。 </span>
+            l=read();r=read();x=read();
+            reset(1,l,r,1,n,x);
+        }
+        else if(op==2)
+        {<span>//对(l,r)区间的每个数加x。 </span>
+            l=read();r=read();x=read();
+            update(1,l,r,1,n,x);
+        }
+        else
+        {<span>//查询(l,r)区间的最大值。 </span>
+            l=read();r=read();
+            printf("%lld\n",query(1,l,r,1,n));
+        }
+    }
+    return 0;
+}
+</pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1438">P1438 无聊的数列</a>在线段树当中算是一个进阶题了吧。我想我得把这个记下来，这道题是区间加上一个等差数列，那么我们是选择使用线段树+差分完成的。这个是结构体版本的，只需要2个数组就能完成。<pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define ll long long
+ll data[100010];
+struct point{<span>//结构体定义节点</span>
+    ll sum;
+    ll tag;
+}a[400001];
+inline int ls(int root){
+    <span>//左孩子</span>
+    return root&lt;&lt;1;
+}
+inline int rs(int root){
+    <span>//右孩子</span>
+    return root&lt;&lt;1|1;
+}
+inline void up(int root){
+    <span>//相当于pushup</span>
+    a[root].sum=a[ls(root)].sum+a[rs(root)].sum;
+}
+void build(int root,int l,int r){
+    <span>//构建线段树</span>
+    a[root].tag=0;int mid=(l+r)&gt;&gt;1;
+    if(l==r){
+        a[root].sum=data[l];
+        return;
+    }
+    build(ls(root),l,mid);build(rs(root),mid+1,r);
+    up(root);
+}
+inline void pd(int root,int l,int r){
+    <span>//下加，pushdown</span>
+    int mid=(l+r)&gt;&gt;1;
+    a[ls(root)].tag+=a[root].tag;
+    a[rs(root)].tag+=a[root].tag;
+    a[ls(root)].sum+=a[root].tag*(mid-l+1);
+    a[rs(root)].sum+=a[root].tag*(r-mid);
+    a[root].tag=0;
+}
+void add(int root,int l,int r,int ql,int qr,ll x){
+    <span>//单点添加元素</span>
+    if(ql&lt;=l&&qr&gt;=r){
+        a[root].tag+=x;
+        a[root].sum+=(r-l+1)*x;
+        return;
+    }
+    int mid=(l+r)&gt;&gt;1;
+    pd(root,l,r);
+    if(ql&lt;=mid)add(ls(root),l,mid,ql,qr,x);
+    if(qr&gt;mid)add(rs(root),mid+1,r,ql,qr,x);
+    up(root);
+    return;
+}
+ll query(int root,int l,int r,int ql,int qr){
+    if(ql&lt;=l&&qr&gt;=r){<span>//单点查询</span>
+        return a[root].sum;
+    }
+    int mid=(l+r)&gt;&gt;1,res=0;
+    pd(root,l,r);
+    if(ql&lt;=mid)res+=query(ls(root),l,mid,ql,qr);
+    if(qr&gt;mid)res+=query(rs(root),mid+1,r,ql,qr);
+    return res;
+}
+int main()
+{
+    int n,m,opt,l,r,K,D,p;
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;data[i];
+    }
+    for(int i=n-1;i&gt;0;i--)
+    {
+        data[i+1]=data[i+1]-data[i];
+    }
+    build(1,1,n);
+    while(m--)
+    {
+        cin&gt;&gt;opt;
+        switch(opt)
+        {
+            case 1:{
+                cin&gt;&gt;l&gt;&gt;r&gt;&gt;K&gt;&gt;D;
+                add(1,1,n,l,l,K);
+                if(l+1&lt;=r)add(1,1,n,l+1,r,D);
+                if(r&lt;n)add(1,1,n,r+1,r+1,-(K+D*(r-l)));
+                break;
+            }
+            case 2:{
+                cin&gt;&gt;p;
+                cout&lt;&lt;query(1,1,n,1,p)&lt;&lt;'\n';
+                break;
+            }
+        }
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3870">P3870 [TJOI2009] 开关</a>算是模板题了，不过因为我刚学线段树，所以不会做。<a href="https://www.luogu.com.cn/problem/solution/P3870">题解区</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3372">P3372 【模板】线段树 1</a>这道题需要数组开大点，否则WA。<a href="https://www.luogu.com.cn/record/182406256">AC代码</a></div>
+    <div class="t1">线段树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/555e5110f45b475c11cb40f875bd6a7a_1581579760085853751.png" alt="线段树"></div>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+</body>
+<script src="../CanvasFor_index.js"></script>
+<!-- <script src="./Canvas2.js"></script> -->
+<script src="../Volume.js"></script>
+<script src="../Unit.js"></script>
+<script src="../ChangSpanColor.js"></script>
+<script src="../a_blank.js"></script>
+</html>

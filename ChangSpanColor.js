@@ -103,5 +103,44 @@ document.addEventListener('DOMContentLoaded', function() {
             aTag.style.textDecoration = 'none';
             aTag.style.borderStyle = 'none';
         }  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('普及+/提高')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#52C41A';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('普及/提高-')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#FFC116';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('NOI/NOI+/CTSC')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#0E1D69';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
     }  
 });

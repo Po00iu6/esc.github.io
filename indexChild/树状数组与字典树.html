@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
+    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
+    <meta name="renderer" content="webkit">
+    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
+    <meta name="description" content="OIer的错题集,ESC,ESC.html">
+
+    <!-- bing sitmap system -->
+    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
+    <!--  -->
+
+    <title>错题集</title>
+
+    <link rel="stylesheet" href="../style.css">
+
+    <!--  -->
+    <style>
+        @media screen and (max-width:600px) {
+            .bg1{
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/f195052f3d75df8f4371a2a8d95eacf3_2950503004553823051.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+            }
+        }
+        @media screen and (min-width:601px){
+            .bg1{
+        background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/953ca301427c6d15de9ff6afcc8e06cc_8368540530643825496.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+    }
+        }
+    </style>
+    <!--  -->
+</head>
+<body>
+    <header id="_header">
+        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+            NOI
+        </div> -->
+        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+            物理
+        </div> -->
+        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+            化学
+        </div> -->
+        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+            生物
+        </div> -->
+        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+            OIWiki
+        </div> -->
+    </header>
+    
+    <!--  -->
+    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay loop style="display: none;"></audio>
+    <!--  -->
+    <div class="bg1"></div>
+    <div class="bg2"></div>
+    <div class="bg3"></div>
+    <div class="bg4"></div>
+    <div class="bg5"></div>
+    <div class="bg6"></div>
+    <div class="bg7"></div>
+    <div class="bg8"></div>
+    <!--  -->
+
+
+    <div class="op">
+        <h1>下拉查看OI错题</h1>
+    </div>
+
+
+
+    <br>
+    <h1>错题集</h1>
+    <br>
+    <hr style="z-index: 1;">
+    <br>
+    <!--  -->
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4587">P4587 [FJOI2016] 神秘数</a>这也是一个模板题，不过我不会，呜呜呜~<a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define N 1000001 <span>//数组最大值</span>
+int n,m,tot,rt[N],ans;
+struct node{
+    int ls[N&lt;&lt;5],rs[N&lt;&lt;5],v[N&lt;&lt;5];<span>//小一点就RE</span>
+    void cp(int x,int y){
+        ls[x]=ls[y],rs[x]=rs[y],v[x]=v[y];<span>//节点复制</span>
+    }
+    void fix(int pl,int pr,int l,int r,int x){
+        cp(pr,pl),v[pr]+=x;<span>//按照pl新建一个节点pr(两棵树可以共享节点)</span>
+        if(l==r)return;
+        int mid=(l+r)&gt;1;
+        if(mid&gt;=x) fix(ls[pl],ls[pr]=++tot,l,mid,x);
+        else fix(rs[pl],rs[pr]=++tot,mid+1,r,x);
+    }
+    int sum(int pl,int pr,int l,int r,int x,int y){<span>//得出pr和pl之间的大于x小于y的数的和</span>
+        if(v[pr]-v[pl]==0) return 0;
+        if(l&gt;=x&&r&lt;=y) return v[pr]-v[pl];
+        int ret=0,mid=(l+r)&gt;1;
+        if(mid&gt;=x) ret+=sum(ls[pl],ls[pr],l,mid,x,y);
+        if(mid&lt;y) ret+=sum(rs[pl],rs[pr],mid+1,r,x,y);
+        return ret;
+    }
+}tree;
+int main(){
+    cin&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        int x;
+        cin&gt;x;
+        tree.fix(rt[i-1],rt[i]=++tot,1,N&lt;&lt;10,x);
+    }
+    cin&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        int L,R,tmp,lst=0,now=0;
+        cin&gt;L&gt;R;
+        while(1){
+            tmp=tree.sum(rt[L-1],rt[R],1,N&lt;&lt;10,lst+1,now+1);<span>//算法精华</span>
+            if(tmp){
+                lst=now+1;now+=tmp;
+            }
+            else break;
+        }
+        cout&lt;&lt;now+1&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a><pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define N 200010
+int n,q,m,cnt;<span>// n为序列长度，q为查询数量，m为去重后的元素数量，cnt为节点计数器</span>
+int a[N],b[N],tree[N];<span>// a为原始序列，b为排序后的唯一元素序列，tree为可持久化线段树的根节点数组</span>
+int sum[N&lt;&lt;5],L[N&lt;&lt;5],R[N&lt;&lt;5];<span>// sum为线段树节点存储的区间和（此处为元素个数），L和R为左右子节点指针</span>
+<span>// 构建空线段树</span>
+inline int build(int l,int r){
+    int mid=(l+r)&gt;&gt;1;
+    int rt=++cnt;<span> // 新建节点</span>
+    sum[rt]=0;<span>// 初始化区间和为0</span>
+    if(l&lt;r){
+        L[rt]=build(l,mid);<span>// 递归构建左子树</span>
+        R[rt]=build(mid+1,r);<span>// 递归构建右子树</span>
+    }
+    return rt;<span>// 返回当前节点编号 </span>
+}
+<span>// 更新线段树，插入新元素</span>
+inline int update(int pre,int l,int r,int x){
+    int mid=(l+r)&gt;&gt;1;
+    int rt=++cnt;<span>// 新建节点</span>
+    L[rt]=L[pre];R[rt]=R[pre];sum[rt]=sum[pre]+1;<span>// 复制前驱节点的信息，并增加区间和</span>
+    if(l&lt;r){
+        if(x&lt;=mid) L[rt]=update(L[pre],l,mid,x);<span>// 如果x在左子树范围内，更新左子树</span>
+        else R[rt]=update(R[pre],mid+1,r,x);<span>// 否则更新右子树</span>
+    }
+    return rt;<span>// 返回当前节点编号</span>
+}
+<span>// 查询区间第k小值</span>
+inline int query(int u,int v,int l,int r,int k){
+    int mid=(l+r)&gt;&gt;1;
+    if(l&gt;=r)return l;<span>// 如果区间长度为1，直接返回该位置的值（但此处不会执行，因为k一定小于区间长度）</span>
+    int x=sum[L[v]]-sum[L[u]];<span>// 计算v和u在左子树中的区间和之差，即[l, mid]区间内v有而u没有的元素个数</span>
+    if(x&gt;=k)return query(L[u],L[v],l,mid,k);<span>// 如果左子树中的元素个数大于等于k，继续在左子树中查询</span>
+    else return query(R[u],R[v],mid+1,r,k-x);<span>// 否则，在右子树中查询第(k-x)小的元素  </span>
+}
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;q;<span>// 输入序列长度和查询数量  </span>
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        b[i]=a[i];<span>// 将a数组的元素复制到b数组，用于后续排序和去重  </span>
+    }
+    sort(b+1,b+n+1);<span> // 对b数组进行排序  </span>
+    m=unique(b+1,b+n+1)-b-1;<span>// 去重，并计算去重后的元素数量  </span>
+    <span>// 构建可持久化线段树  </span>
+    tree[0]=build(1,m);<span>// 构建空线段树作为根节点（虽然实际上没有用到，但为了统一接口）  </span>
+    for(int i=1;i&lt;=n;i++){
+        int t=lower_bound(b+1,b+m+1,a[i])-b;<span>// 在b数组中找到a[i]的位置（排序后的） </span>
+        tree[i]=update(tree[i-1],1,m,t);<span>// 基于前一个节点的线段树，插入新元素a[i]  </span>
+    }
+    <span>// 查询并输出结果</span>
+    while(q--){
+        int x,y,z;
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;<span>// 输入查询的区间[x, y]和k值 </span>
+        int t=query(tree[x-1],tree[y],1,m,z);<span> // 在线段树中查询区间[x, y]内的第z小值  </span>
+        cout&lt;&lt;b[t]&lt;&lt;'\n';<span>// 输出查询结果  </span>
+    }
+    return 0;
+}
+    </pre>*这段代码实现了可持久化权值线段树，用于解决静态区间第k小值的问题。通过构建一系列版本的线段树，每个版本都基于前一个版本进行更新，从而可以在O(log n)的时间内查询任意区间的第k小值。<br><a href="https://yiyan.baidu.com/" style="text-decoration: none;color: rgb(0, 132, 255);">代码注释by: 文心一言®</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5283">P5283 [十二省联考 2019] 异或粽子</a>区间[l,r]的异或和等于sr⊕sl-1因为每个si都异或了两遍而抵消。<pre>
+#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define ll long long
+#define maxn 501000
+int n,k;
+ll a[maxn];
+int trie[maxn*32][2],sz[maxn*32],tot=0;
+void insert(ll val){
+    int u=0;
+    for(int i=31;i&gt;=0;i--){
+        int z=(val&gt;&gt;i)&amp;1;
+        if(!trie[u][z]){
+            trie[u][z]=++tot;
+        }
+        u=trie[u][z];
+        sz[u]++;
+    }
+}
+ll find(ll val,int t){
+    ll s=0;
+    int u=0;
+    for(int i=31,z;i&gt;=0;i--){
+        z=(val&gt;&gt;i)&amp;1;
+        if(sz[trie[u][z^1]]&gt;=t){
+            u=trie[u][z^1];
+            s|=(1ll&lt;&lt;i);
+        }else{
+            t-=sz[trie[u][z^1]];
+            u=trie[u][z];
+        }
+    }
+    return s;
+}
+struct node{
+    ll w;
+    int x,y;<span>//x的第y大</span>
+    bool operator&lt;(const node &amp;A)const{
+        return w&lt;A.w;
+    }
+};
+node d[maxn];
+priority_queue&lt;node&gt; q;
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        a[i]^=a[i-1];
+    }
+    for(int i=0;i&lt;=n;i++){
+        insert(a[i]);
+    }
+    k=2*k;
+    for(int i=0;i&lt;=n;i++){
+        d[i].w=find(a[i],1);
+        d[i].x=i;
+        d[i].y=1;
+        q.push(d[i]);
+    }
+    ll ans=0;
+    node A;
+    for(int i=1;i&lt;=k;i++){
+        A=q.top();
+        ans+=A.w;
+        q.pop();
+        d[A.x].y++;
+        d[A.x].w=find(a[A.x],d[A.x].y);
+        q.push(d[A.x]);
+    }
+    ans/=2;
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4551">P4551 最长异或路径</a>01-Trie树。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+struct node{
+    int v,w,nxt;
+}edge[2000001];
+int head[2000001];
+int cnt=1;
+void add(int u,int v,int w){
+    edge[++cnt].nxt=head[u];
+    edge[cnt].v=v;
+    edge[cnt].w=w;
+    head[u]=cnt;
+}
+int sum[2000001];
+void dfs(int x,int fa){<span>//预处理 </span>
+    for(int i=head[x];~i;i=edge[i].nxt){
+        int v=edge[i].v;
+        int w=edge[i].w;
+        if(v!=fa){
+            sum[v]=sum[x]^w;
+            dfs(v,x);
+        }
+    }
+}
+struct trie{
+    int ch[2];
+}t[2000001];
+int tot;
+void build(int val,int x){
+    for(int i=(1&lt;&lt;30);i;i&gt;&gt;=1){
+        bool c=val&amp;i;<span>//取出二进制下这个数的当前位置 </span>
+        if(!t[x].ch[c]){
+            t[x].ch[c]=++tot;
+        }
+        x=t[x].ch[c];
+    }
+}
+int query(int val,int x){
+    int ans=0;
+    for(int i=(1&lt;&lt;30);i;i&gt;&gt;=1){
+        bool c=val&amp;i;
+        if(t[x].ch[!c]){<span>//如果这一位可以进行异或就沿着这一条往下走 </span>
+            ans+=i;
+            x=t[x].ch[!c];
+        }
+        else x=t[x].ch[c];<span>//否则就沿着另一条路往下走 </span>
+    }
+    return ans;
+}
+int main()
+{
+    memset(head,-1,sizeof(head));
+    int n;
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n-1;i++){
+        int u,v,w;
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        add(u,v,w);
+        add(v,u,w);
+    }
+    dfs(1,-1);<span>//预处理出每一个节点到根的异或和 </span>
+    for(int i=1;i&lt;=n;i++){<span>//建立trie树 </span>
+        build(sum[i],0);
+    }
+    int ans=0;
+    for(int i=1;i&lt;=n;i++){
+        ans=max(ans,query(sum[i],0));<span>//查询，取最大值 </span>
+    }
+    cout&lt;&lt;ans;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2580">P2580 于是他错误的点名开始了</a>STL大法好！用map叫我做爽了。<pre>
+#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+map&lt;string,int&gt; mp;
+int main(){
+    int n;
+    cin&gt;&gt;n;
+    while(n--){
+        string s;
+        cin&gt;&gt;s;
+        mp[s]=1;
+    }
+    cin&gt;&gt;n;
+    while(n--){
+        string s;
+        cin&gt;&gt;s;
+        if(mp[s]==1&&mp[s]++)
+            cout&lt;&lt;"OK"&lt;&lt;'\n';
+        else if(mp[s]==0)
+            cout&lt;&lt;"WRONG"&lt;&lt;'\n';
+        else if(mp[s]&gt;1)
+            cout&lt;&lt;"REPEAT"&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre>不过这道题既然是字典树，那我们就用字典树来解吧！<br>*But，我不会。<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/302083128/5cd66a31025f6db429719874abee013b_8339061302961208307.gif" alt="啊啊啊" style="width: 150px;"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1481">P1481 魔族密码</a>Trie字典树题目。<pre>
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+using namespace std;
+char c[90];
+int word[1000],g[1000][1000];
+int ans,res,u,tot,n;
+void f(){
+    int len=strlen(c);
+    u=res=0;
+    for(int i=0;i&lt;len;i++){
+        int a=c[i]-'0';
+        if(!g[u][a])g[u][a]=++tot;
+        u=g[u][a];
+        res+=word[u];
+    }
+    word[u]++;
+    ans=max(ans,res+1);
+}
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        memset(c,0,sizeof(0));
+        cin&gt;&gt;c;
+        f();
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3368">P3368 【模板】树状数组 2</a><ul>
+        <li>区间修改</li><li>单点查找</li>
+    </ul><pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500010
+int n,m;
+int a[maxn],c[maxn],b[maxn];
+int lowbit(int x){
+    return x&(-x);
+}
+void add(int x,int y){
+    for(int i=x;i&lt;=n;i+=lowbit(i))
+        c[i]+=y;
+}
+int sum(int x){
+    int res=0;
+    for(int i=x;i;i-=lowbit(i))
+        res+=c[i];
+    return res;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        b[i]=a[i]-a[i-1];
+        add(i,b[i]);
+    }
+    while(m--){
+        int op,x,y,k;
+        cin&gt;&gt;op;
+        if(op==1)
+        {
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;k;
+            add(x,k);
+            add(y+1,-k);
+        }
+        else
+        {
+            cin&gt;&gt;x;
+            cout&lt;&lt;sum(x)&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3374">P3374 【模板】树状数组 1</a>还挺简单的，我用线段树一遍AC了，没想到我还是会写线段树的啊，哈哈哈~ <img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/265801674/2939e5b79007fb2673dba8fcbea8b89f_4984784221438249415.gif" alt="哈哈哈" style="width: 150px;"><br>*But，不过这道题让我用的是树状数组......<br><b>线段树做法：</b><pre style="height: 400px;">
+#include &lt;iostream&gt;
+using namespace std;
+#define int long long
+<span>//考场不建议把int替换为long long，万一RE了呢？谁知道评测机上跑的啥样？ </span>
+struct node{
+    int val;
+}tree[4000001];
+int a[1000100];
+void build(int root,int l,int r){
+    if(l==r){
+        tree[root].val=a[l];
+        return;
+    }
+    int m=(l+r)&gt;&gt;1;
+    build(root&lt;&lt;1,l,m);
+    build(root&lt;&lt;1|1,m+1,r);
+    tree[root].val=tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val;
+}
+void update(int root,int l,int r,int ql,int qr,int k){
+    if(qr&lt;l||r&lt;ql)return;<span>//这一句必须加，不加就卡住了 </span>
+    if(ql&lt;=l&&r&lt;=qr){
+        tree[root].val+=k;
+        return;
+    }
+    int m=(l+r)&gt;&gt;1;
+    update(root&lt;&lt;1,l,m,ql,qr,k);
+    update(root&lt;&lt;1|1,m+1,r,ql,qr,k);
+    tree[root].val=tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val;
+}
+int query(int root,int l,int r,int ql,int qr){
+    if(qr&lt;l||r&lt;ql)return 0;<span>//这一句必须加，不加就卡住了</span> 
+    if(ql&lt;=l&&r&lt;=qr){
+        return tree[root].val;
+    }
+    int m=(l+r)&gt;&gt;1;
+    return query(root&lt;&lt;1,l,m,ql,qr)+query(root&lt;&lt;1|1,m+1,r,ql,qr);
+}
+int n,m,op,x,y,k;
+signed main()
+{
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+    }
+    build(1,1,n);
+    while(m--)
+    {
+        cin&gt;&gt;op;
+        if(op==1){
+            cin&gt;&gt;x&gt;&gt;k;
+            update(1,1,n,x,x,k);
+        }
+        else{
+            cin&gt;&gt;x&gt;&gt;y;
+            cout&lt;&lt;query(1,1,n,x,y)&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre><br><b>树状数组求法：</b><ul>
+        <li>单点修改</li><li>区间查找</li>
+    </ul><pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500010
+int n,m;
+int a[maxn],c[maxn];
+int lowbit(int x){
+    return x&(-x);
+}
+int sum(int x){
+    int res=0;
+    for(int i=x;i;i-=lowbit(i))
+        res+=c[i];
+    return res;
+}
+void add(int x,int y){
+    for(int i=x;i&lt;=n;i+=lowbit(i))
+        c[i]+=y;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        add(i,a[i]);
+    }
+    while(m--){
+        int op,x,y;
+        cin&gt;&gt;op&gt;&gt;x&gt;&gt;y;
+        if(op==1)
+            add(x,y);
+        else
+            cout&lt;&lt;sum(y)-sum(x-1)&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1">树状数组与字典树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/c5d9ad7673cdfc1000a1c34ada514390_7005827162608113595.png" alt="树状数组"></div>
+    <!--  -->
+    <!--  -->
+    <!--  -->
+</body>
+<script src="../CanvasFor_index.js"></script>
+<!-- <script src="./Canvas2.js"></script> -->
+<script src="../Volume.js"></script>
+<script src="../Unit.js"></script>
+<script src="../ChangSpanColor.js"></script>
+<script src="../a_blank.js"></script>
+</html>
