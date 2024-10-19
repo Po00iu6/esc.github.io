@@ -2,7 +2,7 @@
 var parentElement = document.getElementById('_header');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
-parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_1\" onclick=\"window.location.href=\'../index.html\'\">");
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_1\" onclick=\"window.location.href=\'./index.html\'\">");
 
 
 // 获取要插入的位置的父元素
@@ -22,7 +22,7 @@ parentElement.insertAdjacentHTML('beforeend', "NOI");
 var parentElement = document.getElementById('_header');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
-parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_2\" onclick=\"window.location.href=\'../PH.html\'\">");
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_2\" onclick=\"window.location.href=\'./PH.html\'\">");
 
 
 // 获取要插入的位置的父元素
@@ -42,7 +42,7 @@ parentElement.insertAdjacentHTML('beforeend', "物理");
 var parentElement = document.getElementById('_header');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
-parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_3\" onclick=\"window.location.href=\'../CM.html\'\">");
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_3\" onclick=\"window.location.href=\'./CM.html\'\">");
 
 
 // 获取要插入的位置的父元素
@@ -62,7 +62,7 @@ parentElement.insertAdjacentHTML('beforeend', "化学");
 var parentElement = document.getElementById('_header');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
-parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_4\" onclick=\"window.location.href=\'../BO.html\'\">");
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"h_4\" onclick=\"window.location.href=\'./BO.html\'\">");
 
 
 // 获取要插入的位置的父元素
@@ -262,7 +262,7 @@ parentElement.insertAdjacentHTML('beforeend', "UnityDoc");
 var parentElement = document.getElementById('_header');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
-parentElement.insertAdjacentHTML('beforeend', "<div class=\"db\" id=\"h_14\" onclick=\"window.location.href=\'../DataBase.html'\">");
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"db\" id=\"h_14\" onclick=\"window.location.href=\'./DataBase.html'\">");
 
 
 // 获取要插入的位置的父元素
