@@ -270,3 +270,26 @@ var parentElement = document.getElementById('h_14');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
 parentElement.insertAdjacentHTML('beforeend', "DataBase");
+
+
+
+
+
+
+
+
+
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('_header');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"db\" id=\"h_15\" onclick=\"window.location.href=\'./Fenleiindex.html'\">");
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('h_15');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "分类主页");

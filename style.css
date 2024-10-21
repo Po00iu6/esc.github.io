@@ -116,7 +116,7 @@ pre{
     overflow-x: scroll;
 
     max-width: 90%;
-    max-height: 100vh;
+    max-height: 80vh;
 }
 
 pre::-webkit-scrollbar{
@@ -134,10 +134,12 @@ pre::-webkit-scrollbar-thumb{
 
 ol{
     margin: 5%;
+    max-width: 95%;
 }
 
 ul{
     margin: 5%;
+    max-width: 95%;
 }
 
 

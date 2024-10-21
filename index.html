@@ -18,6 +18,9 @@
     <!-- bing sitmap system -->
     <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
     <!--  -->
+    <script>
+        alert("这个页面没有进行分类，之前我想分类来着，但一想，这个页面打开直接看也很方便，就干脆不分类了。我单独做了一个分类页面\n\n                                 ——————您亲爱的站长")
+    </script>
 
     <title>错题集</title>
 
@@ -25,13 +28,6 @@
 
     <!--  -->
     <style>
-        a{
-            text-decoration: none;
-            font-size: large;
-            font-weight: bolder;
-            color:black;
-
-        }
         @media screen and (max-width:600px) {
             .bg1{
         background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/570fc67f4b580da77f9af206eb3bc0a5_7858946434453008095.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
@@ -44,6 +40,7 @@
         }
     </style>
     <!--  -->
+      
 </head>
 <body>
     <header id="_header">
@@ -79,32 +76,2671 @@
 
 
     <div class="op">
-        <h1>下拉查看OI错题<br>の目录</h1>
+        <h1>下拉查看OI错题</h1>
     </div>
 
 
 
     <br>
-    <h1>错题集の目录</h1>
+    <h1>错题集</h1>
     <br>
     <hr style="z-index: 1;">
     <br>
-    <div class="t1"><a href="./indexChild/最短路.html">最短路</a></div>
-    <div class="t1"><a href="./indexChild/树.html">树</a></div>
-    <div class="t1"><a href="./indexChild/树状数组与字典树.html">树状数组与字典树</a></div>
-    <div class="t1"><a href="./indexChild/线段树.html">线段树</a></div>
-    <div class="t1"><a href="./indexChild/二叉堆.html">二叉堆</a></div>
-    <div class="t1"><a href="./indexChild/进阶搜索.html">进阶搜索</a></div>
-    <div class="t1"><a href="./indexChild/分治与倍增.html">分治与倍增</a></div>
-    <div class="t1"><a href="./indexChild/前缀和差分与离散化.html">前缀和、差分与离散化</a></div>
-    <div class="t1"><a href="./indexChild/常见优化技巧.html">常见优化技巧</a></div>
-    <div class="t1"><a href="./indexChild/图论算法杂项.html">图论算法杂项</a></div>
-    <div class="t1"><a href="./indexChild/子序列问题.html">子序列问题</a></div>
-    <div class="t1"><a href="./indexChild/动态规划和一些杂项.html">动态规划和一些杂项</a></div>
-    <div class="t1"><a href="./indexChild/注意事项.html">注意事项</a></div>
-    <div class="t1"><a href="./indexChild/CSP-S组初赛.html">CSP-S组初赛</a></div>
-    <div class="t1"><a href="./oldindex.html">老页面</a>整个网站进行了整理，老页面并没有被删除，只不过放一边了~</div>
     <!--  -->
+    <div class="t1">unordered_map比map速度要快，复杂度是O(1)，对于卡常数的题目，要用到map就直接用unordered_map。需要包含头文件：<code>#include &lt;unordered_map&gt;</code></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4568">P4568 [JLOI2011] 飞行路线</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高-</a><pre>
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+struct Edge{
+    int to,next,cost;
+}edge[10000010];
+int cnt,head[10000010];
+void addedge(int u,int v,int c=0){
+    edge[++cnt]=(Edge){v,head[u],c
+    };
+    head[u]=cnt;
+}
+int dis[10010000];
+bool vis[10000001];
+void dij(int s){
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0;
+    priority_queue&lt;pair&lt;int,int&gt;,vector&lt;pair&lt;int,int&gt; &gt;,greater&lt;pair&lt;int,int&gt; &gt; &gt; points;
+    points.push(make_pair(0,s));
+    while(!points.empty()){
+        int u=points.top().second;
+        points.pop();
+        if(!vis[u]){
+            vis[u]=1;
+            for(int i=head[u];i;i=edge[i].next){
+                int to=edge[i].to;
+                if(dis[to]&gt;dis[u]+edge[i].cost){
+                    dis[to]=dis[u]+edge[i].cost;
+                    points.push(make_pair(dis[to],to));
+                }
+            }
+        }
+    }
+}
+int main(){
+    int n,m,k,s,t;
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k&gt;&gt;s&gt;&gt;t;
+    for(int i=0,u,v,c;i&lt;m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;c;
+        addedge(u,v,c);
+        addedge(v,u,c);
+        for(int j=1;j&lt;=k;j++){
+            addedge(u+(j-1)*n,v+j*n);
+            addedge(v+(j-1)*n,u+j*n);
+            addedge(u+j*n,v+j*n,c);
+            addedge(v+j*n,u+j*n,c);
+        }
+    }
+    for(int i=1;i&lt;=k;i++){
+        addedge(t+(i-1)*n,t+i*n);
+    }
+    dij(s);
+    printf("%d",dis[t+k*n]);
+    return 0;
+}
+</pre><b style="margin-left: 60px;letter-spacing: 10px;">膜拜</b><p style="line-height: px;font-size: 10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长</p><br><p style="line-height: 0px;">解法很玄妙，可惜我不懂。</p><br><p style="line-height: 0px;">我只会在那，%%%%orz。</p></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3371">P3371 【模板】单源最短路径（弱化版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及/提高-</a><ul>
+        <li>
+解法1：链式前向星
+<pre>
+<span>//代码变量名有点臭，是为了防止系统名冲突</span>
+<span>//考场上也把名字稍微起的臭一点更安全</span>
+#include &lt;iostream&gt;
+using namespace std;
+int head[1000001],cnt;
+long long ans[1000000];
+bool vis[1000010];
+int n,m,s;
+struct edge{
+    int to,nextt,wei;
+}edge[1000000];
+void addedge(int x,int y,int t){
+    edge[++cnt].to=y;
+    edge[cnt].nextt=head[x];
+    edge[cnt].wei=t;
+    head[x]=cnt;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1;i&lt;=m;i++){
+        ans[i]=2147483647;
+    }
+    ans[s]=0;
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        addedge(u,v,w);
+    }
+    int pos=s;
+    while(!vis[pos]){
+        long long minn=2147483647;
+        vis[pos]=1;
+        for(int i=head[pos];i!=0;i=edge[i].nextt){
+            if(!vis[edge[i].to]&&ans[edge[i].to]&gt;ans[pos]+edge[i].wei){
+                ans[edge[i].to]=ans[pos]+edge[i].wei;
+            }
+        }
+        for(int i=1;i&lt;=n;i++){
+            if(ans[i]&lt;minn&&vis[i]==0){
+                minn=ans[i];
+                pos=i;
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        cout&lt;&lt;ans[i]&lt;&lt;' ';
+    }
+    return 0;
+}
+</pre>
+        </li>
+        <li>
+解法2：暴力解法
+<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define int long long
+const long long N=2147483647;<span>//正确示范1 </span>
+<span>//const long long N=(1&lt;&lt;31)-1;//正确示范2 </span>
+<span>//const long long N=1&lt;&lt;31-1;//错误示范</span>
+struct edge{
+    int v,w;
+};
+
+vector&lt;edge&gt; e[20000];
+
+int dis[20001];
+int n,m;
+bool vis[20001];
+void Dijkstra(int s){
+    dis[s]=0;
+    for(int i=1;i&lt;=n;i++){
+        int u=0,mind=N;
+        for(int j=1;j&lt;=n;j++){
+            if(!vis[j]&&dis[j]&lt;mind)u=j,mind=dis[j];
+        }
+        vis[u]=1;
+        for(int j=0;j&lt;e[u].size();j++){
+            <span>//可不能把j写成i了！ </span>
+            edge ed=e[u][j];
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w)dis[v]=dis[u]+w;
+        }
+    }
+}
+
+int s;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});<span>//看好了，这是单向边！</span> 
+    }
+    
+<span>//	memset(dis,0x3f,sizeof(dis));</span>
+    for(int i=1;i&lt;=n;i++){
+        dis[i]=N;
+    }
+    Dijkstra(s);
+    
+    for(int i=1;i&lt;=n;i++){
+        cout&lt;&lt;dis[i]&lt;&lt;" ";
+    }
+    return 0;
+}
+</pre>
+        </li>
+        <li>
+解法3：优先队列实现+链式前向星(堆优化版)
+<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define int long long
+#define maxn 2000000
+const long long N=2147483647;
+
+priority_queue&lt;pair&lt;int,int&gt;, vector&lt;pair&lt;int,int&gt; &gt; ,greater&lt;pair&lt;int,int&gt; &gt; &gt; q;
+
+int fir[maxn],to[maxn],val[maxn],nex[maxn],n,m,s,u,v,w,cnt;
+
+int dis[maxn];
+bool vis[maxn];
+
+void addedge(int a,int b,int c){
+    to[++cnt]=b;
+    val[cnt]=c;
+    nex[cnt]=fir[a];
+    fir[a]=cnt;
+}
+
+void Dijkstra(int s){
+    dis[s]=0;
+    
+    q.push(make_pair(0,s));
+    while(!q.empty()){
+        int x=q.top().second;q.pop();
+        if(vis[x])continue;
+        vis[x]=1;
+        for(int i=fir[x];i;i=nex[i]){
+            if(dis[to[i]]&gt;dis[x]+val[i]){
+                dis[to[i]]=dis[x]+val[i];
+                q.push(make_pair(dis[to[i]],to[i]));
+            }
+        }
+    }
+}
+
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        addedge(x,y,w);
+    }
+    
+    for(int i=1;i&lt;=n;i++){
+        dis[i]=N;
+    }
+    Dijkstra(s);
+    
+    for(int i=1;i&lt;=n;i++){
+        cout&lt;&lt;dis[i]&lt;&lt;" ";
+    }
+    return 0;
+}
+</pre>
+        </li>
+        <li>
+解法4：堆优化版，简单写法
+<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define int long long
+#define maxn 2000000
+const long long N=2147483647;
+
+struct edge {
+    int v, w;
+};
+
+struct node {
+    int dis, u;
+
+    bool operator&gt;(const node& a) const { return dis &gt; a.dis; }
+};
+
+vector&lt;edge&gt; e[maxn];
+int dis[maxn], vis[maxn];
+priority_queue&lt;node, vector&lt;node&gt;, greater&lt;node&gt; &gt; q;
+
+void dijkstra(int s) {
+    dis[s] = 0;
+    q.push({0, s});
+    while (!q.empty()) {
+    int u = q.top().u;
+    q.pop();
+    if (vis[u]) continue;
+    vis[u] = 1;
+    for (int i=0;i&lt;e[u].size();i++) {
+        edge ed=e[u][i];
+        int v = ed.v, w = ed.w;
+        if (dis[v] &gt; dis[u] + w) {
+            dis[v] = dis[u] + w;
+            q.push({dis[v], v});
+        }
+    }
+    }
+}
+
+int n,m,s;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+    }
+
+
+    for(int i=1;i&lt;=n;i++){
+        dis[i]=N;
+    }
+    dijkstra(s);
+    
+    for(int i=1;i&lt;=n;i++){
+        cout&lt;&lt;dis[i]&lt;&lt;" ";
+    }
+    return 0;
+}
+</pre>
+        </li>
+        <li>
+解法5：spfa可以判负环
+<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define int long long
+#define maxn 2000000
+const long long N=2147483647;
+
+struct edge{
+    int v,w;
+};
+
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],cnt[maxn],vis[maxn];
+queue&lt;int&gt; q;
+
+bool spfa(int n,int s){
+    dis[s]=0;vis[s]=1;
+    q.push(s);
+    while(!q.empty()){
+        int u=q.front();
+        q.pop(),vis[u]=0;
+        for(int i=0;i&lt;e[u].size();i++){
+            edge ed=e[u][i];
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                cnt[v]=cnt[u]+1;<span>// 记录最短路经过的边数</span>
+                if(cnt[v]&gt;=n)return 0;
+                <span>// 在不经过负环的情况下，最短路至多经过 n - 1 条边</span>
+                <span>// 因此如果经过了多于 n 条边，一定说明经过了负环</span>
+                if(!vis[v])q.push(v),vis[v]=1;
+            }
+        }
+    }
+    return 1;
+}
+
+int n,m,s;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+    }
+    
+//	memset(dis,0x3f,sizeof(dis));
+    for(int i=1;i&lt;=n;i++){
+        dis[i]=N;
+    }
+    spfa(n,s);
+    
+    for(int i=1;i&lt;=n;i++){
+        cout&lt;&lt;dis[i]&lt;&lt;" ";
+    }
+    return 0;
+}
+</pre>
+        </li>
+    </ul></div>
+    <div class="t1">蓝色的是高频考点：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/20/286158760/2dc705baa5fe2e0d9e8c4980809e6410_3563378581543882989.png" alt="考点"></div>
+    <div class="t1">最大公约数与最小公倍数的求法<pre>
+int sum1=__gcd(a,b);<span>//求最大公约数</span>
+int sum2=a*b/__gcd(a,b);<span>//求最小公倍数</span>
+    </pre></div>
+    <div class="t1">认真读题，有些题里面要求对答案进行mod多少，别忘了mod，否则就会WA。</div>
+    <div class="t1">异或：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/19/286158760/b8355bb0bb08782bd17367225f5f18cc_2398932819789195744.png" alt="异或"></div>
+    <div class="t1"><a href="https://contest.xinyoudui.com/contest/280/problem/1503">A.  火柴</a>注意for循环的范围，我把数组的范围写成了1-39，正确做法应该是0-39,39取不到。</div>
+    <div class="t1">学习最短路之前先总结一波~(Because 我已经学完了) <ol>
+        <li>Dijkstra算法<ul><li>优点：<ol><li>准确性</li><li>适用性广泛</li><li>易于理解和实现</li><li>支持自动路径恢复</li></ol><li>缺点：</li><ol><li>无法处理含负权边的图</li><li>对于稀疏图效率较低</li><li>牺牲了部分性能来保证准确性</li></ol></li></ul></li>
+
+        <li>Floyed算法<ul><li>优点：<ol><li>多源最短路算法</li><li>动态规划思想</li><li>稠密图效果最佳</li></ol><li>缺点：</li><ol><li>时间复杂度较高</li><li>无法处理负环</li></ol></li></ul></li>
+
+        <li>SPFA算法<ul><li>优点：<ol><li>适用于稀疏图</li><li>可以解决带有负权边的问题</li></ol><li>缺点：</li><ol><li>时间复杂度不稳定</li><li>实现相对复杂</li></ol></li></ul></li>
+    </ol><br>总之，赛场上尽量用Dijkstra，因为Dijkstra时间复杂度低，而且稳定，SPFA容易被卡数据。（SPFA已死~）</div>
+    <div class="t1">最短路<img src="https://upload-bbs.miyoushe.com/upload/2024/10/18/198629752/f3f059a471cc80989eb1c327706830ca_177783167206426404.png" alt="最短路"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3128">P3128 [USACO15DEC] Max Flow P</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>果然，还是套公式好用！这道题前一部分是直接套用熟练剖分的算法模板，后一部分也就是dfs3是遍历整棵树，回溯过程中去做和的累加，循环外去记录最大值。<b>典型模板：树上差分</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+int n,m,k,ans,power[maxn];<span>//power是差分数组</span>
+int fa[maxn],dep[maxn],top[maxn],sz[maxn],son[maxn];
+void dfs1(int u,int father){
+    fa[u]=father;sz[u]=1;dep[u]=dep[father]+1;
+    for(int i=0;i&lt;linker[u].size();i++){
+        int v=linker[u][i];
+        if(v==father)continue;
+        dfs1(v,u);
+        sz[u]+=sz[v];
+        if(sz[son[u]]&lt;sz[v])son[u]=v;
+    }
+}
+void dfs2(int u,int t){
+    top[u]=t;
+    if(!son[u])return;
+    dfs2(son[u],t);
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]==fa[u]||linker[u][i]==son[u])continue;
+        dfs2(linker[u][i],linker[u][i]);
+    }
+}
+void swap(int &x,int &y){
+    int tmp=x;x=y;y=tmp;
+}
+int lca(int x,int y){
+    while(top[x]!=top[y]){
+        if(dep[top[x]]&lt;dep[top[y]])swap(x,y);
+        x=fa[top[x]];
+    }
+    return dep[x]&lt;dep[y]?x:y;
+}
+<span>//--------从这往上都是模板-----------</span>
+
+void dfs3(int u,int f){<span>//这个的意思就是遍历整棵树</span>
+    for(int i=0;i&lt;linker[u].size();i++)
+    {
+        if(linker[u][i]==f)continue;
+        dfs3(linker[u][i],u);
+        power[u]+=power[linker[u][i]];<span>//回溯阶段累加</span>
+    }
+    ans=max(ans,power[u]);<span>//记录最大值</span>
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1,x,y;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    dfs1(1,0);
+    dfs2(1,1);
+    for(int i=1,x,y;i&lt;=k;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        int l=lca(x,y);
+        ++power[x];++power[y];<span>//做差分，跟之前学的差不多</span>
+        --power[l];--power[fa[l]];
+    }
+    dfs3(1,0);<span>//差分完了就累加</span>
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3379">P3379 【模板】最近公共祖先（LCA）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>树链剖分挺简单的。<br><b>1.树链剖分：</b><pre>
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+int n,m,s;
+int fa[maxn],dep[maxn],top[maxn],sz[maxn],son[maxn];
+void dfs1(int u,int father){<span>//求出fa、sz、dep、son</span>
+    fa[u]=father;sz[u]=1;dep[u]=dep[father]+1;
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]==father)continue;
+        dfs1(linker[u][i],u);
+        sz[u]+=sz[linker[u][i]];
+        if(sz[son[u]]&lt;sz[linker[u][i]])son[u]=linker[u][i];
+    }
+}
+void dfs2(int u,int t){<span>//求出链头top</span>
+    top[u]=t;
+    if(!son[u])return;
+    dfs2(son[u],t);
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]==fa[u]||linker[u][i]==son[u])continue;
+        dfs2(linker[u][i],linker[u][i]);
+    }
+}
+void swap(int &x,int &y){
+    int tmp=x;x=y;y=tmp;
+}
+int lca(int x,int y){<span>//通过链头向上跳，找最近公共祖先。</span>
+    while(top[x]!=top[y]){
+        if(dep[top[x]]&lt;dep[top[y]])swap(x,y);
+        x=fa[top[x]];
+    }
+    return dep[x]&lt;dep[y]?x:y;
+}
+int main(){
+    cin&gt;n&gt;m&gt;s;
+    for(int i=1,x,y;i&lt;n;i++){
+        cin&gt;x&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    dfs1(s,0);
+    dfs2(s,s);
+    int x,y;
+    while(m--){
+        cin&gt;x&gt;y;
+        cout&lt;&lt;lca(x,y)&lt;&lt;'\n';
+    }
+    return 0;
+}</pre><br><b>2.倍增：</b><pre>
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+int n,m,s,x,y;
+int fa[maxn][30],dep[maxn];
+void dfs(int u,int father){
+    fa[u][0]=father;
+    dep[u]=dep[father]+1;
+    <span>//fa数组的初始化，可以考虑在dfs的时候一块弄，不过这样会略微超时，所以我把fa数组初始化提出来了。见下文__init()函数</span>
+<span>//	for(int i=1;i&lt;=19;i++){</span>
+<span>//		fa[u][i]=fa[fa[u][i-1]][i-1];</span>
+<span>//	}</span>
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(linker[u][i]!=father)dfs(linker[u][i],u);
+    }
+}
+void swap(int &x,int &y){
+    int tmp=x;x=y;y=tmp;
+}
+int lca(int u,int v){
+    if(dep[u]&lt;dep[v])swap(u,v);
+    for(int i=19;i&gt;=0;i--){
+        if(dep[fa[u][i]]&gt;=dep[v]){
+            u=fa[u][i];
+        }
+    }
+    if(u==v)return v;
+    for(int i=19;i&gt;=0;i--){
+        if(fa[u][i]!=fa[v][i]){
+            u=fa[u][i];v=fa[v][i];
+        }
+    }
+    return fa[u][0];
+}
+void __init(){
+    for(int i=1;i&lt;20;i++){
+        for(int j=1;j&lt;=n;j++){
+            fa[j][i]=fa[fa[j][i-1]][i-1];
+        }
+    }
+}
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    dfs(s,0);
+    __init();<span>//把fa数组提出来处理，虽然仍会TLE，但比之前好一点。</span>
+    while(m--){
+        cin&gt;&gt;x&gt;&gt;y;
+        cout&lt;&lt;lca(x,y)&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre><br><b>3.tarjan算法</b><pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 500100
+vector&lt;int&gt; linker[maxn];
+vector&lt;pair&lt;int,int&gt; &gt; query[maxn];
+int fa[maxn],vis[maxn],ans[maxn],n,m,s,x,y;
+int find(int u){
+    if(u==fa[u])return u;
+    return fa[u]=find(fa[u]);
+}
+void tarjan(int u){
+    vis[u]=true;
+    for(int i=0;i&lt;linker[u].size();i++){
+        if(!vis[linker[u][i]]){
+            tarjan(linker[u][i]);
+            fa[linker[u][i]]=u;
+        }
+    }
+    for(int i=0;i&lt;query[u].size();i++){
+        int v=query[u][i].first,q=query[u][i].second;
+        if(vis[v])ans[q]=find(v);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s;
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        linker[x].push_back(y);
+        linker[y].push_back(x);
+    }
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        query[x].push_back({y,i});
+        query[y].push_back({x,i});
+    }
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    tarjan(s);
+    for(int i=1;i&lt;=m;i++){
+        cout&lt;&lt;ans[i]&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre><br><br>总结：数列剖分比较易于理解，而且不超时，但比较麻烦。倍增算法易于理解但是超时。tarjan算法不好理解，但是是最高效的。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1395">P1395 会议</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>典型的找树的重心的问题啊！！！但我不会呜呜呜。<pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 10000010
+int n,f[maxn],size[maxn],center,sum,dep[maxn];<span>//center为重心</span>
+vector&lt;int&gt; G[maxn];
+queue&lt;int&gt; q;
+void getcenter(int u,int fa){
+    size[u]=1;f[u]=0;
+    for(int i=0;i&lt;G[u].size();i++){
+        int v=G[u][i];
+        if(v==fa)continue;
+        getcenter(v,u);
+        size[u]+=size[v];
+        f[u]=max(f[u],size[v]);<span>//f[u]保存了点u的最大子树大小</span>
+    }
+    f[u]=max(f[u],n-size[u]);
+    <span>//size[u]计算完之后，计算树中除了该点的部分，并和之前的f[u]取较大值</span>
+    if(f[u]&lt;f[center]||(f[u]==f[center]&&u&lt;center)){
+        center=u;<span>//如果f[u]较小，更新找到的重心</span>
+    }
+}
+void bfs(){
+    q.push(center);
+    while(!q.empty()){
+        int u=q.front();q.pop();
+        for(int i=0;i&lt;G[u].size();i++){
+            int v=G[u][i];
+            if(dep[v]||v==center)continue;
+            dep[v]=dep[u]+1;<span>//深度</span>
+            sum+=dep[v];<span>//总距离要加上这个点的深度</span>
+            q.push(v);
+        }
+    }
+}
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1,x,y;i&lt;=n-1;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        G[x].push_back(y);
+        G[y].push_back(x);
+    }
+    center=0;f[0]=0x3f3f3f3f;
+    getcenter(1,0);<span>//求重心</span>
+    bfs();<span>//从重心开始求距离</span>
+    cout&lt;&lt;center&lt;&lt;' '&lt;&lt;sum;
+    return 0;
+}
+    </pre>代码还是挺好理解的哦~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1099">P1099 [NOIP2007 提高组] 树网的核</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>找直径，我们可以跑两遍DFS，随便找一点DFS到最远端，然后在最远端开始DFS找对于这个最远端来说的最远端。这两个最远端的距离就是直径。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#define M 500005
+using namespace std;
+int n,m,x,y,z,k,id,top,ans=2e9;
+int dis[M],fa[M],head[M];
+bool mark[M];
+struct node{
+    int to,w,nxt;
+}E[M&lt;&lt;1];
+void add(int u,int v,int w){
+    E[++id]=((node){v,w,head[u]});
+    head[u]=id;<span>//存图</span>
+}
+void dfs(int f,int x){
+    fa[x]=f;
+    if(dis[x]&gt;dis[k])k=x;
+    for(int i=head[x];i;i=E[i].nxt){
+        int y=E[i].to;
+        if(y==f||mark[y])continue;
+        dis[y]=dis[x]+E[i].w;
+        dfs(x,y);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
+        add(x,y,z);add(y,x,z);
+    }
+    dis[1]=1;dfs(0,1);
+    dis[k]=0;dfs(0,k);
+    top=k;<span>//k表示最远的端点</span>
+    for(int i=top,j=top,l=1,r=0;i;i=fa[i]){
+        while(dis[j]-dis[i]&gt;m)j=fa[j];
+        <span>//进行尺取，选路径。</span>
+        x=max(dis[top]-dis[j],dis[i]);
+        <span>//路径两端点到直径端点的最小贡献.</span>
+        ans=min(ans,x);
+    }
+    for(int i=top;i;i=fa[i])mark[i]=1;
+    <span>//标记直径，重新计算每个点的贡献。</span>
+    for(int i=top;i;i=fa[i]){
+        k=i;dis[k]=0;
+        dfs(fa[i],i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        ans=max(ans,dis[i]);<span>//每个点的贡献，仔细想想为什么是对的。</span>
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5908">P5908 猫猫和企鹅</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>这普及的题目啊，就一个字，“细节”！<pre>
+#include &lt;iostream&gt;
+using namespace std;
+long long p[4000001];
+long long ans,n,d,x,y;
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;d;
+    for(int i=1;i&lt;=n-1;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        if(x&gt;y)int tmp=x,x=y,y=tmp;
+        p[y]=p[x]+1;
+        if(p[y]&lt;=d)ans++;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>因为题目中没有说输入的x和y一定是x小于y，她只是说了：“居民区x和y之间存在道路”。这也就是本题的坑点。导致我WA零分！所以输入数据要判断x如果大于y就交换她俩。<br><hr style="width: 100%;">那为什么建图就AC了呢？其实原因就在于建图的建了无向边，恰好规避了这个顺序问题。其实这道题的数据也比较水，如果我来个这个数据：<pre>
+5 1
+1 5
+3 5
+2 3
+4 2</pre>这个数据按道理老说应该输出1，但是却输出了4，也就是说，我们这个代码是会WA的，之所以AC了，是因为数据太水了。这都能过，我也是服了。比赛时保险起见还是建图比较好。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3810">P3810 【模板】三维偏序（陌上花开）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>省选代码都可长了~连一个模板都要这么长！<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 1000006
+int n,k,cnt[maxn];<span>// n是元素数量，k是最大属性值，cnt数组用于存储结果</span>
+struct Data
+{
+    int x,y,z;
+    <span>// 重载小于运算符，用于排序</span>
+    int operator &lt; (const Data &o)const{
+        return x!=o.x?(x&lt;o.x):(y!=o.y?(y&lt;o.y):(z&lt;o.z));
+    }
+    <span>// 重载等于运算符，用于比较两个元素是否相等</span>
+    int operator == (const Data &o)const{
+        return x==o.x&&y==o.y&&z==o.z;
+    }
+}data[maxn];
+
+<span>// 树状数组（线段树）的定义</span>
+struct Seg{
+    struct Node{
+        int val;
+        Node *ch[2];
+        Node(int val=0):val(val){
+            ch[0]=ch[1]=NULL;
+        }
+    };
+    Node *rt;
+    Seg(){
+        rt=NULL;
+    }
+    <span>// 修改操作，在树状数组中的指定位置增加或减少值</span>
+    void Modify(Node *&now,int pos,int val,int nl,int nr){
+        if(!now)now=new Node();
+        if(nl==nr){
+            now-&gt;val+=val;
+            return;
+        }
+        int mid=(nl+nr)&gt;&gt;1;
+        if(pos&lt;=mid)Modify(now-&gt;ch[0],pos,val,nl,mid);
+        else Modify(now-&gt;ch[1],pos,val,mid+1,nr);
+        now-&gt;val=(now-&gt;ch[0]?now-&gt;ch[0]-&gt;val:0)+(now-&gt;ch[1]?now-&gt;ch[1]-&gt;val:0);
+    }
+    <span>// 查询操作，获取树状数组中指定区间的和</span>
+    int Query(Node *now,int l,int r,int nl,int nr){
+        if(!now)return 0;
+        if(l==nl&&r==nr)return now-&gt;val;
+        int mid=nl+nr&gt;&gt;1;
+        if(r&lt;=mid)return Query(now-&gt;ch[0],l,r,nl,mid);
+        else if(l&gt;mid)return Query(now-&gt;ch[1],l,r,mid+1,nr);
+        return Query(now-&gt;ch[0],l,mid,nl,mid)+Query(now-&gt;ch[1],mid+1,r,mid+1,nr);
+    }
+};
+Seg tree[maxn];<span>// 树状数组数组，用于处理每个x值的y,z坐标统计</span>
+int LB(int x){
+    return x&(-x);
+}
+void Modify(int posx,int posy,int val){
+    for(int i=posx;i&lt;=k;i+=LB(i)){
+        tree[i].Modify(tree[i].rt,posy,val,1,k);
+    }
+}
+int Query(int x,int y){
+    int ret=0;
+    for(int i=x;i;i-=LB(i))ret+=tree[i].Query(tree[i].rt,1,y,1,k);
+    return ret;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;data[i].x&gt;&gt;data[i].y&gt;&gt;data[i].z;
+    }
+    sort(data+1,data+n+1);<span> // 按x,y,z排序 </span>
+    int sum=1;<span>// 用于处理相同元素的数量</span>
+    for(int i=1;i&lt;=n;i++){
+        if(data[i+1]==data[i]){
+            sum++;<span>// 如果下一个元素与当前元素相同，增加sum</span>
+            continue;
+        }
+        Modify(data[i].y,data[i].z,sum);<span>// 在树状数组中记录当前元素</span>
+        int res=Query(data[i].y,data[i].z);<span>// 查询小于等于当前y,z的点的数量</span>
+        cnt[res]+=sum;
+        sum=1;<span>// 重置sum</span>
+    }
+    for(int i=1;i&lt;=n;i++)cout&lt;&lt;cnt[i]&lt;&lt;'\n';
+    return 0;
+}
+    </pre></div>
+    <div class="t1">树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/18/198629752/4ac1d4603e95ddbde0301655b6273856_5867892361830757225.png" alt="树"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4587">P4587 [FJOI2016] 神秘数</a>这也是一个模板题，不过我不会，呜呜呜~<a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define N 1000001 <span>//数组最大值</span>
+int n,m,tot,rt[N],ans;
+struct node{
+    int ls[N&lt;&lt;5],rs[N&lt;&lt;5],v[N&lt;&lt;5];<span>//小一点就RE</span>
+    void cp(int x,int y){
+        ls[x]=ls[y],rs[x]=rs[y],v[x]=v[y];<span>//节点复制</span>
+    }
+    void fix(int pl,int pr,int l,int r,int x){
+        cp(pr,pl),v[pr]+=x;<span>//按照pl新建一个节点pr(两棵树可以共享节点)</span>
+        if(l==r)return;
+        int mid=(l+r)&gt;1;
+        if(mid&gt;=x) fix(ls[pl],ls[pr]=++tot,l,mid,x);
+        else fix(rs[pl],rs[pr]=++tot,mid+1,r,x);
+    }
+    int sum(int pl,int pr,int l,int r,int x,int y){<span>//得出pr和pl之间的大于x小于y的数的和</span>
+        if(v[pr]-v[pl]==0) return 0;
+        if(l&gt;=x&&r&lt;=y) return v[pr]-v[pl];
+        int ret=0,mid=(l+r)&gt;1;
+        if(mid&gt;=x) ret+=sum(ls[pl],ls[pr],l,mid,x,y);
+        if(mid&lt;y) ret+=sum(rs[pl],rs[pr],mid+1,r,x,y);
+        return ret;
+    }
+}tree;
+int main(){
+    cin&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        int x;
+        cin&gt;x;
+        tree.fix(rt[i-1],rt[i]=++tot,1,N&lt;&lt;10,x);
+    }
+    cin&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        int L,R,tmp,lst=0,now=0;
+        cin&gt;L&gt;R;
+        while(1){
+            tmp=tree.sum(rt[L-1],rt[R],1,N&lt;&lt;10,lst+1,now+1);<span>//算法精华</span>
+            if(tmp){
+                lst=now+1;now+=tmp;
+            }
+            else break;
+        }
+        cout&lt;&lt;now+1&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3834">P3834 【模板】可持久化线段树 2</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a><pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define N 200010
+int n,q,m,cnt;<span>// n为序列长度，q为查询数量，m为去重后的元素数量，cnt为节点计数器</span>
+int a[N],b[N],tree[N];<span>// a为原始序列，b为排序后的唯一元素序列，tree为可持久化线段树的根节点数组</span>
+int sum[N&lt;&lt;5],L[N&lt;&lt;5],R[N&lt;&lt;5];<span>// sum为线段树节点存储的区间和（此处为元素个数），L和R为左右子节点指针</span>
+<span>// 构建空线段树</span>
+inline int build(int l,int r){
+    int mid=(l+r)&gt;&gt;1;
+    int rt=++cnt;<span> // 新建节点</span>
+    sum[rt]=0;<span>// 初始化区间和为0</span>
+    if(l&lt;r){
+        L[rt]=build(l,mid);<span>// 递归构建左子树</span>
+        R[rt]=build(mid+1,r);<span>// 递归构建右子树</span>
+    }
+    return rt;<span>// 返回当前节点编号 </span>
+}
+<span>// 更新线段树，插入新元素</span>
+inline int update(int pre,int l,int r,int x){
+    int mid=(l+r)&gt;&gt;1;
+    int rt=++cnt;<span>// 新建节点</span>
+    L[rt]=L[pre];R[rt]=R[pre];sum[rt]=sum[pre]+1;<span>// 复制前驱节点的信息，并增加区间和</span>
+    if(l&lt;r){
+        if(x&lt;=mid) L[rt]=update(L[pre],l,mid,x);<span>// 如果x在左子树范围内，更新左子树</span>
+        else R[rt]=update(R[pre],mid+1,r,x);<span>// 否则更新右子树</span>
+    }
+    return rt;<span>// 返回当前节点编号</span>
+}
+<span>// 查询区间第k小值</span>
+inline int query(int u,int v,int l,int r,int k){
+    int mid=(l+r)&gt;&gt;1;
+    if(l&gt;=r)return l;<span>// 如果区间长度为1，直接返回该位置的值（但此处不会执行，因为k一定小于区间长度）</span>
+    int x=sum[L[v]]-sum[L[u]];<span>// 计算v和u在左子树中的区间和之差，即[l, mid]区间内v有而u没有的元素个数</span>
+    if(x&gt;=k)return query(L[u],L[v],l,mid,k);<span>// 如果左子树中的元素个数大于等于k，继续在左子树中查询</span>
+    else return query(R[u],R[v],mid+1,r,k-x);<span>// 否则，在右子树中查询第(k-x)小的元素  </span>
+}
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;q;<span>// 输入序列长度和查询数量  </span>
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        b[i]=a[i];<span>// 将a数组的元素复制到b数组，用于后续排序和去重  </span>
+    }
+    sort(b+1,b+n+1);<span> // 对b数组进行排序  </span>
+    m=unique(b+1,b+n+1)-b-1;<span>// 去重，并计算去重后的元素数量  </span>
+    <span>// 构建可持久化线段树  </span>
+    tree[0]=build(1,m);<span>// 构建空线段树作为根节点（虽然实际上没有用到，但为了统一接口）  </span>
+    for(int i=1;i&lt;=n;i++){
+        int t=lower_bound(b+1,b+m+1,a[i])-b;<span>// 在b数组中找到a[i]的位置（排序后的） </span>
+        tree[i]=update(tree[i-1],1,m,t);<span>// 基于前一个节点的线段树，插入新元素a[i]  </span>
+    }
+    <span>// 查询并输出结果</span>
+    while(q--){
+        int x,y,z;
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;<span>// 输入查询的区间[x, y]和k值 </span>
+        int t=query(tree[x-1],tree[y],1,m,z);<span> // 在线段树中查询区间[x, y]内的第z小值  </span>
+        cout&lt;&lt;b[t]&lt;&lt;'\n';<span>// 输出查询结果  </span>
+    }
+    return 0;
+}
+    </pre>*这段代码实现了可持久化权值线段树，用于解决静态区间第k小值的问题。通过构建一系列版本的线段树，每个版本都基于前一个版本进行更新，从而可以在O(log n)的时间内查询任意区间的第k小值。<br><a href="https://yiyan.baidu.com/" style="text-decoration: none;color: rgb(0, 132, 255);">代码注释by: 文心一言®</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5283">P5283 [十二省联考 2019] 异或粽子</a>区间[l,r]的异或和等于sr⊕sl-1因为每个si都异或了两遍而抵消。<pre>
+#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define ll long long
+#define maxn 501000
+int n,k;
+ll a[maxn];
+int trie[maxn*32][2],sz[maxn*32],tot=0;
+void insert(ll val){
+    int u=0;
+    for(int i=31;i&gt;=0;i--){
+        int z=(val&gt;&gt;i)&amp;1;
+        if(!trie[u][z]){
+            trie[u][z]=++tot;
+        }
+        u=trie[u][z];
+        sz[u]++;
+    }
+}
+ll find(ll val,int t){
+    ll s=0;
+    int u=0;
+    for(int i=31,z;i&gt;=0;i--){
+        z=(val&gt;&gt;i)&amp;1;
+        if(sz[trie[u][z^1]]&gt;=t){
+            u=trie[u][z^1];
+            s|=(1ll&lt;&lt;i);
+        }else{
+            t-=sz[trie[u][z^1]];
+            u=trie[u][z];
+        }
+    }
+    return s;
+}
+struct node{
+    ll w;
+    int x,y;<span>//x的第y大</span>
+    bool operator&lt;(const node &amp;A)const{
+        return w&lt;A.w;
+    }
+};
+node d[maxn];
+priority_queue&lt;node&gt; q;
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        a[i]^=a[i-1];
+    }
+    for(int i=0;i&lt;=n;i++){
+        insert(a[i]);
+    }
+    k=2*k;
+    for(int i=0;i&lt;=n;i++){
+        d[i].w=find(a[i],1);
+        d[i].x=i;
+        d[i].y=1;
+        q.push(d[i]);
+    }
+    ll ans=0;
+    node A;
+    for(int i=1;i&lt;=k;i++){
+        A=q.top();
+        ans+=A.w;
+        q.pop();
+        d[A.x].y++;
+        d[A.x].w=find(a[A.x],d[A.x].y);
+        q.push(d[A.x]);
+    }
+    ans/=2;
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4551">P4551 最长异或路径</a>01-Trie树。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+struct node{
+    int v,w,nxt;
+}edge[2000001];
+int head[2000001];
+int cnt=1;
+void add(int u,int v,int w){
+    edge[++cnt].nxt=head[u];
+    edge[cnt].v=v;
+    edge[cnt].w=w;
+    head[u]=cnt;
+}
+int sum[2000001];
+void dfs(int x,int fa){<span>//预处理 </span>
+    for(int i=head[x];~i;i=edge[i].nxt){
+        int v=edge[i].v;
+        int w=edge[i].w;
+        if(v!=fa){
+            sum[v]=sum[x]^w;
+            dfs(v,x);
+        }
+    }
+}
+struct trie{
+    int ch[2];
+}t[2000001];
+int tot;
+void build(int val,int x){
+    for(int i=(1&lt;&lt;30);i;i&gt;&gt;=1){
+        bool c=val&amp;i;<span>//取出二进制下这个数的当前位置 </span>
+        if(!t[x].ch[c]){
+            t[x].ch[c]=++tot;
+        }
+        x=t[x].ch[c];
+    }
+}
+int query(int val,int x){
+    int ans=0;
+    for(int i=(1&lt;&lt;30);i;i&gt;&gt;=1){
+        bool c=val&amp;i;
+        if(t[x].ch[!c]){<span>//如果这一位可以进行异或就沿着这一条往下走 </span>
+            ans+=i;
+            x=t[x].ch[!c];
+        }
+        else x=t[x].ch[c];<span>//否则就沿着另一条路往下走 </span>
+    }
+    return ans;
+}
+int main()
+{
+    memset(head,-1,sizeof(head));
+    int n;
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n-1;i++){
+        int u,v,w;
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        add(u,v,w);
+        add(v,u,w);
+    }
+    dfs(1,-1);<span>//预处理出每一个节点到根的异或和 </span>
+    for(int i=1;i&lt;=n;i++){<span>//建立trie树 </span>
+        build(sum[i],0);
+    }
+    int ans=0;
+    for(int i=1;i&lt;=n;i++){
+        ans=max(ans,query(sum[i],0));<span>//查询，取最大值 </span>
+    }
+    cout&lt;&lt;ans;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2580">P2580 于是他错误的点名开始了</a>STL大法好！用map叫我做爽了。<pre>
+#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+map&lt;string,int&gt; mp;
+int main(){
+    int n;
+    cin&gt;&gt;n;
+    while(n--){
+        string s;
+        cin&gt;&gt;s;
+        mp[s]=1;
+    }
+    cin&gt;&gt;n;
+    while(n--){
+        string s;
+        cin&gt;&gt;s;
+        if(mp[s]==1&&mp[s]++)
+            cout&lt;&lt;"OK"&lt;&lt;'\n';
+        else if(mp[s]==0)
+            cout&lt;&lt;"WRONG"&lt;&lt;'\n';
+        else if(mp[s]&gt;1)
+            cout&lt;&lt;"REPEAT"&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre>不过这道题既然是字典树，那我们就用字典树来解吧！<br>*But，我不会。<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/302083128/5cd66a31025f6db429719874abee013b_8339061302961208307.gif" alt="啊啊啊" style="width: 150px;"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1481">P1481 魔族密码</a>Trie字典树题目。<pre>
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+using namespace std;
+char c[90];
+int word[1000],g[1000][1000];
+int ans,res,u,tot,n;
+void f(){
+    int len=strlen(c);
+    u=res=0;
+    for(int i=0;i&lt;len;i++){
+        int a=c[i]-'0';
+        if(!g[u][a])g[u][a]=++tot;
+        u=g[u][a];
+        res+=word[u];
+    }
+    word[u]++;
+    ans=max(ans,res+1);
+}
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        memset(c,0,sizeof(0));
+        cin&gt;&gt;c;
+        f();
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3368">P3368 【模板】树状数组 2</a><ul>
+        <li>区间修改</li><li>单点查找</li>
+    </ul><pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500010
+int n,m;
+int a[maxn],c[maxn],b[maxn];
+int lowbit(int x){
+    return x&(-x);
+}
+void add(int x,int y){
+    for(int i=x;i&lt;=n;i+=lowbit(i))
+        c[i]+=y;
+}
+int sum(int x){
+    int res=0;
+    for(int i=x;i;i-=lowbit(i))
+        res+=c[i];
+    return res;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        b[i]=a[i]-a[i-1];
+        add(i,b[i]);
+    }
+    while(m--){
+        int op,x,y,k;
+        cin&gt;&gt;op;
+        if(op==1)
+        {
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;k;
+            add(x,k);
+            add(y+1,-k);
+        }
+        else
+        {
+            cin&gt;&gt;x;
+            cout&lt;&lt;sum(x)&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3374">P3374 【模板】树状数组 1</a>还挺简单的，我用线段树一遍AC了，没想到我还是会写线段树的啊，哈哈哈~ <img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/265801674/2939e5b79007fb2673dba8fcbea8b89f_4984784221438249415.gif" alt="哈哈哈" style="width: 150px;"><br>*But，不过这道题让我用的是树状数组......<br><b>线段树做法：</b><pre style="height: 400px;">
+#include &lt;iostream&gt;
+using namespace std;
+#define int long long
+<span>//考场不建议把int替换为long long，万一RE了呢？谁知道评测机上跑的啥样？ </span>
+struct node{
+    int val;
+}tree[4000001];
+int a[1000100];
+void build(int root,int l,int r){
+    if(l==r){
+        tree[root].val=a[l];
+        return;
+    }
+    int m=(l+r)&gt;&gt;1;
+    build(root&lt;&lt;1,l,m);
+    build(root&lt;&lt;1|1,m+1,r);
+    tree[root].val=tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val;
+}
+void update(int root,int l,int r,int ql,int qr,int k){
+    if(qr&lt;l||r&lt;ql)return;<span>//这一句必须加，不加就卡住了 </span>
+    if(ql&lt;=l&&r&lt;=qr){
+        tree[root].val+=k;
+        return;
+    }
+    int m=(l+r)&gt;&gt;1;
+    update(root&lt;&lt;1,l,m,ql,qr,k);
+    update(root&lt;&lt;1|1,m+1,r,ql,qr,k);
+    tree[root].val=tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val;
+}
+int query(int root,int l,int r,int ql,int qr){
+    if(qr&lt;l||r&lt;ql)return 0;<span>//这一句必须加，不加就卡住了</span> 
+    if(ql&lt;=l&&r&lt;=qr){
+        return tree[root].val;
+    }
+    int m=(l+r)&gt;&gt;1;
+    return query(root&lt;&lt;1,l,m,ql,qr)+query(root&lt;&lt;1|1,m+1,r,ql,qr);
+}
+int n,m,op,x,y,k;
+signed main()
+{
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+    }
+    build(1,1,n);
+    while(m--)
+    {
+        cin&gt;&gt;op;
+        if(op==1){
+            cin&gt;&gt;x&gt;&gt;k;
+            update(1,1,n,x,x,k);
+        }
+        else{
+            cin&gt;&gt;x&gt;&gt;y;
+            cout&lt;&lt;query(1,1,n,x,y)&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre><br><b>树状数组求法：</b><ul>
+        <li>单点修改</li><li>区间查找</li>
+    </ul><pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 500010
+int n,m;
+int a[maxn],c[maxn];
+int lowbit(int x){
+    return x&(-x);
+}
+int sum(int x){
+    int res=0;
+    for(int i=x;i;i-=lowbit(i))
+        res+=c[i];
+    return res;
+}
+void add(int x,int y){
+    for(int i=x;i&lt;=n;i+=lowbit(i))
+        c[i]+=y;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        add(i,a[i]);
+    }
+    while(m--){
+        int op,x,y;
+        cin&gt;&gt;op&gt;&gt;x&gt;&gt;y;
+        if(op==1)
+            add(x,y);
+        else
+            cout&lt;&lt;sum(y)-sum(x-1)&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1">树状数组与字典树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/c5d9ad7673cdfc1000a1c34ada514390_7005827162608113595.png" alt="树状数组"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3373">P3373 【模板】线段树 2</a>这个模板代码我调了半天才发现其中一个+号不小心写成了*号，就连鲨笔AI都查不出来。<pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define int long long
+struct node{
+    int mul,add,val;
+}tree[4000011];
+int a[1000001],p;
+void pushdown(int root,int l,int r){
+    int m=(l+r)&gt;&gt;1;
+    tree[root&lt;&lt;1].val=(tree[root&lt;&lt;1].val*tree[root].mul+tree[root].add*(m-l+1))%p;
+    tree[root&lt;&lt;1|1].val=(tree[root&lt;&lt;1|1].val*tree[root].mul+tree[root].add*(r-m))%p;
+    tree[root&lt;&lt;1].mul=(tree[root&lt;&lt;1].mul*tree[root].mul)%p;
+    tree[root&lt;&lt;1|1].mul=(tree[root&lt;&lt;1|1].mul*tree[root].mul)%p;
+    tree[root&lt;&lt;1].add=(tree[root&lt;&lt;1].add*tree[root].mul+tree[root].add)%p;
+    tree[root&lt;&lt;1|1].add=(tree[root&lt;&lt;1|1].add*tree[root].mul+tree[root].add)%p;
+    tree[root].add=0;
+    tree[root].mul=1;
+}
+void build(int root,int l,int r){
+    tree[root].mul=1;
+    tree[root].add=0;
+    if(l==r){
+        tree[root].val=a[l];
+    }
+    else{
+        int m=(l+r)&gt;&gt;1;
+        build(root&lt;&lt;1,l,m);
+        build(root&lt;&lt;1|1,m+1,r);
+        tree[root].val=tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val;
+    }
+    tree[root].val%=p;
+    return;
+}
+void updateC(int root,int l,int r,int ql,int qr,int k){
+    if(qr&lt;l||r&lt;ql){
+        return;
+    }
+    if(ql&lt;=l&&r&lt;=qr){
+        tree[root].val=(tree[root].val*k)%p;
+        tree[root].mul=(tree[root].mul*k)%p;
+        tree[root].add=(tree[root].add*k)%p;
+        return;
+    }
+    pushdown(root,l,r);
+    int m=(l+r)&gt;&gt;1;
+    updateC(root&lt;&lt;1,l,m,ql,qr,k);
+    updateC(root&lt;&lt;1|1,m+1,r,ql,qr,k);
+    tree[root].val=(tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val)%p;
+}
+void updateJ(int root,int l,int r,int ql,int qr,int k){
+    if(qr&lt;l||r&lt;ql){
+        return;
+    }
+    if(ql&lt;=l&&r&lt;=qr){
+        tree[root].add=(tree[root].add+k)%p;
+        tree[root].val=(tree[root].val+k*(r-l+1))%p;
+        return;
+    }
+    pushdown(root,l,r);
+    int m=(l+r)&gt;&gt;1;
+    updateJ(root&lt;&lt;1,l,m,ql,qr,k);
+    updateJ(root&lt;&lt;1|1,m+1,r,ql,qr,k);
+    tree[root].val=(tree[root&lt;&lt;1].val+tree[root&lt;&lt;1|1].val)%p;
+}
+int query(int root,int l,int r,int ql,int qr){
+    if(qr&lt;l||r&lt;ql){
+        return 0;
+    }
+    if(ql&lt;=l&&r&lt;=qr){
+        return tree[root].val;
+    }
+    pushdown(root,l,r);
+    int m=(l+r)&gt;&gt;1;
+    return (query(root&lt;&lt;1,l,m,ql,qr)+query(root&lt;&lt;1|1,m+1,r,ql,qr))%p;
+}
+int n,q,op,x,y,k;
+signed main()
+{
+    cin&gt;&gt;n&gt;&gt;q&gt;&gt;p;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+    }
+    build(1,1,n);
+    while(q--)
+    {
+        cin&gt;&gt;op;
+        if(op==1){
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;k;
+            updateC(1,1,n,x,y,k);
+        }
+        else if(op==2){
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;k;
+            updateJ(1,1,n,x,y,k);
+        }
+        else{
+            cin&gt;&gt;x&gt;&gt;y;
+            cout&lt;&lt;query(1,1,n,x,y)%p&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre>这个故事告诉我们要仔细检查。<p>这个代码是仿照<a href="https://www.luogu.com.cn/problem/solution/P3373">@zhuwanman</a>的代码抄的~</p></div>
+    <div class="t1">手写max太慢，容易TLE，具体原理我也不清楚，反正<code>#define max(a,b) (a>b?a:b)</code>这个以后就不要用了。以后就用algorithm里面的max函数就好了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1253">P1253 扶苏的问题</a>手写max容易超时，眼都快看花了，后面看了讨论区才知道手写max太慢。😓这个代码建议多看几遍，毕竟线段树挺重要的。这个线段树代码支持修改、查找、最大值比较操作，知识点还算全。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cctype&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+<span>//#define max(a,b) (a&gt;b?a:b)</span>
+<span>//总结，能不用就不用，用了就会超时。 </span>
+#define ll long long
+ll a[4000001];
+struct node{
+    ll data,add=0;
+    bool set=0;
+}tree[4000501];
+inline void build(ll root,ll l,ll r){
+    ll num;
+    if(l==r){
+        tree[root].data=a[l];
+        num=max(num,root);
+        return;
+    }
+    ll m=(l+r)&gt;&gt;1;
+    build(root&lt;&lt;1,l,m);
+    build((root&lt;&lt;1)+1,m+1,r);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+inline void pushdown(ll root){
+    if(tree[root].set){
+        tree[root].set=0;
+        tree[root].add=0;
+        tree[root&lt;&lt;1].add=0;
+        tree[root&lt;&lt;1].set=1;
+        tree[root&lt;&lt;1].data=tree[root].data;
+        tree[(root&lt;&lt;1)+1].add=0;
+        tree[(root&lt;&lt;1)+1].set=1;
+        tree[(root&lt;&lt;1)+1].data=tree[root].data;
+    }
+    else
+    {
+        tree[root&lt;&lt;1].add+=tree[root].add;
+        tree[root&lt;&lt;1].data+=tree[root].add;
+        tree[(root&lt;&lt;1)+1].add+=tree[root].add;
+        tree[(root&lt;&lt;1)+1].data+=tree[root].add;
+        tree[root].add=0;
+    }
+}
+inline ll query(ll root,ll l,ll r,ll ql,ll qr){
+    ll ans=-1e18;
+    if(l&lt;=ql&&r&gt;=qr)return tree[root].data;
+    pushdown(root);
+    ll m=(ql+qr)&gt;&gt;1;
+    if(l&lt;=m)ans=max(ans,query(root&lt;&lt;1,l,r,ql,m));
+    if(r&gt;m)ans=max(ans,query((root&lt;&lt;1)+1,l,r,m+1,qr));
+    return ans;
+}
+inline void update(ll root,ll L,ll R,ll l,ll r,ll k)
+{
+    if(L&lt;=l&&R&gt;=r)
+    {
+        tree[root].add+=k;tree[root].data+=k;
+        return;
+    }
+    pushdown(root);
+    ll m=(l+r)&gt;&gt;1;
+    if(L&lt;=m)update(root&lt;&lt;1,L,R,l,m,k);
+    if(R&gt;m)update((root&lt;&lt;1)+1,L,R,m+1,r,k);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+inline void reset(ll root,ll L,ll R,ll l,ll r,ll k)
+{
+    if(L&lt;=l&&R&gt;=r)
+    {
+        tree[root].add=0;tree[root].data=k;tree[root].set=1;
+        return;
+    }
+    pushdown(root);
+    ll m=(l+r)&gt;&gt;1;
+    if(L&lt;=m)reset(root&lt;&lt;1,L,R,l,m,k);
+    if(R&gt;m)reset((root&lt;&lt;1)+1,L,R,m+1,r,k);
+    tree[root].data=max(tree[root&lt;&lt;1].data,tree[(root&lt;&lt;1)+1].data);
+}
+ll read()
+{
+    ll s=0,w=1;char ch=getchar();
+    while(!isdigit(ch)){<span>//使用isdigit()函数被忘了引用cctype </span>
+        if(ch=='-')w=-1;
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';
+        ch=getchar();
+    }
+    return s*w;
+}
+int main()
+{
+    ll n,q,l,r,x,op;
+    n=read();q=read();
+    for(int i=1;i&lt;=n;i++)
+    {
+        a[i]=read();
+    }
+    build(1,1,n);
+    while(q--)
+    {
+        op=read();
+        if(op==1)
+        {<span>//把(l,r)的所有数修改成x。 </span>
+            l=read();r=read();x=read();
+            reset(1,l,r,1,n,x);
+        }
+        else if(op==2)
+        {<span>//对(l,r)区间的每个数加x。 </span>
+            l=read();r=read();x=read();
+            update(1,l,r,1,n,x);
+        }
+        else
+        {<span>//查询(l,r)区间的最大值。 </span>
+            l=read();r=read();
+            printf("%lld\n",query(1,l,r,1,n));
+        }
+    }
+    return 0;
+}
+</pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1438">P1438 无聊的数列</a>在线段树当中算是一个进阶题了吧。我想我得把这个记下来，这道题是区间加上一个等差数列，那么我们是选择使用线段树+差分完成的。这个是结构体版本的，只需要2个数组就能完成。<pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define ll long long
+ll data[100010];
+struct point{<span>//结构体定义节点</span>
+    ll sum;
+    ll tag;
+}a[400001];
+inline int ls(int root){
+    <span>//左孩子</span>
+    return root&lt;&lt;1;
+}
+inline int rs(int root){
+    <span>//右孩子</span>
+    return root&lt;&lt;1|1;
+}
+inline void up(int root){
+    <span>//相当于pushup</span>
+    a[root].sum=a[ls(root)].sum+a[rs(root)].sum;
+}
+void build(int root,int l,int r){
+    <span>//构建线段树</span>
+    a[root].tag=0;int mid=(l+r)&gt;&gt;1;
+    if(l==r){
+        a[root].sum=data[l];
+        return;
+    }
+    build(ls(root),l,mid);build(rs(root),mid+1,r);
+    up(root);
+}
+inline void pd(int root,int l,int r){
+    <span>//下加，pushdown</span>
+    int mid=(l+r)&gt;&gt;1;
+    a[ls(root)].tag+=a[root].tag;
+    a[rs(root)].tag+=a[root].tag;
+    a[ls(root)].sum+=a[root].tag*(mid-l+1);
+    a[rs(root)].sum+=a[root].tag*(r-mid);
+    a[root].tag=0;
+}
+void add(int root,int l,int r,int ql,int qr,ll x){
+    <span>//单点添加元素</span>
+    if(ql&lt;=l&&qr&gt;=r){
+        a[root].tag+=x;
+        a[root].sum+=(r-l+1)*x;
+        return;
+    }
+    int mid=(l+r)&gt;&gt;1;
+    pd(root,l,r);
+    if(ql&lt;=mid)add(ls(root),l,mid,ql,qr,x);
+    if(qr&gt;mid)add(rs(root),mid+1,r,ql,qr,x);
+    up(root);
+    return;
+}
+ll query(int root,int l,int r,int ql,int qr){
+    if(ql&lt;=l&&qr&gt;=r){<span>//单点查询</span>
+        return a[root].sum;
+    }
+    int mid=(l+r)&gt;&gt;1,res=0;
+    pd(root,l,r);
+    if(ql&lt;=mid)res+=query(ls(root),l,mid,ql,qr);
+    if(qr&gt;mid)res+=query(rs(root),mid+1,r,ql,qr);
+    return res;
+}
+int main()
+{
+    int n,m,opt,l,r,K,D,p;
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;data[i];
+    }
+    for(int i=n-1;i&gt;0;i--)
+    {
+        data[i+1]=data[i+1]-data[i];
+    }
+    build(1,1,n);
+    while(m--)
+    {
+        cin&gt;&gt;opt;
+        switch(opt)
+        {
+            case 1:{
+                cin&gt;&gt;l&gt;&gt;r&gt;&gt;K&gt;&gt;D;
+                add(1,1,n,l,l,K);
+                if(l+1&lt;=r)add(1,1,n,l+1,r,D);
+                if(r&lt;n)add(1,1,n,r+1,r+1,-(K+D*(r-l)));
+                break;
+            }
+            case 2:{
+                cin&gt;&gt;p;
+                cout&lt;&lt;query(1,1,n,1,p)&lt;&lt;'\n';
+                break;
+            }
+        }
+    }
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3870">P3870 [TJOI2009] 开关</a>算是模板题了，不过因为我刚学线段树，所以不会做。<a href="https://www.luogu.com.cn/problem/solution/P3870">题解区</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3372">P3372 【模板】线段树 1</a>这道题需要数组开大点，否则WA。<a href="https://www.luogu.com.cn/record/182406256">AC代码</a></div>
+    <div class="t1">线段树<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/555e5110f45b475c11cb40f875bd6a7a_1581579760085853751.png" alt="线段树"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2278">P2278 [HNOI2003] 操作系统</a>这道题非常考验思维啊。输入数据已经按到达时间从小到大排序。首先刚开始没有东西的时候，我们加入第一个任务。其次，你们还是看题解区吧。<a href="https://www.luogu.com.cn/problem/solution/P2278">题解区</a>总之这道题跟上一道是一样的需要一个变量充当时间线。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4053">P4053 [JSOI2007] 建筑抢修</a>我们按照时间T1排序，然后再循环中把T1加起来作为当前时间，然后把抢修时间加入优先队列，如果当前时间小于优先队列当中最小的(最紧急)抢修时间，那么我们就修，否则不修了，pop()掉，把这个东西所需时间减掉。最后代码：<a href="https://www.luogu.com.cn/problem/solution/P4053">题解区大佬思路牛啊。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2827">P2827 [NOIP2016 提高组] 蚯蚓</a>如果你用C++自带的priority_queue，别忘了STL的许多函数常数都是比较大的，也就是说这玩意会超时！害我改了半天。<a href="https://blog.csdn.net/I_have_a_world/article/details/119207142">CSDN的大佬的操作很神奇。</a>可以准备三个队列，第一个存放原来的蚯蚓，第二个和第三个存放切割后的蚯蚓，这三个都是单调不增的。<br><b>证明：由于最开始蚯蚓取的是最大值，则分割后的小蚯蚓存入另外两个队列后仍然最大，且后面入队的蚯蚓都比她们小，这是因为蚯蚓都在变长，相对长度不变。</b>这样一来三个队列的最大值直接进行队头比较就好了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2168">P2168 [NOI2015] 荷马史诗</a>代码挺简单，主要是哈夫曼树不太好看出来，而且也不好想。可能还是我刷题太少了。<a href="https://www.luogu.com.cn/record/182332052">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1090">P1090 [NOIP2004 提高组] 合并果子 / [USACO06NOV] Fence Repair G</a>2024年S组要是来个这样的题多好啊，简直是送分啊，不要白不要。<a href="https://www.luogu.com.cn/record/182308166">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3378">P3378 【模板】堆</a>可以使用priority_queue&lt;int , vector&lt;int&gt; , greater&lt;int&gt; &gt;秒杀。但我们毕竟是来学算法的，所以来讲一下堆吧。最重要的是这个<ol>
+        <li>
+            编号为x节点的父节点是[x/2]。
+        </li>
+        <li>
+            编号为x节点的左子节点是2x，右子节点是2x+1。
+        </li>
+        <li>
+            对于大根堆而言，父节点的值一定大于等于子节点的值；小根堆反之。
+        </li>
+    </ol>修复二叉堆，直接找到要修复的节点，让她与父节点交换，直到满足第三条性质。删除堆顶元素，直接让堆顶与堆尾交换，然后修复二叉堆。</div>
+    <div class="t1">二叉堆<img src="https://upload-bbs.miyoushe.com/upload/2024/10/16/198629752/0fb55586daf283dcdc56be51b1614d07_837307545986593437.png" alt="二叉堆"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1074">P1074 [NOIP2009 提高组] 靶形数独</a>搜索题，感觉很简单，但其实我也不知道为什么错，我的代码可能没错，只不过时间复杂度是阶乘级别的。因此这道题我是抄的。<a href="https://www.luogu.com.cn/problem/solution/P1074">感谢 @学无止境 的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2324">P2324 [SCOI2005] 骑士精神</a>这道题是启发式A*搜索算法，我抄的题解。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5507">P5507 机关</a>这道题我不会，抄的。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1379">P1379 八数码难题</a>累晕了，不想看了~我直接抄的题解，不过这道题看起来应该不难。<a href="https://www.luogu.com.cn/problem/solution/P1379">@hidden_er的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1763">P1763 埃及分数</a>迭代加深搜索我不会，所以是抄的。<a href="https://www.luogu.com.cn/problem/solution/P1763">感谢 @王熙文 的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1120">P1120 小木棍</a>这道题可谓是把剪枝剪到了极致！<a href="https://www.luogu.com.cn/record/182203529">我之前的答案</a><a href="https://www.luogu.com.cn/record/182205234">AC之后的答案</a>木棍需要从最大值枚举，枚举到所有木棍最大加和。如果不是最大加和的因数就continue，而且从大到小枚举......具体见题解。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1433">P1433 吃奶酪</a>搜索拿不了满分，最多拿90分，不过在赛场上已经够了。其中搜索的一个新技巧是遇到卡时情况时，可以强制退出。<pre>
+cnt++;
+if(cnt>=10000000)<span>//卡时，则直接退出程序。</span>
+{
+    printf("%.2lf",ans);
+    exit(0);<span>//结束程序需要用头文件cstdlib</span>
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1036">P1036 [NOIP2002 普及组] 选数</a>一道普及的题目我调了半天。最后发现是参数写错了。<code>dfs(x+1,i+1,z+a[i]);</code>这里应该是i+1而不是y+1。<a href="https://www.luogu.com.cn/record/182199160">AC代码</a>如果按照常规搜索，那么会有重复，为了避免重复，我们dfs要有3个参数<ol>
+        <li>当前选了多少数</li>
+        <li>考虑下一个是哪里</li>
+        <li>加和是多少</li>
+    </ol></div>
+    <div class="t1">进阶搜索<img src="https://upload-bbs.miyoushe.com/upload/2024/10/15/198629752/aa21ff8dbbb240259aa361fe8086648c_3557376428275539776.png" alt="进阶搜索"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7562">P7562 [JOISC 2021 Day4] イベント巡り 2 (Event Hopping 2)</a>这道题我就是抄代码也是我抄不来的。不过题目很好理解，主要是代码很难写。<a href="https://www.luogu.com.cn/problem/solution/P7562">感谢@AquariusZhao的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P6648">P6648 [CCC2019] Triangle: The Data Structure</a>看来还是我肤浅了，ST表要是考得难，就会这样难。<a href="https://www.luogu.com.cn/problem/solution/P6648">题解</a>看不懂，不过觉得应该是多维ST表，这是啥我没学过啊！<a href="https://blog.csdn.net/weixin_41162823/article/details/98471161">二维ST表</a><a href="https://www.luogu.com.cn/problem/P2216">二维ST表例题：P2216 [HAOI2007] 理想的正方形</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1816">P1816 忠诚</a>这道题是一道令人喜庆的ST表问题，而且考的是模板！我一遍就AC了（其实MLE了4个点）。<br><br>*总结：ST表不能开太大，我试了一下，这个题目数据我们rmin只需要开[m][16]即可。<br>（其实我也不知道为什么开这么小能过，因为模板上是这么写的，赛场上保险一点还是开到[m][64]吧。）<a href="https://www.luogu.com.cn/record/182134693">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4155">P4155 [SCOI2015] 国旗计划</a>这道题主要是倍增的一个应用，目前题解写的是啥我都没搞明白，可能是我的知识储备还不够吧。<a href="https://www.luogu.com.cn/record/182086007">AC代码</a><a href="https://www.luogu.com.cn/problem/solution/P4155">感谢@xuanfly的题解</a></div>
+    <div class="t1">遇到圆环问题，我们一般的做法是改成链来做，把原数组复制一份，加到原数组后面去。<img src="https://upload-bbs.miyoushe.com/upload/2024/10/14/198629752/accf07f019be64aa9d6d1f49b068bc7f_5634778520008144210.png" alt="如图"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3517">P3517 [POI2011] WYK-Plot</a>派蒙抄完都似了~<img src="https://img-static.mihoyo.com/communityweb/upload/417976a3dacde790f947f8769d85d55c.png" alt="π蒙">比前一道题的代码还长！感谢大佬的题解，虽然连题目样例都没过，但结果居然AC了！很神奇。<a href="https://www.luogu.com.cn/problem/solution/P3517">@ycyaw</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1742">P1742 最小圆覆盖</a>π蒙抄完都似了~<img src="https://img-static.mihoyo.com/communityweb/upload/417976a3dacde790f947f8769d85d55c.png" alt="π蒙">不过还是要感谢这位大佬给的题解<a href="https://www.luogu.com.cn/problem/solution/P1742">@TimeTraveller
+    </a><br><p>我的题解<b><a href="https://www.luogu.com.cn/record/182055836">代码</a></b></p></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3509">P3509 [POI2010] ZAB-Frog</a>这道题我连题目都没读懂别说写了，不过抄代码的时候忘记带cstring头文件了，导致编译失败，这要在赛场估计得凉凉。<a href="https://www.luogu.com.cn/problem/solution/P3509">感谢@卷王[慢即快]的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2345">P2345 [USACO04OPEN] MooFest G</a>这道题是CDQ分治，目前还没学到，因此代码我是抄的。<a href="https://oi-wiki.org/misc/cdq-divide/">CDQ分治——OI Wiki</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1228">P1228 地毯填补问题</a>分治算法的典型，主要是太费时间了，这道题需要找好位置之间的关系来递归求解。<a href="https://www.luogu.com.cn/problem/solution/P1228"></a>题解区</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1257">P1257 平面上的最接近点对</a>令我吃惊的是，暴力居然真的能过！<a href="https://www.luogu.com.cn/record/182016281">AC代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2415">P2415 集合求和</a>纯数学方法就行了，这道题原本我还想二分，结果一看题解，居然是数学推导。<a href="https://www.luogu.com.cn/problem/solution/P2415">题解区</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7167">P7167 [eJOI2020 Day1] Fountain</a>这道题要用二分+ST表，ST表存储最大值，使用二分查找最大值。没错，二分最大值不一定非要序列有序，ST表是可以被二分的！<a href="https://www.luogu.com.cn/record/182012406">AC代码</a>查询ST表最大值
+    <pre>
+int query_max(int A,int B)
+{<span>//ST表的查询，建议直接背会</span>
+	int x=log_2[B-A+1];
+	return max(rmax[A][x],rmax[B-(1&lt;&lt;x)+1][x]);
+}
+    </pre>构建ST表
+<pre>
+for(int i=2;i<=n;i++)
+{
+    log_2[i]=log_2[i>>1]+1;
+}
+for(int i=1;i<=n;i++)
+{
+    rmax[i][0]=d[i];
+}
+for(int j=1;(1&lt;&lt;j)&lt;=n;j++)
+{
+    for(int i=1;i&lt;=n-(1&lt;&lt;j)+1;i++)
+    {
+        rmax[i][j]=max(rmax[i][j-1],rmax[i+(1&lt;&lt;j-1)][j-1]);
+    }
+}
+</pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2880">P2880 [USACO07JAN] Balanced Lineup G</a>还是奶牛牧场这道题，但是ST表，ST表我刚学，还是得背板子啊。<a href="https://www.luogu.com.cn/record/181971452">AC代码</a>需要2个数组，分别存储最大值和最小值，ST表可以存储最大值和最小值，但要么只能存最大、要么只能存最小，所以要想两个都存，就必须要开2个数组。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1045">P1045 [NOIP2003 普及组] 麦森数</a>思路挺简单，主要是高精度不会的话得需要复习一下了。<a href="https://www.luogu.com.cn/record/181931701">AC代码</a>其中为了输出位数，指数化成了对数log表示。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1226">P1226 【模板】快速幂</a>经典算法快速幂<br><a href="https://www.luogu.com.cn/record/181914237">递归写法</a><a href="https://www.luogu.com.cn/record/181919030">非递归写法</a>主要利用了二分法和倍增法。<br>递归法是将指数二分。<br>非递归法是将底数倍增。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1966">P1966 [NOIP2013 提高组] 火柴排队</a>这可能是我第一次理解归并排序<a href="https://www.luogu.com.cn/record/181909327">AC代码</a>如果代码看不懂就去看题解区大佬的代码，毕竟这个没有注释。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1908">P1908 逆序对</a>归并排序求逆序对<a href="https://www.luogu.com.cn/record/181836523">AC代码</a><img src="https://upload-bbs.miyoushe.com/upload/2024/10/13/198629752/220c2cdbf5a1a991f296bebb20abd02b_8699420978560025386.png" alt="解释">代码解释如图。详细见Database中的深入浅出。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1177">P1177 【模板】排序</a>
+    <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int a[100010],b[100001],n;
+void mergersort(int l,int r){
+    if(l==r)return;<span>//如果撞到了一起则返回 </span>
+    int mid=(l+r)/2;
+    mergersort(l,mid);mergersort(mid+1,r);<span>//分治 </span>
+    for(int i=l,j=l,k=mid+1;i&lt;=r;i++)<span>//排序</span> 
+        if(j==mid+1) b[i]=a[k++];
+        else if(k==r+1) b[i]=a[j++];
+        else b[i]=a[j]&lt;a[k]?a[j++]:a[k++];
+    for(int i=l;i&lt;=r;i++)a[i]=b[i];<span>//覆盖</span> 
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;a[i];
+    mergersort(1,n);
+    for(int i=1;i&lt;=n;i++)cout&lt;&lt;a[i]&lt;&lt;" ";
+    return 0;
+}
+    </pre>这是经过压行的归并排序，十分简洁，了解主要分治思想最关键。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11184?contestId=200686">P11184 带余除法</a>CSP-J模拟赛，这道题需要用数学方法来做，当时提交时候用的暴力枚举除数，结果1个MLE、3个AC，其他TLE。正解应该是这样的：<a href="https://www.luogu.com.cn/record/181818460">AC代码</a>我们用商的边界相减就能得到余数的种类。比如10/5=2、10/3=3，那么我们就用5-3等于2，那么余数一共有2种。</div>
+    <div class="t1">每场考试都要写read，否则就算答案对了，也得TLE</div>
+    <div class="t1">归并排序算法当中有一步叫做合并，具体实现步骤看这：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/13/198629752/7bbd924ea0156296fd8c66c79982ccbd_6907507698226923087.png" alt="合并">这里用到了3个指针+3个数组，c是结果数组，a和b是被合并的数组。最终结果c数组呈单调增。</div>
+    <div class="t1">分治与倍增<img src="https://upload-bbs.miyoushe.com/upload/2024/10/13/198629752/6a87b1b1252ffef69e94285a33b20729_9207826495284927265.png" alt="分治与倍增"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5937">P5937 [CEOI1999] Parity Game</a>这道题是并查集、找关系，如果冲突，那么就输出答案，否则继续判断。通过将数据离散化来达到降低复杂度的效果。<a href="https://www.luogu.com.cn/record/181785320">题解代码</a>题解区的代码讲的太难懂，我用我的理解写到了注释上面。总的意思来说，就是给每个区间端点设立两种状态，如果不冲突，那么就合并，否则就输出冲突的位置结束程序。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4375">P4375 [USACO18OPEN] Out of Sorts G</a>这道题如果只改写代码，那么只能拿到50分。<a href="https://www.luogu.com.cn/problem/solution/P4375">@Meepo的题解</a>代码写的很简单，大意就是找到需要往后面交换的数字的个数。<a href="https://www.luogu.com.cn/record/181623321">我的题解(注释非常清晰)</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1904">P1904 天际线</a>这道题暴力就能AC，但是我们为了练习离散化，还是用离散化比较好。<br>
+        <ol>
+            <li>明确离散对象：左右区间l和r。</li>
+            <li>二分对象：高度</li>
+        </ol><a href="https://www.luogu.com.cn/record/181594387">题解代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3029">P3029 [USACO11NOV] Cow Lineup S</a>这道题使用单调队列和离散化求解，离散化就用map就能实现了。<a href="https://www.luogu.com.cn/record/181574982">题解代码</a>我觉得这是最容易理解的代码了。<a href="https://upload-bbs.miyoushe.com/upload/2024/10/12/198629752/051492f6386b9f247fa787df63c07633_8572214169970926441.png">我与AI的聊天记录</a>这是AI的回答，非常容易理解</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4552">P4552 [Poetize6] IncDec Sequence</a>这道题已经是一道数学题了。<br>不要模拟，模拟不出来，看看题目颜色，绿色！这道题需要先用数学思想推一下，最后总结出公式再写代码，代码很短。<a href="https://www.luogu.com.cn/record/181563937">我的AC代码</a>这告诉我们一个道理，有些题目你最好先试试能不能总结出公式，如果不能，那就模拟。<a href="https://www.luogu.com.cn/problem/solution/P4552">别人的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2882">P2882 [USACO07MAR] Face The Right Way G</a>这道题需要利用二进制的异或运算。差分数组为二进制异或差分。这是一道很典的题目。这道题不好理解的地方在于题目中说每次可以将K头牛转向，但没有说这个K是不变的，因此刚开始我以为这个K会变，结果看了题解才知道原来K是一个定值。这道题翻译过来就是给定一个01串、一个K，每次对某个长度为K的区间进行翻转，使得所有0变成1。求翻转的最小次数还有最小次数对应的K。<br><a href="https://www.luogu.com.cn/record/181558002">题解</a>其中的now相当于对区间进行前缀异或了(说白了就是对区间取反)，这样的做法时间复杂度可以降至O(n²)。题目范围5000，O(n²)的复杂度下，5000*5000=25000000&lt;400000000可以在一秒内通过本题。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/record/181548562">P1083 [NOIP2012 提高组] 借教室</a>这道题有一个坑点，输入的数据是有序的，也就是可以使用二分答案！呜呜呜~<br>二分+前缀和+差分配合使用。<br>别忘了memset初始化tmp数组。<a href="https://www.luogu.com.cn/record/181548562">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3406">P3406 海底高铁</a>这道题是前缀和+差分，首先进行差分，求解一个区间经过了多少次，但这道题不同的是，他告诉你了进过了第几段区间，而不是从几到几，因此差分不需要再尾部+1的位置-1，而是要直接在尾部-1。前缀和+贪心求解最终答案即可。<br>*这道题可以加深自己对前缀和与差分的认识。<br><a href="https://www.luogu.com.cn/record/181468218">题解</a><img src="https://upload-bbs.miyoushe.com/upload/2024/10/11/198629752/3b735a0db14f78be46234d68ed2be073_1895195961999785588.png" alt="前缀和与差分">如图，其中的t就是差分后累加的每个阶段的结果。(还是那句话，这个差分的是段，而不是点，所以直接尾部-1，而不是尾部+1处-1。)。每个阶段的t代表了这个区间经过了多少遍，然后用这个t乘以我的花费，对于IC卡，你可能也注意到了，每次i只经过一次，因此刚好利用程序顺序结构处理了IC卡的问题。<p>如果还不理解可以去题解那边去看看，记得亲自用手推一遍dalao的代码。</p></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3017">P3017 [USACO11MAR] Brownie Slicing G</a>不会...题解没看懂。<a href="https://www.luogu.com.cn/problem/solution/P3017">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2004">P2004 领地选择</a>这道题挺简单的，但我提交了几遍才AC，因为这道题说了领地大小了，因此我们只需要枚举右上角，那么左下角就根据领地边长C算出来了，时间复杂度O(n²)。<br>易错点：遍历循环边界忘记加一，计算出的右下角忘记减一。出错的位置我在↓题解标出来了。<a href="https://www.luogu.com.cn/record/181395934">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1884">P1884 [USACO12FEB] Overplanting S</a>这道题是典型的二维离散化。要注意题目中要求是笛卡尔坐标，也就是说输入数据当中的y轴一定要颠倒过来，否则输出答案就是0，我当时还调试了好一会才发现错误。数组大小需要大一点。<a href="https://www.luogu.com.cn/record/181389465">AC代码</a>*和一维离散化很像~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1955">P1955 [NOI2015] 程序自动分析</a>离散化端点x和y，然后lower_bound将原来的x和y转化成下标，之后根据a[i].z是否是相等，来判断是否要在x和y之间连边。连完边之后我们遍历整个a[]数组，判断a[i].z是否不相等，如果不相等，那么判断x和y有没有连边，如果连了边，那么说明与不相等相矛盾，这时直接输出NO，然后break。否则输出YES。<br><br>致错原因：把return 0写到了while(t--)里面，导致多组数据只能读入一组。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1496">P1496 火烧赤壁</a>这道题足足硬控了我2小时。就为了一个lower_bound问东问西。结果用手一模拟啥问题都没了。这个故事告诉我们，不懂的代码可以模拟来理解。<a href="https://www.luogu.com.cn/record/181275467">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3397">P3397 地毯</a>这道题的数据范围没问题，当时数组开的刚刚好，结果CE了，后来一查发现竟然是数组里面有一项是<code>b[x2+1][y2+1]+=1;</code>说明数组需要多开一点，要不然这个+1操作会越界。<br><p>关于二维差分我找到了一个帖子：<a href="https://zhuanlan.zhihu.com/p/439268614">二维差分</a><br>二维差分核心就这两条<img src="https://upload-bbs.miyoushe.com/upload/2024/10/10/198629752/cbe6a648473cfcabf33e2ba1b4195110_7117397826006467220.png" alt="差分"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/10/198629752/92e38cf14e320067068a165dfc6dd7b3_9089620150170481597.png" alt="差分">不要以为和二维前缀和一样，要注意还是有点不一样的地方：<b>第二张图的最后一个算式</b></p><a href="https://www.luogu.com.cn/record/181266744">题解</a>*另外，差分需要满足叠加，如果不满足那么就不能用差分解题喽~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2367">P2367 语文成绩</a>差分的经典题型，手推一遍理解差分含义。记住差分公式。<ol>
+        <li>
+            构建差分数组b[i]=a[i]-a[i-1]；
+        </li>
+        <li>
+            对区间修改时直接对差分数组修改，若加x，则在首端加x，末端+1的位置减x。
+        </li>
+        <li>
+            对差分数组求前缀和之后的数组就是修改后的原数组。
+        </li>
+    </ol><br>*面对大数据大范围大范围修改时，差分更有优势，否则你会TLE。<a href="https://www.luogu.com.cn/record/181254236">题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1314">P1314 [NOIP2011 提高组] 聪明的质监员</a>这道题目前我还不会哦~</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1719">P1719 最大加权矩形</a>区区普及，还能难倒我？这道题跟以前哪道题很像？</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8218">P8218 【深进1.例1】求区间和</a><p>致错原因：☝️🤓诶，数组开小了，如此低级的错误我还能犯，呜呜呜~，一定要看好题目区间啊！！！有时候区间开小了都不给你CE，给你个WA让你去猜吧。</p></div>
+    <div class="t1">前缀和、查分与离散化<img src="https://upload-bbs.miyoushe.com/upload/2024/10/10/198629752/02af59cc5778c715efddc10c4a043e46_5468453292179555448.png" alt="第二章"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1725">P1725 琪露诺</a>这道题用动态规划+单调队列优化。<a href="https://www.luogu.com.cn/record/181197716">题解</a>如果仅仅用动态规划只能拿80分，剩下的就TLE了。<a href="https://www.luogu.com.cn/record/181189437">80分的题解</a></div>
+    <div class="t1">注意函数返回值，如果该返回的没有返回，结果会TLE。而且在本机上跑的是正确的，在评测机上就会TLE。因此这个错误很重要。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1714">P1714 切蛋糕</a>这道题需要前缀和+单调序列，当时我以为不能是单调队列，于是我的代码就写成了这样：<a href="https://www.luogu.com.cn/record/181183317">代码</a>后来看了题解才知道，必须得是单调队列，而且还得要前缀和。于是后来改成了这样<a href="https://www.luogu.com.cn/record/181185448">代码</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1886">P1886 滑动窗口 /【模板】单调队列</a><P>滑动窗口这道题需要注意，这道题中有一个位置容易错。请看 <a href="https://www.luogu.com.cn/record/181171733">代码</a> ，这里的
+        <pre>
+while((!mindq.empty())&&i-k>=mindq.front())
+{
+    mindq.pop_front();
+}
+while((!maxdq.empty())&&i-k>=maxdq.front())
+{
+    maxdq.pop_front();
+}
+    </pre>其中<code>i-k>=mindq.front()</code>可以写成<code>mindq.back()-mindq.front()>=k-1</code>但是不能写成<code>mindq.back()-mindq.front()>=k</code>因为当我们的区间的序列长度已经等于k的时候，我们就应该把<code>front()</code>pop掉，因为后面还要push一个i，这就意味着如果我们的序列长度等于k，那么后面再加入i的时候长度就会大于k，因此代码才这么写。<br>&nbsp;&nbsp;&nbsp;&nbsp;*当然，你要是把push语句放前面的话那就没事了。</P></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3467">P3467 [POI2008] PLA-Postering</a>这道题需要有反向思维，既然海报数一个一个加不好办，那么我们就反向减。具体思路见题解。<a href="https://www.luogu.com.cn/problem/solution/P3467">题解</a>代码很简单，但这个思路绝了！<b>选自题解的一句核心句：因为题目要求海报不可超出建筑物链，那么我们即可用单调栈维护：初始海报数为建筑物数，入栈建筑物链的高度序列，当栈顶大于即将入栈元素时弹栈，若最后弹栈元素与即将入栈元素等高，需要的海报数-1；</b></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1578">P1578 奶牛浴场</a><p>小心！这道题和<a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a>不一样。这道题的数据范围不适用悬线法，否则会MLE！经过我查找题解，发现某年的国家队wzk大佬的论文《浅谈用极大化思想解决最大子矩形问题》，一共有两种：1.悬线法 2.通过障碍点找子矩形。我们也只能用第二种了。<a href="https://www.luogu.com.cn/problem/solution/P1578">题解</a>太绝喵了！我正在研究中......</p><br><br>这道题抄都能抄错，l和1长得太像啦！很容易把l抄成1。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a><p>这是一道经典的求区间边界的题目，可以用悬线法求解，悬线怎么理解？当时我想了一天，后来遇到<a href="https://www.luogu.com.cn/problem/P1578">奶牛浴场</a>这道题我才醒悟。你可以理解为PS的裁剪工具，如图：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/09/198629752/7b03d2e7bb2ca7c0f5bc82d4033c2195_2942403461030409694.png" alt="PS"></p>悬线就是裁剪边缘的框框，框住了哪里，哪里就要被保留，其余的就被裁剪掉了。这两道题悬线的概念就是这么理解的。<br><br>我们设置一个h数组记录从第(i,j)这一点向上能到达的最大长度，碰到障碍物或者边界就break。l数组记录左边最远到达的长度，r数组记录右边。*此时你会问了，为什么没有down数组记录下面到达的最远位置？A:因为不需要，那样做太多余了，我们的for循环是从上往下遍历的，而且答案也是从上往下遍历的，我们迟早要遍历到下边，因此down数组没有任何作用。最后的最大面积就是答案，面积=底乘高，底=(l+r-1),为什么要减一，因为l和r在一个点重合了，高=h，那么面积=h*(l+r-1)，之后取最大值就是最终结果。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7910">P7910 [CSP-J 2021] 插入排序</a>还是需要插入排序，我觉得最简单的方法就是按照题目要求每次进行插入排序就好了，只不过我们无需对全部区间排序，只需要判断：如果修改后的值改小了，那么对她前面的区间排序，否则对她后面的区间排序。<a href="https://www.luogu.com.cn/problem/solution/P7910">感谢@Inaba_Meguru的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3143">P3143 [USACO16OPEN] Diamond Collector S</a><p>这是一道好题啊！我看到一篇题解十分牛逼：<a href="https://www.luogu.com.cn/problem/solution/P3143">@a1455520571</a>感谢这位大佬带来的题解。思路很绝妙。就是类似DP+双指针。i表示左侧第一个架子上最多能放多少钻石，i~r的差就是右侧能放的最多的钻石数量。用ma记录左侧能放的最大值，然后ans更新成ma+(r-i)<b style="color: rgba(0, 0, 0, 0.371);"> (式子展开就是ma+r-i) </b>的最大值。</p><br><a href="https://www.luogu.com.cn/record/181024731">我的题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4653">P4653 [CEOI2017] Sure Bet</a>要用双指针+前缀和，当然，就算不用前缀和也没事，就是有点麻烦，这道题有点像贪心。<a href="https://www.luogu.com.cn/record/181010663">题解</a></div>
+    <div class="t1">常见的优化技巧<img src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png" alt="优化技巧"></div>
+    <div class="t1">局部变量一定要初始化，轻则TLE，重则RE，其间就是WA。</div>
+    <div class="t1">cout输出字符串占时间，而且占的不少，容易超时。建议用printf输出字符串！！！(后来经过调查，原来是endl的问题，endl占的时间比较多，以后换行就用'\n'吧，尽量别用endl了，endl不仅仅是换行，endl还要清除缓存区，所以慢得多)</div>
+    <div class="t1">千万不要忘记检查代码输出格式，比如把“YES”写成“Yes”结果直接0分，幸好不是在赛场上，否则直接见祖宗！<br><br>图论当中要注意在删除点的时候，推荐使用二维矩阵，因为二维表会出问题。<br><br><code>memset(g[i],0,sizeof(g[i]))</code>可以对一个数组的某一个维度单独初始化，这个操作我才知道！<br><br>如何输入当中给你的是无法用cin和scanf区分的数据，那么就把这串数据当成字符串来处理输入，之后转成自己想要的数据。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1345">1345：【例4-6】香甜的黄油</a>这道题我也是不会，要求用SPFA解决，反正不会，目前走一步看一步吧。<a href="https://blog.csdn.net/qq_42914633/article/details/98882991">题解</a></div>
+    <div class="t1">群友提供的Dijkstra算法的通解：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/06/198629752/c6aebb59e6f1a42ec6bb8ba938758d66_7600648732841161930.jpg" alt="Dijkstra">目前我确实看不懂，后面再说吧。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1344">1344：【例4-4】最小花费</a>这道题属于是板子题了，我得背一下板子，否则后面真的学不下去。(因为前面啥板子都没背过，这个Dijkstra算法难写，没办法那就背吧。)<a href="https://blog.csdn.net/weixin_61017400/article/details/124343916">Dijkstra算法模板</a><p><a href="https://www.luogu.com.cn/training/444587#problems">Dijkstra算法刷题题单</a>我觉得这块还是得练练，要不然后面真不知道要怎么进行下去。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1343">1343：【例4-2】牛的旅行</a><p>这道题看了<a href="https://www.cnblogs.com/jzxnl/p/11397149.html">题解</a>，觉得很简单，但实际做起来发现结果居然不对，始终不知道哪错了。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1343">1343：【例4-2】牛的旅行</a>这道题还是求最短路，只不过是求整个牧场最短路当中最大的那个。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1342">1342：【例4-1】最短路径问题</a><p>这道题错的稀里糊涂，我也不知道为啥。第一次写的时候输出了个0.00，其实不是0，而是被省略了小数，这很显然是一个异常的答案。后来找到了原因，原来是memset初始化double类型的数组时不能用0x3f，具体原因见<a href="https://blog.csdn.net/PoPoQQQ/article/details/38926889">博文</a>，而应该赋值成0x7f，否则最终结果连0.1都不到。最后这道题我也是AC了。</p><br><p><a href="https://blog.csdn.net/lq1990717/article/details/123321240#:~:text=%E8%AE%A2%E9%98%85%E4%B8%93%E6%A0%8F.%20%E3%80%90%E9%A2%98%E7%9B%AE%E9%93%BE">Floyed算法求最短路</a>可以说是最基础的了。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1375">1375：骑马修栅栏(fence)</a>记录欧拉路要在回溯阶段存储，否则会出现错误。另外，起始点不一定是1。题目中说“输出第一个数较小的”意思就是开始的节点度数最小，那么我们的最终代码就出来了：<pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+int f,n;
+int arr[2001],top=1;
+int g[2001][2001],du[2001];
+void dfs(int xi)
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        if(g[xi][i])
+        {
+            g[xi][i]--;g[i][xi]--; 
+            dfs(i);
+        }
+    }
+    arr[top++]=xi;<span>//回溯阶段存储路径</span>
+}
+int main()
+{
+    cin&gt;&gt;f;
+    int start=0x3f3f3f3f;<span>//就像我说的，起始节点不一定是1，所以要初始时赋值为一个很大的数，后面找最小的节点编号。</span> 
+    for(int i=1,x,y;i&lt;=f;i++)
+    {
+        cin&gt;&gt;x&gt;&gt;y;
+        g[x][y]++;g[y][x]++;
+        du[x]++;du[y]++;
+        n=x&gt;n?x:n;<span>//找到最大的点的编号。</span>
+        n=y&gt;n?y:n;
+        start=start&lt;x?start:x;<span>//找到最小的点</span>
+        start=start&lt;y?start:y;
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        if(du[i]%2==1)
+        {
+            start=i;
+            break;
+        }
+    }
+    dfs(start);
+    for(int i=top-1;i&gt;=1;i--)
+    {<span>//到序输出</span>
+        cout&lt;&lt;arr[i]&lt;&lt;endl;
+    }
+    return 0;
+}
+    </pre>说白了还是最基础的邻接矩阵存图，没什么难的，但要是不注意题目说的是啥，那就容易爆0。(当时我还在想500进制表示法是啥来着，但现在看来啥用也没有。)</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1374">1374：铲雪车(snow)</a><p>看到这道题我第一时间想到的是建立一个图。结果当我看到<a href="https://blog.csdn.net/lq1990717/article/details/129891715#:~:text=%E9%93%B2%E9%9B%AA%E8%BD%A6%E5%8F%AF%E4%BB%A5%E5%9C%A8%E4%BB%BB%E6%84%8F%E4%BA%A4%E5%8F%89">题解</a>的时候立刻小脑萎缩。</p>致错原因：做题前没有充分分析题目。有些题目要用数学方法证明，如果能证明出来，那么题目会非常简单，但如果证明不出来，那么就只能模拟。但通常像这种题目，模拟难度往往很高。*我也不会模拟。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1341">1341：【例题】一笔画问题</a>致错原因：这是无向图，有度，没有入度和出度之分，直接用度就好了。使用邻接矩阵解决。<p><a href="https://blog.csdn.net/Wchenchen0/article/details/81283700">题解</a>仅供参考。</p>原本深入浅出的那本书上讲的挺好的，到这里怎么我的编程能力还退化了呢？</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1372">1372：小明的账单</a>这道题挺简单，但要注意的是要对每个账单设置一个id，已经弹出的账单保证不再弹出。<a href="https://blog.csdn.net/lq1990717/article/details/128502439#:~:text=ybt%201372%EF%BC%9A%E5%B0%8F">题解</a>使用优先队列priority_queue可以快速完成。不建议使用多重集合multiset。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1371">1371：看病</a>这道题看似很简单，其实坑点一大堆。其中一个点还超时。<a href="https://blog.csdn.net/lq1990717/article/details/128490063#:~:text=1371%EF%BC%9A%E7%9C%8B%E7%97%85%20%E6%97%B6%E9%97%B4">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1370">1370：最小函数值(minval)</a><p>这道题不难，主要是刚开始读题可能会理解错，这道题的意思是对函数值排序，不是叫你对解出的x值排序。这是<a href="https://www.cnblogs.com/tflsnoi/p/14150443.html#:~:text=1370%EF%BC%9A%E6%9C%80%E5%B0%8F%E5%87%BD%E6%95%B0%E5%80%BC">题解</a></p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1373">1373：鱼塘钓鱼(fishing)</a><p>这道题挺难的，因为我不会。但是<a href="https://blog.csdn.net/Wchenchen0/article/details/81259412">题解</a>很好看。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1369">1369：合并果子(fruit)</a>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈，我对了！我对了！<br>我终于对了一道题了！！！哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈......<br><b>需要注意的是，要分成函数写，否测会WA，不知道为啥，写成顺序结构会WA，但封装成函数就AC了(挠头~)。</b><p>*也可以直接用<code>priority_queue&lt;int, vector&lt;int&gt;, greater&lt;int&gt;&gt;</code>来解出答案。(也不知道比赛时叫不叫用)</p><pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define LL long long
+LL n,a[30001],ans;
+void swap(LL &a,LL &b)
+{
+    LL tmp=a;a=b;b=tmp;
+}
+void _init()
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+        int p=i;
+        while(p!=1)
+        {
+            if(a[p/2]&gt;a[p])
+            {
+                swap(a[p/2],a[p]);
+            }
+            else break;
+            p=p/2;
+        }
+    }
+}
+void put(int x)
+{
+    a[++n]=x;int p=n;
+    while(p!=1)
+    {
+        if(a[p/2]&gt;a[p])
+        {
+            swap(a[p/2],a[p]);
+        }
+        else break;
+        p=p/2;
+    }
+}
+int get()
+{
+    LL res=a[1];
+    a[1]=a[n--];
+    for(int i=1;i&lt;=n;i++)
+    {
+        int p=i;
+        while(p!=1)
+        {
+            if(a[p/2]&gt;a[p])
+            {
+                swap(a[p/2],a[p]);
+            }
+            else break;
+            p=p/2;
+        }
+    }
+    return res;
+}
+int main()
+{
+    cin&gt;&gt;n;
+    _init();
+    while(1)
+    {
+        if(n==1)break;
+        LL a=get();
+        LL b=get();
+        put(a+b);
+        ans+=(a+b);
+    }
+    cout&lt;&lt;ans&lt;&lt;endl;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1368">1368：对称二叉树(tree_c)</a>二叉树的题目好难啊，这道题还是不会。<a href="https://blog.csdn.net/lq1990717/article/details/127680193">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1367">1367：查找二叉树(tree_a)</a>致错原因：题目描述的问题，与我无瓜~，™也没说1号必须是根节点呀？<a href="https://blog.csdn.net/qq_39053800/article/details/108318606">题解</a>如此简单的一道题，我又双叒做错了。</div> 
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1365">1365：FBI树(fbi)</a><p>这道题不会，我看的<a href="https://www.cnblogs.com/tflsnoi/p/14110703.html#:~:text=%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E7%AC%A8%E5%8A%9E%E6%B3%95%E5%BB%BA%E6%A3%B5%E6%A0%91">题解</a></p></div>
+    <div class="t1">使用cin、cout、string......时，一定要引入命名空间<code>using namespace std;</code></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1363">1363：小球(drop)</a>这道题可以暴力遍历。<a href="https://www.cnblogs.com/sxrekord/p/small_ball.html#:~:text=1363%EF%BC%9A%E5%B0%8F%E7%90%83%20(d">题解</a>*然而我还傻傻模拟了一棵树。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1364">1364：二叉树遍历(flist)</a>这么简单的题也能错？我真的服了。致错原因：没有加if判断。<a href="https://www.cnblogs.com/sxrekord/p/binary_tree_traversal.html">题解</a>就只这两个if判断<pre>
+if(p&gt;l)print(l,p-1);
+if(p&lt;r)print(p+1,r);</pre>*函数名和题解的不一样。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/pic/1340.gif">1340：【例3-5】扩展二叉树</a>写的时候发现全错，但答案是对的，后来发现自己忘记把新创建的节点赋值为NULL，然后再判断要不要创建新节点。<br>这是正确写法，重点标红：<pre>void crt(tree &p)
+{
+    char x=getchar();
+    <b style="color: red;">p=NULL;</b><span>//先赋值为NULL。</span>
+    <b style="color: red;">if(x=='.')return;</b><span>//再看看要不要创建新的。</span>
+    <b style="color: red;">p=new node;</b><span>//如果要，那么就创建新的。</span>
+    p->l=NULL;p->r=NULL;
+    p->data=x;
+    crt(p->l);
+    crt(p->r);
+}</pre>如果反过来写虽然输出是对的，但判题机给我判错，我想可能是因为我没有把p赋值为NULL，导致输出时某些不可见字符被输出了出来导致错误。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1339">1339：【例3-4】求后序遍历</a>第一次就想写出来不就成了天才了？(自我安慰)<a href="https://blog.csdn.net/qq_39053800/article/details/108182882">题解</a>这是模板，后面学二叉树可能会用它来构造二叉树，需要背下来。</div>
+    <div class="t1">创建链表。<pre>struct node
+{
+    int data;<span>//数据。</span> 
+    node *next,*pre;<span>//前指针、后指针。 </span>
+};
+node *head,*p,*r;<span>//创建头、中、尾指针。</span>  </pre></div>
+<div class="t1">
+链表新增以及移动的几个步骤：<br>
+1.申请新节点。<br>
+2.赋值数据。<br>
+3.当前节点的下一个置为NULL，前一个节点的下一个置为自己。<br>
+4.指针后移，即前一个变成自己。<br>
+<pre>
+p=new node;
+p->data=x;
+p->next=NULL;
+r->next=p;
+r=p;
+</pre>在此之前还需要<code>head=new node;<br>r=head;</code>最后指针p归位<code>p=head->next;</code>
+</div>
+    <div class="t1">二叉树的存储结构，可以用数组，也可以用指针。两种方式都差不多，总之就是模拟。<br>这个是指针方式：<code>
+typedef struct node;<br>
+typedef node *tree;<br>
+struct node<br>
+{<br>
+	&nbsp;&nbsp;*tree lchild,rchild;<br>
+	&nbsp;&nbsp;int data;<br>
+};<br>
+tree bt;<br>
+    </code></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1306">1306：最长公共子上升序列</a>据说这道题是一道模板题。总之我不会，就算是看了题解还是不会。<p><a href="https://blog.csdn.net/lq1990717/article/details/124222748">君义_noip</a>的题解第一个还写错了，也没看懂在写啥。</p><p><a href="https://www.cnblogs.com/-Ackerman/p/11232960.html#:~:text=%E5%A6%82%E6%9E%9C%E6%98%AF%E6%B1%82%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E4%B8%8B%E9%99%8D">-Ackermanの博客</a>的题解还算比较清晰，但没时间看了，暂时就过吧。</p></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1305">1305：Maximum sum</a>这是一个动态规划之最大连续子段和问题。没学过，不会。<p><a href="https://blog.csdn.net/lq1990717/article/details/124162300#:~:text=%E8%A7%A3%E6%B3%951%EF%BC%9A%20%E8%A6%81%E5%9C%A8%E6%95%B4%E4%B8%AA%E5%BA%8F">题解</a>看的似懂非懂。</p></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1107">P1107 [BJWC2008] 雷涛的小猫</a>始终不知道自己哪错了，拿了80分，稀里糊涂看了题解。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1304">1304：数的划分</a>信心都快要错没了。致错原因：没找对状态转移方程。<a href="https://developer.aliyun.com/article/1285630#:~:text=%E7%AE%80%E4%BB%8B%EF%BC%9A%201304%EF%BC%9A%E6%95%B0%E7%9A%84%E5%88%92%E5%88%86%20%E6%97%B6%E9%97%B4%E9%99%90%E5%88%B6%3A%201000%20ms%20%E5%86%85%E5%AD%98%E9%99%90%E5%88%B6%3A%2065536%20KB,%E5%B0%86%E6%95%B4%E6%95%B0n%E5%88%86%E6%88%90k%E4%BB%BD%EF%BC%8C%E4%B8%94%E6%AF%8F%E4%BB%BD%E4%B8%8D%E8%83%BD%E4%B8%BA%E7%A9%BA%EF%BC%8C%E4%BB%BB%E6%84%8F%E4%B8%A4%E4%BB%BD%E4%B8%8D%E8%83%BD%E7%9B%B8%E5%90%8C%20%28%E4%B8%8D%E8%80%83%E8%99%91%E9%A1%BA%E5%BA%8F%29%E3%80%82%20%E4%BE%8B%E5%A6%82%EF%BC%9An%3D7%EF%BC%8Ck%3D3%EF%BC%8C%E4%B8%8B%E9%9D%A2%E4%B8%89%E7%A7%8D%E5%88%86%E6%B3%95%E8%A2%AB%E8%AE%A4%E4%B8%BA%E6%98%AF%E7%9B%B8%E5%90%8C%E7%9A%84%E3%80%82%201%EF%BC%8C1%EF%BC%8C5%EF%BC%9B%201%EF%BC%8C5%EF%BC%8C1%EF%BC%9B%205%EF%BC%8C1%EF%BC%8C1%EF%BC%9B%20%E9%97%AE%E6%9C%89%E5%A4%9A%E5%B0%91%E7%A7%8D%E4%B8%8D%E5%90%8C%E7%9A%84%E5%88%86%E6%B3%95%E3%80%82%20%E8%BE%93%E5%87%BA%E4%B8%80%E4%B8%AA%E6%95%B4%E6%95%B0%EF%BC%8C%E5%8D%B3%E4%B8%8D%E5%90%8C%E7%9A%84%E5%88%86%E6%B3%95%E3%80%82">阿里云题解</a>这个题解还是蛮清晰的。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1303">1303：鸣人的影分身</a>这道题不是很清楚，但为了时间，还是草草过了，后面遇到类似的题回来看看吧。<a href="https://blog.csdn.net/lq1990717/article/details/125285359#:~:text=%E6%88%91%E4%BB%AC%E7%9A%84%E4%B8%BB%E8%A7%92%E6%BC%A9%E6%B6%A1%E9%B8%A3%E4%BA%BA%E6%89%80">题解</a>题解写的也是一如既往的简单啊。为什么我就是想不出来呢?</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1302">1302：股票买卖</a>致错原因：数组忘记改名了，导致同一个数组用了2遍。<a href="https://blog.csdn.net/lq1990717/article/details/125284609#:~:text=%E8%AE%A2%E9%98%85%E4%B8%93%E6%A0%8F.%20%E3%80%90%E9%A2%98%E7%9B%AE%E9%93%BE">题解</a>我写的是解法一的优化版，下次忘了就回来看看。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1301">1301：大盗阿福</a>常规做法会超时，必须优化。<a href="https://blog.csdn.net/weq2011/article/details/127170491#:~:text=%E9%98%BF%E7%A6%8F%E6%98%AF%E4%B8%80%E5%90%8D%E7%BB%8F%E9%AA%8C%E4%B8%B0%E5%AF%8C%E7%9A%84">题解</a>这个作者写的很全，有2种优化，1.一维数组+压缩循环。2.滚动数组+压缩循环。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1300">1300：鸡蛋的硬度</a>很难想。<a href="https://blog.csdn.net/lq1990717/article/details/125259551">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1299">1299：糖果</a>致错原因：还是不会找状态转移方程。dp[i][j]表示取前i个数的余数为j时的最大值。<a href="https://blog.csdn.net/qq_40802813/article/details/123556631#:~:text=1299%EF%BC%9A%E7%B3%96%E6%9E%9C%20%E6%97%B6%E9%97%B4">题解</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1297">1297：公共子序列</a>这道题和最长公共子序列那道题很像，但就是有一点点不一样，不知道为什么，竟然这都能AC？<pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;string&gt;
+#include &lt;cstring&gt;
+using namespace std;
+string a,b;
+int dp[501][501];
+int f(string a,string b)
+{
+    memset(dp,0,sizeof(0));
+    a=" "+a;
+    b=" "+b;
+    for(int i=1;i&lt;a.length();i++)
+    {
+        for(int j=1;j&lt;b.length();j++)
+        {
+            if(a[i]==b[j])
+            {
+                <span>//增加</span>
+                dp[i][j]=dp[i-1][j-1]+1;
+            }
+            else
+            {
+                <span>//继承</span>
+                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+    }
+    return dp[a.length()-1][b.length()-1];
+}
+int main()
+{
+    while(cin&gt;&gt;a&gt;&gt;b)
+    {
+        cout&lt;&lt;f(a,b)&lt;&lt;endl;
+    }
+    return 0;
+}
+    </pre>容易忽视的问题：当你在字符串前面加上空格时，字符串长度也会增加，因此ij不能循环到s.length()了，输出也不能输出到s.length()。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1434">P1434 [SHOI2002] 滑雪</a>这道题是动态规划+记忆化搜索。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+using namespace std;
+int r,c,a[201][201],maxn,dp[200][200];
+int dir[4][2]={{1,0},{-1,0},{0,1},{0,-1}};
+int dfs(int x,int y)
+{
+    <span>//如果来过，那么直接返回当前点出发的长度。就不需要再走一遍了。</span>
+    if(dp[x][y])return dp[x][y];
+    <span>//如果没来过，那么算上这个点，从这个点开始进行搜索。</span>
+    dp[x][y]=1;
+    for(int i=0;i&lt;4;i++)
+    {
+        int ux=x+dir[i][0],uy=y+dir[i][1];
+        if(ux&gt;=1&&ux&lt;=r&&uy&gt;=1&&uy&lt;=c&&a[ux][uy]&lt;a[x][y])
+        {
+            dfs(ux,uy);
+            dp[x][y]=max(dp[x][y],dp[ux][uy]+1);
+        }
+    }
+    return dp[x][y];
+}
+int main()
+{
+    cin&gt;&gt;r&gt;&gt;c;
+    for(int i=1;i&lt;=r;i++)
+    {
+        for(int j=1;j&lt;=c;j++)
+        {
+            cin&gt;&gt;a[i][j];
+        }
+    }
+    for(int i=1;i&lt;=r;i++)
+    {
+        for(int j=1;j&lt;=c;j++)
+        {
+            maxn=max(maxn,dfs(i,j));
+        }
+    }
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+</pre>如果仅仅用记忆化搜索，那么只能拿90分，其中一个点超时。优化：如果你已经找到一条对于该点出发来说的最长路径，那么下次遇到这个点的时候就可以不用搜索，直接返回这条路径的长度即可，最后用这个长度加上你之前走过的长度就是当前点的答案。省下了大量时间。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1854">P1854 花店橱窗布置</a><p>这是一个不一样的动态规划，不会做，就看题解了。结果发现题解代码和<a href="https://www.luogu.com.cn/problem/P2066">P2066 机器分配</a>一模一样，可以去对比一下。</p>我觉得好的题解是这个<a href="https://blog.csdn.net/lq1990717/article/details/125213307">信息学奥赛一本通 1279：【例9.23】橱窗布置(flower) | 洛谷 P1854 花店橱窗布置</a></div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1278">1278：【例9.22】复制书稿(book)</a>这这道题很难，当时没做出来，就这样吧。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+int m,k,a[1001],s[1001],dp[1001][1001];
+void show(int t,int x)
+{
+    int i;
+    int sum=0;
+    if(t==0)return;
+    for(i=t;i&gt;=1&&sum+a[i]&lt;=x;i--)
+    {
+        sum+=a[i];
+    }
+    show(i,x);
+    cout&lt;&lt;i+1&lt;&lt;" "&lt;&lt;t&lt;&lt;endl;
+}
+int main()
+{
+    cin&gt;&gt;m&gt;&gt;k;
+    for(int i=1;i&lt;=m;i++)
+    {
+        cin&gt;&gt;a[i];
+        s[i]=a[i]+s[i-1];
+    }
+    memset(dp,0x3f,sizeof(dp));
+    for(int i=1;i&lt;=m;i++)
+    {
+        dp[i][1]=s[i];
+    }
+    for(int i=1;i&lt;=m;i++)
+    {//i表示抄写的人数。 
+        for(int j=2;j&lt;=k;j++)
+        {//前j本书分配给i个人抄写。 
+            for(int h=j;h&lt;=i;h++)
+            {//最后一个人需要抄写h~i本书。 
+                dp[i][j]=min(dp[i][j],max(dp[h-1][j-1],s[i]-s[h-1]));
+            }
+        }
+    }
+    show(m,dp[m][k]);
+    return 0;
+}
+</pre>
+</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1004">P1004 [NOIP2000 提高组] 方格取数</a>因为是2个人走，所以要用4维数组，dp[i][j][k][p]，ij表示第一个人走的，kp表示第二个人走的。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define LL long long
+LL n,a[40][40],ans,dp[11][11][11][11];
+void print()
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {
+            cout&lt;&lt;a[i][j]&lt;&lt;" ";
+        }cout&lt;&lt;endl;
+    }cout&lt;&lt;endl;
+}
+LL max(LL a,LL b)
+{
+    return a&gt;b?a:b;
+}
+void f()
+{
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {
+            for(int k=1;k&lt;=n;k++)
+            {
+                for(int p=1;p&lt;=n;p++)
+                {
+                    dp[i][j][k][p]=max(dp[i-1][j][k-1][p],max(dp[i][j-1][k][p-1],max(dp[i-1][j][k][p-1],dp[i][j-1][k-1][p])))+a[i][j];
+                    if(i!=k&&j!=p)<span>//如果第一个人没走过，那第二个人就走过来。</span>
+                    {
+                        dp[i][j][k][p]+=a[k][p];
+                    }	
+                }
+            }
+        }
+    }
+    ans=dp[n][n][n][n];
+}
+int main()
+{
+    cin&gt;&gt;n;
+    LL x,y,v;
+    while(cin&gt;&gt;x&gt;&gt;y&gt;&gt;v&&(x!=0||y!=0||v!=0))
+    {
+        a[x][y]=v;
+    }
+    f();
+    cout&lt;&lt;ans&lt;&lt;endl;
+}
+    </pre>当时情况没有考虑周全，导致暴力求解WA了2个点。暴力做法的代码在这里了<a href="https://www.luogu.com.cn/record/179790417">暴力代码</a>
+    </div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2758">P2758 编辑距离</a>确定状态，转移方程，注意边界条件。<br>致错原因：未处理边界。
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int dp[2001][2001];
+string a,b;
+int main()
+{
+    cin&gt;&gt;a&gt;&gt;b;
+    a=" "+a;b=" "+b;
+    <b style="color: red;">for(int i=1;i&lt;=a.length();i++)
+    {<span>//当其中一个串为0时，最小操作次数就是不为零的那个串的长度咯！</span>
+        dp[i][0]=i;
+    }
+    for(int i=1;i&lt;=b.length();i++)
+    {
+        dp[0][i]=i;
+    }</b>
+    for(int i=1;i&lt;=a.length();i++)
+    {
+        for(int j=1;j&lt;=b.length();j++)
+        {
+            if(a[i]==b[j])dp[i][j]=dp[i-1][j-1];
+            else
+            {
+                <span>//我可以增删改三选一，三选一找最小值。</span>
+                dp[i][j]=min(dp[i-1][j-1],min(dp[i-1][j],dp[i][j-1]))+1;
+            }
+        }
+    }
+    cout&lt;&lt;dp[a.length()][b.length()]&lt;&lt;endl;
+    return 0;
+}
+    </pre>
+    </div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1275">1275：【例9.19】乘积最大</a>像这种动态规划的题目不要用瞪眼法，瞪眼法看不出来的，需要先用小数据枚举，找规律，找状态转移方程。<br>致错原因：区间定义错误。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1274">1274：【例9.18】合并石子</a>状态转移方程，dp[i][j]表示从第i堆石子到第j堆石子合并的最小价值。</div>
+    <div class="t1">二维数组最大开5000*5000，否则可能出现MLE的情况。如果数据范围拿不准，就用vector吧。</div>
+    <div class="t1">
+        各个数据类型大小(单位字节Byte,B)：<br>short 2<br>int 4<br>long 4<br>long long 8<br>char 1<br>double 8<br><br>1MB=1024kb=1024*1024B。
+    </div>
+    <div class="t1">循环边界再检查一遍。看看变量名是否与上文重合了。</div>
+    <div class="t1">有些题目需要对某些情况特判。</div>
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1293">1293：买书</a>错误原因：没有看清条件。</div>
+    <div class="t1">
+        <a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1296">1296：开餐馆</a>
+        致错原因：ans最大值更新时放在了if语句内，导致更新失败而爆0。
+        <pre>
+int ans=dp[1];
+for(int i=1;i&lt;=n;i++)
+{
+    for(int j=1;j&lt;i;j++)
+    {
+        if(m[i]-m[j]&gt;k)
+        {
+            dp[i]=max(dp[i],dp[j]+p[i]);
+        }
+        <b style="color: red;">ans=max(ans,dp[i]);</b>//&lt;------- 应该是在这，之前写到上边括号里头了。
+    }
+}
+cout&lt;&lt;ans&lt;&lt;endl;
+        </pre>
+    </div>
+    <div class="t1">经常忘记题目叫输出的是啥，比如叫你求最大值，而且输出格式是“max=最大值”，结果我只输出了最大值，那么全0分。</div>
+
+    <div class="t1">01背包：每种物品只选一次。(逆推)<code>二维：dp[i][j]=max(dp[i-1][j],dp<b style="color: rgb(255, 79, 188);">[i-1]</b>[j-w[i]]+c[i])<br>一维：dp[j]=max(dp[j],dp[j-w[i]]+c[i])</code><br>完全背包：每种物品数量无限。(顺推)<code><p>二维：dp[i][j]=max(dp[i-1][j],dp<b style="color: rgb(255, 79, 188);">[i]</b>[j-w[i]]+c[i])<br>一维：dp[j]=max(dp[j],dp[j-w[i]]+c[i]);</p></code><br>多重背包：每种物品数量有限。(二维可顺可逆，一维要逆推)<br><code><p>二维：dp[i][j]=max(dp[i][j],dp<b style="color: rgb(255, 79, 188);">[i-1]</b>[j-k*w[i]]+k*c[i]);<br>一维：dp[j]=max(dp[j],dp[j-k*v[i]]+k*w[i]);</p></code></p><br>混合背包：遍历物品的时候加个判断就好，物品只有一个那就是01背包，无限就是完全背包，有穷就是多重背包。其他都不变。<br><br>二维费用问题：普通背包的基础上再加一个状态就好，状态的最小值设为0或1。<br><br>分组背包：普通背包问题的基础上最内层多加一个遍历每组的物品个数就好了，可以用vector储存每组的物品信息。<br><br>有依赖的背包问题：需要建树。<br><br>背包问题的方案总数：递推，f[0]=1，普通背包基础上，往下推即可。<br><br>**01背包dp[i][j]的意思是，考虑前i个物品且背包容量为j的情况下能够获得的最大价值。当优化成一维dp[i]时，表示考虑前i件物品能达到的最大价值。<br>**完全背包：含义与01背包相同，只不过第i种物品可以取无数次。<br><br>*背包的数组优化，仅仅在空间上进行了优化。</div>
+
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1271">1271：【例9.15】潜水员</a>二维费用问题的典型题目，代码如下：
+        <pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int m,n,s,a[1001],b[1001],c[1001],dp[1001][1001];
+int main()
+{
+    cin&gt;&gt;m&gt;&gt;n&gt;&gt;s;
+    for(int i=1;i&lt;=s;i++)
+    {
+        cin&gt;&gt;a[i]&gt;&gt;b[i]&gt;&gt;c[i];
+    }
+    memset(dp,0x3f,sizeof(dp));
+    dp[0][0]=0;//都不放的时候就是0。 
+    for(int i=1;i&lt;=s;i++)
+    {
+        for(int j=m;j&gt;=0;j--)
+        {//枚举氧气 
+            for(int k=n;k&gt;=0;k--)
+            {//枚举氮气 
+                //氧气限度不能低于0，如果低于0代表超了。 
+                dp[j][k]=min(dp[j][k],dp[max(0,j-a[i])][max(0,k-b[i])]+c[i]);
+            }
+        }
+    }
+    cout&lt;&lt;dp[m][n]&lt;&lt;endl;
+    return 0;
+}
+        </pre>
+    </div>
+
+    <div class="t1">Linux主要命令，一定要熟练掌握，否则赛场两眼一摸黑。<br><br><p><code>mkdir</code>：创建文件夹。</p><p><code>touch</code>：创建文件。</p><p><code>cd</code>：切换目录。</p><p><code>ls</code>：列出当前文件夹下的内容。</p><p><code>cat</code>：显示文件内容，而且是全部显示。</p><p><code>more</code>：查看文件内容，但是翻页查看。</p><p><code>cp [-r] [被复制] [复制到哪]</code>：复制文件文件夹，参数<code>-r</code>可以复制文件夹。</p><p><code>mv [被移动] [目的地]</code>：移动文件文件夹。</p><p><code>rm [-r -f] [参数1......参数n]</code>：删除文件，<code>-r</code>删除文件夹，<code>-f</code>强制删除。</p></div>
+
+    <div class="t1"><p>对拍时使用<code>rand()</code>函数生成伪随机数的方法。</p><p>头文件是<code>#include &lt;cstdlib&gt;</code></p>接下来是代码：
+        <pre>
+#include &lt;iostream&gt;
+#include &lt;ctime&gt;
+#include &lt;cstdlib&gt;
+
+int getRand(int min, int max) {
+    return (rand() % (max - min + 1)) + min;
+}
+
+int main() {
+    srand(time(0)); // 使用当前时间作为种子
+    for (int i = 0; i &lt; 10; i++) {
+        int r = getRand(2, 20); // 生成2到20之间的随机整数
+        std::cout &lt;&lt; r &lt;&lt; std::endl;
+    }
+    return 0;
+}
+        </pre>
+        建议写一个自己的解题代码，再写一个暴力的代码，之后再写一个随机数生成数据的代码。<br><br>即，用随机数生成数据，然后用暴力算法测试数据答案，最后用自己的解题代码测试答案与暴力解法是否相等，如果不相等，说明代码存在漏洞。
+    </div>
+    
+    <div class="t1"><b>别忘了加上文件读写。</b><p>文件读写的头文件是<code>#include &lt;cstdio&gt;</code>。</p>开头加上这句<code>freopen("demo.in","r",stdin);<br>freopen("demo.out","w",stdout);</code>否则等着爆0。<br>结尾建议加上这句<code>fclose(stdin);<br>fclose(stdout);</code></div>
+
+    <div class="t1">调试的那些打印语句别忘了注释掉！否则0分等着你！</div>
+    <div class="t1">
+        二维数组求“最大连续子矩阵和”的解法：<br><br>
+        <b>暴力解法：</b>6层循环即可，外两层是左上角，中间两层是右下角，内两层是枚举累加左上到右下的和。<br><br>
+        <b>优化解法1：一维前缀和优化</b>
+        跟一维数组求“最大连续子区间”的优化解法是一样的，只不过把<code>w[i]=w[i-1]+a[i];</code>改成了<code>w[i][j]=w[i][j-1]+a[i][j]</code>然后对循环以及部分内容稍微改动就完事了。<br><br>
+        <b>优化解法2：二维前缀和优化</b>
+        <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001][10001],w[10001][10001],maxn=-0x3f3f3f3f;
+//maxn建议赋值为负数，因为矩阵当中可能会出现负的数。
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {
+            cin&gt;&gt;a[i][j];
+            w[i][j]=w[i-1][j]+w[i][j-1]+a[i][j]-w[i-1][j-1];
+        }
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=n;j++)
+        {//------枚举左上角--------
+
+            for(int k=i;k&lt;=n;k++)
+            {
+                for(int t=j;t&lt;=n;t++)
+                {//--------枚举右下角---------
+
+                    int sum=w[k][t]-w[k][j-1]-w[i-1][t]+w[i-1][j-1];
+                    maxn=maxn&gt;sum?maxn:sum;
+
+                }
+            }
+
+        }
+    }
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+        </pre>
+        图解：
+        <img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/bbf70b405981e8ae02468e701a216a77_3706323876176022470.png" alt="矩阵图解">如图，我们的二维前缀和优化相当于求(i-1,j-1)到(k,t)之间的前缀和。也就是我用红色线条画的那部分。那么那部分的前缀和sum就等于我用w[k][t]减去(区1+区2+区3)的前缀和，那么公式也就是<code>sum=w[k][t]-(w[k][j-1]-w[i-1][j-1])+(w[i-1][t]-w[i-1][j-1])+w[i-1][j-1];</code>最后化简后就成了这样子：<code>sum=w[k][t]-w[k][j-1]-w[i-1][t]+w[i-1][j-1];</code><br><p>*这也就是<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1282">1282：最大子矩阵</a>的解法</p>（这道题妥妥模板题。我还硬啃了2小时，艹！）
+    </div>
+
+    <div class="t1">
+        一维数组求“最大连续子序列和”的解法：
+        <br><b>优化解法1：（递推）</b>
+        <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001],maxn;
+int main()
+{
+    cin&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;a[i];
+    }
+    //-----------------------
+    for(int i=1;i&lt;=n;i++)
+    {
+        int sum=0;
+        for(int j=i;j&lt;=n;j++)
+        {
+            sum+=a[j];
+            maxn=sum&gt;maxn?sum:maxn;
+        }
+    }
+    //----------------------
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+    </pre>
+    两个注释线夹着的循环可以改为这种写法：（最朴素的解法）
+    <pre>
+for(int i=1;i<=n;i++)
+{
+    for(int j=i;j<=n;j++)
+    {
+        int sum=0;
+        for(int k=i;k<=j;k++)
+        {
+            sum+=a[k];
+        }
+        maxn=sum>maxn?sum:maxn;
+    }
+}
+    </pre>
+    这两种是等价的，但前者能少一个循环。
+    <br><b>优化解法2：利用前缀和求区间和</b>
+    <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001],maxn,w[10001];
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+        w[i]=w[i-1]+a[i];
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=i;j&lt;=n;j++)
+        {
+            maxn=maxn&gt;(w[j]-w[i-1])?maxn:(w[j]-w[i-1]);
+        }
+    }
+    cout&lt;&lt;maxn&lt;&lt;endl;
+    return 0;
+}
+    </pre>
+    这里用w数组在输入的时候就顺带把前缀和全都求出来了，然后要求出某个区间的前缀和，那就用区间的右端点的前缀和与左端点的前缀和相加就能得到答案。(但要注意左端点的头也得算在内，要i-1)。如图解：
+    <img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/175dac2c567043cd0c76c462fa3e903c_1093202781834302723.png" alt="区间图解">
+    <br>
+    一维和二维的处理方式有点不一样，见参考：<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1282">1282：最大子矩阵</a>
+    </div>
+
+    <div class="t1"><b>二维前缀和的计算方法</b><br>在二维数组中，我们首先定义一个同等大小的二维数组dp，其中dp[i][j]表示从原数组左上角(1,1)到(i,j)形成的子矩阵的元素和。计算dp[i][j]的状态转移方程如下：
+<code>dp[i][j] = dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1] + arr[i][j];</code>
+    <b>*即，自身前缀和=左+上+自身-左上。</b>
+    </div>
+
+    <div class="t1">动态规划+最优路径典中典的题目，这道题实在是太典了，建议记住。<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1266">1266：【例9.10】机器分配</a>
+    <pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+using namespace std;
+int n,m;
+int a[10001][10001];
+int dp[10001][10001];
+int vis[10001][10001];
+void print(int x,int y)
+{
+    if(x==0)return;
+    print(x-1,y-vis[x][y]);
+    cout&lt;&lt;x&lt;&lt;" "&lt;&lt;vis[x][y]&lt;&lt;endl;
+}
+int main()
+{
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=m;j++)
+        {
+            cin&gt;&gt;a[i][j];
+        }
+    }
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=m;j++)
+        {
+            for(int k=0;k&lt;=j;k++)
+            {
+                if(dp[i-1][j-k]+a[i][k]&gt;=dp[i][j])
+                {
+                    dp[i][j]=dp[i-1][j-k]+a[i][k];
+                    vis[i][j]=k;
+                }
+            }
+        }
+    }
+    cout&lt;&lt;dp[n][m]&lt;&lt;endl;
+    print(n,m);
+    return 0;
+}
+    </pre>
+    这是一个三重循环的动态规划，i外层代表当前公司，j代表要选的机器数，k代表还剩几台机器能够选。最后vis[i][j]记录公司选的机器数k，然后递归打印公司x和机器数vis[x][y]。
+    </div>
+
+    <div class="t1">模版题：<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1265">1265：【例9.9】最长公共子序列</a>
+        <pre>
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+using namespace std;
+string a,b;
+int dp[1001][1001];
+int main()
+{
+    cin&gt;&gt;a&gt;&gt;b;
+    int n=a.size(),m=b.size();
+    a=' '+a;
+    b=' '+b;
+    for(int i=1;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;=m;j++)
+        {
+            if(a[i]==b[j])
+            {
+                dp[i][j]+=dp[i-1][j-1]+1;
+            }
+            else
+            {
+                dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+            }
+        }
+    }
+    cout&lt;&lt;dp[n][m];
+    return 0;
+}
+        </pre>
+        建议直接背会。dp[i][j]的意思是，i的前面和j的前面有多少公共的部分，如果a[i]==b[j]，那么dp[i][j]+=dp[i-1][j-1]+1，那如果不相等，就继承i与j前面最大的公共部分。
+    </div>
+
+    <div class="t1">字符类型数组，一个字符占1byte大小，八位。实际上，能开的最大长度是2146793727。<code>char s[2146793727];</code><br>字符串类型数组，一个字符串能存储4049个字符（多了会卡死），但字符串类型的数组最大长度为268349215<code>string b[268349215];</code><br>int 类型数组，一个int类型的变量占4个字节，是字符的四倍，所以int类型数组的最大长度大概是字符类型的四分之一，为536698431<code>int a[536698431];</code><br>long long类型数组，一个long long类型的变量占8个字节，所以longlong类型数组的最大长度大概是268349215<code>long long c[268349215];</code><br>浮点数，float和double类型的变量就像是int和longlong，而数组最大长度也分别和int和longlong相同，为536698431和268349215<code>float e[536698431];<br>double f[268349215];</code><br>布尔类型，布尔类型的变量也只占一个字节，所以数组最大长度和char一样为2146793727<code>bool d[2146793727];</code><br>*以上总结的各类型数组最大长度仅为最大能编译的长度</div>
+
+    <div class="t1">动态规划最短路径问题<br><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1261">1261：【例9.5】城市交通路网</a>这道题是一道经典dp，建议烂熟于心。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/513612dea4e03294e7f64b38ffd8f2a4_456798892526461554.png" alt="城市交通路网"><br><code>memset(arr,0x3f,sizeof(arr));</code>memset用0x3f初始化数组代表无穷大，因为memset函数初始化特点是按字节去逐个初始化。</div>
+
+    <div class="t1">最长上升子序列（LIS）<br><br>最长不下降子序列（LNDS）<br><br>最长下降子序列（LDS）<br><br>最长不上升子序列（LNIS）</div>
+
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1091">P1091 [NOIP2004 提高组] 合唱队形</a>这道题是一道令人迷惑的题目，我做了2次，错了2次，而且全错，0分。不说了，代码放这了，自己看吧，啥时候忘了啥时候回来瞅一眼。
+        <pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,a[10001],up[10001],down[10001];
+int main()
+{
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)
+    {
+        cin&gt;&gt;a[i];
+        up[i]=1;down[i]=1;
+    }
+    for(int i=2;i&lt;=n;i++)
+    {
+        for(int j=1;j&lt;i;j++)
+        {
+            if(a[i]&gt;a[j]){up[i]=max(up[i],up[j]+1);}
+        }
+    }
+    //这两个循环不等价，当时我还不信，硬是写一块去，结果WA了4个点。
+    for(int i=n-1;i&gt;=1;i--)
+    {
+        for(int j=i+1;j&lt;=n;j++)
+        {
+            if(a[i]&gt;a[j]){down[i]=max(down[i],down[j]+1);}
+        }
+    }
+    int ans=-0x3f3f3f3f;
+    for(int i=1;i&lt;=n;i++)
+    {
+        ans=max(ans,up[i]+down[i]-1);
+    }
+    cout&lt;&lt;n-ans&lt;&lt;endl;
+    return 0;
+}
+        </pre>
+    </div>
+
+    <div class="t1"><p>对于<a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1283">1283：登山</a>这道题目我真是服了，</p><img src="https://upload-bbs.miyoushe.com/upload/2024/09/30/198629752/4d6f33c3b441e2a2080df38abe0eec24_6549954258408915795.png" alt="登山">就是这句具有迷惑性的话，直接让我0分。让我们来思考一下这句话的含义，首先不能连续爬相同的山，那么我们会很容易想到他下山的时候有没有可能会爬相同的山？那是不是就是非严格单调子序列？其实不是，我们反证法可以得出，如果他经过了2个相同高度的山，那么分2种情况，一种是在爬山(或下山)过程中经过的，很显然根据题目可知不会有这种情况。那么另外一种就是一个在爬的过程中经过一遍，一个在下山过程中经过一遍，但又由于，上山属于单调增，下山属于单调减，因此这种情况完全可以忽略不计，因为他们根本不可能同时在一个严格单调序列里面。<p>因此这道题就是<a href="https://www.luogu.com.cn/problem/P1091">P1091 [NOIP2004 提高组] 合唱队形</a>的变形，只不过最终的答案不再是n-ans，而是直接输出ans，其他都不需要改。也就是说这就转化成了一个数学证明题：求证同时经过两座山并且还得同时位于一个单调序列种的情况不可能出现。</p></div>
+
+    <div class="t1"><a href="http://ybt.ssoier.cn:8088/problem_show.php?pid=1260">1260：【例9.4】拦截导弹(Noip1999)</a>这道题目是典型的求 最长不上升子序列 和 最长下降子序列 的题目，具体代码如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/f9380e628310dba1074bde3f982cc994_4117213231434843130.png" alt="拦截导弹"><br>当时错了好几遍都没过，致错原因还是太理所当然的认为是暴力求解，但其实由题意可得，答案是求最长不上升子序列和最长下降子序列。<br><br>这是一个代码模板，要求背会。考试能保证类似的题能拿一半的分。<br><br><a href="https://www.luogu.com.cn/problem/P1020">P1020 [NOIP1999 提高组] 导弹拦截</a>洛谷的这道题是升级版。<br>对于最小划分数有：<br>不升子序列：lower_bound<br>不降子序列：upper_bound<br>严格上升子序列：对所有数取相反数，upper_bound<br>严格下降子序列：对所有数取相反数，lower_bound<br><pre><b style="color: rgb(51, 255, 0);">Dilworth 定理</b><br>原链最长长度=反链划分数最小值：<br><br>上升子序列⇔不升子序列<br>下降子序列⇔不降子序列<br><br>*如果定理不会用(或没把握)，那就返璞归真，用最朴素的解法求答案。</pre><br>题解如下：<img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/c9a4c200879f825f3558433fcff69c1d_5668380233911982326.png" alt="迪尔沃斯定理"></div>
+
+    <div class="t1">题目都说了最大上升，上升，怎么能写成小于等于？应该是严格递增的呀。</div>
+
+    <div class="t1">如果用scanf读入字符串不方便，害怕出错，那么就写stread()，即字符串快读，写法与数字快读同理。<br>
+        <pre>
+<span class="">string</span> <span>stread()</span>
+<span>{</span>
+    <span>string</span> <span>s</span>;<span>char</span> <span>ch</span>=<span>getchar()</span>;</span>
+    &nbsp;&nbsp;<span>while</span><span>(</span><span>ch</span>&lt;<span>'a'</span>&&<span>ch</span>&gt;<span>'z'</span>||<span>ch</span>&lt;<span>'A'</span>&&<span>ch</span>&gt;<span>'Z'</span>||<span>ch</span>&lt;<span>'0'</span>&&<span>ch</span>&gt;<span>'9'</span><span>)</span><span>{</span><span>ch</span>=<span>getchar()</span>;<span>}</span></span>
+    &nbsp;&nbsp;<span>while</span><span>(</span><span>ch</span>&gt;=<span>'a'</span>&&<span>ch</span>&lt;=<span>'z'</span>||<span>ch</span>&gt;=<span>'A'</span>&&<span>ch</span>&lt;=<span>'Z'</span>||<span>ch</span>&gt;=<span>'0'</span>&&<span>ch</span>&lt;=<span>'9'</span><span>)</span><span>{</span><span>s</span>+=<span>ch</span>;<span>ch</span>=<span>getchar()</span>;<span>}</span>
+    <span>return</span> <span>s</span><span>;</span>
+<span>}</span>
+        </pre>
+    </div>
+    <div class="t1">字符串用scanf读入时，如果有空格，那么可能会出现一些棘手的问题。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;头文件&lt;string&gt;，用于定义string类型。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;头文件&lt;cstring&gt;，里面包含了字符串的相关函数，比如strlen()、strcpy()、fgets()、sscanf()。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;输入结束时getchar()会返回EOF，即End Of File。控制台中可以使用(Windows)Ctrl+Z或者(Linux)Ctrl+D来输入EOF表示输入结束。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;string类型的字符串可以直接进行比较，比较是按照字典序进行的。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;fgets()来读入一行字符串并存入字符数组中，而gets()有溢出的风险所以不使用。<code>fgets(s,sizeof(s),stdin);</code>这条语句制定了字符数组的最大读入数量，因此是安全的。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;sscanf()和scanf()是很接近的。比如，<code>sscanf(s,"%d",&a);</code>就可以从s字符串中读入一个整数a。他们的区别是，scanf()是从标准输入中读入，而sscanf()是从给定的一个字符串中读入，所以要求提供字符数组的名称，表示从哪个字符串里面读入信息。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;同理，<code>sprintf(s,"%d",a);</code>就可以将一个int类型的数a输出到字符串s中而不是标准输出。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;s.substr(pos,len)：截取字符串s，从第pos个位置开始len个字符，并返回这个字符串。<br>&nbsp;&nbsp;&nbsp;&nbsp;s.insert(pos,str)：在字符串s的第pos个字符之前，插入字符串str，并返回这个字符串。<br>&nbsp;&nbsp;&nbsp;&nbsp;s.find(str,[pos])：在字符串s中从第pos个字符开始寻找str，并返回位置，如果找不到返回-1。pos可以省略，默认值是0；<br>&nbsp;&nbsp;&nbsp;&nbsp;*要注意的是find函数查找子串但是找不到时，它会返回一个常量string::npos，但是由于它不一定是一个int类型的常量，因此要强制转换成int类型才能直接输出-1。<br><br>&nbsp;&nbsp;&nbsp;&nbsp;另外还要注意字符串能赋值一个常量，但不能像下面这样赋值↓
+        <pre>
+
+<span><span>string</span> <span>a</span>,<span>b</span>;</span>
+<span><span>a</span>=<span>"LUOGU"</span>;</span>
+<span><span>b</span>=<span>a</span>;<span><span>//这一步是错误操作</span></span></span>
+        </pre>
+    </div>
+
+    <div class="t1">公式：[1,n]的约数中有p的数的个数为[n/p]<br><br>&nbsp;&nbsp;&nbsp;&nbsp;*(其中[]表示向下取整)。<br><br>当p很大时，在一个区间范围内，[n/pi]保持不变，因此遍历时可以直接从pi跳到pj，其中pj=[n/(n/pi)]+1，区间长度为j-i。
+<pre>
+
+<span>#include</span> <span>&lt;iostream&gt</span>;
+<span>using</span> <span>namespace</span> <span>std</span>;
+<span>#define</span> <span>LL</span> <span>long long</span>
+<span>LL</span> <span>ans</span>,<span>n</span>;
+<span>int</span> <span>main()</span>
+<span>{</span>
+    cin>><span>n</span>;
+    <span>for</span>(</span><span>LL</span> <span>i</span>=1,<span>j</span>;<span>i</span>&lt;=<span>n</span>;<span>i</span>=<span>j</span>)
+    <span>{</span>
+        <span>j</span>=<span>n</span>/<span>(</span><span>n</span>/<span>i</span><span>)</span>+<span>1</span>;
+        <span>ans</span>+=<span>(</span><span>n</span>/<span>i</span><span>)</span>*<span>(</span><span>j</span>-<span>i</span><span>)</span>;
+    <span>}</span>
+    cout&lt;&lt;<span>ans</span>;
+    <span>return</span> 0;
+<span>}</span>
+
+</pre>
+    </div>
+    <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/09/29/198629752/09f0aab8de6e5cc0db270c73e691dab6_9079656361092462373.png" alt="时间复杂度">应尽量避免除法运算。还有循环如果能用while就用while。</div>
+    <div class="t1">如果遇到10^6这样的大数据，能写快读就写快读。</div>
+    <div class="t1">cin读取数字时可以把数字的符号一起读进去，也就是说，当你要读入一个数字表达式，那么可以直接用cin读入，连数字的正负判断都省了。</div>
+    <div class="t1">补全程序当中遇到图论代码，如果遇到不认识的数组，就往“点”、“入度”、“出度”、“权值”上想，再偏也不会跑出这个考试范围。</div>
+    <div class="t1">注意数据范围，要开 long long 的千万不要忘了开，否则只能拿一半的分！</div>
+    <div class="t1">浮点数转整形会丧失精度，要看好代码中的类型转换以及是否出现了，函数要求传入int类型然而却传入了浮点类型。</div>
+    <div class="t1">"7/sqrt(3)/2"和"7/2/sqrt(3)"不一样，前者会先变成浮点数再除以二，相比于后者精度更精确，二者存在明显的精度误差。</div>
+    <div class="t1">b=a*q则，b是a的倍数，a是b的约数。</div>
+    <div class="t1">由数字
+        1,1,2,4,8,8 所组成的不同的 
+        4 位数的个数是（）。<br><br>解：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况1：无重复的数字，1、2、4、8一共4个数字放在4个位置，：4×3×2=24<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况2：仅重复1，两个1，两个1的组合是6种：11xx,1x1x,1xx1,x11x,x1x1,xx11，两个x位置放3个不重复的数字，共3×2=6种，6×6=36种<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况3：仅重复8，两个8，同上，一共6×6=36种<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;情况4：重复两对，两个1和两个8。11xx,1x1x,1xx1,x11x,x1x1,xx11，一共6种。</div>
+    <div class="t1">一些数字可以颠倒过来看，例如
+        0,1,8 颠倒过来还是本身，
+        6 颠倒过来是 
+        9,9 颠倒过来看还是 
+        6,其他数字颠倒过来都不构成数字。类似的，一些多位数也可以颠倒过来看，比如
+        106 颠倒过来是
+        901。假设某个城市的车牌只有 
+        5 位数字，每一位都可以取 
+        0 到 
+        9。请问这个城市有多少个车牌倒过来恰好还是原来的车牌，并且车牌上的 
+        5 位数能被 
+        3 整除？（）<br><br>解：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第1、2位有（0、1、8、6、9）五个数字，第3位有（0、1、8）三个数字，第4、5位由第1、2位决定。由于0,1,8模3正好余0,1,2，所以其他位确定则第3位自然确定，共5*5=25种。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;举例：第1位选1，第5位必然是1；第2位选0，第4位必然是0；为能被3整除，第3位只能选8。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;第1位可选5个数字，第2位也可选5个数字。5*5=25种。<br><br><p style="color: rgb(232, 0, 0);background-color: rgb(254, 241, 0);">注: 是车牌，车牌第一位可以是0</p></div>
+    <div class="t1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一个数的所有数字之和能被3整除，则这个数能被3整除。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一个数的个位为0或5，则这个数能被5整除。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一个数的所有数字之和能被9整除，则这个数能被9整除。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果一个数所有奇数位的数字相加减去所有偶数位的数字后的值能被11整除，那么这个数能被11整除。</div>
+    <div class="t1">G是一个非连通无向图(没有重边和自环)，共有28条边，则该图至少有(  )个顶点。<br><br>解：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;最优情况下是8个顶点的完全图，外加1个孤立顶点。即共有9个顶点。<img src="https://upload-bbs.miyoushe.com/upload/2024/09/23/198629752/de892d9f522b3dbd49e60532b643533c_4417491289934517107.png" alt="8个顶点的完全图">最后的边数就是1+2+3+4+5+6+7+8=28。</div>
+    <div class="t1">在写并查集的代码时，并查集的初始化f[i]=i,其中i∈[a,b],则输入的一对节点(x,y)也应该在[a,b]范围内。因为如果超出这个范围，x的父节点会被默认指向为0或其他未知数字。</div>
+    <div class="t1">没有路径压缩的并查集时间复杂度为线性的O(n),路径压缩后的为O(1)。</div>
+    <div class="t1">如要补充，请联系管理员......</div>
     <!--  -->
     <!--  -->
     <!--  -->
@@ -114,5 +2750,5 @@
 <script src="./Volume.js"></script>
 <script src="./Unitcopy.js"></script>
 <script src="./ChangSpanColor.js"></script>
-<!-- <script src="../a_blank.js"></script> -->
+<script src="./a_blank.js"></script>
 </html>
