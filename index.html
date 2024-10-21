@@ -87,6 +87,81 @@
     <hr style="z-index: 1;">
     <br>
     <!--  -->
+    <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7915">P7915 [CSP-S 2021] 回文</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>思维题？？？我无话可说。这题代码挺难实现的，我也是想不到这样的解法。<pre>
+#include &lt;cstdio&gt;
+#include &lt;cctype&gt;
+int n;
+const int maxn = 1000002;
+char res[maxn];
+int a[maxn];
+inline int read(){
+    int s=0,w=1;char ch=getchar();
+    while(!isdigit(ch)){
+        if(ch=='-'){
+            w=-1;
+        }
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';
+        ch=getchar();
+    }
+    return s*w;
+}
+inline bool work(int l1,int r1,int l2,int r2){
+    for(int i=1;i&lt;n;i++){
+        if(l1&lt;=r1&&((l2&lt;=r2&&a[l1]==a[l2])||(l1&lt;r1&&a[l1]==a[r1]))){
+            if(l1&lt;r1&&a[l1]==a[r1]){
+                ++l1;--r1;
+                res[i]='L';res[2*(n-1)-i+1]='L';
+            }
+            else{
+                ++l1;++l2;
+                res[i]='L';res[2*(n-1)-i+1]='R';
+            }
+        }
+        else if(l2&lt;=r2&&((l1&lt;=r1&&a[r2]==a[r1])||(l2&lt;r2&&a[l2]==a[r2]))){
+            if(l2&lt;r2&&a[l2]==a[r2]){
+                ++l2;--r2;
+                res[i]='R';res[2*(n-1)-i+1]='R';
+            }
+            else{
+                --r2;--r1;
+                res[i]='R';res[2*(n-1)-i+1]='L';
+            }
+        }
+        else return 0;
+    }
+    return 1;
+}
+int main(){
+    int T=read();
+    while(T--){
+        n=read();int p1=-1,p2=-1;
+        for(int i=1;i&lt;=2*n;i++)a[i]=read();
+        for(int i=1;i&lt;=2*n+1;i++)res[i]=0;
+        for(int i=2;i&lt;=2*n;i++){
+            if(a[1]==a[i]){
+                p1=i;break;
+            }
+        }
+        for(int i=1;i&lt;2*n;i++){
+            if(a[2*n]==a[i]){
+                p2=i;break;
+            }
+        }
+        if(work(2,p1-1,p1+1,2*n)){
+            printf("L%sL\n",res+1);
+        }
+        else if(work(1,p2-1,p2+1,2*n-1)){
+            printf("R%sL\n",res+1);
+        }
+        else printf("-1\n");
+    }
+    return 0;
+}
+</pre>呜呜呜，求求你了€€£！我拿不到一等奖就完蛋了！呜呜呜！€€£ %%%orz。</div>
     <div class="t1">unordered_map比map速度要快，复杂度是O(1)，对于卡常数的题目，要用到map就直接用unordered_map。需要包含头文件：<code>#include &lt;unordered_map&gt;</code></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4568">P4568 [JLOI2011] 飞行路线</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高-</a><pre>
 #include &lt;cstdio&gt;

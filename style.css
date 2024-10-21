@@ -4,6 +4,7 @@
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", "Noto Sans", "Noto Sans CJK SC", "Noto Sans CJK", "Source Han Sans", "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif;
 }
 body{
+    width: 100%;
     overflow-x: hidden;
     /* background-color: #000000d6; */
     display: flex;
