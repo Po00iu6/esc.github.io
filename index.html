@@ -86,8 +86,102 @@
     <br>
     <hr style="z-index: 1;">
     <br>
-    <!--  -->
-    <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
+    <!--  --><div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
+    <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7914">P7914 [CSP-S 2021] 括号序列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>我想了半天也没想出来，看了题解才恍然大悟，这是个动态规划，而且不是一般的动态规划。<pre>
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+using namespace std;
+#define int long long
+#define mod 1000000007
+int n,k,dp[600][600][10];
+char s[600];
+bool comp(int a,int b){
+    return (s[a]=='('||s[a]=='?')&&(s[b]=='?'||s[b]==')');
+}
+signed main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    scanf("%s",s+1);
+    for(int i=1;i&lt;=n;i++)dp[i][i-1][0]=1;
+    for(int len=1;len&lt;=n;len++){
+        for(int l=1;l&lt;=n-len+1;l++){
+            int r=l+len-1;
+            if(len&lt;=k)dp[l][r][0]=dp[l][r-1][0]&&(s[r]=='*'||s[r]=='?');
+            if(len&gt;=2){
+                if(comp(l,r))dp[l][r][1]=(dp[l+1][r-1][0]+dp[l+1][r-1][2]+dp[l+1][r-1][3]+dp[l+1][r-1][4])%mod;
+                for(int i=l;i&lt;=r-1;i++){
+                    dp[l][r][2]=(dp[l][r][2]+dp[l][i][3]*dp[i+1][r][0])%mod;
+                    dp[l][r][3]=(dp[l][r][3]+(dp[l][i][2]+dp[l][i][3])*dp[i+1][r][1])%mod;
+                    dp[l][r][4]=(dp[l][r][4]+(dp[l][i][4]+dp[l][i][5])*dp[i+1][r][1])%mod;
+                    dp[l][r][5]=(dp[l][r][5]+dp[l][i][4]*dp[i+1][r][0])%mod;
+                }
+            }
+            dp[l][r][5]=(dp[l][r][5]+dp[l][r][0])%mod;
+            dp[l][r][3]=(dp[l][r][3]+dp[l][r][1])%mod;
+        }
+    }
+    cout&lt;&lt;dp[1][n][3];
+    return 0;
+}
+</pre>*总结：考场上一定要多想想，找到规律，规律一定是能找到的，只不过你没发现。</div>
+    
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7913">P7913 [CSP-S 2021] 廊桥分配</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>祝贺我把这道题搞懂了！！！<pre>
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+#define maxn 1000050
+#define pii pair&lt;int,int&gt;
+struct node{
+    int x,y;
+    bool operator &lt; (const node &a){
+        return x&lt;a.x||(x==a.x&&y&lt;a.y);
+    }
+}a[maxn],b[maxn];
+
+int n,m1,m2,ans;
+int res1[maxn],res2[maxn];
+
+void sol(node *t,int m,int *res){
+    priority_queue&lt;pii,vector&lt;pii&gt;,greater&lt;pii&gt; &gt; q;
+    priority_queue&lt;int,vector&lt;int&gt;,greater&lt;int&gt; &gt; w;
+    for(int i=1;i&lt;=n;i++)w.push(i);
+    for(int i=1;i&lt;=m;i++){
+        
+        while((!q.empty())&&t[i].x&gt;=q.top().first){
+            w.push(q.top().second);
+            q.pop();
+        }
+        
+        if(w.empty())continue;
+        int dest=w.top();
+        w.pop();
+        res[dest]++;
+        q.push(make_pair(t[i].y,dest));
+    }
+    for(int i=1;i&lt;=n;i++)res[i]+=res[i-1];
+}
+
+int main(){
+    cin&gt;&gt;n&gt;&gt;m1&gt;&gt;m2;
+    for(int i=1;i&lt;=m1;i++){
+        cin&gt;&gt;a[i].x&gt;&gt;a[i].y;
+    }
+    for(int i=1;i&lt;=m2;i++){
+        cin&gt;&gt;b[i].x&gt;&gt;b[i].y;
+    }
+    sort(a+1,a+m1+1);
+    sort(b+1,b+m2+1);
+    sol(a,m1,res1);
+    sol(b,m2,res2);
+    for(int i=0;i&lt;=n;i++){
+        ans= max(ans, res1[i]+res2[n-i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>我来讲解一下啥意思。首先按照飞机入港的时间排序，排好序之后我们用优先队列按顺序存储她们离港的时间。res1和res2数组用来存储国内和国外的廊桥上面停放飞机的前缀和。用w数组模拟飞机过来之后我分配给飞机一个空闲廊桥，暂时不考虑n的分配限制。我们res[i]记录第i个廊桥最多能停多少架飞机，完事之后求res前缀和。最后求答案的时候用for循环遍历i，找到最大的max(res1[i],res[n-i])，即为答案。<br>*总结，这道题卡了很长时间，我真到了考场不一定能想出来。总结一句，还是做题太少了。不过想想，我真的是做题太少了吗？可能是我对数据结构的认识还不够彻底吧。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7915">P7915 [CSP-S 2021] 回文</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>思维题？？？我无话可说。这题代码挺难实现的，我也是想不到这样的解法。<pre>
 #include &lt;cstdio&gt;
 #include &lt;cctype&gt;
