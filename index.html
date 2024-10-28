@@ -91,6 +91,282 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://codeforces.com/problemset/problem/525/E">E. Anya and Cubes</a>这是CF上的一道题目。主要运用了折半查找的算法<pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;unordered_map&gt;
+using namespace std;
+#define LL long long 
+const int N = 30;
+unordered_map&lt;LL,LL&gt; M[N];
+LL fact[N];
+int n,k,a[N];
+LL s,ans;
+void dfs1(int now,int end,LL S,int used){
+    if(used&gt;k){
+        return;
+    }
+    if(now&gt;end){
+        M[used][S]++;
+        return;
+    }
+    dfs1(now+1,end,S,used);
+    dfs1(now+1,end,S+a[now],used);
+    if(a[now]&lt;=20){
+        dfs1(now+1,end,S+fact[a[now]],used+1);
+    }
+}
+void dfs2(int now,int end,LL S,int used){
+    if(used&gt;k){
+        return;
+    }
+    if(S&gt;s){
+        return;
+    }
+    if(now&gt;end){
+        for(int i=0;i&lt;=k-used;i++){
+            ans+=M[i][s-S];
+        }
+        return;
+    }
+    dfs2(now+1,end,S,used);
+    dfs2(now+1,end,S+a[now],used);
+    if(a[now]&lt;=20){
+        dfs2(now+1,end,S+fact[a[now]],used+1);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;k&gt;&gt;s;
+    fact[1]=1;
+    for(int i=2;i&lt;=20;i++){
+        fact[i]=fact[i-1]*i;<span>与处理出20以内的所有数的阶乘</span>
+    }
+    for(int i=1;i&lt;=n;i++){ 
+        cin&gt;&gt;a[i];
+    }
+    dfs1(1,(n+1)/2,0,0); 
+    dfs2((n+1)/2+1,n,0,0);
+    cout&lt;&lt;ans;
+    return 0; 
+}
+    </pre>M意思是选了i个阶乘，和为S</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8819">P8819 [CSP-S 2022] 星战</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>看好了孩子们，哈希是这么用的！<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;map&gt;
+#include &lt;random&gt;
+#include &lt;ctime&gt;
+using namespace std;
+#define N 500001
+int n,m,q;
+unsigned long long sum,ans,val[N],pos[N],pos2[N];
+pair&lt;int ,int &gt; e[N];
+int main(){
+    srand(time(0)),cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        val[i]=rand(),sum+=val[i];
+    }
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;e[i].first&gt;&gt;e[i].second;
+        ans+=val[e[i].first];
+        pos[e[i].second]+=val[e[i].first];
+    }
+    for(int i=1;i&lt;=n;i++)pos2[i]=pos[i];
+    cin&gt;&gt;q;
+    while(q--){
+        int opt;
+        cin&gt;&gt;opt;
+        if(opt==1||opt==3){
+            int x,y;
+            cin&gt;&gt;x&gt;&gt;y;
+            if(opt==1)pos[y]-=val[x],ans-=val[x];
+            else pos[y]+=val[x],ans+=val[x];
+        }
+        if(opt==2||opt==4){
+            int x;cin&gt;&gt;x;
+            if(opt==2)ans-=pos[x],pos[x]=0;
+            else ans+=pos2[x]-pos[x],pos[x]=pos2[x];
+        }
+        puts(sum==ans?"YES":"NO");
+    }
+    return 0;
+}
+</pre><p>暴力解法就是建图，然后按照opt的编号去把边的状态切换成“激活/失活”。之后统计激活的出边为1的点的数量，如果等于n，那么说明可以进攻，换句话说构成了一个环，不过这个环没有其他多余的边。但是压根不用判环，只需要判断出边就好了，参见<a href="https://www.luogu.com.cn/problem/solution/P8819">题解</a>。题解的解答比我的详细多了。这个环还真比较特殊，它叫做<a href="https://oi-wiki.org/graph/concept/">基环内向树</a>。</p></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8818">P8818 [CSP-S 2022] 策略游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>我艹，我调了半天，这辈子也是有了~~~，完了之后才发现错误原因，首先是因为最大值和最小值开小了，但后来使用LONG_LONG_MAX，结果0pts，网上一查才知道，这玩意需要引入头文件<code>#include &lt;climits&gt;</code>真的服了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cctype&gt;
+#include &lt;climits&gt;
+#define int long long
+#define maxn 200000
+#define logN 30
+const int maxinf=LLONG_MAX,mininf=LLONG_MIN;
+using namespace std;
+int f[maxn+1][logN +1],lg[maxn+1];
+inline int max(int a,int b){
+    return a&gt;b?a:b;
+}
+inline int min(int a,int b){
+    return a&lt;b?a:b;
+}
+void pre(){
+    lg[2]=1;
+    for(int i=3;i&lt;=maxn;i++)lg[i]=lg[i&gt;&gt;1]+1;
+}
+inline int read(){
+    int s=0,w=1;char ch=getchar();
+    while(!isdigit(ch)){
+        if(ch=='-')w=-1;
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';
+        ch=getchar();
+    }
+    return s*w;
+}
+int amax[maxn+1][logN+1],bmax[maxn+1][logN+1];
+int amin[maxn+1][logN+1],bmin[maxn+1][logN+1];
+int aupmin[maxn+1][logN+1];
+int adownmax[maxn+1][logN+1];
+int n,m,q,x,y;
+signed main(){
+    n=read(),m=read(),q=read();
+    for(int i=1;i&lt;=n;i++){
+        x=read();
+        amax[i][0]=amin[i][0]=x;
+        aupmin[i][0]=(x&gt;=0?x:maxinf);
+        adownmax[i][0]=(x&lt;0?x:mininf);
+    }
+    for(int i=1;i&lt;=m;i++){
+        x=read();
+        bmax[i][0]=bmin[i][0]=x;
+    }
+    pre();
+    for(int j=1;j&lt;=logN;j++){
+        for(int i=1;i+(1&lt;&lt;j)-1&lt;=n;i++){
+            amax[i][j]=max(amax[i][j-1],amax[i+(1&lt;&lt;(j-1))][j-1]);
+            amin[i][j]=min(amin[i][j-1],amin[i+(1&lt;&lt;(j-1))][j-1]);
+            aupmin[i][j]=min(aupmin[i][j-1],aupmin[i+(1&lt;&lt;(j-1))][j-1]);
+            adownmax[i][j]=max(adownmax[i][j-1],adownmax[i+(1&lt;&lt;(j-1))][j-1]);
+            bmax[i][j]=max(bmax[i][j-1],bmax[i+(1&lt;&lt;(j-1))][j-1]);
+            bmin[i][j]=min(bmin[i][j-1],bmin[i+(1&lt;&lt;(j-1))][j-1]);
+        }
+    }
+    while(q--){
+        int ans=mininf;
+        x=read(),y=read();
+        int s=lg[y-x+1];
+        int a1=max(amax[x][s],amax[y-(1&lt;&lt;s)+1][s]);
+        int a2=min(amin[x][s],amin[y-(1&lt;&lt;s)+1][s]);
+        int a3=max(adownmax[x][s],adownmax[y-(1&lt;&lt;s)+1][s]);
+        int a4=min(aupmin[x][s],aupmin[y-(1&lt;&lt;s)+1][s]);
+        
+        x=read(),y=read();
+        s=lg[y-x+1];
+        int b1=max(bmax[x][s],bmax[y-(1&lt;&lt;s)+1][s]);
+        int b2=min(bmin[x][s],bmin[y-(1&lt;&lt;s)+1][s]);
+        
+        ans=max(ans,a1*(a1&gt;=0?b2:b1));
+        ans=max(ans,a2*(a2&gt;=0?b2:b1));
+        if(a3!=mininf){
+            ans=max(ans,a3*(a3&gt;=0?b2:b1));
+        }
+        if(a4!=maxinf){
+            ans=max(ans,a4*(a4&gt;=0?b2:b1));
+        }
+        cout&lt;&lt;ans&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre>不过通过这道题我也是把ST表玩明白了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8817">P8817 [CSP-S 2022] 假期计划</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a><pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;set&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define int long long
+#define maxn 200000
+#define N 2147483647
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &gt; (const node & a)const{
+        return dis &gt;a.dis;
+    }
+};
+int sc[maxn];
+vector&lt;edge&gt; e[maxn];
+int dis[3000][3000],vis[maxn];
+priority_queue&lt;node,vector&lt;node&gt;,greater&lt;node&gt; &gt; q;
+void dijkstra(int s){
+    dis[s][s]=0;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(int i=0;i&lt;e[u].size();i++){
+            edge ed=e[u][i];
+            int v=ed.v,w=ed.w;
+            if(dis[s][v]&gt;dis[s][u]+w){
+                dis[s][v]=dis[s][u]+w;
+                q.push({dis[s][v],v});
+            }
+        }
+    }
+}
+set&lt;pair&lt;int,int&gt; &gt; s[maxn];
+int n,m,ans,k;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k;
+    for(int i=2;i&lt;=n;i++){
+        cin&gt;&gt;sc[i];
+    }
+    for(int i=1,x,y;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        e[x].push_back({y,1});
+        e[y].push_back({x,1});
+    }
+    memset(dis,0x3f,sizeof(dis));
+    for(int i=1;i&lt;=n;i++){
+        memset(vis,0,sizeof(vis));
+        dijkstra(i);
+    }
+
+    <span>//------上面都是dijkstra算法模板，直接套就好-----</span>
+
+    k++;
+    for(int i=2;i&lt;=n;i++){
+        for(int j=2;j&lt;=n;j++){
+            if(i==j)continue;
+            if(dis[i][j]&lt;=k&&dis[1][j]&lt;=k)
+                s[i].insert({sc[j],j});<span>//这里的first虽然不会用到，但是是为了使set内元素有序而加入的。因为set的元素是pair时，set会先按照first排序，如果first相等，在按照second排序。</span>
+            if(s[i].size()&gt;3)s[i].erase(s[i].begin());<span>//这里是为了维护前2大，size大于3直接把set的底部元素删掉。（也就是删最小的sc）</span>
+        }
+    }
+    for(int b=2;b&lt;=n;b++){
+        for(int c=2;c&lt;=n;c++){
+            if(b==c||dis[b][c]&gt;k)continue;
+            for(auto a:s[b]){
+                if(a.second==b||a.second==c)continue;
+                for(auto d : s[c]){
+                    if(d.second==b||d.second==c||d.second==a.second)continue;
+                    ans=max(ans,sc[a.second]+sc[b]+sc[c]+sc[d.second]);
+                }
+            }
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这里通过预处理达到n^2的复杂度，如果暴力解法的话，那就是dijkstra完事之后就枚举四个景点，四层循环，判断景点之间的距离要小于k，时间复杂度是n^4只能拿75分。我们可以预处理第一个点和最后一个点，再处理第二个和第三个点。时间复杂度直接降到了O(2*n²)=O(n²)，其中set查找的时间复杂度只有2，常数级忽略不计。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7914">P7914 [CSP-S 2021] 括号序列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>我想了半天也没想出来，看了题解才恍然大悟，这是个动态规划，而且不是一般的动态规划。<pre>
 #include &lt;cstdio&gt;
 #include &lt;iostream&gt;
