@@ -91,6 +91,76 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2085">P2085 最小函数值</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>AC了！<br><b>啊~这灼热的真理！</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+using namespace std;
+#define maxn 200000
+#define int long long
+int n,m;
+priority_queue&lt;int&gt; q;
+priority_queue&lt;int,vector&lt;int&gt;,greater&lt;int&gt; &gt; qr;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    int a,b,c;
+    cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+    for(int i=1;i&lt;=m;i++){
+        q.push(a*i*i+b*i+c);
+    }
+    for(int i=2;i&lt;=n;i++){
+        cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+        for(int j=1;j&lt;=m;j++){
+            if((!q.empty())&&a*j*j+b*j+c&lt;q.top()){
+                q.pop();q.push(a*j*j+b*j+c);
+            }
+        }
+    }
+    while(!q.empty()){
+        qr.push(q.top());q.pop();
+    }
+    while(!qr.empty()){
+        cout&lt;&lt;qr.top()&lt;&lt;' ';qr.pop();
+    }
+    return 0;
+}
+    </pre>用一个大顶堆维护前10个小的数，如果新来的数比堆顶还小，那么弹出堆顶，把新来的放进去。最后把大顶堆的数转移到小顶堆，输出小顶堆即可。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1631">P1631 序列合并</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题我还是有点糊涂~<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+using namespace std;
+#define maxn 200000
+#define int long long
+#define pint pair&lt;int,int&gt;
+int n,a[maxn],b[maxn],to[maxn];
+priority_queue&lt;pint,vector&lt;pint&gt;,greater&lt;pint&gt; &gt; q;
+signed main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;b[i];
+        to[i]=1;
+        q.push(make_pair(a[1]+b[i],i));
+    }
+    int i=n;
+    while(n--){
+        cout&lt;&lt;q.top().first&lt;&lt;' ';
+        i=q.top().second;q.pop();
+        q.push(make_pair(a[++to[i]]+b[i],i));
+    }
+    return 0;
+}
+</pre>详细解答见题解区：<a href="https://www.luogu.com.cn/problem/solution/P1631">@ysner
+ 大佬的解答</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1168">P1168 中位数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是维护两个队列，使其时钟保持两队列size相等。不断更新mid中位数的值，可以想象成不断吃了又吐的过程。<pre>
 #include &lt;iostream&gt;
 #include &lt;queue&gt;
