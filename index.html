@@ -91,6 +91,204 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1471">P1471 方差</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>太厉害了，这道题完美的让线段树与数学结合在了一起，让我们充分领略了西格玛求和函数在线段树中的应用。不过太难了，我抄的答案。呜呜呜<pre>
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#define lson rt&lt;&lt;1,l,mid
+#define rson rt&lt;&lt;1|1,mid+1,r
+#define maxn 300010
+using namespace std;
+double sega[maxn],segb[maxn];
+double mark[maxn];
+void pushup(int x){
+    sega[x]=sega[x&lt;&lt;1]+sega[x&lt;&lt;1|1];
+    segb[x]=segb[x&lt;&lt;1]+segb[x&lt;&lt;1|1];
+}
+void pushdown(int rt,int x){
+    if(mark[rt]){
+        segb[rt&lt;&lt;1]+=2*mark[rt]*sega[rt&lt;&lt;1]+(x-x/2)*mark[rt]*mark[rt];
+        segb[rt&lt;&lt;1|1]+=2*mark[rt]*sega[rt&lt;&lt;1|1]+(x/2)*mark[rt]*mark[rt];
+        sega[rt&lt;&lt;1]+=(x-x/2)*mark[rt];
+        sega[rt&lt;&lt;1|1]+=(x/2)*mark[rt];
+        mark[rt&lt;&lt;1]+=mark[rt];
+        mark[rt&lt;&lt;1|1]+=mark[rt];
+        mark[rt]=0;
+    }
+}
+void build(int rt,int l,int r){
+    if(l==r){
+        cin&gt;&gt;sega[rt],segb[rt]=sega[rt]*sega[rt];
+    }
+    else{
+        int mid=l+r&gt;&gt;1;
+        build(lson);
+        build(rson);
+        pushup(rt);
+    }
+}
+double query_a(int rt,int l,int r,int L,int R){
+    if(l&gt;=L&&r&lt;=R){
+        return sega[rt];
+    }
+    else{
+        pushdown(rt,r-l+1);
+        int mid=r+l&gt;&gt;1;
+        double ret=0;
+        if(mid&gt;=L){
+            ret+=query_a(lson,L,R);
+        }
+        if(mid&lt;R){
+            ret+=query_a(rson,L,R);
+        }
+        return ret;
+    }
+}
+
+double query_b(int rt,int l,int r,int L,int R){
+    if(l&gt;=L&&r&lt;=R){
+        return segb[rt];
+    }
+    else{
+        pushdown(rt,r-l+1);
+        int mid=r+l&gt;&gt;1;
+        double ret=0;
+        if(mid&gt;=L){
+            ret+=query_b(lson,L,R);
+        }
+        if(mid&lt;R){
+            ret+=query_b(rson,L,R);
+        }
+        return ret;
+    }
+}
+void update(int rt,int l,int r,int L,int R,double x){
+    if(l&gt;=L&&r&lt;=R){
+        mark[rt]+=x,segb[rt]+=2*x*sega[rt]+x*x*(r-l+1),sega[rt]+=(r-l+1)*x;
+    }
+    else{
+        pushdown(rt,r-l+1);
+        int mid=r+l&gt;&gt;1;
+        if(mid&gt;=L){
+            update(lson,L,R,x);
+        }
+        if(mid&lt;R){
+            update(rson,L,R,x);
+        }
+        pushup(rt);
+    }
+}
+double sqr(double x){
+    return x*x;
+}
+int main(){
+    int n,m,x,y,c;
+    double z;
+    cin&gt;&gt;n&gt;&gt;m;
+    build(1,1,n);
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;c;
+        if(c==2){
+            cin&gt;&gt;x&gt;&gt;y;
+            printf("%.4lf\n",query_a(1,1,n,x,y)/(y-x+1));
+        }
+        else if(c==1){
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
+            update(1,1,n,x,y,z);
+        }
+        else if(c==3){
+            cin&gt;&gt;x&gt;&gt;y;
+            double sum1=query_b(1,1,n,x,y)/(y-x+1),sum2=query_a(1,1,n,x,y)/(y-x+1);
+            double ans=sum1-sum2*sum2;
+            printf("%.4lf\n",ans);
+        }
+    }
+}
+</pre>做这道题需要我们先展开求和公式，然后化简得到最基本的公式，然后转化成代码求解，跟普通的线段树找区间和是一样的，只不过这里变成了公式推导以及对于平方的处理。<p>感谢<a href="https://www.luogu.com.cn/problem/solution/P1471">@远航之曲
+</a>的题解。</p>%%% orz</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4513">P4513 小白逛公园</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是一道很好的最大连续子段和例题，建议记住。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define ll long long
+#define maxn 500010
+#define lc l,m,rt&lt;&lt;1
+#define rc m+1,r,rt&lt;&lt;1|1
+struct Tree{
+    int pre,suf,sub,val;
+}tree[maxn&lt;&lt;2];
+Tree pushup(Tree l,Tree r){
+    Tree rt;
+    rt.pre=max(l.pre,l.val+r.pre);
+    rt.suf=max(r.suf,r.val+l.suf);
+    rt.sub=max(max(l.sub,r.sub),l.suf+r.pre);
+    rt.val=l.val+r.val;
+    return rt;
+}
+void build(int l,int r,int rt){
+    if(l==r){
+        cin&gt;&gt;tree[rt].val;
+        tree[rt].pre=tree[rt].suf=tree[rt].sub=tree[rt].val;
+        return;
+    }
+    int m=l+r&gt;&gt;1;
+    build(lc);
+    build(rc);
+    tree[rt]=pushup(tree[rt&lt;&lt;1],tree[rt&lt;&lt;1|1]);
+}
+void update(int pos,int c,int l,int r,int rt){
+    if(l==r){
+        tree[rt].pre=tree[rt].suf=tree[rt].sub=tree[rt].val=c;
+        return;
+    }
+    int m=l+r&gt;&gt;1;
+    if(pos&lt;=m)update(pos,c,lc);
+    if(pos&gt;m)update(pos,c,rc);
+    tree[rt]=pushup(tree[rt&lt;&lt;1],tree[rt&lt;&lt;1|1]);
+}
+Tree query(int L,int R,int l,int r,int rt){
+    if(L&lt;=l&&r&lt;=R){
+        return tree[rt];
+    }
+    int m=l+r&gt;&gt;1;
+    Tree ret,lret,rret;
+    int flag1=0,flag2=0;
+    if(L&lt;=m){
+        lret=query(L,R,lc);flag1=1;
+    }
+    if(R&gt;m){
+        rret=query(L,R,rc);flag2=1;
+    }
+    if(flag1&flag2){
+        ret=pushup(lret,rret);
+    }
+    else if(flag1)ret=lret;
+    else if(flag2)ret=rret;
+    return ret;
+}
+int n,m;
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    build(1,n,1);
+    for(int i=1;i&lt;=m;i++){
+        int op;
+        cin&gt;&gt;op;
+        if(op==1){
+            int l,r;
+            cin&gt;&gt;l&gt;&gt;r;
+            if(l&gt;r)swap(l,r);
+            Tree ans=query(l,r,1,n,1);
+            cout&lt;&lt;ans.sub&lt;&lt;'\n';
+        }
+        else{
+            int p,s;
+            cin&gt;&gt;p&gt;&gt;s;
+            update(p,s,1,n,1);
+        }
+    }
+    return 0;
+}
+</pre>这篇代码来源于博客:<a href="https://www.cnblogs.com/ZERO-/p/10679858.html">洛谷 P4513 小白逛公园-区间最大子段和-分治+线段树区间合并(单点更新、区间查询)</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P2085">P2085 最小函数值</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>AC了！<br><b>啊~这灼热的真理！</b><pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
