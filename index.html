@@ -91,6 +91,159 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.cnblogs.com/lingspace/p/p5666.html">P5666 [CSP-S2019] 树的重心</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题看不懂。呜呜呜~<pre>
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+typedef long long ll;
+
+const int maxn = 3e5 + 5;
+const int maxm = 6e5 + 5;
+const int inf = 0x3f3f3f3f;
+
+int t, n, rt, u, v;
+int head[maxn], sz[maxn], mx[maxn];
+bool vis[maxn];
+ll ans;
+vector&lt;int&gt; g[maxn];
+
+struct node
+{
+    int to, nxt;
+} edge[maxm];
+
+struct BIT
+{
+    int c[maxn];
+
+    void clear() { memset(c, 0, (n + 2) * sizeof(int)); }
+
+    int lowbit(int x) { return x & (-x); }
+
+    void update(int p, int w) { p++; for (int i = p; i &lt;= n + 1; i += lowbit(i)) c[i] += w; }
+
+    int query(int p)
+    {
+        int res = 0;
+        p++;
+        for (int i = p; i; i -= lowbit(i)) res += c[i];
+        return res;
+    }
+} c1, c2;
+
+void dfs1(int x, int f)
+{
+    bool is_rt = true;
+    sz[x] = 1, mx[x] = 0;
+    for (int y : g[x])
+    {
+        if (y == f) continue;
+        dfs1(y, x);
+        sz[x] += sz[y];
+        mx[x] = max(mx[x], sz[y]);
+        if (sz[y] &gt; (n &gt;&gt; 1)) is_rt = false;
+    }
+    if (n - sz[x] &gt; (n &gt;&gt; 1)) is_rt = false;
+    if (is_rt) rt = x;
+}
+
+void dfs2(int x, int f)
+{
+    c1.update(sz[f], -1);
+    c1.update(n - sz[x], 1);
+    vis[x] |= vis[f];
+    if (x != rt)
+    {
+        ans += 1ll * x * c1.query(n - 2 * mx[x]);
+        ans -= 1ll * x * c1.query(n - 2 * sz[x] - 1);
+        ans += 1ll * x * c2.query(n - 2 * mx[x]);
+        ans -= 1ll * x * c2.query(n - 2 * sz[x] - 1);
+        ans += 1ll * rt * (int)(sz[x] &lt;= n - 2 * sz[vis[x] ? v : u]);
+    }
+    c2.update(sz[x], 1);
+    for (int y : g[x])
+    {
+        if (y == f) continue;
+        dfs2(y, x);
+    }
+    c1.update(sz[f], 1);
+    c1.update(n - sz[x], -1);
+    if (x != rt)
+    {
+        ans -= 1ll * x * c2.query(n - 2 * mx[x]);
+        ans += 1ll * x * c2.query(n - 2 * sz[x] - 1);
+    }
+}
+
+int main()
+{
+    scanf("%d", &t);
+    while (t--)
+    {
+        scanf("%d", &n);
+        for (int i = 1; i &lt;= n; i++) g[i].clear();
+        for (int i = 1, u, v; i &lt;= n - 1; i++)
+        {
+            scanf("%d%d", &u, &v);
+            g[u].push_back(v);
+            g[v].push_back(u);
+        }
+        ans = 0ll;
+        dfs1(1, 0);
+        dfs1(rt, 0);
+        u = v = 0;
+        for (int x : g[rt])
+        {
+            if (sz[x] &gt; sz[v]) v = x;
+            if (sz[v] &gt; sz[u]) swap(u, v);
+        }
+        c1.clear(), c2.clear();
+        for (int i = 0; i &lt;= n; i++) c1.update(sz[i], 1), vis[i] = false;
+        vis[u] = true;
+        dfs2(rt, 0);
+        printf("%lld\n", ans);
+    }
+    return 0;
+}
+</pre>题解抄自博客园。<a href="https://www.cnblogs.com/lingspace/p/p5666.html">博客园题解</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2052">P2052 [NOI2011] 道路修建</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>我以为dfs时间复杂度会非常高，结果居然过了！数据范围10^6，这告诉了我们，有时候你越是想要正解，越容易出错，还不如先把暴力打一遍，说不定暴力即正解。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 1500000
+#define int long long
+struct edge{
+    int v,w;
+};
+vector&lt;edge&gt; e[maxn];
+int n;
+int size[maxn],ans;
+void dfs(int u,int fa){
+    size[u]=1;
+    for(auto ed:e[u]){
+        if(ed.v==fa)continue;
+        dfs(ed.v,u);
+        size[u]+=size[ed.v];
+        ans+=ed.w*abs(2*size[ed.v]-n);
+    }
+}
+signed main(){
+    cin&gt;&gt;n;
+    for(int i=1,x,y,w;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+        e[y].push_back({x,w});
+    }
+    dfs(1,0);
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这里要特别注意dfs的时候要传入当前节点编号还有父节点编号，至于为什么，其实我也不清楚，如果不这么做，dfs会无限循环。</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3369">P3369 【模板】普通平衡树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>平衡树速度可真快。但代码老长了~<pre>
 #include &lt;iostream&gt;
 using namespace std;
