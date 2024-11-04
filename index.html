@@ -91,6 +91,453 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2680">P2680 [NOIP2015 提高组] 运输计划</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题注意数组开大一点。需要使用tarjan算法解决，还有lca。但是我不会呜呜呜。还有二分答案，<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 300005
+struct edge{
+    int next,to,dis;
+}e[2*maxn],q[2*maxn];
+struct length{
+    int len,lca,u,v;
+}len[maxn];
+int head[maxn],cnt,headq[maxn],dis[maxn],maxlen,n,m,a[maxn],ans,s[maxn],num,ret,f[maxn];
+bool vis[maxn];
+inline  void add_edge(int x,int y,int d){
+    e[++cnt].next=head[x];
+    e[cnt].to=y;
+    e[cnt].dis=d;
+    head[x]=cnt;
+}
+inline void add_que(int x,int y){
+    q[++cnt].next=headq[x];
+    q[cnt].to=y;
+    headq[x]=cnt;
+}
+int find(int x){
+    return f[x]==x?f[x]:f[x]=find(f[x]);
+}
+void dfs(int u,int pre){
+    for(int i=head[u];i;i=e[i].next){
+        int v=e[i].to;
+        if(v==pre){
+            continue;
+        }
+        dfs(v,u);
+        s[u]+=s[v];
+    }
+    if(s[u]==num&&a[u]&gt;ret){
+        ret=a[u];
+    }
+}
+inline bool check(int x){
+    memset(s,0,sizeof(s));
+    num=ret=0;
+    for(int i=1;i&lt;=m;i++){
+        if(len[i].len&gt;x){
+            s[len[i].u]++;
+            s[len[i].v]++;
+            s[len[i].lca]-=2;
+            num++;
+        }
+    }
+    dfs(1,0);
+    if(maxlen-ret&gt;x){
+        return 0;
+    }
+    return 1;
+}
+void tarjan(int u,int pre){
+    for(int i=head[u];i;i=e[i].next){
+        int v=e[i].to;
+        if(v==pre){
+            continue;
+        }
+        dis[v]=dis[u]+e[i].dis;
+        tarjan(v,u);
+        a[v]=e[i].dis;
+        int f1=find(v);
+        int f2=find(u);
+        if(f1!=f2){
+            f[f1]=find(f2);
+        }
+        vis[v]=1;
+    }
+    for(int i=headq[u];i;i=q[i].next){
+        if(vis[q[i].to]){
+            int p=(i+1)&gt;&gt;1;
+            len[p].lca=find(q[i].to);
+            len[p].len=dis[u]+dis[q[i].to]-2*dis[len[p].lca];
+            maxlen=max(maxlen,len[p].len);
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;n;i++){
+        int ai,bi,ti;
+        cin&gt;&gt;ai&gt;&gt;bi&gt;&gt;ti;
+        add_edge(ai,bi,ti);
+        add_edge(bi,ai,ti);
+    }
+    for(int i=1;i&lt;=n;i++){
+        f[i]=i;
+    }
+    cnt=0;
+    for(int i=1;i&lt;=m;i++){
+        int x,y;
+        cin&gt;&gt;x&gt;&gt;y;
+        len[i].u=x;
+        len[i].v=y;
+        add_que(x,y);
+        add_que(y,x);
+    }
+    tarjan(1,0);
+    int l=0,r=maxlen,mid;
+    while(l&lt;=r){
+        mid=(l+r)&gt;&gt;1;
+        if(check(mid)){
+            r=mid-1;
+            ans=mid;
+        }
+        else{
+            l=mid+1;
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre><a href="https://www.luogu.com.cn/problem/solution/P2680">题解区代码@communist</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3398">P3398 仓鼠找 sugar</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题暴力解法可以拿40分，暴力搜索a到b的最短路，然后把最短路径用set记录下来，然后找c到d的最短路，记录路径，然后查找c到d的路径上的点在不在set中，如果存在一个，则直接break输出Y，否则输出N。结果超时40pts。正解需要lca求公共祖先，如果存在公共祖先，则有交点。<pre>
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#define maxn 200000
+using namespace std;
+struct edge{
+    int v,pre;
+}e[maxn&lt;1];
+int n,t,fst[maxn],dep[maxn],dp[maxn][19];
+int vis[maxn],lg[maxn];
+int abs(int x){
+    return x&gt;0?x:-x;
+}
+void swap(int &x,int &y){
+    x^=y^=x^=y;
+}
+inline void addedge(int a,int b,int k){
+    e[k]=(edge){b,fst[a]};
+    fst[a]=k;
+}
+void build(int k,int d){
+    vis[k]=1,dep[k]=d;
+    for(int o=fst[k];o;o=e[o].pre){
+        if(!vis[e[o].v])dp[e[o].v][0]=k,build(e[o].v,d+1);
+    }
+}
+void prepare(int k){
+    vis[k]=0;
+    for(int i=1;i&lt;=lg[dep[k]];i++){
+        dp[k][i]=dp[dp[k][i-1]][i-1];
+    }
+    for(int o=fst[k];o;o=e[o].pre){
+        if(vis[e[o].v])prepare(e[o].v);
+    }
+}
+void init(){
+    cin&gt;&gt;n&gt;&gt;t;
+    for(int i=1,a,b,c;i&lt;n;i++){
+        cin&gt;&gt;a&gt;&gt;b;
+        addedge(a,b,i);
+        addedge(b,a,i+n);
+    }
+    build(1,0);
+    for(int i=1;i&lt;=n;i++){
+        lg[i]=lg[i-1]+((1&lt;(lg[i-1]+1))==i);
+    }
+    prepare(1);
+}
+int lca(int a,int b){
+    if(dep[a]&lt;dep[b])swap(a,b);
+    while(dep[a]&gt;dep[b])a=dp[a][lg[dep[a]-dep[b]]];
+    if(a==b)return a;
+    for(int i=lg[dep[a]];i&gt;=0;i--){
+        if(dp[a][i]!=dp[b][i])a=dp[a][i],b=dp[b][i];
+    }
+    return dp[a][0];
+}
+inline int dis(int a,int b){
+    int c=lca(a,b);
+    return abs(dep[c]-dep[a])+abs(dep[c]-dep[b]);
+}
+void work(){
+    for(int a,b,c,d,x,y;t;t--){
+        cin&gt;&gt;a&gt;&gt;b&gt;&gt;c&gt;&gt;d;
+        x=lca(a,b),y=lca(c,d);
+        if(dis(a,y)+dis(b,y)==dis(a,b)||dis(c,x)+dis(d,x)==dis(c,d))puts("Y");
+        else puts("N");
+    }
+}
+int main(){
+    init();
+    work();
+    return 0;
+}
+</pre>正解代码在题解区。<a href="https://www.luogu.com.cn/problem/solution/P3398">@zhyh</a><b>进食后人：不要对着抄，否则TLE，因为有些函数返回值要改成void。</b></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4408">P4408 [NOI2003] 逃学的小孩</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>唯一一个做出来的蓝题，纪念一下！OHHH~~~~.解法十分简单，2遍dij求出直径，然后再开2个dis数组枚举C点，然后求出max(min(disA[C],disB[C])+直径[A][B])就是答案了。<pre>
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 300000
+#define int long long
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &gt; (const node &a)const {
+        return dis&gt; a.dis;
+    }
+};
+int dis[maxn];
+vector&lt;edge&gt; e[maxn];
+bool vis[maxn];
+int n,m;
+void dij(int s){
+    memset(vis,0,sizeof(vis));
+    dis[s]=0;
+    priority_queue&lt;node,vector&lt;node&gt;,greater&lt;node&gt; &gt; q;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                q.push({dis[v],v});
+            }
+        }
+    }
+}
+int disA[maxn],disB[maxn];
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+        e[y].push_back({x,w});
+    }
+    memset(dis,0x3f,sizeof(dis));
+    dij(1);
+    int maxp=0,p;
+    for(int i=1;i&lt;=n;i++){
+        if(dis[i]&gt;maxp){
+            maxp=dis[i];p=i;
+        }
+    }
+    memset(dis,0x3f,sizeof(dis));
+    
+    dij(p);
+    int A=p;
+    memcpy(disA,dis,sizeof(disA));
+    maxp=0,p;
+    for(int i=1;i&lt;=n;i++){
+        if(dis[i]&gt;maxp){
+            maxp=dis[i];p=i;
+        }
+    }
+    memset(dis,0x3f,sizeof(dis));
+    dij(p);
+    memcpy(disB,dis,sizeof(disB));
+    int B=p;
+    
+    int ans=0;
+    for(int i=1;i&lt;=n;i++){
+        ans=max(ans,min(disA[i],disB[i])+maxp);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>看来我的IQ还是够的。别忘了开long long。思路同题解区第一篇。<a href="https://www.luogu.com.cn/problem/solution/P4408">题解区@C3H5ClO</a>。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1351">P1351 [NOIP2014 提高组] 联合权值</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题是用树型结构解题，我们枚举每一个中转点就好了。<pre>
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+using namespace std;
+#define maxn 400005
+struct edge{
+    int next;
+    int to;
+}a[maxn];
+int edgenum,head[maxn],w[maxn];
+int n,ans,maxx;
+void add(int u,int v){
+    a[++edgenum].next=head[u];
+    a[edgenum].to=v;
+    head[u]=edgenum;
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;n;i++){
+        int u,v;
+        cin&gt;&gt;u&gt;&gt;v;
+        add(u,v);
+        add(v,u);
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;w[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        int max1=0,max2=0;
+        int t1=0,t2=0;
+        for(int j=head[i];j;j=a[j].next){
+            if(w[a[j].to]&gt;max1)max2=max1,max1=w[a[j].to];
+            else if(w[a[j].to]&gt;max2)max2=w[a[j].to];
+            t1=(t1+w[a[j].to])%10007;
+            t2=(t2+w[a[j].to]*w[a[j].to])%10007;
+        }
+        t1=t1*t1%10007;
+        ans=(ans+t1+10007-t2)%10007;
+        if(maxx&lt;max1*max2)maxx=max1*max2;
+    }
+    cout&lt;&lt;maxx&lt;&lt;" "&lt;&lt;ans;
+    return 0;
+}
+    </pre>题解在题解区。<a href="https://www.luogu.com.cn/problem/solution/P1351">题解区。第一篇就是。@wucstdio</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1315">P1315 [NOIP2011 提高组] 观光公交</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是经典贪心题，用不到图论哦！<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int maxn = 10003;
+int n,m,k,d[maxn];
+struct people{
+    int kaishi,chufabianhao,daodabianhao;
+}a[maxn];
+struct zhandian{
+    int daoda,zuiwan,person;
+}b[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k;
+    for(int i=1;i&lt;n;i++)cin&gt;&gt;d[i];
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;a[i].kaishi&gt;&gt;a[i].chufabianhao&gt;&gt;a[i].daodabianhao;
+        ++b[a[i].daodabianhao].person;
+        b[a[i].chufabianhao].zuiwan=max(b[a[i].chufabianhao].zuiwan,a[i].kaishi);
+    }
+    int wudan_time=0;
+    for(int i=1;i&lt;=n;i++){
+        b[i].daoda=wudan_time;
+        wudan_time=max(wudan_time,b[i].zuiwan)+d[i];
+    }
+    while(k--){
+        int max_preson=0,max_zhandian=0;
+        for(int i=2;i&lt;=n;i++){
+            if(!d[i-1])continue;
+            int now_preson=0;
+            for(int j=i;j&lt;=n;j++){
+                now_preson+=b[j].person;
+                if(b[j].daoda&lt;=b[j].zuiwan)break;
+            }
+            if(now_preson&gt;max_preson){
+                max_preson=now_preson;
+                max_zhandian=i;
+            }
+        }
+        --d[max_zhandian-1];
+        for(int i=max_zhandian;i&lt;=n;i++){
+            --b[i].daoda;
+            if(b[i].daoda&lt;b[i].zuiwan)break;
+        }
+    }
+    int ans=0;
+    for(int i=1;i&lt;=m;i++){
+        ans+=b[a[i].daodabianhao].daoda-a[i].kaishi;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>题解来自于博客园。<a href="https://www.cnblogs.com/xsl19/p/noip2011_day2t3.html">博客园题解。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5836">P5836 [USACO19DEC] Milk Visits S</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题要用并查集，题目并不难，我看着像并查集，但我没想出来，看了题解才知道原来这么简单。注意并查集的合并得是fa[find(x)]=find(fa[y])才行，否则WA。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 200000
+int fa[maxn];
+int find(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=find(fa[x]);
+}
+void merge(int u,int v){
+    fa[find(u)]=find(fa[v]);
+}
+int n,k;
+char col[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+        cin&gt;&gt;col[i];
+    }
+    for(int i=1,x,y;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        if(col[x]==col[y])merge(x,y);
+    }
+    while(k--){
+        int x,y;char c;
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;c;
+        if(find(x)==find(y)&&col[x]!=c)cout&lt;&lt;0;
+        else cout&lt;&lt;1;
+    }
+    return 0;
+}
+</pre><a href="https://www.luogu.com.cn/problem/solution/P5836">题解区。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5536">P5536 【XR-3】核心城市</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题的解法是真的逆天啊！可以选择找树的直径，然后找直径中点，由中点向外发散k个核心城市。也可以拓扑排序从外向内找非核心城市，求ans最大值。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 200000
+vector&lt;int&gt; e[maxn];
+int n,k,du[maxn],size[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1,x,y;i&lt;n;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        e[x].push_back(y);
+        e[y].push_back(x);
+    }
+    queue&lt;int&gt; q;
+    for(int i=1;i&lt;=n;i++){
+        du[i]=e[i].size();
+        if(du[i]==1)q.push(i);
+    }
+    int m=n-k,ans=0;
+    while(m--){
+        int u=q.front();q.pop();
+        ans=max(ans,size[u]);
+        for(auto v:e[u]){
+            if(--du[v]==1){
+                size[v]=size[u]+1;
+                q.push(v);
+            }
+        }
+    }
+    cout&lt;&lt;ans+1;
+    return 0;
+}
+</pre>这说明我们在学习新算法的同时，不要忘了基础算法。<a href="https://www.luogu.com.cn/article/8zm2qhcz">逆天题解</a><a href="https://www.cnblogs.com/pure4knowledge/p/18111333">逆天代码。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5588">P5588 小猪佩奇爬树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题好难，不会。代码在题解区~~~<a href="https://www.luogu.com.cn/problem/solution/P5588">题解区</a></div>
     <div class="t1"><a href="https://www.cnblogs.com/lingspace/p/p5666.html">P5666 [CSP-S2019] 树的重心</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题看不懂。呜呜呜~<pre>
 #include &lt;cstdio&gt;
 #include &lt;cstring&gt;
