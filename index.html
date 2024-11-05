@@ -91,6 +91,513 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1875">P1875 佳佳的魔法药水</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是Dijkstra的魔改题，乍一看看过去无从下手，其实暗藏玄鸡。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 1200
+int dis[maxn][maxn],vis[maxn],cnt[maxn],n,cost[maxn];
+void dij(){
+    for(int i=1;i&lt;=n;i++){
+        int t=0;
+        for(int j=1;j&lt;=n;j++){
+            if(vis[j])continue;
+            if(!t||cost[j]&lt;cost[t]){<span>//这里有一个!t别忘了哦~</span>
+                <span>//初始状态当t==0时是可以更新的哦！</span>
+                t=j;
+            }
+        }
+        vis[t]=1;
+        for(int j=1;j&lt;=n;j++){
+            int d=dis[t][j];
+            if(vis[j]&&d){
+                if(cost[d]&gt;cost[t]+cost[j]){
+                    cost[d]=cost[t]+cost[j];
+                    cnt[d]=cnt[t]*cnt[j];
+                }
+                else if(cost[d]==cost[t]+cost[j]){
+                    cnt[d]+=cnt[t]*cnt[j];
+                }
+            }
+        }
+    }
+}
+signed main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;cost[i];
+    int x,y,z;
+    while(cin&gt;&gt;x&gt;&gt;y&gt;&gt;z){
+        x++,y++,z++;
+        dis[x][y]=z;
+        dis[y][x]=z;
+    }
+    for(int i=1;i&lt;=n;i++){
+        cnt[i]=1;
+    }
+    dij();
+    cout&lt;&lt;cost[1]&lt;&lt;' '&lt;&lt;cnt[1];
+    return 0;
+}
+    </pre>用一个二维数组存储药水之间的合成关系，然后利用贪心思想找出每一种药水的最小配置方案，之后由已知往未知配。别忘了x++,y++,z++,否则cnt[1]和cost[1]指向的就不是0，而是1。还有贪心取最小花费的时候别忘了行开始t==0要允许也就是代码中标绿色注释的那个。具体详情见CSDN题解。<a href="https://blog.csdn.net/weixin_51797626/article/details/122589925">CSDN题解。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1144">P1144 最短路计数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题乍一看似乎有点问的不合理，明明都已经是最短路了怎么会有多个？其实是因为最短路有相同的。稍微对Dijkstra改造一下就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 2000000
+#define mod 100003
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &lt; (const node &a)const{
+        return dis&gt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],vis[maxn],cnt[maxn];
+void dij(int s){
+    memset(dis,0x3f,sizeof(dis));
+    memset(vis,0,sizeof(vis));
+    priority_queue&lt;node&gt; q;
+    dis[s]=0;cnt[s]=1;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed : e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                cnt[v]=cnt[u];
+                cnt[v]%=mod;
+                q.push({dis[v],v});
+            }
+            else if(dis[v]==dis[u]+w){
+                cnt[v]+=cnt[u];
+                cnt[v]%=mod;
+            }
+        }
+    }
+}
+int n,m;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,x,y;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        e[x].push_back({y,1});
+        e[y].push_back({x,1});
+    }
+    dij(1);
+    for(int i=1;i&lt;=n;i++){
+        cout&lt;&lt;cnt[i]&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre>其中cnt数组就是用来记录相同的最短路有多少个的。如果dis[v]==dis[u]+w了说明有相同的最短路，那么我们就在前面那个最短路的基础上累加就好了，为什么要累加，其实就是组合数学当中的加法原理。如果走了上面按那个判断，那么就覆盖。最后别忘了mod。<a href="https://www.luogu.com.cn/problem/solution/P1144">参考题解区@ZiDing_ByronFinlso的文章。</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/B3611">B3611 【模板】传递闭包</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>为了理解传递闭包是什么勾八东西，我才做了这道题，简单的一批。但我仍然不知道什么是传递闭包，貌似只要能从某个点到达某个点就叫“存在传递闭包”。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;climits&gt;
+using namespace std;
+#define maxn 500
+#define int long long
+int dis[maxn][maxn],b[maxn][maxn];
+int n;
+signed main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            cin&gt;&gt;dis[i][j];
+            if(!dis[i][j]){
+                dis[i][j]=0x3f3f3f3f;
+            }
+        }
+    }
+    for(int k=1;k&lt;=n;k++){
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=n;j++){
+                dis[i][j]=min(dis[i][j],dis[i][k]+dis[k][j]);
+                if(dis[i][j]!=0x3f3f3f3f){
+                    b[i][j]=1;
+                }
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            cout&lt;&lt;b[i][j]&lt;&lt;' ';
+        }cout&lt;&lt;'\n';
+    }
+    return 0;
+}
+    
+</pre>没有题解，因为太简单了。我就是题解好吧，用Floyd就能解出来了。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2910">P2910 [USACO08OPEN] Clear And Present Danger S</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题注意数据范围。另外要注意题目中的一句话：<b>约翰从1号小岛出发，最后到达n号小岛</b>f数组当中的第一个数字不一定是1，最后一个数字也不一定是n，因此最后还要ans+=dis[1][f[1]]和ans+=dis[f[m]][n];代码如下。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;climits&gt;
+using namespace std;
+#define maxn 500
+#define int long long
+int dis[maxn][maxn];
+int n,m,f[100000];
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;f[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            cin&gt;&gt;dis[i][j];
+        }
+    }
+    for(int k=1;k&lt;=n;k++){
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=n;j++){
+                if(i==j||i==k||j==k)continue;
+                dis[i][j]=min(dis[i][j],dis[i][k]+dis[k][j]);
+            }
+        }
+    }
+    int ans=0;
+    for(int i=1;i&lt;m;i++){
+        ans+=dis[f[i]][f[i+1]];
+    }
+    if(f[1]!=1)ans+=dis[1][f[1]];
+    if(f[m]!=n)ans+=dis[f[m]][n];
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这次没有题解，没错，我就是题解！这道题使用Floyd解决最好。<b>Attention : Floyd算法中，k一定要作为最外层循环！
+</b></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2865">P2865 [USACO06NOV] Roadblocks G</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>真是巨坑啊！输入的n和m弄反了，导致我调了半天都没调对。我还以为我的算法错了呢，结果仔细检查才发现，n和m搞反了！！！<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;climits&gt;
+using namespace std;
+#define maxn 5000000
+#define int long long
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,v;
+    bool operator &gt; (const node &a)const{
+        return dis&gt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],vis[maxn];
+void dij(int s){
+    memset(dis,0x3f,sizeof(dis));
+    memset(vis,0,sizeof(vis));
+    dis[s]=0;
+    priority_queue&lt;node,vector&lt;node&gt;,greater&lt;node&gt; &gt; q;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().v;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                q.push({dis[v],v});
+            }
+        }
+    }
+}
+int n,m,dis1[maxn],disn[maxn];
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+        e[y].push_back({x,w});
+    }
+    dij(1);
+    memcpy(dis1,dis,sizeof(dis1));
+    dij(n);
+    memcpy(disn,dis,sizeof(disn));
+    int ans=LONG_LONG_MAX;
+    for(int i=1;i&lt;=m;i++){
+        for(auto ed : e[i]){
+            //i-&gt;ed w
+            int x=dis1[i]+ed.w+disn[ed.v];
+            if(x&gt;dis1[n]){
+                ans=min(ans,x);
+            }
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    
+</pre>当时第一遍提交上去的就是这个，可能这个是我认为最好理解的一个了，可惜n和m写反了，导致只有10分，好在现在改过来了。如果要论简洁程度的话，那应该是下面这个了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;climits&gt;
+using namespace std;
+#define maxn 500000
+#define int long long
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &lt; (const node &a)const{
+        return dis&gt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn];
+int dis1[maxn],dis2[maxn];
+void dij(int s){
+    memset(dis1,0x3f,sizeof(dis1));
+    memset(dis2,0x3f,sizeof(dis2));
+    dis1[s]=0;
+    priority_queue&lt;node&gt; q;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().u;
+        int tmp=q.top().dis;
+        q.pop();
+        if(dis2[u]&lt;tmp)continue;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            int dis=tmp+w;
+            if(dis&lt;dis1[v]){
+                swap(dis1[v],dis);
+                q.push({dis1[v],v});
+            }
+            if(dis&lt;dis2[v]&&dis1[v]&lt;dis){
+                dis2[v]=dis;
+                q.push({dis2[v],v});
+            }
+        }
+    }
+}
+int n,m;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+        e[y].push_back({x,w});
+    }
+    dij(1);
+    cout&lt;&lt;dis2[n];
+    return 0;
+}
+    
+</pre>这个是我抄自CSDN的博客。<a href="https://blog.csdn.net/qq_50332374/article/details/119935438">次短路模板</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5960">P5960 【模板】差分约束</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题有多解，只需要输出其中一个即可。这道题的差分约束有点类似于最短路当中的dis[v]>dis[u]+w;这样一个式子的变形，所以这就是为什么它会出现在最短路算法当中。<pre>
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#include &lt;queue&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define int long long
+#define maxn 200000
+struct edge{
+    int v,w,nxt;
+}e[maxn];
+int head[maxn],tot[maxn],vis[maxn],cnt,n,m;
+int dis[maxn];
+void addedge(int u,int v,int w){
+    e[++cnt].v=v;
+    e[cnt].w=w;
+    e[cnt].nxt=head[u];
+    head[u]=cnt;
+}
+bool spfa(int s){
+    queue&lt;int&gt; q;
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0;vis[s]=1;
+    q.push(s);
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();
+        vis[u]=0;
+        for(int i=head[u];i;i=e[i].nxt){
+            int v=e[i].v;
+            if(dis[v]&gt;dis[u]+e[i].w){
+                dis[v]=dis[u]+e[i].w;
+                if(!vis[v]){
+                    vis[v]=1,tot[v]++;
+                    if(tot[v]==n+1)return 0;
+                    q.push(v);
+                }
+            }
+        }
+    }
+    return 1;
+}
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)addedge(0,i,0);
+    for(int i=1;i&lt;=m;i++){
+        int v,u,w;
+        cin&gt;&gt;v&gt;&gt;u&gt;&gt;w;
+        addedge(u,v,w);
+    }
+    if(!spfa(0)){
+        cout&lt;&lt;"NO\n";
+    }
+    else{
+        for(int i=1;i&lt;=n;i++)cout&lt;&lt;dis[i]&lt;&lt;' ';
+    }
+    return 0;
+}
+    </pre>题解在题解区。<a href="https://www.luogu.com.cn/problem/solution/P5960">@StudyingFather</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3385">P3385 【模板】负环</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>像这种模板题应该一遍过，但是我错了#9，没好好看题，是w>=0等于号忘记添加了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 360000
+#define int long long
+struct edge{
+    int v,w;
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],cnt[maxn],vis[maxn];
+bool spfa(int n,int s){
+    queue&lt;int&gt; q;
+    memset(vis,0,sizeof(vis));
+    memset(cnt,0,sizeof(cnt));
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0,vis[s]=1;
+    q.push(s);
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();vis[u]=0;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                cnt[v]=cnt[u]+1;
+                if(cnt[v]&gt;=n)return 0;
+                if(!vis[v])q.push(v),vis[v]=1;
+            }
+        }
+    }
+    return 1;
+}
+int t,n,m;
+signed main(){
+    cin&gt;&gt;t;
+    while(t--){
+        for(auto &ed:e){
+            ed.clear();
+        }
+        cin&gt;&gt;n&gt;&gt;m;
+        for(int i=1,x,y,w;i&lt;=m;i++){
+            cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+            if(w&gt;=0) e[x].push_back({y,w}),e[y].push_back({x,w});
+            else e[x].push_back({y,w});
+        }
+        bool isR=spfa(n,1);
+        cout&lt;&lt;(isR?"NO":"YES")&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre>没有题解，因为太简单了。模板在OIWiki上面有。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1629">P1629 邮递员送信</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>像这种普及的题，我还是好对付的，哈哈哈。一遍AC！Dijstra跑n遍就OK了，起码比Floyd快一点，别看我外面套了个大循环，但其实时间复杂度比Floyd好。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 300000
+#define int long long
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,v;
+    bool operator &gt; (const node &a)const{
+        return dis&gt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],vis[maxn];
+void dij(int s){
+    memset(vis,0,sizeof(vis));
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0;
+    priority_queue&lt;node,vector&lt;node&gt;,greater&lt;node&gt; &gt; q;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().v;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                q.push({dis[v],v});
+            }
+        }
+    }
+}
+int n,m,ans;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+    }
+    dij(1);
+    for(int i=2;i&lt;=n;i++){
+        ans+=dis[i];
+    }
+    for(int i=2;i&lt;=n;i++){
+        dij(i);
+        ans+=dis[1];
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这次没有题解，没错，我就是题解！</div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P2680">P2680 [NOIP2015 提高组] 运输计划</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题注意数组开大一点。需要使用tarjan算法解决，还有lca。但是我不会呜呜呜。还有二分答案，<pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
