@@ -80,7 +80,6 @@
     </div>
 
 
-
     <br>
     <h1>错题集</h1>
     <br>
@@ -91,6 +90,410 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P6464">P6464 [传智杯 #2 决赛] 传送门</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题要注意时间复杂度，不要单纯的用Floyd，否则肯定会超时。如果你的想法是枚举边，然后Floyd，那么时间复杂度会是O(n^5)，因为Floyd是三次方，枚举边，是二次方。然而标程是O(n^4)，那么如何少一个循环是一个关键。先给出标程吧。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;climits&gt;
+#include &lt;cctype&gt;
+using namespace std;
+#define re register
+int read(){
+    int s=0,w=1;char ch=getchar();
+    while(!isdigit(ch)){
+        if(ch=='-')w=-1;
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';ch=getchar();
+    }
+    return s*w;
+}
+int n,m;
+int g[120][120],dis[120][120],ans=0x3f3f3f3f;
+signed main(){
+    n=read();m=read();
+    memset(g,-1,sizeof(g));
+    for(re int i=1,u,v,w;i&lt;=m;i++){
+        u=read(),v=read(),w=read();
+        g[v][u]=g[u][v]=w;
+    }
+    for(re int k=1;k&lt;=n;k++){
+        for(re int i=1;i&lt;=n;i++){
+            for(re int j=1;j&lt;=n;j++){
+                if(g[i][k]!=-1&&g[k][j]!=-1){
+                    if(g[i][j]==-1||g[i][j]&gt;g[i][k]+g[k][j]){
+                        g[i][j]=g[i][k]+g[k][j];
+                    }
+                }
+            }
+        }
+    }
+    for(re int i=1;i&lt;=n;i++){
+        for(re int j=1;j&lt;=n;j++){
+            
+            for(int x=1;x&lt;=n;x++){
+                for(int y=1;y&lt;=n;y++){
+                    dis[x][y]=g[x][y];
+                }
+            }
+            dis[i][j]=dis[j][i]=0;
+            for(int x=1;x&lt;=n;x++){
+                for(int y=1;y&lt;=n;y++){
+                    if(dis[x][y]==-1||dis[x][y]&gt;dis[x][i]+dis[i][y]){
+                        dis[x][y]=dis[x][i]+dis[i][y];
+                    }
+                }
+            }
+            for(int x=1;x&lt;=n;x++){
+                for(int y=1;y&lt;=n;y++){
+                    if(dis[x][y]==-1||dis[x][y]&gt;dis[x][j]+dis[j][y]){
+                        dis[x][y]=dis[x][j]+dis[j][y];
+                    }
+                }
+            }
+            int sum=0;
+            for(int x=1;x&lt;=n;x++){
+                for(int y=1;y&lt;x;y++){
+                    sum+=dis[x][y];
+                }
+            }
+            ans=min(ans,sum);
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>快读其实没必要。我们发现，这里其实将Floyd的k分解成了i和j。具体原理我也不清楚。<I>参考文献：<a href="https://www.luogu.com.cn/problem/solution/P6464">题解区@_Fontainebleau_</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3275">P3275 [SCOI2011] 糖果</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题卡SPFA，所以请不要用SPFA解决这道题。<s>当然，即便允许我也不会啊</s>这道题需要tarjan缩点+差分约束+拓扑排序才能解决。当然，我不会，所以抄的。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+#define add(L,X,Y)\
+    l[++p]=L,to[p]=Y;\
+    ne[p]=he[X],he[X]=p;\
+    if(!tl[X])tl[X]=p;
+const int N=100005,M=N*3;
+int p,df,tot,he[N],tl[N],ne[M],to[M],rd[N],d[N];
+int low[N],dfn[N],sz[N],f[N],st[N];
+bool l[M];
+void tarjan(int x){
+    low[st[++p]=x]=dfn[x]=++df;
+    for(int y,i=he[x];i;i=ne[i]){
+        if(l[i])continue;
+        if(!dfn[y=to[i]]){
+            tarjan(y);
+            low[x]=min(low[x],low[y]);
+        }
+        else if(!f[y]){
+            low[x]=min(low[x],dfn[y]);
+        }
+    }
+    if(low[x]==dfn[x]){
+        ++tot;
+        do ++sz[f[st[p]]=x];
+        while(st[p--]!=x);
+    }
+}
+int main(){
+    int p=0,n,k,S,o,x,y,i,j,cnt=0;
+    cin&gt;&gt;n&gt;&gt;k;S=n+1;
+    long long ans=n;
+    while(k--){
+        cin&gt;&gt;o&gt;&gt;x&gt;&gt;y;
+        switch(o){
+            case 1:add(0,x,y);add(0,y,x);break;
+            case 2:add(1,x,y);break;
+            case 3:add(0,y,x);break;
+            case 4:add(1,y,x);break;
+            case 5:add(0,x,y);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        add(0,S,i);
+    }
+    tarjan(S);
+    for(i=1;i&lt;=S;i++){
+        x=f[i];
+        for(j=he[i];j;j=ne[j]){
+            y=to[j]=f[to[j]];
+            if(x!=y)++rd[y];
+            else if(l[j]){
+                puts("-1");return 0;
+            }
+        }
+    }
+    for(i=1;i&lt;=S;i++){
+        if(i!=f[i]){
+            ne[tl[i]]=he[f[i]];
+            he[f[i]]=he[i];
+        }
+    }
+    st[p=1]=S;
+    while(p){
+        ++cnt;
+        ans+=d[x=st[p--]]*sz[x];
+        for(i=he[x];i;i=ne[i]){
+            y=to[i];
+            d[y]=max(d[y],d[x]+l[i]);
+            if(!--rd[y])st[++p]=y;
+        }
+    }
+    cout&lt;&lt;(cnt&lt;tot?-1:ans);
+    return 0;
+}
+</pre>题解来自题解区。<a href="https://www.luogu.com.cn/problem/solution/P3275">@FlashHu</a></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1993">P1993 小 K 的农场</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a><s>这道题我过了，所以它是一道水题！</s>这道题需要用到差分约束，说白了就是将题目中的差值关系转化成建边的形式，那么怎么建边是一个关键。我们注意到: <ul>
+        <li>农场 
+            a 比农场 
+            b 至少多种植了 
+            c 个单位的作物；<b>等价于a-b&gt;=c</b></li>
+        <li>
+            农场 
+a 比农场 
+b 至多多种植了 
+c 个单位的作物；<b>等价于a-b&lt;=c</b>
+        </li>
+        <li>
+            农场 
+a 与农场 
+b 种植的作物数一样多。<b>等价于a==b</b>
+        </li>
+    </ul>而我们的最短路基本式是长这样：dis[v]>dis[u]+w;而上面那些是跟这不一样的，因此要转化一下。要注意的是v是子节点，u才是父节点。顺序千万不能错。转化后如下: <ul>
+        <li>
+            b&lt;=a-c;遇到这样的，直接建反向边转化成: b>=a+c;虽然在图论中成立，但数学上就不知道了。
+        </li>
+        <li>
+            b&gt;=a+c;
+        </li>
+        <li>
+            a&lt;=b+0; 和 b&lt;=a+0;
+        </li>
+    </ul>于是就建边就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 100000
+struct edge{
+    int v,w;
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],vis[maxn],cnt[maxn],n,m;
+bool spfa(int s){
+    memset(dis,0x3f,sizeof(dis));
+    dis[s]=0;
+    vis[s]=1;
+    queue&lt;int&gt; q;
+    q.push(s);
+    cnt[s]++;
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();
+        vis[u]=0;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                if(!vis[v]){
+                    q.push(v);
+                    vis[v]=1;
+                    cnt[v]++;
+                    if(cnt[v]&gt;n){
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+    return 1;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,a,b,c,z;i&lt;=m;i++){
+        cin&gt;&gt;z;
+        if(z==1){
+            cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+            e[a].push_back({b,-c});
+        }
+        else if(z==2){
+            cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+            e[b].push_back({a,c});
+        }
+        else{
+            cin&gt;&gt;a&gt;&gt;b;
+            e[a].push_back({b,0});
+            e[b].push_back({a,0});
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        e[n+1].push_back({i,0});
+    }
+    if(spfa(n+1)){
+        cout&lt;&lt;"Yes";
+    }
+    else{
+        cout&lt;&lt;"No";
+    }
+    return 0;
+}
+    
+</pre>其中你会发现我多建了n条通向n+1的边，这是因为n+1要作为超级源点使用，总之就是降低时间复杂度，边权为0。<I>参考文献：<a href="https://www.luogu.com.cn/problem/solution/P1993">题解区@SDqwq</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1073">P1073 [NOIP2009 提高组] 最优贸易</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是分层图的问题，先说一下分层图的作用。<img src="https://upload-bbs.miyoushe.com/upload/2024/11/06/198629752/64e4888554c0988fdd507fe5deb084bf_1047287439941308302.webp" alt="分层图">如图，我们需要构建这么一个图，第一层代表初始状态，第二层代表我从第一层里面买入了一个东西，现在我到了第二层，我要在第二层选一个国家卖出这个东西，第三层表示我已经卖出了这个东西，现在我要找终点。<b>分层图是一种能解决图上决策问题的建图构造模式，可以结合最短路解决多种图上问题。</b>这道题我也是调了好长时间，把题解的spfa算法调成了dijkstra。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;map&gt;
+using namespace std;
+#define maxn 100040
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &lt; (const node &a)const{
+        return dis&gt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn*3];
+int n,m,dis[maxn*3],vis[maxn*3];
+int t(int x,int i){
+    return x+n*i;
+}
+void add(int x,int y){
+    e[t(x,0)].push_back({t(y,0),0});
+    e[t(x,1)].push_back({t(y,1),0});
+    e[t(x,2)].push_back({t(y,2),0});
+}
+void dij(int s){
+    for(int i=1;i&lt;=n*3;i++){
+        dis[i]=-2147483647;
+    }
+    dis[s]=0;
+    priority_queue&lt;node&gt; q;
+    q.push({0,s});
+    vis[s]=1;
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        vis[u]=0;
+        for(auto ed:e[u]){
+            int v=ed.v,d=ed.w;
+            if(dis[v]&lt;dis[u]+d){
+                dis[v]=dis[u]+d;
+                if(!vis[v])q.push({dis[v],v}),vis[v]=1;
+            }
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,v;i&lt;=n;i++){
+        cin&gt;&gt;v;
+        e[t(i,0)].push_back({t(i,1),-v});
+        e[t(i,1)].push_back({t(i,2),v});
+    }
+    for(int i=1,x,y,z;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
+        if(z==1){
+            add(x,y);
+        }
+        else{
+            add(x,y);
+            add(y,x);
+        }
+    }
+    dij(t(1,0));
+    cout&lt;&lt;dis[t(n,2)];
+    return 0;
+}
+</pre>你会发现除了上面Dijkstra的部分以外，我新加了两个函数，一个叫t()，一个叫add()，t是为了快速为点分配图层而生，add是为了在多个层之间快速建边而生。主要还是图一个方便。其中在输入商品价格的时候我是将每个商品都由本层到向下一层的道路上加了边，而且是1->2层是负边，代表买入，2->3层是正边，代表卖出，而同一层的没有跨层的边，我将它们的权值设为了0，也就是add函数中的0。最后输出，我们只需要输出最后一层的节点n就是终点，dis[n*2]就是答案了。<I>参考文献：<a href="https://www.luogu.com.cn/problem/solution/P1073">题解区@fy1234567ok</a>、<a href="https://blog.samzhangjy.com/posts/layered-graph">Blog：浅谈分层图最短路</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1462">P1462 通往奥格瑞玛的道路</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是二分+Dijkstra。只要看见题目中说<b>所有的最大值的最小值</b>那么我们就直接用二分，当然也得先判断一下单调性。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 200000
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &lt; (const node &a)const{
+        return dis&gt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],b,n,m,vis[maxn],c[maxn];
+bool dij(int k){
+    if(c[1]&gt;k)return 0;<span>//如果刚开始的钱就已经大于k，直接退出。</span>
+    memset(dis,0x3f,sizeof(dis));
+    memset(vis,0,sizeof(vis));
+    dis[1]=0;
+    priority_queue&lt;node&gt; q;
+    q.push({0,1});
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;<span>//这里是血量</span>
+            if(dis[v]&gt;dis[u]+w&&c[v]&lt;=k){<span>//多加一条判断，经过的钱数不能大于k</span>
+                dis[v]=dis[u]+w;
+                q.push({dis[v],v});
+            }
+        }
+    }
+    if(dis[n]&gt;b){<span>//判断血量</span>
+        return 0;
+    }
+    return 1;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;b;
+    int l=0x3f3f3f3f,r=0,mid;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;c[i];
+        l=min(c[i],l);
+        r=max(c[i],r);
+    }
+    for(int i=1,x,y,w;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;w;
+        e[x].push_back({y,w});
+        e[y].push_back({x,w});
+    }
+    if(!dij(2147483647)){
+        cout&lt;&lt;"AFK";
+        return 0;
+    }
+    while(l&lt;=r){
+        mid=l+r&gt;&gt;1;
+        if(dij(mid)){
+            r=mid-1;
+        }
+        else{
+            l=mid+1;
+        }
+    }
+    cout&lt;&lt;l;
+    return 0;
+}
+    </pre>这道题在Dijkstra的判断中加了一句，而且最后还加了句判断，代码中我标了出来。题解参考题解区还有CSDN。<a href="https://blog.csdn.net/Halo_7777777/article/details/103523834">CSDN</a><a href="https://www.luogu.com.cn/problem/solution/P1462">题解区</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1875">P1875 佳佳的魔法药水</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是Dijkstra的魔改题，乍一看看过去无从下手，其实暗藏玄鸡。<pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
