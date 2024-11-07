@@ -90,6 +90,166 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1037">P1037 [NOIP2002 普及组] 产生数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>呜呜呜，我连普及都不如了？？？这道题有两种解法，一种是爆搜，满分；另一只是Floyd。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;queue&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdlib&gt;
+using namespace std;
+int tag[10][10];
+int d[10];
+int p[1000];
+int main(){
+    string a;
+    int n;
+    while(cin&gt;&gt;a&gt;&gt;n){
+        int x,y;
+        for(int i=0;i&lt;n;i++){
+            cin&gt;&gt;x&gt;&gt;y;
+            tag[x][y]=1;
+        }
+        for(int k=1;k&lt;=9;k++){
+            for(int i=0;i&lt;=9;i++){
+                for(int j=0;j&lt;=9;j++){
+                    if(tag[i][k]&&tag[k][j])tag[i][j]=1;
+                }
+            }
+        }
+        for(int i=0;i&lt;=9;i++){
+            tag[i][i]=1;
+            for(int j=0;j&lt;=9;j++){
+                if(tag[i][j]){
+                    d[i]++;
+                }
+            }
+        }
+        int z=0;
+        p[0]=1;
+        for(int i=0;a[i];i++){
+            z=0;
+            int x=d[a[i]-'0'];
+            for(int i=0;i&lt;500;i++){
+                p[i]=(p[i]*x+z);
+                z=p[i]/10;
+                p[i]%=10;
+            }
+        }
+        int i=500;
+        while(p[i]==0)i--;
+        for(;i&gt;=0;i--){
+            cout&lt;&lt;p[i];
+        }
+        cout&lt;&lt;'\n';
+    }
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1037">题解区@zhangjiangnan</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1119">P1119 灾后重建</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题能加深你对Floyd的理解。这道题考得就是你对中转点的认识。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 300
+int g[maxn][maxn];
+int n,m;
+int t[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(g,0x3f,sizeof(g));
+    for(int i=0;i&lt;n;i++){
+        cin&gt;&gt;t[i];
+    }
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        g[u][v]=g[v][u]=w;
+    }
+    int Q;
+    cin&gt;&gt;Q;
+    int k=0;
+    for(int i=1,u,v,tim;i&lt;=Q;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;tim;
+        for(;t[k]&lt;=tim&&k&lt;n;k++){
+            for(int ii=0;ii&lt;n;ii++){
+                for(int jj=0;jj&lt;ii;jj++){
+                    if(g[ii][jj]&gt;g[ii][k]+g[k][jj]){
+                        g[jj][ii]=g[ii][jj]=g[ii][k]+g[k][jj];
+                    }
+                }
+            }
+        }
+        if(t[u]&gt;tim||t[v]&gt;tim)cout&lt;&lt;-1&lt;&lt;'\n';
+        else cout&lt;&lt;(g[u][v]&gt;=1e9?-1:g[u][v])&lt;&lt;'\n';
+        //注意，如果你想在速度上追求极致，三目运算符尽量不要用，if语句都比它快。 
+    }
+    return 0;
+}
+</pre>看到k了吗？我直接让k不从0开始，那样会重复计算，我们让k继承上一次的运算结果继续运算。因为k的本质就是中转点，k不符合条件时就暂时退出，下一次询问的时候再回来。如果不这么做，那么只有50分，TLE超时。<s>看题解愣是没看出来~</s><I>
+    参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1119">题解区@Time_Rune</a>
+</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3403">P3403 跳楼机（【模板】同余最短路）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是模板题，同于最短路，类比差分约束，我们用最短路来模拟同余。我也不知道怎么回事，代码如下。<pre>
+#include &lt;iostream&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define ll long long
+#define maxn 100010
+#define inf (1ull&lt;&lt;63)-1
+ll h,x,y,z;
+ll head[maxn&lt;&lt;1],tot;
+ll dis[maxn],vis[maxn];
+queue&lt;int&gt; q;
+struct edge{
+    ll to,nxt,w;
+}e[maxn&lt;&lt;1];
+void add(ll u,ll v,ll w){
+    e[++tot]=edge{v,head[u],w};
+    head[u]=tot;
+}
+void spfa(){
+    dis[0]=0;
+    vis[0]=1;
+    q.push(0);
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();
+        vis[u]=0;
+        for(int i=head[u];i;i=e[i].nxt){
+            int v=e[i].to,w=e[i].w;
+            if(dis[v]&gt;dis[u]+w){
+                dis[v]=dis[u]+w;
+                if(!vis[v]){
+                    q.push(v);
+                    vis[v]=1;
+                }
+            }
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;h;
+    cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
+    if(x==1||y==1||z==1){
+        cout&lt;&lt;h;
+        return 0;
+    }
+    --h;
+    for(int i=0;i&lt;x;i++){
+        add(i,(i+z)%x,z);
+        add(i,(i+y)%x,y);
+        dis[i]=inf;
+    }
+    spfa();
+    ll ans=0;
+    for(int i=0;i&lt;x;i++){
+        if(h&gt;=dis[i])ans+=(h-dis[i])/x+1;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>2^63别忘了开unsigned long long！<I>
+        参考资料：<a href="https://oi-wiki.org/graph/mod-shortest-path/">OIWiki同余最短路</a>
+    </I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P6464">P6464 [传智杯 #2 决赛] 传送门</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题要注意时间复杂度，不要单纯的用Floyd，否则肯定会超时。如果你的想法是枚举边，然后Floyd，那么时间复杂度会是O(n^5)，因为Floyd是三次方，枚举边，是二次方。然而标程是O(n^4)，那么如何少一个循环是一个关键。先给出标程吧。<pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
