@@ -90,6 +90,274 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1">最小生成树<img src="https://upload-bbs.miyoushe.com/upload/2024/11/07/198629752/1bd42f0f2b49815d4a3d44d64a1b4a2c_6009894409766654602.png" alt="最小生成树"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3366">P3366 【模板】最小生成树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>最小生成树的代码和Dijkstra有点像，代码很好打。<b>Prim算法求最小生成树</b>1.普通版：<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define inf 1e9
+#define N 6000
+int n,m,ans,cnt;
+struct edge{
+    int v,w;
+};
+vector&lt;edge&gt; e[N];
+int d[N],vis[N];
+bool prim(int s){
+    for(int i=0;i&lt;=n;i++){
+        d[i]=inf;
+    }
+    d[s]=0;
+    for(int i=1;i&lt;=n;i++){
+        int u=0;
+        for(int j=1;j&lt;=n;j++){
+            if(!vis[j]&&d[j]&lt;d[u]){
+                u=j;
+            }
+        }
+        vis[u]=1;
+        ans+=d[u];
+        if(d[u]!=inf){
+            cnt++;
+        }
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(d[v]&gt;w){
+                d[v]=w;
+            }
+        }
+    }
+    return cnt==n;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        e[u].push_back({v,w});
+        e[v].push_back({u,w});
+    }
+    if(prim(1)){
+        cout&lt;&lt;ans;
+    }
+    else{
+        cout&lt;&lt;"orz";
+    }
+    return 0;
+}
+</pre>2.堆优化版：<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;queue&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define inf 1e9
+#define N 6000
+int n,m,ans,cnt;
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &lt; (const node &a)const{
+        return dis &lt; a.dis;
+    }
+};
+vector&lt;edge&gt; e[N];
+int d[N],vis[N];
+priority_queue&lt;node&gt; q;
+bool prim(int s){
+    for(int i=1;i&lt;=n;i++){
+        d[i]=inf;
+    }
+    d[s]=0;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        ans+=d[u];
+        cnt++;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(d[v]&gt;w){
+                d[v]=w;
+                q.push({-d[v],v});
+            }
+        }
+    }
+    return cnt==n;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        e[u].push_back({v,w});
+        e[v].push_back({u,w});
+    }
+    if(prim(1)){
+        cout&lt;&lt;ans;
+    }
+    else{
+        cout&lt;&lt;"orz";
+    }
+    return 0;
+}
+</pre><br><b>Kruskal算法求最小生成树</b><pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define N 300000
+int n,m;
+struct edge{
+    int u,v,w;
+    bool operator &lt; (const edge &a)const{
+        return w&lt;a.w;
+    }
+}e[N];
+int fa[N],ans,cnt;
+int find(int x){
+    if(fa[x]==x){
+        return x;
+    }
+    return fa[x]=find(fa[x]);
+}
+bool kruskal(){
+    sort(e,e+m);
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    for(int i=1;i&lt;=m;i++){
+        int x=find(e[i].u);
+        int y=find(e[i].v);
+        if(x!=y){
+            fa[x]=y;
+            ans+=e[i].w;
+            cnt++;
+            
+        }
+    }
+    return cnt==n-1;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;e[i].u&gt;&gt;e[i].v&gt;&gt;e[i].w;
+    }
+    if(kruskal()){
+        cout&lt;&lt;ans;
+    }
+    else{
+        cout&lt;&lt;"orz";
+    }
+    return 0;
+}
+</pre><I>
+    参考资料：博客园@董晓算法( <a href="https://www.cnblogs.com/dx123/p/16320452.html">最小生成树 Prim 算法</a>、<a href="https://www.cnblogs.com/dx123/p/16320454.html">最小生成树 Kruskal 算法</a> )
+</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2047">P2047 [NOI2007] 社交网络</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a><s>抄答案也得仔仔细细的抄哦~</s>这道题真的不简单呐！仍然是Floyd，解决点对问题，题目很好理解，但是代码一定要仔细，要不然很容易爆零！<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 200
+#define int long long
+int n,m;
+int g[maxn][maxn];
+double I[maxn];
+int C[maxn][maxn];
+int inf=0x7f7f7f7f;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(g,0x7f,sizeof(g));
+    inf=g[1][1];
+    for(int i=1,a,b,c;i&lt;=m;i++){
+        cin&gt;&gt;a&gt;&gt;b&gt;&gt;c;
+        g[a][b]=g[b][a]=c;
+        C[a][b]=C[b][a]=1;
+    }
+    for(int k=1;k&lt;=n;k++){
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=n;j++){
+                if(g[i][k]==inf&&g[k][j]==inf)continue;
+                if(g[i][j]&gt;g[i][k]+g[k][j]){
+                    g[i][j]=g[i][k]+g[k][j];
+                    C[i][j]=C[i][k]*C[k][j];
+                    continue;
+                }
+                if(g[i][j]==g[i][k]+g[k][j]){
+                    C[i][j]+=C[i][k]*C[k][j];
+                }
+            }
+        }
+    }
+    for(int k=1;k&lt;=n;k++){
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=n;j++){
+                if(i==k||j==k||i==j)continue;
+                if(g[i][j]==g[i][k]+g[k][j]){
+                    I[k]+=(1.0*C[i][k]*C[k][j])/C[i][j];
+                }
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        printf("%.3lf\n",I[i]);
+    }
+    return 0;
+}
+    
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2047">题解区@Ning_Mew</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2419">P2419 [USACO08JAN] Cow Contest S</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a><s>典中典的一个Floyd图论题目</s>这道题可以使用Floyd，不过思路有点超前，不太好想。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 300
+int n,m;
+int g[maxn][maxn]; 
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,u,v;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        g[u][v]=1;
+    }
+    for(int k=1;k&lt;=n;k++){
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=n;j++){
+                if(g[i][k]&&g[k][j]){
+                    g[i][j]=1;
+                }
+            }
+        }
+    }
+    int ans=0;
+    for(int i=1;i&lt;=n;i++){
+        int sum=0;
+        for(int j=1;j&lt;=n;j++){
+            if(g[i][j]||g[j][i]){
+                sum++;
+            }
+        }
+        if(sum==n-1)ans++;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>同样利用的是Floyd处理点对的性质，来解决这种比较关系的题目。f[i][j]=f[i][j]|(f[i][k]&f[k][j])表示i能否走到j，即要么一开始i能到j,要么i能到k，k再能到j。那么这里表示的是i能否赢j。用floyed求出每个点与个点的关系，只要这个点和其他n-1个点的关系都确定了，就能确定他的排名。<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2419">题解区@xun薰</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1037">P1037 [NOIP2002 普及组] 产生数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>呜呜呜，我连普及都不如了？？？这道题有两种解法，一种是爆搜，满分；另一只是Floyd。<pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
