@@ -142,5 +142,69 @@ document.addEventListener('DOMContentLoaded', function() {
             aTag.style.textDecoration = 'none';
             aTag.style.borderStyle = 'none';
         }  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('Rated')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#5EB95E';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
+
+        // 检查文本内容是否包含特定的字符串  
+        if (textContent.includes('UnRated')) {  
+            // 修改样式  
+            aTag.style.backgroundColor = '#E74C3C';  
+            aTag.style.borderRadius = '3px'; // 圆角边框  
+            aTag.style.border = '1px solid black'; // 可选：添加边框以更清楚地看到效果  
+            aTag.style.paddingLeft = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.paddingRight = '10px'; // 可选：增加一些内边距以使效果更明显  
+            aTag.style.color = '#FFFFFF';
+            aTag.style.textDecoration = 'none';
+            aTag.style.borderStyle = 'none';
+        }  
     }  
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('CF');
+    const links = container.getElementsByTagName('a');
+    // 定义一个函数来设置特殊链接的样式
+    function setSpecialLinkStyle(link) {
+        link.style.fontWeight = 'bold';
+        link.style.color = 'black';
+        link.style.textDecoration = 'none';
+
+        // 添加鼠标悬停事件监听器
+        link.addEventListener('mouseover', function() {
+            link.style.color = 'gray'; // 鼠标悬停时更改颜色
+        });
+
+        // 添加鼠标离开事件监听器以恢复原始颜色
+        link.addEventListener('mouseout', function() {
+            link.style.color = 'black'; // 鼠标离开时恢复颜色
+        });
+    }
+    // 遍历所有链接并应用样式
+    for (let i = 0; i < links.length; i++) {
+        const text = links[i].textContent || links[i].innerText;
+        const regex = /^[A-Z]\./;
+
+        if (regex.test(text.trim())) {
+            setSpecialLinkStyle(links[i]);
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('CF');
+
+    // 更改背景颜色
+    cfElement.style.backgroundColor = 'rgba(255,186,  2,0.8)';
 });

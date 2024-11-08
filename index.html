@@ -90,7 +90,896 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
-    <div class="t1">最小生成树<img src="https://upload-bbs.miyoushe.com/upload/2024/11/07/198629752/1bd42f0f2b49815d4a3d44d64a1b4a2c_6009894409766654602.png" alt="最小生成树"></div>
+    <div class="t1" id="CF"><a href="https://codeforces.com/contest/2035">Codeforces Global Round 27</a><a href="#">Rated</a><a href="https://codeforces.com/contest/2035/problem/A">A. Sliding</a><a href="https://codeforces.com/contest/2035/problem/B">B. Everyone Loves Tres</a><a href="https://codeforces.com/contest/2035/problem/C">C. Alya and Permutation</a>A和B题都太简单了，我来说一下C题，这道题就是一道构造题，不过有点难度，大概是洛谷的黄题水平。先将1,2,3,4,7,8,2^k-1,2^k放在序列最后，然后前面的奇数位置放剩下的偶数，偶数位置放剩下的奇数即可。<pre>
+#include &lt;cstdio&gt;
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int t,n; 
+int main(){
+    for(scanf("%d",&t);t;--t){
+        scanf("%d",&n);vector&lt;int&gt; ans;
+        auto solve=[&](const int &n){
+            vector&lt;int&gt; vec;
+            auto check=[&](const int &x){
+                return (x&(-x))==x;
+            };
+            for(int i=n;i&gt;=1;i--){
+                if(check(i)||check(i+1))continue;
+                vec.push_back(i);
+            }
+            for(int i=1;i&lt;=n;i++){
+                if(check(i)||check(i+1))vec.push_back(i);
+            }
+            return vec;
+        };
+        if(n==5)ans={2,1,3,4,5};
+        else if(n%2==0)ans=solve(n);
+        else ans=solve(n-1),ans.push_back(n);
+        int ret=0;
+        for(int i=0;i&lt;ans.size();i++){
+            if(i&1){
+                ret|=ans[i];
+            }
+            else{
+                ret&=ans[i];
+            }
+        }
+        printf("%d\n",ret);
+        for(auto x:ans)printf("%d ",x);
+        puts("");
+    }
+    return 0;
+}
+</pre>这道题我赛时没写出来，索性赛后看了题解。像这种构造题不要慌，一定要手动模拟一遍，观察样例，从样例中找到启发。<I>题解来源：<a href="https://www.cnblogs.com/cjjsb/p/18533864">博客园某大佬</a></I><a href="https://codeforces.com/contest/2035/problem/D">D. Yet Another Real Number Problem</a></div>
+    <div class="t1"><a href="https://codeforces.com/problemset/problem/1120/D">D. Power Tree</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>一题多解，但我不会解。<b>法1.区间转差分的思想+最小生成树</b><b>法2.DP</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+using namespace std;
+const int N = 1e6+5;
+int n,dfc,id_lf,c[N],u[N],v[N],fa[N],lf[N],rf[N],dfn[N],num[N];
+vector&lt;int&gt; G[N];
+struct J{
+    int u,v,w,id;
+}e[N];
+int find(int x){
+    return x==fa[x]?x:fa[x]=find(fa[x]);
+}
+void unite(int x,int y){
+    fa[find(y)]=find(x);
+}
+void dfs1(int x,int p){
+    bool is_lf=1;
+    for(int i=0;i&lt;G[x].size();i++){
+        int y=G[x][i];
+        if(y^p)is_lf=0,dfs1(y,x);
+    }
+    if(is_lf)num[x]=++id_lf;
+}
+void dfsa(int x,int p){
+    dfn[++dfc]=x;
+    for(int i=0;i&lt;G[x].size();i++){
+        int y=G[x][i];
+        if(y^p)dfsa(y,x);
+    }
+    rf[x]=num[dfn[dfc]];
+}
+void dfsb(int x,int p){
+    dfn[++dfc]=x;
+    for(int i=0;i&lt;G[x].size();i++){
+        int y=G[x][i];
+        if(y^p)dfsb(y,x);
+    }
+    lf[x]=num[dfn[dfc]];
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;c[i];
+    for(int i=1;i&lt;n;i++)cin&gt;&gt;u[i]&gt;&gt;v[i];
+    for(int i=1;i&lt;n;i++)G[u[i]].push_back(v[i]),G[v[i]].push_back(u[i]);
+    dfs1(1,0);
+    for(int i=1;i&lt;=id_lf+1;i++)fa[i]=i;
+    dfsa(1,0);
+    for(int i=1;i&lt;=n;i++)G[i].clear();
+    for(int i=n-1;i;i--)G[u[i]].push_back(v[i]),G[v[i]].push_back(u[i]);
+    dfc=0;dfsb(1,0);
+    for(int i=1;i&lt;=n;i++)e[i].u=lf[i],e[i].v=rf[i]+1,e[i].w=c[i],e[i].id=i;
+    sort(e+1,e+n+1,[](J a,J b){return a.w&lt;b.w;});
+    vector&lt;int&gt; st;
+    long long sum=0;
+    for(int i=1;i&lt;=n;i++){
+        int j=i-1;
+        while(j&lt;n&&e[j+1].w==e[i].w){
+            j++;
+            if(find(e[j].u)!=find(e[j].v))st.push_back(e[j].id);
+        }
+        j=i-1;
+        while(j&lt;n&&e[j+1].w==e[i].w){
+            j++;
+            if(find(e[j].u)!=find(e[j].v))unite(e[j].u,e[j].v),sum+=e[j].w;
+        }
+        i=j;
+    }
+    cout&lt;&lt;sum&lt;&lt;' '&lt;&lt;st.size()&lt;&lt;'\n';
+    sort(st.begin(),st.end());
+    for(int i=0;i&lt;st.size();i++){
+        cout&lt;&lt;st[i]&lt;&lt;' ';
+    }
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.cnblogs.com/impyl/p/16101016.html">博客园一题多解大佬！</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3623">P3623 [APIO2008] 免费道路</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这就很让人无语，题目很难，翻译过来应该是: <b>给定n个点m条边，边权为0或1的图，求一棵边权和为k的最小生成树。若不存在则输出no solution。</b><pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define no_solution printf("no solution\n")
+#define maxn 202020
+int n,m,k,fa[maxn],tot,cnt;
+struct edge{
+    int u,v,w;
+}e[maxn],ans[maxn];
+bool cmp1(edge e1,edge e2){
+    return e1.w&gt;e2.w;
+}
+bool cmp2(edge e1,edge e2){
+    return e1.w&lt;e2.w;
+}
+int find(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=find(fa[x]);
+}
+bool Union(int x,int y){
+    x=find(x),y=find(y);
+    if(x==y)return 0;
+    fa[x]=y;
+    return 1;
+}
+void init(){
+    cnt=tot=0;
+    for(int i=1;i&lt;=n;i++)fa[i]=i;
+}
+void check(){
+    int tmp=find(1);
+    for(int i=2;i&lt;=n;i++){
+        int f=find(i);
+        if(f!=tmp){
+            no_solution;
+            exit(0);
+        }
+        tmp=f;
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;e[i].u&gt;&gt;e[i].v&gt;&gt;e[i].w;
+    }
+    init();sort(e+1,e+m+1,cmp1);
+    for(int i=1;i&lt;=m;i++){
+        if(Union(e[i].u,e[i].v)&&e[i].w==0){
+            tot++,e[i].w=-1;
+        }
+    }
+    if(tot&gt; k){
+        no_solution;
+        return 0;
+    };
+    check();
+    init();
+    sort(e+1,e+m+1,cmp2);
+    for(int i=1;i&lt;=m;i++){
+        int f1=find(e[i].u),f2=find(e[i].v);
+        if(f1==f2)continue;
+        if(e[i].w==1||tot&lt;k){
+            ans[++cnt]=e[i];fa[f1]=f2;
+            if(e[i].w&lt;1){
+                tot++,e[i].w=0;
+            }
+        }
+    }
+    if(tot&lt;k){
+        no_solution;
+        return 0;
+    }
+    check();
+    for(int i=1;i&lt;=cnt;i++){
+        if(ans[i].w==-1)ans[i].w=0;
+        cout&lt;&lt;ans[i].u&lt;&lt;" "&lt;&lt;ans[i].v&lt;&lt;" "&lt;&lt;ans[i].w&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre>由于我是蒟蒻，所以这道题我不会写，抄的题解，而且也没看懂。<I>
+        参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3623">题解区@Gypsophila</a>、<a href="https://www.cnblogs.com/Kan-kiz/p/10783561.html">博客园@Kan_kiz</a>
+    </I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2700">P2700 逐个击破</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题好难！先用ans求出所有边权和，然后求最大生成树，ans不断减去最大生成树的边，最后输出ans就行了，如果vis[a]和vis[b]都是目标节点，那么就continue跳过，否则加入最大生成树。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 3000000
+#define int long long
+struct edge{
+    int u,v,w;
+    bool operator &lt; (const edge &a)const{
+        return w&gt;a.w;
+    }
+}e[maxn];
+int fa[maxn],ans,n,k,vis[maxn];
+int find(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=find(fa[x]);
+}
+void kruskal(){
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    sort(e+1,e+n);
+    for(int i=1;i&lt;n;i++){
+        int x=find(e[i].u);
+        int y=find(e[i].v);
+        if(vis[x]&&vis[y])continue;
+        fa[x]=y;
+        ans-=e[i].w;
+        if(vis[x])vis[y]=1;
+        else if(vis[y])vis[x]=1;
+    }
+}
+signed main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1,x;i&lt;=k;i++){
+        cin&gt;&gt;x;vis[x]=1;
+    }
+    for(int i=1;i&lt;n;i++){
+        cin&gt;&gt;e[i].u&gt;&gt;e[i].v&gt;&gt;e[i].w;
+        ans+=e[i].w;
+    }
+    kruskal();
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2700">题解区@顾z</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1967">P1967 [NOIP2013 提高组] 货车运输</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题一眼就能看出来是求最大生成树，然后求最大生成树上面的链路上的最小值，但是有一个问题，这道题的题解是用LCA和倍增来做，我很疑惑倍增难道不会跳过~吗？来自群聊大佬的回答：“用RMQ在跳之前先查一下自己这个位置与跳跃目标位置的区间最小值就好了，这样就不会跳过头了”。但我还是不懂，因为RMQ没学过。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+#define maxn 10005
+#define inf 99999999
+struct Edge1{
+    int x,y,dis;
+}edge1[50005];
+struct Edge2{
+    int to,nxt,w;
+}edge2[100005];
+int cnt,n,m,head[maxn],deep[maxn],f[maxn],fa[maxn][21],w[maxn][21];
+bool vis[maxn];
+void addedge(int from,int to,int w){
+    edge2[++cnt].nxt=head[from];
+    edge2[cnt].to=to;
+    edge2[cnt].w=w;
+    head[from]=cnt;
+    return;
+}
+bool cmp(Edge1 x,Edge1 y){
+    return x.dis&gt;y.dis;
+}
+int find(int x){
+    if(f[x]!=x)f[x]=find(f[x]);
+    return f[x];
+}
+void kruskal(){
+    sort(edge1+1,edge1+m+1,cmp);
+    for(int i=1;i&lt;=n;i++){
+        f[i]=i;
+    }
+    for(int i=1;i&lt;=m;i++){
+        if(find(edge1[i].x)!=find(edge1[i].y)){
+            f[find(edge1[i].x)]=find(edge1[i].y);
+            addedge(edge1[i].x,edge1[i].y,edge1[i].dis);
+            addedge(edge1[i].y,edge1[i].x,edge1[i].dis);
+        }
+    }
+}
+void dfs(int node){
+    vis[node]=1;
+    for(int i=head[node];i;i=edge2[i].nxt){
+        int to=edge2[i].to;
+        if(vis[to])continue;
+        deep[to]=deep[node]+1;
+        fa[to][0]=node;
+        w[to][0]=edge2[i].w;
+        dfs(to);
+    }
+}
+int lca(int x,int y){
+    if(find(x)!=find(y))return -1;
+    int ans=inf;
+    if(deep[x]&gt;deep[y])swap(x,y);
+    for(int i=20;i&gt;=0;i--){
+        if(deep[fa[y][i]]&gt;=deep[x]){
+            ans=min(ans,w[y][i]);
+            y=fa[y][i];
+        }
+    }
+    if(x==y)return ans;
+    for(int i=20;i&gt;=0;i--){
+        if(fa[x][i]!=fa[y][i]){
+            ans=min(ans,min(w[x][i],w[y][i]));
+            x=fa[x][i];
+            y=fa[y][i];
+        }
+    }
+    ans=min(ans,min(w[x][0],w[y][0]));
+    return ans;
+}
+int main(){
+    int x,y,z,q;
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
+        edge1[i].x=x;
+        edge1[i].y=y;
+        edge1[i].dis=z;
+    }
+    kruskal();
+    for(int i=1;i&lt;=n;i++){
+        if(!vis[i]){
+            deep[i]=1;
+            dfs(i);
+            fa[i][0]=i;
+            w[i][0]=inf;
+        }
+    }
+    for(int i=1;i&lt;=20;i++){
+        for(int j=1;j&lt;=n;j++){
+            fa[j][i]=fa[fa[j][i-1]][i-1];
+            w[j][i]=min(w[j][i-1],w[fa[j][i-1]][i-1]);
+        }
+    }
+    cin&gt;&gt;q;
+    for(int i=1;i&lt;=q;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        cout&lt;&lt;lca(x,y)&lt;&lt;'\n';
+    }
+    return 0;
+}
+    
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1967">题解区@crazydave</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1550">P1550 [USACO08OCT] Watering Hole G</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>一遍AK，不过也是在大佬的提醒下我才一遍过的。要多连一条边，类比超级源点，从地下向地上所有田地连一条边代表水井就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 300000
+struct edge{
+    int u,v,w;
+    bool operator &lt; (const edge &a)const{
+        return w&lt;a.w;
+    }
+}e[maxn];
+int n,m;
+int fa[maxn],ans;
+int find(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=find(fa[x]);
+}
+void build(int x,int y,int z){
+    m++;
+    e[m].u=x;
+    e[m].v=y;
+    e[m].w=z;
+}
+void kruskal(){
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    sort(e+1,e+m+1);
+    for(int i=1;i&lt;=m;i++){
+        int x=find(e[i].u);
+        int y=find(e[i].v);
+        if(x!=y){
+            fa[x]=y;
+            ans+=e[i].w;
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1,x;i&lt;=n;i++){
+        cin&gt;&gt;x;
+        build(0,i,x);
+    }
+    for(int i=1,x;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            cin&gt;&gt;x;
+            if(i&lt;j)build(i,j,x);
+        }
+    }
+    kruskal();
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1550">题解区@Mr_QwQ</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1195">P1195 口袋的天空</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>因为一个判断给我整红温了。这道题挺简单，说百了就是给你n个点，让你从这n个点中之选择n-k个构造最小生成树，而最难的就是这个判断到底是cnt&lt;=n-k还是cnt&lt;n-k，以及最后的return到底是cnt==n-k还是cnt&gt;=n-k？？？看了题解才知道，原来是这样：<pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 300000
+int n,m,k;
+struct edge{
+    int u,v,w;
+    bool operator &lt; (const edge &a)const{
+        return w&lt;a.w;
+    }
+}e[maxn];
+int fa[maxn],cnt,ans;
+int find(int x){
+    if(fa[x]==x){
+        return x;
+    }
+    return fa[x]=find(fa[x]);
+}
+bool kruskal(){
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    sort(e+1,e+m+1);
+    for(int i=1;i&lt;=m&&cnt&lt;n-k;i++){
+        int x=find(e[i].u);
+        int y=find(e[i].v);
+        if(x!=y){
+            fa[x]=y;
+            cnt++;
+            ans+=e[i].w;
+        }
+    }
+    return cnt&gt;=n-k;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;e[i].u&gt;&gt;e[i].v&gt;&gt;e[i].w;
+    }
+    if(kruskal()){
+        cout&lt;&lt;ans;
+    }
+    else{
+        cout&lt;&lt;"No Answer";
+    }
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1195">题解区@yangrunze</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1396">P1396 营救</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>题解上面很简单就水过去了，但我暴力却只有20分。如下是满分代码：<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 30000
+int n,m,s,t;
+struct edge{
+    int u,v,w;
+    bool operator &lt; (const edge &a)const{
+        return w&lt;a.w;
+    }
+}e[maxn];
+int fa[maxn];
+int find(int x){
+    if(fa[x]==x)return x;
+    return fa[x]=find(fa[x]);
+}
+void kruskal(){
+    sort(e+1,e+m+1);
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+    for(int i=1;i&lt;=m;i++){
+        int x=find(e[i].u);
+        int y=find(e[i].v);
+        if(x!=y){
+            fa[x]=y;
+        }
+        if(find(s)==find(t)){
+            cout&lt;&lt;e[i].w;
+            return;
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;s&gt;&gt;t;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;e[i].u&gt;&gt;e[i].v&gt;&gt;e[i].w;
+    }
+    kruskal();
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1396">题解区@lzk5627</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4180">P4180 [BJWC2010] 严格次小生成树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>怪不得我不会，因为太难了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;climits&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define ll long long
+#define N 300100
+const ll inf=0x3f3f3f3f3f3f3f3f;
+int n,m;
+struct node{
+    int u,v,nxt;
+    ll w;
+}a[3*N],E[3*N];
+bool cmp(node x,node y){
+    return x.w&lt;y.w;
+}
+int p[N],eid,fa[N],f[N][23],d[N];
+ll mx[N][22],cmx[N][22],W;
+vector&lt;node&gt; G[3*N];
+bool used[3*N];
+void add(int u,int v,ll w){
+    E[eid].u=u;
+    E[eid].v=v;
+    E[eid].nxt=p[u];
+    E[eid].w=w;
+    p[u]=eid++;
+}
+void init(){
+    memset(mx,-1,sizeof(mx));
+    memset(cmx,-1,sizeof(cmx));
+    memset(p,-1,sizeof(p));
+    eid=1;
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=i;
+    }
+}
+int find(int x){
+    if(fa[x]==x){
+        return fa[x];
+    }
+    return fa[x]=find(fa[x]);
+}
+void kruskal(){
+    sort(a,a+m,cmp);
+    for(int i=0;i&lt;m;i++){
+        int fu=find(a[i].u),fv=find(a[i].v);
+        if(fu!=fv){
+            fa[fv]=fu;
+            W+=a[i].w;
+            add(a[i].u,a[i].v,a[i].w);
+            add(a[i].v,a[i].u,a[i].w);
+            used[i]=1;
+        }
+    }
+}
+void dfs(int u){
+    d[u]=d[f[u][0]]+1;
+    for(int i=p[u];i!=-1;i=E[i].nxt){
+        int v=E[i].v;
+        if(v!=f[u][0]){
+            mx[v][0]=E[i].w;
+            cmx[v][0]=-inf;
+            f[v][0]=u;
+            dfs(v);
+        }
+    }
+}
+void init_LCA(){
+    for(int i=1;i&lt;=n;i++){
+        fa[i]=0;
+    }
+    dfs(1);
+    for(int j=1;(1&lt;&lt;j)&lt;=n;j++){
+        for(int i=1;i&lt;=n;i++){
+            f[i][j]=f[f[i][j-1]][j-1];
+            mx[i][j]=max(mx[i][j-1],mx[f[i][j-1]][j-1]);
+            cmx[i][j]=max(cmx[i][j-1],cmx[f[i][j-1]][j-1]);
+            if(mx[i][j-1]&gt;mx[f[i][j-1]][j-1]){
+                cmx[i][j]=max(cmx[i][j],mx[f[i][j-1]][j-1]);
+            }
+            if(mx[i][j-1]&lt;mx[f[i][j-1]][j-1]){
+                cmx[i][j]=max(cmx[i][j],mx[i][j-1]);
+            }
+        }
+    }
+}
+ll LCA(int x,int y,ll w){
+    if(d[x]&lt;d[y]){
+        swap(x,y);
+    }
+    ll maxv=-inf;
+    for(int i=20;i&gt;=0;--i){
+        if(d[f[x][i]]&gt;=d[y]){
+            if(mx[x][i]!=w){
+                maxv=max(maxv,mx[x][i]);
+            }
+            else{
+                maxv=max(maxv,cmx[x][i]);
+            }
+            x=f[x][i];
+        }
+    }
+    if(x==y){
+        return maxv;
+    }
+    for(int i=20;i&gt;=0;i--){
+        if(f[x][i]!=f[y][i]){
+            if(mx[x][i]!=w){
+                maxv=max(maxv,mx[x][i]);
+            }
+            else{
+                maxv=max(maxv,cmx[x][i]);
+            }
+            if(mx[y][i]!=w){
+                maxv=max(maxv,mx[y][i]);
+            }
+            else{
+                maxv=max(maxv,cmx[y][i]);
+            }
+            x=f[x][i];
+            y=f[y][i];
+        }
+    }
+    if(mx[x][0]!=w){
+        maxv=max(maxv,mx[x][0]);
+    }
+    else{
+        maxv=max(maxv,cmx[x][0]);
+    }
+    if(mx[y][0]!=w){
+        maxv=max(maxv,mx[y][0]);
+    }
+    else{
+        maxv=max(maxv,cmx[y][0]);
+    }
+    return maxv;
+}
+ll getlen(int u,int v,ll w){
+    ll maxv=LCA(u,v,w);
+    return W+w-maxv;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=0;i&lt;m;i++){
+        cin&gt;&gt;a[i].u&gt;&gt;a[i].v&gt;&gt;a[i].w;
+    }
+    init();
+    kruskal();
+    init_LCA();
+    ll ans=inf;
+    for(int i=0;i&lt;m;i++){
+        if(!used[i]){
+            ans=min(ans,getlen(a[i].u,a[i].v,a[i].w));
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.cnblogs.com/Ryan-juruo/p/15222816.html">博客园@Ryan-Liu</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5651">P5651 基础最短路练习题</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>虽然说是最短路练习题，但其实你也可以用最小生成树来解，这里面还存在负边，也就是说异或起来还需要考虑负数的情况。其实我也不会，我暴力打了40pts。100分正解如下：<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 1000000
+int n,m,Q;
+struct edge{
+    int v,w;
+};
+struct node{
+    int dis,u;
+    bool operator &lt; (const node &a)const{
+        return dis&lt;a.dis;
+    }
+};
+vector&lt;edge&gt; e[maxn];
+int dis[maxn],vis[maxn],cnt;
+void dij(int s){
+    memset(dis,0x3f,sizeof(dis));
+    memset(vis,0,sizeof(vis));
+    dis[s]=0;
+    priority_queue&lt;node&gt; q;
+    q.push({0,s});
+    while(!q.empty()){
+        int u=q.top().u;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            if(dis[v]&gt;=dis[u]^w||cnt==m){
+                dis[v]=dis[u]^w;
+                q.push({-dis[v],v});
+            }
+        }
+    }
+}
+int main(){
+    scanf("%d%d%d",&n,&m,&Q);
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        scanf("%d%d%d",&u,&v,&w);
+        e[u].push_back({v,w});
+        e[v].push_back({u,w});
+        if(w&lt;=1)cnt++;
+    }
+    dij(1);
+    while(Q--){
+        int x,y;
+        scanf("%d%d",&x,&y);
+        printf("%d\n",dis[x]^dis[y]);
+    }
+    return 0;
+}
+</pre>容易想到的是对于每次询问都求一遍以x为起点y为终点的最短路，但其实只需要求一次以1为起点的最短路，然后用dis[x]^dis[y]就是x->y的最短路了。具体原理我也不清楚。<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P5651">题解区@爷，无限霸气</a></I></div>
+    <div class="t1"><a href="https://codeforces.com/problemset/problem/472/D">D. Design Tutorial: Inverse the Problem</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题因为数组没开大导致超时也是无敌了。这道题也是一道最小生成树模板题，但是我却不会。<pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 2010
+#define inf 2147483647
+int mp[maxn][maxn],dis[maxn],vis[maxn],lst[maxn],head[maxn];
+int n,tot;
+struct node{
+    int nxt,to,val;
+}edge[maxn*2];
+void add(int u,int v,int w){
+    edge[tot].nxt=head[u];
+    edge[tot].to=v;
+    edge[tot].val=w;
+    head[u]=tot;
+    ++tot;
+}
+void prim(){
+    for(int i=1;i&lt;=n;i++)dis[i]=inf;
+    for(int i=2;i&lt;=n;i++){
+        dis[i]=mp[1][i];
+        lst[i]=1;
+    }
+    dis[1]=0;
+    vis[1]=1;
+    for(int i=1;i&lt;n;i++){
+        int x=0,Min=inf;
+        for(int j=1;j&lt;=n;j++){
+            if(!vis[j]&&dis[j]&lt;Min){
+                Min=dis[j];
+                x=j;
+            }
+        }
+        if(!x)break;
+        vis[x]=1;
+        add(x,lst[x],dis[x]);
+        add(lst[x],x,dis[x]);
+        for(int j=1;j&lt;=n;j++){
+            if(!vis[j]&&dis[j]&gt;mp[x][j]){
+                dis[j]=mp[x][j];
+                lst[j]=x;
+            }
+        }
+    }
+}
+void dfs(int x,int fa){
+    for(int i=head[x];i!=-1;i=edge[i].nxt){
+        int y=edge[i].to;
+        int z=edge[i].val;
+        if(y==fa)continue;
+        dis[y]=dis[x]+z;
+        dfs(y,x);
+    }
+}
+int main(){
+    memset(head,-1,sizeof(head));
+    scanf("%d",&n);
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            scanf("%d",&mp[i][j]);
+            if(i!=j&&mp[i][j]==0){
+                puts("NO");
+                return 0;
+            }
+            if(i==j&&mp[i][j]!=0){
+                puts("NO");
+                return 0;
+            }
+        }
+    }
+    prim();
+    for(int i=1;i&lt;=n;i++){
+        dis[i]=0;
+        dfs(i,0);
+        for(int j=1;j&lt;=n;j++){
+            if(dis[j]!=mp[i][j]){
+                puts("NO");
+                return 0;
+            }
+        }
+    }
+    puts("YES");
+    return 0;
+}
+</pre>大家的题解都是用链式前向星写的，但我不太习惯那种写法。这道题似乎只能用prim的朴素版来解。<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/CF472D">题解区@_Shine__</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1194">P1194 买礼物</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题就是一道最小生成树模板题。可惜我不会，因此又是抄题解。注意建边的时候除了将给的矩阵的边建完后还要连一条从0向所有点的边。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+using namespace std;
+#define maxn 300000
+int n,m,k;
+struct edge{
+    int u,v,w;
+    bool operator &lt; (const edge &a)const{
+        return w&lt;a.w;
+    }
+}e[maxn];
+int fa[maxn],ans,cnt;
+int find(int x){
+    if(fa[x]==x){
+        return x;
+    }
+    return fa[x]=find(fa[x]);
+}
+void build(int x,int y,int z){
+    k++;
+    e[k].u=x;
+    e[k].v=y;
+    e[k].w=z;
+}
+bool kruskal(){
+    sort(e+1,e+k+1);
+    for(int i=0;i&lt;=m;i++){
+        fa[i]=i;
+    }
+    for(int i=1;i&lt;=k;i++){
+        int x=find(e[i].u);
+        int y=find(e[i].v);
+        if(x!=y){
+            fa[x]=y;
+            ans+=e[i].w;
+            cnt++;
+        }
+    }
+    return cnt==n-1;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,x;i&lt;=m;i++){
+        for(int j=1;j&lt;=m;j++){
+            cin&gt;&gt;x;
+            if(i&lt;j&&x){
+                build(i,j,x);
+            }
+        }
+    }
+    for(int i=1;i&lt;=m;i++){
+        build(0,i,n);
+    }
+    kruskal();
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这是Kruskal求最小生成树。<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1194">题解区@青丝、暮成雪</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3366">P3366 【模板】最小生成树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>最小生成树的代码和Dijkstra有点像，代码很好打。<b>Prim算法求最小生成树</b>1.普通版：<pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
@@ -260,6 +1149,7 @@ int main(){
 </pre><I>
     参考资料：博客园@董晓算法( <a href="https://www.cnblogs.com/dx123/p/16320452.html">最小生成树 Prim 算法</a>、<a href="https://www.cnblogs.com/dx123/p/16320454.html">最小生成树 Kruskal 算法</a> )
 </I></div>
+    <div class="t1">最小生成树<img src="https://upload-bbs.miyoushe.com/upload/2024/11/07/198629752/1bd42f0f2b49815d4a3d44d64a1b4a2c_6009894409766654602.png" alt="最小生成树"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P2047">P2047 [NOI2007] 社交网络</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a><s>抄答案也得仔仔细细的抄哦~</s>这道题真的不简单呐！仍然是Floyd，解决点对问题，题目很好理解，但是代码一定要仔细，要不然很容易爆零！<pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;

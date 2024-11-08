@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Remote Images</title>
+</head>
+<body>
+    <div id="image-container"></div>
+
+    <script>
+        // 假设你已经有了图片URL
+        const imageUrls = [
+            'https://upload-bbs.miyoushe.com/upload/2024/11/06/75276539/fbc26228ceb9b943693ba2b46b523eb4_8869130386573492317.jpg?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,jpg'
+            // ... 其他图片URL
+        ];
+
+        const imageContainer = document.getElementById('image-container');
+
+        imageUrls.forEach(url => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Fetched image';
+            imageContainer.appendChild(img);
+        });
+    </script>
+</body>
+</html>
