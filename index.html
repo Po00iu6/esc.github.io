@@ -62,7 +62,7 @@
     </header>
     
     <!--  -->
-    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay loop style="display: none;"></audio>
+    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay style="display: none;"></audio>
     <!--  -->
     <div class="bg1"></div>
     <div class="bg2"></div>
@@ -90,49 +90,6 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
-    <div class="t1" id="CF"><a href="https://codeforces.com/contest/2035">Codeforces Global Round 27</a><a href="#">Rated</a><a href="https://codeforces.com/contest/2035/problem/A">A. Sliding</a><a href="https://codeforces.com/contest/2035/problem/B">B. Everyone Loves Tres</a><a href="https://codeforces.com/contest/2035/problem/C">C. Alya and Permutation</a>A和B题都太简单了，我来说一下C题，这道题就是一道构造题，不过有点难度，大概是洛谷的黄题水平。先将1,2,3,4,7,8,2^k-1,2^k放在序列最后，然后前面的奇数位置放剩下的偶数，偶数位置放剩下的奇数即可。<pre>
-#include &lt;cstdio&gt;
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;algorithm&gt;
-using namespace std;
-int t,n; 
-int main(){
-    for(scanf("%d",&t);t;--t){
-        scanf("%d",&n);vector&lt;int&gt; ans;
-        auto solve=[&](const int &n){
-            vector&lt;int&gt; vec;
-            auto check=[&](const int &x){
-                return (x&(-x))==x;
-            };
-            for(int i=n;i&gt;=1;i--){
-                if(check(i)||check(i+1))continue;
-                vec.push_back(i);
-            }
-            for(int i=1;i&lt;=n;i++){
-                if(check(i)||check(i+1))vec.push_back(i);
-            }
-            return vec;
-        };
-        if(n==5)ans={2,1,3,4,5};
-        else if(n%2==0)ans=solve(n);
-        else ans=solve(n-1),ans.push_back(n);
-        int ret=0;
-        for(int i=0;i&lt;ans.size();i++){
-            if(i&1){
-                ret|=ans[i];
-            }
-            else{
-                ret&=ans[i];
-            }
-        }
-        printf("%d\n",ret);
-        for(auto x:ans)printf("%d ",x);
-        puts("");
-    }
-    return 0;
-}
-</pre>这道题我赛时没写出来，索性赛后看了题解。像这种构造题不要慌，一定要手动模拟一遍，观察样例，从样例中找到启发。<I>题解来源：<a href="https://www.cnblogs.com/cjjsb/p/18533864">博客园某大佬</a></I><a href="https://codeforces.com/contest/2035/problem/D">D. Yet Another Real Number Problem</a></div>
     <div class="t1"><a href="https://codeforces.com/problemset/problem/1120/D">D. Power Tree</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>一题多解，但我不会解。<b>法1.区间转差分的思想+最小生成树</b><b>法2.DP</b><pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;

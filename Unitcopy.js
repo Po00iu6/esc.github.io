@@ -293,3 +293,29 @@ var parentElement = document.getElementById('h_15');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
 parentElement.insertAdjacentHTML('beforeend', "分类主页");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('_header');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"ct\" id=\"h_16\" onclick=\"window.location.href=\'./Contests.html'\">");
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('h_16');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "比赛回顾");

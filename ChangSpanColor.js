@@ -208,3 +208,210 @@ document.addEventListener('DOMContentLoaded', function() {
     // 更改背景颜色
     cfElement.style.backgroundColor = 'rgba(255,186,  2,0.8)';
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('CF');
+
+    // 创建一个新的img元素
+    const imgElement = document.createElement('img');
+
+    imgElement.style.maxHeight='80px';
+    imgElement.style.backgroundColor='white';
+
+    // 设置img元素的src属性为指定的URL
+    imgElement.src = 'https://upload-bbs.miyoushe.com/upload/2024/11/10/198629752/9d5d40b2b9cf67b7b9baadddd7e284a0_3255032010487932117.webp'; // 请替换为你的图片URL
+
+    // 添加点击事件监听器
+    imgElement.addEventListener('click', function() {
+        // 指定要跳转的URL
+        const targetUrl = 'https://codeforces.com/contests'; // 请替换为实际的目标URL
+
+        // 执行页面跳转
+        window.location.href = targetUrl;
+    });
+
+    // 可选：设置img元素的其他属性，如alt文本
+    imgElement.alt = 'Description of the image';
+
+    // 将img元素插入到CF元素的内容的最前面
+    cfElement.insertBefore(imgElement, cfElement.firstChild);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('AT');
+    const links = container.getElementsByTagName('a');
+    container.style.color='white';
+    // 定义一个函数来设置特殊链接的样式
+    function setSpecialLinkStyle(link) {
+        link.style.fontWeight = 'bold';
+        link.style.color = 'white';
+        link.style.textDecoration = 'none';
+
+        // 添加鼠标悬停事件监听器
+        link.addEventListener('mouseover', function() {
+            link.style.color = 'gray'; // 鼠标悬停时更改颜色
+        });
+
+        // 添加鼠标离开事件监听器以恢复原始颜色
+        link.addEventListener('mouseout', function() {
+            link.style.color = 'white'; // 鼠标离开时恢复颜色
+        });
+    }
+    // 遍历所有链接并应用样式
+    for (let i = 0; i < links.length; i++) {
+        const text = links[i].textContent || links[i].innerText;
+        const regex = /^[A-Z]\ -/;
+
+        if (regex.test(text.trim())) {
+            setSpecialLinkStyle(links[i]);
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('AT');
+
+    // 更改背景颜色
+    cfElement.style.backgroundColor = 'rgba( 45, 51, 59,0.8)';
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('AT');
+
+    // 创建一个新的img元素
+    const imgElement = document.createElement('img');
+
+    imgElement.style.maxHeight='80px';
+    imgElement.style.backgroundColor='black';
+
+    // 设置img元素的src属性为指定的URL
+    imgElement.src = 'https://upload-bbs.miyoushe.com/upload/2024/11/10/198629752/0e376758c2a79d84a388734053349d88_8323781477114625186.png'; // 请替换为你的图片URL
+
+    // 添加点击事件监听器
+    imgElement.addEventListener('click', function() {
+        // 指定要跳转的URL
+        const targetUrl = 'https://atcoder.jp/contests/'; // 请替换为实际的目标URL
+
+        // 执行页面跳转
+        window.location.href = targetUrl;
+    });
+
+    // 可选：设置img元素的其他属性，如alt文本
+    imgElement.alt = 'Description of the image';
+
+    // 将img元素插入到CF元素的内容的最前面
+    cfElement.insertBefore(imgElement, cfElement.firstChild);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('AT');
+
+    const childElements = cfElement.getElementsByTagName('a');
+            for (let i = 0; i < childElements.length; i++) {
+                childElements[i].style.color = 'white';
+                childElements[i].style.textDecoration='none';
+            }
+    cfElement.style.color = 'white';
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('LG');
+    const links = container.getElementsByTagName('a');
+    // 定义一个函数来设置特殊链接的样式
+    function setSpecialLinkStyle(link) {
+        link.style.fontWeight = 'bold';
+        link.style.color = 'black';
+        link.style.textDecoration = 'none';
+
+        // 添加鼠标悬停事件监听器
+        link.addEventListener('mouseover', function() {
+            link.style.color = 'gray'; // 鼠标悬停时更改颜色
+        });
+
+        // 添加鼠标离开事件监听器以恢复原始颜色
+        link.addEventListener('mouseout', function() {
+            link.style.color = 'black'; // 鼠标离开时恢复颜色
+        });
+    }
+    // 遍历所有链接并应用样式
+    for (let i = 0; i < links.length; i++) {
+        const text = links[i].textContent || links[i].innerText;
+        const regex = /^[A-Z]\./;
+
+        if (regex.test(text.trim())) {
+            setSpecialLinkStyle(links[i]);
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('LG');
+
+    // 更改背景颜色
+    cfElement.style.backgroundColor = 'rgba(231,245,231,0.8)';
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取ID为CF的元素
+    const cfElement = document.getElementById('LG');
+
+    // 创建一个新的img元素
+    const imgElement = document.createElement('img');
+
+    imgElement.style.maxHeight='80px';
+    imgElement.style.backgroundColor='white';
+
+    // 设置img元素的src属性为指定的URL
+    imgElement.src = 'https://upload-bbs.miyoushe.com/upload/2024/11/10/198629752/35e6d0796eab39c4bf304d03e6d332c0_3893909472695035573.png'; // 请替换为你的图片URL
+
+    // 添加点击事件监听器
+    imgElement.addEventListener('click', function() {
+        // 指定要跳转的URL
+        const targetUrl = 'https://www.luogu.com.cn/'; // 请替换为实际的目标URL
+
+        // 执行页面跳转
+        window.location.href = targetUrl;
+    });
+
+    // 可选：设置img元素的其他属性，如alt文本
+    imgElement.alt = 'Description of the image';
+
+    // 将img元素插入到CF元素的内容的最前面
+    cfElement.insertBefore(imgElement, cfElement.firstChild);
+});
