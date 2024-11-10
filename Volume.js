@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     // Starting index, can be set to any valid index in the playlist
-    let currentIndex = getRandomInt(0, playlist.length);
-    let startIndex = currentIndex; // You can set a different start index if needed
+    let startIndex = getRandomInt(0, playlist.length);
+    let currentIndex = startIndex; // You can set a different start index if needed
 
     // Get the audio element
     const audio = document.getElementById('dd');
