@@ -90,6 +90,390 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4606">P4606 [SDOI2018] 战略游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题是虚树+圆方树解的，大佬很轻松就搞定了，但我不会。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+const int N = 2e5+10;
+int T,n,m,q,dfc,cnt,ans,p[N],dfn[N],low[N],s[N];
+int pn,dis[N],dep[N],fa[N],top[N],siz[N],son[N];
+vector&lt;int&gt; G[N],H[N];
+stack&lt;int&gt; S;
+void tarjan(int x){
+    dfn[x]=low[x]=++dfc;
+    S.push(x);
+    for(int y:H[x]){
+        if(!dfn[y]){
+            tarjan(y);
+            low[x]=min(low[x],low[y]);
+            if(low[y]==dfn[x]){
+                int k;
+                ++n;
+                do{
+                    k=S.top();S.pop();
+                    G[n].push_back(k);
+                    G[k].push_back(n);
+                }while(k!=y);
+                G[n].push_back(x);
+                G[x].push_back(n);
+            }
+        }
+        else{
+            low[x]=min(low[x],dfn[y]);
+        }
+    }
+}
+void dfs1(int x){
+    dfn[x]=++dfc;
+    siz[x]=1;
+    dep[x]=dep[fa[x]]+1;
+    dis[x]=dis[fa[x]]+(x&lt;=pn);
+    for(int y:G[x]){
+        if(y==fa[x])continue;
+        fa[y]=x;
+        dfs1(y);
+        siz[x]+=siz[y];
+        if(siz[y]&gt;siz[son[x]]) son[x]=y;
+    }
+}
+void dfs2(int x){
+    if(son[x]){
+        top[son[x]]=top[x];
+        dfs2(son[x]);
+    }
+    for(int y:G[x]){
+        if(y==fa[x]||y==son[x]) continue;
+        top[y]=y;
+        dfs2(y);
+    }
+}
+int LCA(int x,int y){
+    while(top[x]!=top[y]){
+        if(dep[top[x]]&lt;dep[top[y]]) swap(x,y);
+        x=fa[top[x]];
+    }
+    return dep[x]&lt;dep[y]?x:y;
+}
+void Add(int x){
+    if(!cnt){
+        s[++cnt]=x;
+        return;
+    }
+    int lca=LCA(x,s[cnt]);
+    while(cnt&gt;1&&dep[s[cnt-1]]&gt;dep[lca]){
+        ans+=dis[s[cnt]]-dis[s[cnt-1]];
+        cnt--;
+    }
+    if(dep[s[cnt]]&gt;dep[lca]){
+        ans+=dis[s[cnt]]-dis[lca];
+        cnt--;
+    }
+    if(s[cnt]!=lca){
+        s[++cnt]=lca;
+    }
+    s[++cnt]=x;
+}
+bool cmp(int x,int y){
+    return dfn[x]&lt;dfn[y];
+}
+int main(){
+    cin&gt;&gt;T;
+    while(T--){
+        cin&gt;&gt;n&gt;&gt;m;
+        dfc=0,pn=n;
+        for(int i=1;i&lt;=2*n;i++){
+            H[i].clear();
+            G[i].clear();
+            dfn[i]=low[i]=son[i]=0;
+        }
+        for(int i=1;i&lt;=m;i++){
+            int x,y;
+            cin&gt;&gt;x&gt;&gt;y;
+            H[x].push_back(y);
+            H[y].push_back(x);
+        }
+        tarjan(1);dfc=0;
+        dfs1(1);top[1]=1;
+        dfs2(1);
+        cin&gt;&gt;q;
+        while(q--){
+            cin&gt;&gt;m;
+            for(int i=1;i&lt;=m;i++){
+                cin&gt;&gt;p[i];
+            }
+            sort(p+1,p+m+1,cmp);
+            cnt=ans=0;
+            for(int i=1;i&lt;=m;i++){
+                Add(p[i]);
+            }
+            while(cnt&gt;1){
+                ans+=dis[s[cnt]]-dis[s[cnt-1]];
+                cnt--;
+            }
+            cout&lt;&lt;ans-m+(LCA(p[1],p[m])&lt;=pn)&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+</pre><I>
+    参考资料：<a href="https://www.cnblogs.com/QuantAsk/p/14386276.html">博客园大佬的题解，十分简洁</a>
+</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3469">P3469 [POI2008] BLO-Blockade</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>tarjan割点的模板题，但我不会，所以抄的，不过题解挺容易理解的。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+using namespace std;
+const int N = 100010;
+#define int long long
+struct node{
+    int to,nxt;
+}e[N&lt;&lt;4];
+
+int head[N&lt;&lt;4],tot;
+void add(int u,int v){
+    e[tot].to=v;
+    e[tot].nxt=head[u];
+    head[u]=tot++;
+}
+int n,m;
+int vis[N],dfn[N],low[N],cnt,flag[N];
+int res = 0;
+vector&lt;int&gt; son[N];
+int sontree[N];
+void tarjan(int u,int fa){
+    sontree[u]=1;
+    vis[u]=1;
+    dfn[u]=low[u]=++cnt;
+    int child=0;
+    int sum=0;
+    for(int i=head[u];i+1;i=e[i].nxt){
+        int v=e[i].to;
+        if(!vis[v]){
+            child++;
+            tarjan(v,u);
+            sontree[u]+=sontree[v];
+            low[u]=min(low[u],low[v]);
+            if(low[v]&gt;=dfn[u]){
+                sum+=sontree[v];
+                son[u].push_back(sontree[v]);
+                if(u!=fa)flag[u]=1;
+            }
+        }
+        else if(v!=fa){
+            low[u]=min(low[u],dfn[v]);
+        }
+    }
+    if(u==fa&&child&gt;1&&!flag[u]){
+        flag[u]=1;
+    }
+    if(flag[u]){
+        if(n-sum-1!=0) son[u].push_back(n-sum-1);
+    }
+}
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(head,-1,sizeof(head));
+    while(m--){
+        int u,v;
+        cin&gt;&gt;u&gt;&gt;v;
+        add(u,v);
+        add(v,u);
+    }
+    tarjan(1,1);
+    for(int i=1;i&lt;=n;i++){
+        int ans=2*(n-1);
+        if(flag[i]&&son[i].size()&gt;1){
+            for(int j=0;j&lt;son[i].size();j++){
+                for(int k=j+1;k&lt;son[i].size();k++){
+                    ans+=2*(son[i][j]*son[i][k]);
+                }
+            }
+        }
+        cout&lt;&lt;ans&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre><I>
+        参考资料：<a href="https://www.cnblogs.com/wabi/p/16750826.html">博客园·tarjan求割点</a>
+    </I></div>
+    <div class="t1"><a href="https://codeforces.com/problemset/problem/1000/E">E. We Need More Bosses</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题不难，tarjan缩点后重新建图，然后跑2遍dfs求直径就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+const int N = 300200;
+int dfn[N],low[N],co[N],col,num;
+int st[N],top;
+bool vis[N];
+vector&lt;int&gt; G[N&lt;&lt;1],G2[N&lt;&lt;1];
+int n,m;
+int maxdis,maxv;
+void tarjan(int x,int fa){
+    dfn[x]=low[x]=++num;
+    st[++top]=x;vis[x]=1;
+    for(int v:G[x]){
+        if(v==fa)continue;
+        if(!dfn[v]){
+            tarjan(v,x);
+            low[x]=min(low[x],low[v]);
+        }
+        else if(vis[v]){
+            low[x]=min(low[x],dfn[v]);
+        }
+    }
+    if(dfn[x]==low[x]){
+        col++;
+        while(1){
+            int y=st[top--];
+            vis[y]=0;
+            co[y]=col;
+            if(y==x)break;
+        }
+    }
+}
+void dfs(int u,int f,int dis){
+    if(maxdis&lt;dis){
+        maxdis=dis;
+        maxv=u;
+    }
+    for(int v:G2[u]){
+        if(v==f)continue;
+        dfs(v,u,dis+1);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    while(m--){
+        int u,v;
+        cin&gt;&gt;u&gt;&gt;v;
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+    tarjan(1,0);
+    for(int i=1;i&lt;=n;i++){
+        for(int j:G[i]){
+            if(co[i]!=co[j]){
+                G2[co[i]].push_back(co[j]);
+            }
+        }
+    }
+    dfs(1,-1,0);
+    maxdis=0;
+    dfs(maxv,-1,0);
+    cout&lt;&lt;maxdis;
+    return 0;
+}
+    </pre>虽然不难，但是我没做出来，抄的题解，挺好理解的。<I>参考资料：<a href="https://www.cnblogs.com/Nepenthe8/p/14313617.html">博客园·tarjan缩点、树上直径</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2863">P2863 [USACO06JAN] The Cow Prom S</a>tarjan算法模板题。<b>朴素版：</b><pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+const int N = 10010;
+int n,m,a,b;
+vector&lt;int&gt; e[N];
+int dfn[N],low[N],tot;
+int stk[N],instk[N],top;
+int scc[N],siz[N],cnt;
+void tarjan(int x){
+    dfn[x]=low[x]=++tot;
+    stk[++top]=x;instk[x]=1;
+    for(int y:e[x]){
+        if(!dfn[y]){
+            tarjan(y);
+            low[x]=min(low[x],low[y]);
+        }
+        else if(instk[y]){
+            low[x]=min(low[x],dfn[y]);
+        }
+    }
+    if(dfn[x]==low[x]){
+        int y;
+        ++cnt;
+        do{
+            y=stk[top--];
+            instk[y]=0;
+            scc[y]=cnt;
+            ++siz[cnt];
+        }while(y!=x);
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    while(m--){
+        cin&gt;&gt;a&gt;&gt;b;
+        e[a].push_back(b);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i])tarjan(i);
+    }
+    int ans=0;
+    for(int i=1;i&lt;=cnt;i++){
+        if(siz[i]&gt;1)ans++;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><b>使用STL栈版:</b><pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+const int N = 10010;
+int n,m,a,b;
+vector&lt;int&gt; e[N];
+int dfn[N],low[N],tot;
+stack&lt;int&gt; stk;
+int scc[N],siz[N],cnt;
+void tarjan(int x){
+    dfn[x]=low[x]=++tot;
+    stk.push(x);
+    for(int y:e[x]){
+        if(!dfn[y]){
+            tarjan(y);
+            low[x]=min(low[x],low[y]);
+        }
+        else if(!scc[y]){
+            low[x]=min(low[x],dfn[y]);
+        }
+    }
+    if(dfn[x]==low[x]){
+        ++cnt;
+        while(1){
+            int y=stk.top();
+            stk.pop();
+            scc[y]=cnt;
+            ++siz[cnt];
+            if(y==x)break;
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    while(m--){
+        cin&gt;&gt;a&gt;&gt;b;
+        e[a].push_back(b);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i])tarjan(i);
+    }
+    int ans=0;
+    for(int i=1;i&lt;=cnt;i++){
+        if(siz[i]&gt;1)ans++;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.cnblogs.com/dx123/p/16320476.html">董晓算法·强连通分量tarjan算法</a></I></div>
     <div class="t1">连通性问题<img src="https://upload-bbs.miyoushe.com/upload/2024/11/11/198629752/d6f9c1b61fc3c93a83fb3a4e83bf2ce4_4286196103297992497.png" alt="连通性问题"></div>
     <div class="t1"><a href="https://codeforces.com/problemset/problem/1120/D">D. Power Tree</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>一题多解，但我不会解。<b>法1.区间转差分的思想+最小生成树</b><b>法2.DP</b><pre>
 #include &lt;iostream&gt;

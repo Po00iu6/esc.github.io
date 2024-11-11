@@ -45,8 +45,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/雨物语.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/有你刚刚好.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/烟火人间月.mp3',
-        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/百味一锅.mp3',
-        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/0to0.mp3'
+        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/百味一锅.mp3'
         // Add more URLs as needed
     ];
 
