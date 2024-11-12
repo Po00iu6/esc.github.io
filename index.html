@@ -90,6 +90,657 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7737">P7737 [NOI2021] 庆典</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题是tarjan缩点转DAG+虚树。但我不会，而且它还卡常，导致得少用vector要不然TLE。<pre>
+#include&lt;bits/stdc++.h&gt;//JZM yyds!!
+#define ll long long
+#define MAXN 300005
+#define uns unsigned
+using namespace std;
+inline ll read(){
+	ll x=0;bool f=1;char s=getchar();
+	while((s&lt;'0'||s&gt;'9')&&s&gt;0){if(s=='-')f^=1;s=getchar();}
+	while(s&gt;='0'&&s&lt;='9')x=(x&lt;&lt;1)+(x&lt;&lt;3)+s-'0',s=getchar();
+	return f?x:-x;
+}
+int n,m,Q,k;
+int u1,v1,u2,v2;
+vector&lt;int&gt;G[MAXN],G_[MAXN],G__[MAXN];
+
+int dfn[MAXN],NN,low[MAXN],bl[MAXN];
+bool ist[MAXN];
+stack&lt;int&gt;st;
+int du[MAXN],num,siz[MAXN];
+
+int fa[MAXN],f[MAXN][25],hd[MAXN],tl[MAXN],dp[MAXN],dep[MAXN],IN;
+
+inline void tarjan(int x){
+	low[x]=dfn[x]=++NN,st.push(x),ist[x]=1;
+	for(uns i=0;i&lt;G__[x].size();i++){
+		int v=G__[x][i];
+		if(!dfn[v])tarjan(v),low[x]=min(low[x],low[v]);
+		else if(ist[v])low[x]=min(low[x],dfn[v]);
+	}
+	if(low[x]==dfn[x]){num++;
+		while(!st.empty()&&dfn[st.top()]&gt;=dfn[x])
+			bl[st.top()]=num,ist[st.top()]=0,st.pop();
+	}
+}
+queue&lt;int&gt;q;
+int root;
+inline void topu(){
+	for(int i=1;i&lt;=num;i++)if(!du[i])q.push(i),root=i;
+	while(!q.empty()){
+		int u=q.front();q.pop();
+		for(uns i=0;i&lt;G_[u].size();i++){
+			int v=G_[u][i];du[v]--;
+			if(!du[v])
+				G[u].push_back(v),fa[v]=u,q.push(v);
+		}
+	}
+}
+inline void dfs(int x){
+	hd[x]=++IN,f[x][0]=fa[x];
+	dp[x]=dp[fa[x]]+siz[x],dep[x]=dep[fa[x]]+1;
+	for(int i=1;i&lt;20;i++)f[x][i]=f[f[x][i-1]][i-1];
+	for(uns i=0;i&lt;G[x].size();i++)dfs(G[x][i]);
+	tl[x]=IN;
+}
+inline int lca(int u,int v){
+	if(dep[u]&lt;dep[v])swap(u,v);
+	for(int i=19;i&gt;=0;i--)if(dep[f[u][i]]&gt;=dep[v])u=f[u][i];
+	if(u!=v){
+		for(int i=19;i&gt;=0;i--)
+			if(f[u][i]!=f[v][i])u=f[u][i],v=f[v][i];
+		u=fa[u];
+	}
+	return u;
+}
+vector&lt;int&gt;a,b;
+inline void addedge(int u,int v){
+	bool ok=0;
+	for(uns i=0;i&lt;a.size();i++)
+		if(hd[u]&gt;=hd[a[i]]&&hd[u]&lt;=tl[a[i]])ok=1;
+	if(ok){
+		int h=0;
+		for(uns i=0;i&lt;a.size()&&h&gt;=0;i++){
+			if(hd[v]&gt;=hd[a[i]]&&hd[v]&lt;=tl[a[i]])h=-1;
+			if(h&gt;=0&&hd[a[i]]&gt;hd[v]&&hd[a[i]]&lt;=tl[v])h=1,a[i]=v;
+		}
+		for(uns i=0;i&lt;a.size();i++){
+			bool ok=1;
+			for(uns j=0;j&lt;i;j++)if(a[j]==a[i])ok=0;
+			if(!ok)a.erase(a.begin()+i,a.begin()+i+1),i--;
+		}
+		if(h==0)a.push_back(v);
+	}
+	
+	ok=0;
+	for(uns i=0;i&lt;b.size();i++)
+		if(hd[b[i]]&gt;=hd[v]&&hd[b[i]]&lt;=tl[v])ok=1;
+	if(ok){
+		int h=0;
+		for(uns i=0;i&lt;b.size()&&h==0;i++){
+			if(hd[b[i]]&gt;=hd[u]&&hd[b[i]]&lt;=tl[u])h=-1;
+			if(h==0&&hd[u]&gt;hd[b[i]]&&hd[u]&lt;=tl[b[i]])h=1,b[i]=u;
+		}
+		if(h==0)b.push_back(u);
+	}
+}
+signed main()
+{
+// 	freopen("celebration.in","r",stdin);
+// 	freopen("celebration.out","w",stdout);
+	n=read(),m=read(),Q=read(),k=read();
+	for(int i=1;i&lt;=m;i++){
+		int u=read(),v=read();
+		G__[u].push_back(v);
+	}
+	for(int i=1;i&lt;=n;i++)if(!dfn[i])tarjan(i);
+	for(int x=1;x&lt;=n;x++){
+		siz[bl[x]]++;
+		for(uns i=0;i&lt;G__[x].size();i++){
+			int v=G__[x][i];
+			if(bl[v]!=bl[x])
+				G_[bl[x]].push_back(bl[v]),du[bl[v]]++;
+		}
+	}
+	topu(),dfs(root);
+	for(int D=1;D&lt;=Q;D++){
+		int s=read(),t=read();
+		a.clear(),b.clear(),u1=v1=u2=v2=0;
+		a.push_back(bl[s]),b.push_back(bl[t]);
+		if(k&gt;0)u1=bl[read()],v1=bl[read()];
+		if(k&gt;1)u2=bl[read()],v2=bl[read()];
+		if(u1==v1)u1=v1=0;
+		if(u2==v2)u2=v2=0;
+		if(u1)addedge(u1,v1);
+		if(u2)addedge(u2,v2);
+		if(u1)addedge(u1,v1);
+		int ans=0;
+		for(uns i=0;i&lt;a.size();i++){
+			for(uns j=0;j&lt;b.size();j++){
+				int c=a[i],d=b[j];
+				if(hd[d]&gt;=hd[c]&&hd[d]&lt;=tl[c]){
+					int lc=fa[c],glc;
+					for(uns l=0;l&lt;j;l++){
+						glc=lca(b[l],d);
+						if(dep[glc]&gt;dep[lc])lc=glc;
+					}
+					ans+=dp[d]-dp[lc];
+				}
+			}
+		}
+		printf("%d\n",ans);
+	}
+	return 0;
+}
+</pre><I>
+    参考资料：<a href="https://www.luogu.com.cn/problem/solution/P7737">题解区@OUYE2020</a>
+</I>代码足足好几行，我忘了，反正很长。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4819">P4819 [中山市选] 杀人游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题需要结合数学期望+tarjan缩点完成，具体怎么完成的我还是不明白呜呜呜。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+using namespace std;
+const int N = 1e5+10;
+const int M = 3e5+10;
+int n,m;
+vector&lt;int&gt; edge[N];
+int low[N],dfn[N],tim,stk[N],top,scc[N],cnt;
+bool vis[N];
+inline void tarjan(int u){
+    stk[++top]=u;
+    vis[u]=1;
+    low[u]=dfn[u]=++tim;
+    for(int v:edge[u]) {
+        if(!dfn[v]){
+            tarjan(v);
+            low[u]=min(low[u],low[v]);
+        }
+        else if(vis[v]){
+            low[u]=min(low[u],dfn[v]);
+        }
+    }
+    if(low[u]==dfn[u]){
+        scc[u]=++cnt;
+        while(stk[top]!=u){
+            scc[stk[top]]=cnt;
+            vis[stk[top--]]=0;
+        }
+        vis[u]=0;top--;
+    }
+}
+int in[N],siz[N],tot;
+vector&lt;int&gt; g[N];
+bool vise[M];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,u,v;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        edge[u].push_back(v);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i])tarjan(i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        siz[scc[i]]++;
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j:edge[i]){
+            if(scc[i]==scc[j]||vise[scc[j]]) continue;
+            g[scc[i]].push_back(scc[j]);
+            vise[scc[j]]=1;in[scc[j]]++;
+        }
+        for(int j:edge[i]) vise[scc[j]]=0;
+    }
+    bool flag = 1;
+    for(int i=1;i&lt;=cnt;i++){
+        if(!in[i]) tot++;
+        if(in[i]||siz[i]&gt;1) continue;
+        if(flag==0) continue;
+        bool pp = 1;
+        for(int j:g[i]){
+            if(in[j]&lt;=1){
+                pp=0;
+                break;
+            }
+        }
+        if(pp) tot--,flag=0;
+    }
+    printf("%.6lf",1.0*(n-tot)/n);
+    return 0;
+}
+</pre><I>
+    参考资料：<a href="https://www.cnblogs.com/adolf-stalin/p/17732917.html">博客园题解</a>
+</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3825">P3825 [NOI2017] 游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题需要2-SAT算法解决。我仍然不会，因此是抄的。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+#define int long long
+const int N=1e5+9;
+struct Edge{
+    int to,nxt;
+}edge[N&lt;&lt;1];
+struct In{
+    int a,b;
+    char x,y;
+}in[N];
+int head[N&lt;&lt;1],dfn[N&lt;&lt;1],low[N&lt;&lt;1],scc[N&lt;&lt;1];
+bool vis[N&lt;&lt;1];
+int a[N],bits[N];
+int n,d,m,ecnt,cnt,tot;
+stack&lt;int&gt; stk;
+void add(int u,int v){
+    edge[++ecnt]=(Edge){v,head[u]};
+    head[u]=ecnt;
+}
+void tarjan(int u){
+    dfn[u]=low[u]=++tot;
+    vis[u]=1;
+    stk.push(u);
+    for(int i=head[u];i;i=edge[i].nxt){
+        int v=edge[i].to;
+        if(!dfn[v]){
+            tarjan(v);
+            low[u]=min(low[u],low[v]);
+        }
+        else{
+            if(vis[v]){
+                low[u]=min(low[u],dfn[v]);
+            }
+        }
+    }
+    if(low[u]==dfn[u]){
+        int v;
+        ++cnt;
+        do{
+            v=stk.top();
+            stk.pop();
+            vis[v]=0;
+            scc[v]=cnt;
+        }while(v!=u);
+    }
+}
+bool two_sat(){
+    for(int i=1;i&lt;=2*n;i++){
+        if(!dfn[i])tarjan(i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(scc[i]==scc[i+n])return 0;
+    }
+    return 1;
+}
+void init(){
+    memset(vis,0,sizeof(vis));
+    memset(scc,0x3f,sizeof(scc));
+    memset(dfn,0,sizeof(dfn));
+    memset(low,0,sizeof(low));
+    memset(head,0,sizeof(head));
+    while(!stk.empty()){
+        stk.pop();
+    }
+    tot=cnt=ecnt=0;
+}
+bool sol(){
+    cin&gt;&gt;n&gt;&gt;d;
+    string s;
+    cin&gt;&gt;s;s=" "+s;
+    int sum=0;
+    for(int i=1;i&lt;s.size();i++){
+        if(s[i]=='x'){
+            a[i]=sum++;
+        }
+    }
+    cin&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;in[i].a&gt;&gt;in[i].x&gt;&gt;in[i].b&gt;&gt;in[i].y;
+    }
+    for(int now=0;now&lt;(1&lt;&lt;d);now++){
+        init();
+        for(int i=1;i&lt;=m;i++){
+            int na=in[i].x-'A',nb=in[i].y-'A';
+            int l=in[i].a,r=in[i].b;
+            if(s[in[i].a]=='x'){
+                if(now&(1&lt;&lt;a[in[i].a])){
+                    if(na==1) continue;
+                    if(na==2) l+=n;
+                }
+                else{
+                    if(na==2) continue;
+                    if(na==1) l+=n;
+                }
+            }
+            else{
+                if(s[in[i].a]-'a'==na){
+                    continue;
+                }
+                if(s[in[i].a]=='a'){
+                    if(na==2) l+=n;
+                }
+                if(s[in[i].a]=='b'){
+                    if(na==2) l+=n;
+                }
+                if(s[in[i].a]=='c'){
+                    if(na==1) l+=n;
+                }
+            }
+            if(s[in[i].b]=='x'){
+                if(now&(1&lt;&lt;a[in[i].b])){
+                    if(nb==1){
+                        add(l,(l==in[i].a)?(l+n):(l-n));
+                        continue;
+                    }
+                    if(nb==2){
+                        r+=n;
+                    }
+                }
+                else{
+                    if(nb==2){
+                        add(l,(l==in[i].a)?(l+n):(l-n));
+                        continue;
+                    }
+                    if(nb==1){
+                        r+=n;
+                    }
+                }
+            }
+            else{
+                if(s[in[i].b]-'a'==nb){
+                    add(l,(l==in[i].a)?(l+n):(l-n));
+                    continue;
+                }
+                if(s[in[i].b]=='a'){
+                    if(nb==2) r+=n;
+                }
+                if(s[in[i].b]=='b'){
+                    if(nb==2) r+=n;
+                }
+                if(s[in[i].b]=='c'){
+                    if(nb==1) r+=n;
+                }
+            }
+            add(l,r);
+            if(l==in[i].a){
+                l+=n;
+            }
+            else{
+                l-=n;
+            }
+            if(r==in[i].b){
+                r+=n;
+            }
+            else{
+                r-=n;
+            }
+            add(r,l);
+        }
+        if(two_sat()){
+            for(int i=1;i&lt;=n;i++){
+                if(s[i]=='x'){
+                    if(now&(1&lt;&lt;a[i])){
+                        if(scc[i]&lt;scc[i+n]){
+                            cout&lt;&lt;"A";
+                        }
+                        else{
+                            cout&lt;&lt;"C";
+                        }
+                    }
+                    else{
+                        if(scc[i]&lt;scc[i+n]){
+                            cout&lt;&lt;"A";
+                        }
+                        else{
+                            cout&lt;&lt;"B";
+                        }
+                    }
+                }
+                if(s[i]=='a'){
+                    if(scc[i]&lt;scc[i+n]){
+                        cout&lt;&lt;"B";
+                    }
+                    else{
+                        cout&lt;&lt;"C";
+                    }
+                }
+                if(s[i]=='b'){
+                    if(scc[i]&lt;scc[i+n]){
+                        cout&lt;&lt;"A";
+                    }
+                    else{
+                        cout&lt;&lt;"C";
+                    }
+                }
+                if(s[i]=='c'){
+                    if(scc[i]&lt;scc[i+n]){
+                        cout&lt;&lt;"A";
+                    }
+                    else{
+                        cout&lt;&lt;"B";
+                    }
+                }
+            }
+            cout&lt;&lt;"\n";
+            return 1;
+        }
+    }
+    return 0;
+}
+signed main(){
+    if(!sol()){
+        cout&lt;&lt;"-1";
+    }
+    return 0;
+}
+    </pre><I>
+        参考资料：<a href="https://www.cnblogs.com/yexinqwq/p/17219177.html">博客园大佬</a>
+    </I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5025">P5025 [SNOI2017] 炸弹</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题是tarjan+线段树优化。具体怎么写我不知道，抄的。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+#define ll long long
+#define mid ((l+r)&gt;&gt;1)
+#define ls k&lt;&lt;1
+#define rs k&lt;&lt;1|1
+const int N = 5e5+10,M=2e6+10,mod=1e9+7;
+struct node{
+    int l,r;
+}a[M];
+ll x[N],r[N];
+int dfn[M],low[M],scc[M];
+int id[M],le[M],ri[M];
+int n,nd,tot,cnt,ans;
+stack&lt;int&gt; s;
+vector&lt;int&gt; e[M],G[M];
+bool vis[M];
+void build(int k,int l,int r){
+    a[k]={l,r};
+    nd=max(nd,k);
+    if(l==r){
+        id[l]=k;
+        return;
+    }
+    build(ls,l,mid);
+    build(rs,mid+1,r);
+    e[k].push_back(ls);
+    e[k].push_back(rs);
+}
+void link(int k,int l,int r,int L,int R,int v){
+    if(L&lt;=l&&R&gt;=r){
+        if(k==v){
+            return;
+        }
+        e[v].push_back(k);
+        return;
+    }
+    if(L&lt;=mid){
+        link(ls,l,mid,L,R,v);
+    }
+    if(R&gt;mid){
+        link(rs,mid+1,r,L,R,v);
+    }
+}
+void tarjan(int x){
+    dfn[x]=low[x]=++tot;
+    s.push(x),vis[x]=1;
+    for(int y:e[x]){
+        if(!dfn[y]){
+            tarjan(y);
+            low[x]=min(low[x],low[y]);
+        }
+        else if(vis[y]){
+            low[x]=min(low[x],dfn[y]);
+        }
+    }
+    if(dfn[x]==low[x]){
+        cnt++;
+        int v;
+        do{
+            v=s.top();
+            s.pop();
+            vis[v]=0;
+            scc[v]=cnt;
+            le[cnt]=min(le[cnt],a[v].l);
+            ri[cnt]=max(ri[cnt],a[v].r);
+        }while(v!=x);
+    }
+}
+void dfs(int u){
+    vis[u]=1;
+    for(int v:G[u]){
+        if(vis[v]){
+            le[u]=min(le[u],le[v]);
+            ri[u]=max(ri[u],ri[v]);
+            continue;
+        }
+        dfs(v);
+        le[u]=min(le[u],le[v]);
+        ri[u]=max(ri[u],ri[v]);
+    }
+}
+int query(int x){
+    int u=scc[id[x]];
+    return ri[u]-le[u]+1;
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;x[i]&gt;&gt;r[i];
+    }
+    memset(le,0x3f,sizeof(le));
+    build(1,1,n);
+    for(int i=1;i&lt;=n;i++){
+        int L=lower_bound(x+1,x+n+1,x[i]-r[i])-x;
+        int R=upper_bound(x+1,x+n+1,x[i]+r[i])-x-1;
+        link(1,1,n,L,R,id[i]);
+        a[id[i]]={L,R};
+    }
+    tarjan(1);
+    for(int i=1;i&lt;=nd;i++){
+        for(int j=0;j&lt;e[i].size();j++){
+            int u=e[i][j];
+            if(scc[u]==scc[i]){
+                continue;
+            }
+            G[scc[i]].push_back(scc[u]);
+        }
+    }
+    for(int i=1;i&lt;=cnt;i++){
+        sort(G[i].begin(),G[i].end());
+        unique(G[i].begin(),G[i].end());
+    }
+    memset(vis,0,sizeof(vis));
+    for(int i=1;i&lt;=cnt;i++){
+        if(!vis[i]) dfs(i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        ans=(ans+1ll*query(i)*i)%mod;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre><I>
+    参考资料：<a href="https://www.cnblogs.com/YHxo/p/16806249.html">博客园大佬</a>
+</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2341">P2341 [USACO03FALL / HAOI2006] 受欢迎的牛 G</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>强连通分量的大小就是答案。难就难在怎么看出来这玩意跟强连通分量有关系。我还是抄的，不过这个感觉好简单。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;stack&gt;
+using namespace std;
+const int N = 2e5;
+int n,m,a,b;
+int dfn[N],low[N],tot;
+int stk[N],instk[N],top;
+int scc[N],siz[N],cnt;
+vector&lt;int&gt; e[N];
+void tarjan(int x){
+    dfn[x]=low[x]=++tot;
+    stk[++top]=x;instk[x]=1;
+    for(int y:e[x]){
+        if(!dfn[y]){
+            tarjan(y);
+            low[x]=min(low[x],low[y]);
+        }
+        else if(instk[y]){
+            low[x]=min(low[x],dfn[y]);
+        }
+    }
+    if(low[x]==dfn[x]){
+        ++cnt;
+        int y;
+        do{
+            y=stk[top--];
+            instk[y]=0;
+            scc[y]=cnt;
+            ++siz[cnt];
+        }while(y!=x);
+    }
+}
+int du[N];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    while(m--){
+        cin&gt;&gt;a&gt;&gt;b;
+        e[a].push_back(b);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i])tarjan(i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j:e[i]){
+            if(scc[i]-scc[j]){
+                du[scc[i]]++;
+            }
+        }
+    }
+    int ans=0;
+    for(int i=1;i&lt;=cnt;i++){
+        if(!du[i]){
+            if(ans){
+                puts("0");
+                return 0;
+            }
+            ans=i;
+        }
+    }
+    cout&lt;&lt;siz[ans];
+    return 0;
+}
+</pre><I>
+    参考资料：<a href="https://www.cnblogs.com/bifanwen/p/12581880.html">博客园题解</a>
+</I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1262">P1262 间谍网络</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题我也不会，因此也是抄的。这道题需要dfs+tarjan缩点。<pre>
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;
