@@ -90,6 +90,257 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1262">P1262 间谍网络</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题我也不会，因此也是抄的。这道题需要dfs+tarjan缩点。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 3005
+#define maxm 8005
+int n,p,r;
+int hd[maxn],nxt[maxm],to[maxm],tot=1;
+int dfn[maxn],low[maxn],num,stk[maxn],tp,c[maxn],cnt;
+int pr[maxn],f[maxn];
+int x,y;
+bool vs[maxn],v[maxn];
+
+void add(int x,int y){
+    nxt[++tot]=hd[x];
+    hd[x]=tot;
+    to[tot]=y;
+}
+void tarjan(int x){
+    dfn[x]=low[x]=++tot;
+    stk[++tp]=x;
+    for(int i=hd[x];i;i=nxt[i]){
+        if(!dfn[to[i]]){
+            tarjan(to[i]),low[x]=min(low[x],low[to[i]]);
+        }
+        else if(!c[to[i]]){
+            low[x]=min(low[x],dfn[to[i]]);
+        }
+    }
+    if(low[x]==dfn[x]){
+        c[x]=++cnt;
+        f[cnt]=pr[x];
+        while(stk[tp]!=x){
+            f[cnt]=min(f[cnt],pr[stk[tp]]),c[stk[tp--]]=cnt;
+        }
+        tp--;
+    }
+}
+void dfs(int x){
+    v[x]=1;
+    for(int i=hd[x];i;i=nxt[i]){
+        if(!v[to[i]]){
+            dfs(to[i]);
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;p;
+    for(int i=1;i&lt;=n;i++){
+        pr[i]=2147483647;
+    }
+    for(int i=1;i&lt;=p;i++){
+        cin&gt;&gt;x&gt;&gt;y;pr[x]=y;
+    }
+    cin&gt;&gt;r;
+    for(int i=1;i&lt;=r;i++){
+        cin&gt;&gt;x&gt;&gt;y;
+        add(x,y);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(pr[i]&lt;2147483647&&!v[i]){
+            dfs(i);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!v[i]){
+            cout&lt;&lt;"NO\n"&lt;&lt;i&lt;&lt;'\n';
+            return 0;
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!c[i]){
+            tarjan(i);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=hd[i];j;j=nxt[j]){
+            if(c[i]!=c[to[j]]){
+                vs[c[to[j]]]=1;
+            }
+        }
+    }
+    int ans=0;
+    for(int i=1;i&lt;=cnt;i++){
+        if(!vs[i]){
+            ans+=f[i];
+        }
+    }
+    cout&lt;&lt;"YES\n"&lt;&lt;ans;
+    return 0;
+}
+</pre><I>
+    参考资料：<a href="https://www.cnblogs.com/louhancheng/p/10160699.html">博客园@louhc</a>
+</I></div>
+    <div class="t1"><a href="https://codeforces.com/problemset/submit?csrf_token=ee0fad0734e5a1432fc96e5c2954dac6">E. Tourists</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题不会，我抄的博客园大佬的题解，大佬的代码实在是太恶心人了，变量起的啥玩意啊，而且size还引发了二义性导致CE了我￥%@&！<pre>
+#include &lt;cmath&gt;
+#include &lt;queue&gt;
+#include &lt;stack&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;set&gt;
+using namespace std;
+const int N = 2e5+5;
+const int M = 4e5+5;
+const int INF = 1e9;
+struct node{
+    int u[M],v[M],nxt[M];
+    int cnt,head[N];
+    void init(){
+        cnt=0;
+        memset(head,0,sizeof(head));
+    }
+    void add(int U,int V){
+        u[++cnt]=U;
+        v[cnt]=V;
+        nxt[cnt]=head[U];head[U]=cnt;
+    }
+}e,g;
+int n,m,T,w[N];
+int dfn[N],low[N],to[N],t,l;
+stack&lt;int&gt; q;
+void tarjan(int u,int f){
+    dfn[u]=low[u]=++t;
+    for(int i=g.head[u];i;i=g.nxt[i]){
+        int v=g.v[i];
+        if(!dfn[v]){
+            q.push(i);tarjan(v,u);
+            low[u]=min(low[u],low[v]);
+            if(low[v]&gt;=dfn[u]){
+                int num;l++;
+                do{
+                    num=q.top();q.pop();
+                    int x=g.u[num],y=g.v[num];
+                    if(to[x]!=l){
+                        to[x]=l;
+                        e.add(x,l+n);e.add(l+n,x);
+                    }
+                    if(to[y]!=l){
+                        to[y]=l;
+                        e.add(y,l+n);e.add(l+n,y);
+                    }
+                }while(num!=i);
+            }
+        }
+        else if(low[u]&gt;dfn[v]&&f!=v){
+            q.push(i);low[u]=dfn[v];
+        }
+    }
+}
+inline bool is_square(int x){
+    return x&gt;n;
+}
+multiset&lt;int&gt; minn[N];
+int tot,fa[N],pos[N],idx[N],siz[N],son[N],dep[N],top[N],val[N];
+void dfs1(int u){
+    siz[u]=1;
+    for(int i=e.head[u];i;i=e.nxt[i]){
+        int v=e.v[i];
+        if(fa[u]==v)continue;
+        fa[v]=u,dep[v]=dep[u]+1;
+        if(is_square(u))minn[u].insert(w[v]);
+        dfs1(v);siz[u]+=siz[v];
+        if(!son[u]||siz[son[u]]&lt;siz[v]) son[u]=v;
+    }
+}
+void dfs2(int u,int anc){
+    pos[u]=++tot;
+    idx[tot]=u;top[u]=anc;
+    if(!son[u])return;
+    dfs2(son[u],anc);
+    for(int i=e.head[u];i;i=e.nxt[i]){
+        int v=e.v[i];
+        if(v==fa[u]||v==son[u])continue;
+        dfs2(v,v);
+    }
+}
+inline void init(){
+    dep[1]=1;
+    dfs1(1);
+    dfs2(1,1);
+}
+int tr[N&lt;&lt;2];
+void build(int a,int l,int r){
+    if(l==r){
+        tr[a]=(is_square(idx[l]))?*minn[idx[l]].begin():w[idx[l]];
+        return;
+    }
+    int mid=l+r&gt;&gt;1;
+    build(a&lt;&lt;1,l,mid);build(a&lt;&lt;1|1,mid+1,r);
+    tr[a]=min(tr[a&lt;&lt;1],tr[a&lt;&lt;1|1]);
+}
+inline int query(int a,int l,int r,int ll,int rr){
+    if(rr&lt;l||ll&gt;r)return INF;
+    if(ll&lt;=l&&r&lt;=rr)return tr[a];
+    int mid=l+r&gt;&gt;1;
+    return min(query(a&lt;&lt;1,l,mid,ll,rr),query(a&lt;&lt;1|1,mid+1,r,ll,rr));
+}
+inline void modify(int a,int l,int r,int x){
+    if(x&lt;l||r&lt;x)return;
+    if(l==r){
+        tr[a]=(is_square(idx[l]))?*minn[idx[l]].begin():w[idx[l]];
+        return;
+    }
+    int mid=l+r&gt;&gt;1;
+    modify(a&lt;&lt;1,l,mid,x);modify(a&lt;&lt;1|1,mid+1,r,x);
+    tr[a]=min(tr[a&lt;&lt;1],tr[a&lt;&lt;1|1]);
+}
+inline int qry(int x,int y){
+    int ans=INF;
+    while(top[x]!=top[y]){
+        if(dep[top[x]]&lt;dep[top[y]])swap(x,y);
+        ans=min(ans,query(1,1,n+l,pos[top[x]],pos[x]));
+        x=fa[top[x]];
+    }
+    if(dep[x]&gt;dep[y])swap(x,y);
+    ans=min(ans,query(1,1,n+l,pos[x],pos[y]));
+    return is_square(x)?min(ans,query(1,1,n+l,pos[fa[x]],pos[fa[x]])):ans;
+}
+inline void mdy(int x,int y){
+    if(fa[x]){
+        minn[fa[x]].insert(y);
+        minn[fa[x]].erase(minn[fa[x]].find(w[x]));
+        modify(1,1,n+l,pos[fa[x]]);
+    }
+    w[x]=y;
+    modify(1,1,n+l,pos[x]);
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;T;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;w[i];
+    for(int i=1;i&lt;=m;i++){
+        int u,v;
+        cin&gt;&gt;u&gt;&gt;v;
+        g.add(u,v);
+        g.add(v,u);
+    }
+    tarjan(1,0);
+    init();build(1,1,n+l);
+    for(int i=1;i&lt;=T;i++){
+        char c;
+        int x,y;
+        cin&gt;&gt;c&gt;&gt;x&gt;&gt;y;
+        if(c=='C')mdy(x,y);
+        if(c=='A')cout&lt;&lt;qry(x,y)&lt;&lt;'\n';
+    }
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.cnblogs.com/luyouqi233/p/12269428.html">博客园@LuYouQi233</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4606">P4606 [SDOI2018] 战略游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题是虚树+圆方树解的，大佬很轻松就搞定了，但我不会。<pre>
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;

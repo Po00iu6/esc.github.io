@@ -86,3 +86,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // currentIndex = startIndex; // Update the current index to match the new start index
     // playSongAtIndex(currentIndex); // Re-initialize playback if you change the start index
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+//天气
+// 创建一个新的 iframe 元素
+const iframe = document.createElement('iframe');
+
+// 设置 iframe 的属性
+iframe.id = 'day';
+iframe.width = '320';
+iframe.scrolling = 'no';
+iframe.height = '85';
+iframe.frameBorder = '0'; // 注意：frameBorder 是小写，尽管在 HTML 中常常写作 frameborder
+iframe.allowTransparency = 'true'; // 注意：allowTransparency 是小写，但在 HTML5 中通常使用 allowtransparency="true"（不带大写T），但这里为兼容性保持原样
+iframe.src = 'https://i.tianqi.com?c=code&id=6&icon=1&py=liangyuanqu&site=12';
+
+// 将 iframe 添加到页面的某个元素中，例如 body
+document.body.appendChild(iframe);
