@@ -90,6 +90,424 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1439">P1439 【模板】最长公共子序列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题的转移方程很好想，就是<code>dp[i][j]=max(dp[i][j-1],max(dp[i-1][j],dp[i-1][j-1]+(a[i]==b[j])));</code>状态压缩以后就是这个<code>dp[j]=max(dp[j-1],max(dp[j],dp[j-1]+(a[i]==b[j])));</code>但是最多只能拿60分。60分的解法：<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 200000
+int dp[maxn];
+int a[maxn],b[maxn],n;
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;b[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            dp[j]=max(dp[j-1],max(dp[j],dp[j-1]+(a[i]==b[j])));
+        }
+    }
+    cout&lt;&lt;dp[n];
+    return 0;
+}
+    </pre>然而AC的正解要难得多，我都看不懂，问了Ai之后模模糊糊能看懂一点。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 200000
+int idx[maxn],dp[maxn];
+int a[maxn],b[maxn],n;
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        idx[a[i]]=i;
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;b[i];
+        dp[i]=0x3f3f3f3f;
+    }
+    int len=0;
+    dp[0]=0;
+    for(int i=1;i&lt;=n;i++){
+        if(idx[b[i]]&gt;dp[len]){
+            dp[++len]=idx[b[i]];
+        }
+        else{
+            int l=0,r=len,mid;
+            while(l&lt;r){
+                mid=l+r&gt;&gt;1;
+                if(dp[mid]&gt;idx[b[i]]) r=mid;
+                else l=mid+1;
+            }
+            dp[l]=min(dp[l],idx[b[i]]);
+        }
+    }
+    cout&lt;&lt;len;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1439">题解区@皎月半洒花</a></I>看了kkk大佬的题解之后我觉得还是差不多能接受。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 200000
+int idx[maxn],dp[maxn];
+int a[maxn],b[maxn],n,ans,c[maxn];
+void ins(int k,int x){
+    for(;k&lt;maxn;k+=k&(-k)){
+        c[k]=max(c[k],x);
+    }
+}
+int ask(int k){
+    int sum=0;
+    for(;k;k-=k&(-k)){
+        sum=max(c[k],sum);
+    }
+    return sum;
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;b[i];
+        idx[b[i]]=i;
+    }
+    for(int i=1;i&lt;=n;i++){
+        dp[i]=ask(idx[a[i]])+1; <span>//查询以b[i]结尾的最长子序列长度 </span>
+        ins(idx[a[i]],dp[i]); <span>//把b[i]的下标更新为dp的长度。</span>
+        ans=max(ans,dp[i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：深进p234</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1874">P1874 快速求和</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题啥玩意啊？看不懂，题解感觉很高级，学到了！num数组的用法非常牛啊，代码如下: <pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+const int INF = 0x7f7f7f7f7f;
+int s,n;
+int dp[50][100010],t,num[50][50];
+string S; 
+int main(){
+    cin&gt;&gt;S&gt;&gt;t;
+    n=S.length();
+    memset(dp,127,sizeof(dp));
+    dp[0][0]=-1;
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=i;j++){
+            if(num[j][i-1]&gt;t){
+                num[j][i]=INF;
+            }
+            else{
+                num[j][i]=num[j][i-1]*10+S[i-1]-'0';
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int s=0;s&lt;=t;s++){
+            for(int j=i-1;j&gt;=0&&num[j+1][i]&lt;=t;j--){
+                if(s&gt;=num[j+1][i]){
+                    dp[i][s]=min(dp[i][s],dp[j][s-num[j+1][i]]+1);
+                }
+            }
+        }
+    }
+    cout&lt;&lt;(dp[n][t]&lt;50?dp[n][t]:-1);
+    return 0;
+}
+</pre><I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4933">P4933 大师</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题很多细节要处理。还有dp数组的第二维一定要开大点。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 24000
+#define mod 998244353
+int n,h[maxn],dp[1010][maxn*2],ans;
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;h[i];
+        for(int j=1;j&lt;i;j++){
+            (dp[i][h[i]-h[j]+maxn]+=(dp[j][h[i]-h[j]+maxn]+1))%=mod;
+            (ans+=(dp[j][h[i]-h[j]+maxn]+1))%=mod;
+        }
+    }
+    cout&lt;&lt;(ans+n)%mod;
+    return 0;
+}
+    </pre>状态转移方程好推，但是不好写对。处理负数的公差时，我使用了添加偏移量的方式来保证下标可以访问负数的方差。ans最后+n是因为每一个数单独也构成美观方案。<I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2285">P2285 [HNOI2004] 打鼹鼠</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题是线性动态规划解决，跟普通动态规划是一样的，就是需要我去变通一下。<br>状态转移的条件限制是曼哈顿距离不超过时间差。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 20000
+int n,m,dp[maxn],ans;
+int t[maxn],x[maxn],y[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;t[i]&gt;&gt;x[i]&gt;&gt;y[i];
+        dp[i]=1;
+        for(int j=1;j&lt;i;j++){
+            if(dp[j]+1&gt;dp[i]&&abs(x[i]-x[j])+abs(y[i]-y[j])&lt;=abs(t[i]-t[j])){
+                dp[i]=dp[j]+1;
+            }
+        }
+        ans=max(ans,dp[i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：无</I></div>
+    <div class="t1">线性动态规划<img src="https://upload-bbs.miyoushe.com/upload/2024/11/13/198629752/f08cb666b85c196938594f8fe04cf757_4166902666156833568.png" alt="线性动态规划"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1064">P1064 [NOIP2006 提高组] 金明的预算方案</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>经典背包附件问题。还记得01背包的决策是什么吗？
+<br>
+        1.不选，然后去考虑下一个<br>
+        
+        2.选，背包容量减掉那个重量，总值加上那个价值。<br>
+        
+        这个题的决策是五个，分别是：<br>
+        
+        1.不选，然后去考虑下一个<br>
+        
+        2.选且只选这个主件<br>
+        
+        3.选这个主件，并且选附件1<br>
+        
+        4.选这个主件，并且选附件2<br>
+        
+        5.选这个主件，并且选附件1和附件2.<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 32000
+int n,m;
+int v,p,q;
+int w[maxn];
+int c[maxn];
+int fw[maxn][3];
+int fc[maxn][3];
+int dp[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;v&gt;&gt;p&gt;&gt;q;
+        if(!q){
+            w[i]=v;
+            c[i]=v*p;
+        }
+        else{
+            fw[q][0]++;
+            fw[q][fw[q][0]]=v;
+            fc[q][fw[q][0]]=v*p;
+        }
+    }
+    for(int i=1;i&lt;=m;i++){
+        for(int j=n;w[i]!=0&&j&gt;=w[i];j--){
+            dp[j]=max(dp[j],dp[j-w[i]]+c[i]);
+            if(j&gt;=w[i]+fw[i][1]){
+                dp[j]=max(dp[j],dp[j-w[i]-fw[i][1]]+c[i]+fc[i][1]);
+            }
+            if(j&gt;=w[i]+fw[i][2]){
+                dp[j]=max(dp[j],dp[j-w[i]-fw[i][2]]+c[i]+fc[i][2]);
+            }
+            if(j&gt;=w[i]+fw[i][1]+fw[i][2]){
+                dp[j]=max(dp[j],dp[j-w[i]-fw[i][1]-fw[i][2]]+c[i]+fc[i][1]+fc[i][2]);
+            }
+        }
+    }
+    cout&lt;&lt;dp[n];
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1064">题解区@ShawnZhou</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3842">P3842 [TJOI2007] 线段</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题中有一个概念“要求沿途走过所有的线段”。她的意思不是让你碰一下这个线的某个位置就算是穿过了，而是让你从这个线的某一端走到另一端保证这个线的各个位置你都走过。这样一来就好说了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int maxn = 2e4+10;
+int n,m,dp[2][maxn],a[maxn],l[maxn],r[maxn],len[maxn];
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;l[i]&gt;&gt;r[i];
+        len[i]=r[i]-l[i];
+    }
+    dp[0][1]=r[1]-1+len[1];
+    dp[1][1]=r[1]-1;
+    for(int i=2;i&lt;=n;i++){
+        dp[0][i]=min(dp[0][i-1]+abs(r[i]-l[i-1]),dp[1][i-1]+abs(r[i-1]-r[i]))+len[i]+1;
+        dp[1][i]=min(dp[0][i-1]+abs(l[i-1]-l[i]),dp[1][i-1]+abs(r[i-1]-l[i]))+len[i]+1;
+    }
+    cout&lt;&lt;min(dp[0][n]+n-l[n],dp[1][n]+n-r[n]);
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3842">题解区@aakennes</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1077">P1077 [NOIP2012 普及组] 摆花</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题是有限背包，3重循环，最外层循环不要从0开始，别忘了循环外面还有提前初始化dp[0][0]=1。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int mod = 1e6+7;
+int n,m,w[100100],dp[1000][1000];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;w[i];
+    }
+    dp[0][0]=1;
+    for(int i=1;i&lt;=n;i++){
+        for(int j=0;j&lt;=m;j++){
+            for(int k=0;k&lt;=min(j,w[i]);k++){
+                dp[i][j]=(dp[i][j]+dp[i-1][j-k])%mod;
+            }
+        }
+    }
+    cout&lt;&lt;dp[n][m];
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1077">题解区@Godのfather</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1616">P1616 疯狂的采药</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>这是完全背包问题，注意j的取值范围，还有数组要开大一点，10^7的数据范围，否则会RE。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define int long long
+int t,m,w[10000010],dp[10000010],v[10010000];
+signed main(){
+    cin&gt;&gt;t&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        cin&gt;&gt;w[i]&gt;&gt;v[i];
+    }
+    for(int i=1;i&lt;=m;i++){
+        for(int j=w[i];j&lt;=t;j++){
+            dp[j]=max(dp[j],dp[j-w[i]]+v[i]);
+        }
+    }
+    cout&lt;&lt;dp[t];
+    return 0;
+}
+    </pre><I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1049">P1049 [NOIP2001 普及组] 装箱问题</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>0-1背包的解法我忘了，因此这道题WA了2次。这道题是背包的模板题，很简单。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define int long long
+#define maxn 20300
+int V,n,w[maxn],dp[maxn];
+int max(int x,int y){
+    return x&gt;y?x:y;
+}
+signed main(){
+    cin&gt;&gt;V&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;w[i];
+    
+    for(int i=0;i&lt;=n;i++){
+        for(int j=V;j&gt;=w[i];j--){
+            dp[j]=max(dp[j],dp[j-w[i]]+w[i]);
+        }
+    }
+    cout&lt;&lt;V-dp[V];
+    return 0;
+}
+    </pre>其中，dp[j]表示背包容量为j时能装的最大体积，dp[j-w[i]]表示当装了第i个物品的话剩余容量能装的最大体积。因此状态转移方程就出来了<code>dp[j]=max(dp[j],dp[j-w[i]]+w[i])</code><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1049">题解区@vegetabird</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1802">P1802 5 倍经验日</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>说实话这道题有点唐。这道题我调了半天，发现是x的区间没有把0算进去。我甚至把for循环遍历药水数量的范围扩大到了3500，想着暴力AC，结果AC了，后来发现我能AC的原因是取值把x算进去了，所以AC了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define int long long
+#define maxn 4000
+
+<span>//dp[i][j]表示用i瓶药水打j个人。 </span>
+int n,x,dp[maxn][maxn],los[maxn],win[maxn],usc[maxn];
+signed main(){
+    cin&gt;&gt;n&gt;&gt;x;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;los[i]&gt;&gt;win[i]&gt;&gt;usc[i];
+    }
+    for(int i=0;i&lt;=x;i++){
+        for(int j=1;j&lt;=n;j++){
+            if(i-usc[j]&gt;=0){ <span>//如果药水数量足够，那么我考虑要不要使用药水打人 </span>
+                dp[i][j]=max(dp[i][j-1]+los[j],dp[i-usc[j]][j-1]+win[j]);
+            }
+            else{ <span>//否则我只能不用药水打人 </span>
+                dp[i][j]=dp[i][j-1]+los[j];
+            }
+        }
+    }
+    cout&lt;&lt;dp[x][n]*5;
+    return 0;
+}
+</pre>注意不要把状态压缩，这个貌似不能压。<I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1115">P1115 最大子段和</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>这道题需要注意，ans有可能是负数，因此dp和ans都要初始化负无穷！<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 300010
+#define int long long
+int a[maxn],dp[maxn],n,ans=-0x3f3f3f3f;
+signed main(){
+    cin&gt;&gt;n;
+    dp[0]=-0x3f3f3f3f;
+    for(int i=1;i&lt;=n;i++){
+        dp[i]=-0x3f3f3f3f;
+        cin&gt;&gt;a[i];
+        dp[i]=max(dp[i-1]+a[i],a[i]);
+        ans=max(ans,dp[i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4017">P4017 最大食物链计数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题考虑建反向边，因为我们要找的是路径和，肯定是从后往前求前缀，所以要建反向边。<s>（为自己WA找的理由）</s><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 50010
+#define mod 80112002
+int n,m,ind[maxn],oud[maxn],dp[maxn],ans;
+vector&lt;int&gt; e[maxn];
+
+int dfs(int x){
+    if(dp[x]) return dp[x];
+    int sum=0;
+    for(int y:e[x]){
+        sum=(sum+dfs(y))%mod;
+    }
+    return dp[x]=sum;
+}
+
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,u,v;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        e[v].push_back(u);
+        ind[v]++;
+        oud[u]++;
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(ind[i]==0)dp[i]=1;
+    }
+    for(int i=1;i&lt;=n;i++){
+        dfs(i);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(oud[i]==0){
+            ans=(ans+dp[i])%mod;
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这道题需要用记忆化搜索+拓扑排序，其实主要还是记忆化搜索，拓扑排序只是给我们一个启发：从入度为0的点出发，到终点出度为0的点的路径。加法原理求路径条数就好了。<I>参考资料：无</I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1434">P1434 [SHOI2002] 滑雪</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题我用了一个十分弱智的解法卡过去了。<pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
