@@ -90,6 +90,161 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1434">P1434 [SHOI2002] 滑雪</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题我用了一个十分弱智的解法卡过去了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int r,c,g[1000][1000];
+int dp[1000][1000];
+int sum;
+
+bool InRange(int x,int y){
+    return (x&gt;=1&&x&lt;=r)&&(y&gt;=1&&y&lt;=c);
+}
+int main(){
+    cin&gt;&gt;r&gt;&gt;c;
+    for(int i=1;i&lt;=r;i++){
+        for(int j=1;j&lt;=c;j++){
+            cin&gt;&gt;g[i][j];
+            dp[i][j]=1;
+        }
+    }
+    sum=1;
+    for(int k=1;k&lt;=r*c/2;k++)
+    for(int i=1;i&lt;=r;i++){
+        for(int j=1;j&lt;=c;j++){
+            if(InRange(i+1,j)){
+                if(g[i+1][j]&lt;g[i][j]){
+                    if(dp[i+1][j]+1&gt;dp[i][j]){
+                        dp[i][j]=dp[i+1][j]+1;
+                        sum=max(sum,dp[i][j]);
+                    }
+                }
+            }
+            if(InRange(i-1,j)){
+                if(g[i-1][j]&lt;g[i][j]){
+                    if(dp[i-1][j]+1&gt;dp[i][j]){
+                        dp[i][j]=dp[i-1][j]+1;
+                        sum=max(sum,dp[i][j]);
+                    }
+                }
+            }
+            if(InRange(i,j+1)){
+                if(g[i][j+1]&lt;g[i][j]){
+                    if(dp[i][j+1]+1&gt;dp[i][j]){
+                        dp[i][j]=dp[i][j+1]+1;
+                        sum=max(sum,dp[i][j]);
+                    }
+                }
+            }
+            if(InRange(i,j-1)){
+                if(g[i][j-1]&lt;g[i][j]){
+                    if(dp[i][j-1]+1&gt;dp[i][j]){
+                        dp[i][j]=dp[i][j-1]+1;
+                        sum=max(sum,dp[i][j]);
+                    }
+                }
+            }
+        }
+    }
+    cout&lt;&lt;sum;
+    return 0;
+}
+    </pre>看一下代码就知道，这确实是状态转移，但是这个状态转移似乎有点问题，因为你需要重复多次这样的转移才能得到最终答案，因此我在外层套了一个k的循环，k太小会导致得不到答案，k太大会导致超时，只有刚刚正好才能AC，因为这道题我是卡过去的。正解是记忆化搜索，但是要注意边界条件的判断<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+int r,c,g[1000][1000];
+int dp[1000][1000];
+int sum;
+
+bool InRange(int x,int y){
+    return (x&gt;=1&&x&lt;=r)&&(y&gt;=1&&y&lt;=c);
+}
+
+int dfs(int x,int y){
+    if(dp[x][y]) return dp[x][y];
+    int ans=0;
+    if(InRange(x,y+1))if(g[x][y]&gt;g[x][y+1]) ans=max(ans,dfs(x,y+1));
+    if(InRange(x,y-1))if(g[x][y]&gt;g[x][y-1]) ans=max(ans,dfs(x,y-1));
+    if(InRange(x+1,y))if(g[x][y]&gt;g[x+1][y]) ans=max(ans,dfs(x+1,y));
+    if(InRange(x-1,y))if(g[x][y]&gt;g[x-1][y]) ans=max(ans,dfs(x-1,y));
+    return dp[x][y]=ans+1;
+}
+
+int main(){
+    cin&gt;&gt;r&gt;&gt;c;
+    for(int i=1;i&lt;=r;i++){
+        for(int j=1;j&lt;=c;j++){
+            cin&gt;&gt;g[i][j];
+        }
+    }
+    for(int i=1;i&lt;=r;i++){
+        for(int j=1;j&lt;=c;j++){
+            if(dp[i][j])continue;
+            sum=max(sum,dfs(i,j));
+        }
+    }
+    cout&lt;&lt;sum;
+    return 0;
+}
+</pre><I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2196">P2196 [NOIP1996 提高组] 挖地雷</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题很简单，就是细节有点多，你要忍一下~~~<img src="https://upload-bbs.miyoushe.com/upload/2024/11/13/198629752/71a8e1e084cbf84d1270fba8325b3e71_8601608978769144660.png" alt="提交记录"><p>第一次WA是因为dp没有初始化，第二次WA是因为ans没有初始化，第三次WA是因为<s>我很不屑</s>第四次WA是因为p没有初始化，第五次都初始化了就AC了。</p><pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define int long long
+int n,a[100001],g[1000][1000],dp[1000],ps[1000];
+int stk[10000],top;
+int ans,p;
+signed main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        dp[i]=a[i];
+        if(dp[i]&gt;ans){
+            ans=dp[i];
+            p=i;
+        }
+    }
+    
+    for(int i=1;i&lt;=n;i++){
+        for(int j=i+1;j&lt;=n;j++){
+            cin&gt;&gt;g[i][j];
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=i+1;j&lt;=n;j++){
+            if(g[i][j]){
+                if(dp[i]+a[j]&gt;dp[j]){
+                    dp[j]=dp[i]+a[j];
+                    if(dp[j]&gt;ans){
+                        ans=dp[j];
+                        p=j;
+                    }
+                    ps[j]=i;
+                }
+            }
+        }
+    }
+    while(p){
+        stk[++top]=p;
+        p=ps[p];
+    }
+    while(top){
+        cout&lt;&lt;stk[top--]&lt;&lt;" ";
+        if(!top)cout&lt;&lt;"\n";
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre>这道题其实完全可以用搜索的。<I>
+    参考资料：无
+</I></div>
+    <div class="t1">什么是动态规划<img src="https://upload-bbs.miyoushe.com/upload/2024/11/13/198629752/2a32dce3f7c2c8baa8450742cb129bc8_2577598402035893172.png" alt="什么是动态规划"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7737">P7737 [NOI2021] 庆典</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题是tarjan缩点转DAG+虚树。但我不会，而且它还卡常，导致得少用vector要不然TLE。<pre>
 #include&lt;bits/stdc++.h&gt;//JZM yyds!!
 #define ll long long
