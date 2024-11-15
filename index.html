@@ -90,6 +90,66 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1">区间DP<img src="https://upload-bbs.miyoushe.com/upload/2024/11/15/198629752/6f35ee82e36e69a6b1b53edae937ccaf_5737850775742159817.png" alt="区间DP"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3147">P3147 [USACO16OPEN] 262144 P</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题的状态转移方程很难推。dp[i][j]表示以j为左端点，i为右端点合并的数的值。<b>Code:</b><pre>
+#include &lt;iostream&gt;
+using namespace std;
+int n,dp[60][400000],ans;
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1,v;i&lt;=n;i++){
+        cin&gt;&gt;v;
+        dp[v][i]=i+1;
+    }
+    for(int i=2;i&lt;=59;i++){
+        for(int j=1;j&lt;=n;j++){
+            if(!dp[i][j]){
+                dp[i][j]=dp[i-1][dp[i-1][j]];
+            }
+            if(dp[i][j]){
+                ans=i;
+            }
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><p>代码中的i的上限是58，原因是题目中要求的i的数值范围是1~40，再加上2<sup>18</sup>=262144，因此就是40+18=58。</p><I>
+        参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3147">题解区@3493441984zz</a><a href="https://www.luogu.com.cn/problem/solution/P3147">题解区@曹老师</a>
+    </I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4310">P4310 绝世好题</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题要注意位运算的优先级，位运算的优先级是很低的，在if判断的时候一定要用括号括起来！<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 200000
+int a[maxn],ans,n,dp[32];
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+    }
+    
+    for(int i=1;i&lt;=n;i++){
+        int sum=0;
+        for(int j=0;j&lt;=30;j++){
+            if(a[i]&(1&lt;&lt;j)!=0){
+                sum=max(sum,dp[j]+1);
+            }
+        }
+        for(int j=0;j&lt;=30;j++){
+            if(a[i]&(1&lt;&lt;j)!=0){
+                dp[j]=sum;
+            }
+        }
+    }
+    
+    for(int i=0;i&lt;=30;i++){
+        ans=max(ans,dp[i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><b>相邻两数位与不为0，等价于两数存在一个二进制位都为1。</b>因此动态规划进行查找拼接即可。<I>参考资料：<a href="https://blog.csdn.net/zjgmartin/article/details/108560248">CSDN题解</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1541">P1541 [NOIP2010 提高组] 乌龟棋</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是多重背包的题目，因为里面有四种物品，因此要开四个维度的dp。<pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
