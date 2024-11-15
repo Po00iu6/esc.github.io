@@ -90,6 +90,233 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1541">P1541 [NOIP2010 提高组] 乌龟棋</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是多重背包的题目，因为里面有四种物品，因此要开四个维度的dp。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+long long dp[50][50][50],n,m;
+int a[1000],b[5],c;
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;a[i];
+    for(int i=1;i&lt;=m;i++)cin&gt;&gt;c,b[c]++;
+    memset(dp,-0x3f,sizeof(dp));
+    dp[0][0][0]=0;
+    for(int i=0;i&lt;=b[1];i++){
+        for(int j=0;j&lt;=b[2];j++){
+            for(int k=0;k&lt;=b[3];k++){
+                for(int p=0;p&lt;=b[4];p++){
+                    int t=a[i+2*j+3*k+4*p+1];
+                    if(j)dp[j][k][p]=max(dp[j-1][k][p],dp[j][k][p]);
+                    if(k)dp[j][k][p]=max(dp[j][k-1][p],dp[j][k][p]);
+                    if(p)dp[j][k][p]=max(dp[j][k][p-1],dp[j][k][p]);
+                    dp[j][k][p]+=t;
+                }
+            }
+        }
+    }
+    cout&lt;&lt;dp[b[2]][b[3]][b[4]];
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1541">题解区@Ousmane_Dembele</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2340">P2340 [USACO03FALL] Cow Exhibition G</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题就是01背包的变式，其中智商表示体积，情商表示价值，奶牛个数表示容量。<b>Code:</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+int s[500],f[500],dp[999999];
+int n,ans;
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;s[i]&gt;&gt;f[i];
+    }
+    memset(dp,-0x3f,sizeof(dp));
+    dp[400000]=0;
+    for(int i=1;i&lt;=n;i++){
+        if(s[i]&gt;=0){
+            for(int j=800000;j&gt;=s[i];j--){
+                dp[j]=max(dp[j],dp[j-s[i]]+f[i]);
+            }
+        }
+        else{
+            for(int j=0;j&lt;=800000+s[i];j++){
+                dp[j]=max(dp[j],dp[j-s[i]]+f[i]);
+            }
+        }
+    }
+    for(int i=400000;i&lt;=800000;i++){
+        if(dp[i]&gt;=0){
+            ans=max(ans,dp[i]+i-400000);
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>那个400000是偏移量，是为了让下标能正常访问负数。最后要减去这个偏移量。其中dp[i][j] 表示前 i 只奶牛中，总智商为 j 时情商的最大值，最后的答案要加上智商，并且取最大值。<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2340">题解区@学而思李老师</a>、<a href="https://www.luogu.com.cn/problem/solution/P2340">题解区@狸狸养的敏敏</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1833">P1833 樱花</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这就是一个混合背包问题，但是之前一本通上面学的都忘完了呜呜呜。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+#define int long long
+#define maxn 40000
+int T,n,dp[maxn],w[maxn],v[maxn],op[maxn];
+signed main(){
+    int a,b,c,d;
+    scanf("%d:%d %d:%d",&a,&b,&c,&d);
+    T=c*60+d-(a*60+b);
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;w[i]&gt;&gt;v[i]&gt;&gt;op[i];
+    }
+    for(int i=1;i&lt;=n;i++){ <span>//这就是一个混合背包问题，对于每一个去判断一下就好了 </span>
+        if(op[i]==0){
+            for(int j=w[i];j&lt;=T;j++){ <span>//完全背包 </span>
+                dp[j]=max(dp[j],dp[j-w[i]]+v[i]);
+            }
+        }
+        else{
+            for(int j=1;j&lt;=op[i];j++){ <span>//01背包和多重背包 </span>
+                for(int k=T;k&gt;=w[i];k--){
+                    dp[k]=max(dp[k],dp[k-w[i]]+v[i]);
+                }
+            }
+        }
+    }
+    cout&lt;&lt;dp[T];
+    return 0;
+}
+    </pre><I>参考资料：信息学奥赛一本题p357</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1435">P1435 [IOI2000] 回文字串</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a><b>喜提AC一枚~</b>我以为我会WA，结果一遍AC了！这道题需要将原来的串复制一份，然后翻转。这样就转化为了最长公共子序列(LCS)问题，然后求最长公共子序列(LCS)，最后用原串长度减去LCS就是答案啦！<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+using namespace std;
+const int maxn = 3e3;
+int dp[maxn][maxn];
+string s,a,b;
+int main(){
+    cin&gt;&gt;s;
+    s=" "+s;
+    a=s;
+    for(int i=s.length();i&gt;=1;i--){
+        b+=s[i];
+    }
+    b=" "+b;
+    for(int i=1;i&lt;=s.length();i++){
+        for(int j=1;j&lt;=s.length();j++){
+            if(a[i]==b[j]){
+                dp[i][j]=dp[i-1][j-1]+1;
+            }
+            else dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+        }
+    }
+    cout&lt;&lt;s.length()-1-dp[s.length()][s.length()];
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1435">题解区@gyf12138</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1004">P1004 [NOIP2000 提高组] 方格取数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是四维dp，用dp[i][j][k][p]表示两个坐标(i,j)和(k,p)，别忘了如果两人走了同一个点，那么我们要让两人其中一人"让步"。<b>Code:</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+using namespace std;
+int n,ans;
+int g[20][20],vg[20][20];
+int dp[20][20][20][20];
+int main(){
+    cin&gt;&gt;n;
+    int x,y,w;
+    while(cin&gt;&gt;x&gt;&gt;y&gt;&gt;w&&(x!=0||y!=0||w!=0)){
+        g[x][y]=w;
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=n;j++){
+            for(int k=1;k&lt;=n;k++){
+                for(int p=1;p&lt;=n;p++){
+                    dp[i][j][k][p]=max(dp[i-1][j][k-1][p],
+                    max(dp[i-1][j][k][p-1],
+                    max(dp[i][j-1][k-1][p],
+                    dp[i][j-1][k][p-1])))+g[i][j]+g[k][p];
+
+                    if(i==k&&j==p)dp[i][j][k][p]-=g[i][j];
+                    <span>//当相等的时候就让其中一人让步</span>
+                    <span>//说白了就是让其中一人把刚吃的吐出来</span>
+                }
+            }
+        }
+    }
+    cout&lt;&lt;dp[n][n][n][n];
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1004">题解区@road</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1544">P1544 三倍经验</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题也很难，但我起码把式子推出来了一点，本题是分层图。状态转移刚开始很好想，但细节非常多。<pre>
+#include &lt;iostream&gt;
+using namespace std;
+#define int long long
+int n,k,ans=-3e9;
+int g[200][200],f[200][200][200];
+signed main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++){
+        for(int j=0;j&lt;=n;j++){
+            for(int p=0;p&lt;=k;p++){
+                f[i][j][p]=-3e9;
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=i;j++){
+            cin&gt;&gt;g[i][j];
+            for(int p=0;p&lt;=k&&p&lt;=i;p++){
+                f[i][j][p]=max(f[i-1][j-1][p],f[i-1][j][p])+g[i][j];
+                if(p&gt;=1){
+                    f[i][j][p]=max(f[i][j][p],max(f[i-1][j-1][p-1],f[i-1][j][p-1])+g[i][j]*3);
+                }
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=0;j&lt;=k;j++){
+            ans=max(ans,f[n][i][j]);
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1544">题解区@QianRan_GG</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2679">P2679 [NOIP2015 提高组] 子串</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题很难啊，呜呜呜。设f[i][j][k]表示仅考虑A的前i个字符，B匹配到第j个字符，用了k个子串，且A[i]为最后一个匹配字符的方案数。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+using namespace std;
+#define int long long
+#define mod 1000000007
+int n,m,k,f[1010][1010],sum[1010][1010];
+string A,B;
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;k;
+    cin&gt;&gt;A&gt;&gt;B;
+    A=" "+A;B=" "+B;
+    f[0][0]=1;
+    for(int i=1;i&lt;=n;i++){
+        for(int j=m;j&gt;=1;j--){
+            for(int p=k;p&gt;=1;p--){
+                if(A[i]==B[j]){
+                    sum[j][p]=sum[j-1][p]+f[j-1][p-1];
+                }
+                else sum[j][p]=0;
+                f[j][p]=(f[j][p]+sum[j][p]%mod)%mod;
+            }
+        }
+    }
+    cout&lt;&lt;f[m][k];
+    return 0;
+}
+    </pre>这个题解说了个什么啊？听不懂啊。<I>
+        参考资料：<a href="https://blog.csdn.net/qq_50332374/article/details/125732674">CSDN题解。</a>
+    </I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1439">P1439 【模板】最长公共子序列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题的转移方程很好想，就是<code>dp[i][j]=max(dp[i][j-1],max(dp[i-1][j],dp[i-1][j-1]+(a[i]==b[j])));</code>状态压缩以后就是这个<code>dp[j]=max(dp[j-1],max(dp[j],dp[j-1]+(a[i]==b[j])));</code>但是最多只能拿60分。60分的解法：<pre>
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;
