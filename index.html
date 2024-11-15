@@ -90,6 +90,211 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1880">P1880 [NOI1995] 石子合并</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是在原先的链式石子合并的基础上变成了环，实际上只需要稍微改动即可，既然是环，就先破环成链，也就是复制一份接到原来的数组后面变成长度为2*n的数组。则<b>一定存在一个断点，使整个链取到最大值或最小值</b>，那么我们就枚举断点，将环变成链来动态DP。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 1000
+int a[maxn],f[maxn][maxn],n,w[maxn][maxn],g[maxn][maxn];
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        a[i+n]=a[i];
+    }
+    for(int i=1;i&lt;=2*n;i++){
+        for(int j=i;j&lt;=2*n;j++){
+            w[i][j]=w[i][j-1]+a[j];
+        }
+    }
+    int minans=0x3f3f3f3f;
+    for(int k=0;k&lt;n;k++){
+        for(int L=1;L&lt;n;L++){
+            for(int i=1+k;i+L&lt;=n+k;i++){
+                int j=i+L;
+                f[i][j]=0x3f3f3f3f;
+                for(int p=i;p&lt;j;p++){
+                    f[i][j]=min(f[i][j],f[i][p]+f[p+1][j]);
+                }
+                f[i][j]+=w[i][j];
+            }
+        }
+        minans=min(minans,f[1+k][n+k]);
+    }
+    cout&lt;&lt;minans&lt;&lt;'\n';
+    
+    int maxans=-0x3f3f3f3f;
+    for(int k=0;k&lt;n;k++){
+        for(int L=1;L&lt;n;L++){
+            for(int i=1+k;i+L&lt;=n+k;i++){
+                int j=i+L;
+                f[i][j]=-0x3f3f3f3f;
+                for(int p=i;p&lt;j;p++){
+                    f[i][j]=max(f[i][j],f[i][p]+f[p+1][j]);
+                }
+                f[i][j]+=w[i][j];
+            }
+        }
+        maxans=max(maxans,f[1+k][n+k]);
+    }
+    cout&lt;&lt;maxans;
+    return 0;
+}
+</pre>代码中的最外层循环就是枚举断点，然后内层循环和链式石子合并的代码一样，就只是改了一个for的范围和max和min。<I>参考资料：无</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3205">P3205 [HNOI2010] 合唱队</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是区间DP的一道难题，考虑到几种情况。<b>f<sub>i,j,0</sub>表示第i个人从左边进来的方案数</b><b>f<sub>i,j,1</sub>表示第j个人从右边进来的方案数</b>因为你的每一次决策都会产生方案数，因此：<b>当右端点的数大于左端点且上一个插入在左端时</b><b>当左端点的数小于右端点且上一个插入在右端时</b>这两种情况也要加上。最后代码如下：<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 1500
+#define mod 19650827
+int n,a[maxn],f[maxn][maxn][2];
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        f[i][i][0]=1;
+    }
+    for(int L=1;L&lt;n;L++){
+        for(int i=1,j=i+L;j&lt;=n;i++,j++){
+            if(a[i]&lt;a[i+1])f[i][j][0]+=f[i+1][j][0];
+            if(a[i]&lt;a[j]){
+                f[i][j][0]+=f[i+1][j][1];
+                f[i][j][1]+=f[i][j-1][0];
+            }
+            if(a[j]&gt;a[j-1])f[i][j][1]+=f[i][j-1][1];
+            f[i][j][0]%=mod;
+            f[i][j][1]%=mod;
+        }
+    }
+    cout&lt;&lt;(f[1][n][0]+f[1][n][1])%mod;
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3205">题解区@帅到报警</a>、<a href="https://www.luogu.com.cn/problem/solution/P3205">题解区@kradcigam</a></I></div>
+    <div class="t1"><a href="https://codeforces.com/problemset/problem/607/B">B. Zuma</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题区间DP，f[i][j]表示从i到j的石子最小消除次数，跟石子合并那道题是差不多的。<br>如果长度为1或2，消除它只需要1步，否则划分成两个子串，类似石子合并那道题枚举中间点k。<b>如果这两个颜色不相同 枚举断点 答案是消掉左半区间最少步数加上消掉右半边区间最少步数 取最小值 如果能更优那么在上一步已经处理过了</b><b>Code：</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 1000
+int f[maxn][maxn];
+int n;
+int c[maxn];
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;c[i];
+    }
+    memset(f,0x3f,sizeof(f));
+    for(int L=0;L&lt;=n;L++){
+        for(int i=1;i+L&lt;=n;i++){
+            int j=i+L;
+            if(c[i]==c[j]){
+                f[i][j]=(L&lt;2)?1:min(f[i][j],f[i+1][j-1]);
+            }
+            for(int k=i;k&lt;j;k++){
+                f[i][j]=min(f[i][j],f[i][k]+f[k+1][j]);
+            }
+        }
+    }
+    cout&lt;&lt;f[1][n];
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/CF607B">题解区@installb</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1775">P1775 石子合并（弱化版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题其实是将f[i][j]划分为两个子区间，然后计算子区间合并带来的价值。如图：<img src="https://upload-bbs.miyoushe.com/upload/2024/11/15/198629752/6fd92c7fa60bde003337a033801e6dd4_1022333349892268241.png" alt="">这就类似Floyd最短路了。<b>Code:</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 2000
+int f[maxn][maxn];
+int n;
+int a[maxn],w[maxn][maxn];
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;a[i];
+        if(i&lt;=1)continue;
+        f[i-1][i]=a[i-1]+a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=i;j&lt;=n;j++){
+            w[i][j]=w[i][j-1]+a[j];
+        }
+    }
+    for(int L=1;L&lt;n;L++){
+        for(int i=1;i+L&lt;=n;i++){
+            int j=i+L;
+            f[i][j]=0x3f3f3f3f;
+            for(int k=i;k&lt;j;k++){
+                f[i][j]=min(f[i][j],f[i][k]+f[k+1][j]);
+            }
+            f[i][j]+=w[i][j];
+        }
+    }
+    cout&lt;&lt;f[1][n];
+    return 0;
+}            
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1775">题解区@expnoi</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1435">P1435 [IOI2000] 回文字串</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这段时间你真的努力了吗？？？这道题也可以用区间DP来做，f[i][j]表示从字符串第i个位置到第j个位置所构成的子串变成回文串所需要的最少插入字符数。考虑三个情况。<b>1.f[i][j]可能是f[i][j-1]+1，考虑把s[j]接在这个串的左边。</b><b>2.f[i][j]可能是f[i+1][j]+1，考虑把s[i]接在这个串的右边。</b><b>3.假如s[i]==s[j]就表明f[i][j]可以从f[i+1][j-1]转移过来取最大值。</b>为什么这么操作？看个图就知道了：<img src="https://upload-bbs.miyoushe.com/upload/2024/11/15/198629752/edcbb435ee39a27d726ca02c8d97d72f_4206213026224012494.png" alt=""><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 3000
+string s;
+int f[maxn][maxn],n;
+int main(){
+    cin&gt;&gt;s;
+    n=s.length();
+    s=" "+s;
+    for(int i=2;i&lt;=n;i++){
+        if(s[i]!=s[i-1]){
+            f[i-1][i]=1;
+        }
+    }
+    for(int L=2;L&lt;=n;L++){
+        for(int i=1;i+L&lt;=n;i++){
+            int j=i+L;
+            f[i][j]=min(f[i+1][j]+1,f[i][j-1]+1);
+            if(s[i]==s[j]){
+                f[i][j]=min(f[i+1][j-1],f[i][j]);
+            }
+        }
+    }
+    cout&lt;&lt;f[1][n];
+    return 0;
+}
+</pre>这里的L指的是i到j的长度为L，但为什么要枚举长度，因为这玩意需要倒着推，因此不枚举长度的话答案做不到及时更新，因此还有一种写法，那就是枚举两个端点。<b>Code:</b><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 3000
+string s;
+int f[maxn][maxn],n;
+int main(){
+    cin&gt;&gt;s;
+    n=s.length();
+    s=" "+s;
+    for(int i=2;i&lt;=n;i++){
+        if(s[i]!=s[i-1]){
+            f[i-1][i]=1;
+        }
+    }
+    for(int j=3;j&lt;=n;j++){
+        for(int i=j-2;i&gt;=1;i--){
+            f[i][j]=min(f[i+1][j]+1,f[i][j-1]+1);
+            if(s[i]==s[j]){
+                f[i][j]=min(f[i+1][j-1],f[i][j]);
+            }
+        }
+    }
+    cout&lt;&lt;f[1][n];
+    return 0;
+}
+</pre>没错，这要就好多了，让左端点i往左遍历，j不动就好了。我也不知道为啥这道题为啥非得倒着推。<I>参考资料：无</I></div>
     <div class="t1">区间DP<img src="https://upload-bbs.miyoushe.com/upload/2024/11/15/198629752/6f35ee82e36e69a6b1b53edae937ccaf_5737850775742159817.png" alt="区间DP"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P3147">P3147 [USACO16OPEN] 262144 P</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题的状态转移方程很难推。dp[i][j]表示以j为左端点，i为右端点合并的数的值。<b>Code:</b><pre>
 #include &lt;iostream&gt;
