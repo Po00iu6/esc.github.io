@@ -90,6 +90,24 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="./myOJ/oj1.html">环上最大子段和</a><a href="https://www.luogu.com.cn/problem/list?difficulty=1">入门</a>这道题很简单，考虑环内最大子段在1-n这条链内的情况，那么最大子段和就是最大子段和，但如果不在1-n，而是一段在y-n，一段在1-x怎么办？那我们反过来考虑，直接求x-y就好了，那么x-y就是最小子段和。答案就是最大子段和或最小子段的补段和了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 300000
+int n,w1,w2,sum,mi,ma;
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1,a;i&lt;=n;i++){
+        cin&gt;&gt;a;
+        sum+=a;
+        ma=max(ma,w1=max(0,w1+ma));
+        mi=min(mi,w2=max(0,w2+mi));
+    }
+    cout&lt;&lt;max(ma,sum-mi);
+    return 0;
+}
+    </pre><I>参考资料：<a href="./myOJ/oj1-answer.html">OJ题解区</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1880">P1880 [NOI1995] 石子合并</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是在原先的链式石子合并的基础上变成了环，实际上只需要稍微改动即可，既然是环，就先破环成链，也就是复制一份接到原来的数组后面变成长度为2*n的数组。则<b>一定存在一个断点，使整个链取到最大值或最小值</b>，那么我们就枚举断点，将环变成链来动态DP。<pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
