@@ -90,6 +90,948 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7516">P7516 [省选联考 2021 A/B 卷] 图函数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>很短的代码AC了，但是我是抄的，题目勉强看懂了。<pre>
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 2001
+int n,m,x,y,f[maxn][maxn],g[maxn*100],ans[maxn*100];
+int main(){
+    scanf("%d%d",&n,&m);
+    for(int i=1;i&lt;=m;i++){
+        scanf("%d%d",&x,&y);
+        f[x][y]=i;
+    }
+    for(int k=n;k&gt;=1;k--){
+        for(int i=1;i&lt;=n;i++){
+            if(f[i][k]){
+                if(i&gt;k){
+                    for(int j=1;j&lt;k;j++){
+                        f[i][j]=max(f[i][j],min(f[i][k],f[k][j]));
+                    }
+                }
+                else{
+                    for(int j=1;j&lt;=n;j++){
+                        f[i][j]=max(f[i][j],min(f[i][k],f[k][j]));
+                    }
+                }
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=i+1;j&lt;=n;j++){
+            g[min(f[i][j],f[j][i])]++;
+        }
+    }
+    ans[m+1]=n;
+    for(int i=m;i&gt;=1;i--){
+        ans[i]=ans[i+1]+g[i];
+    }
+    for(int i=1;i&lt;=m+1;i++){
+        printf("%d ",ans[i]);
+    }
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P7516">题解区@ImmortalWatcher</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3953">P3953 [NOIP2017 提高组] 逛公园</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题一个图上DP，一个Dijkstra，但是题解没看懂。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+#include &lt;algorithm&gt;
+#include &lt;queue&gt;
+using namespace std;
+const int maxn = 100001;
+struct Edge{
+    int v,w;
+};
+vector&lt;Edge&gt; G1[maxn],G2[maxn];
+int t,n,m,k,p;
+bool flag;
+int f[maxn][100];
+int d[maxn];
+bool vis[maxn];
+bool ins[maxn][100];
+void dijkstra(){
+    memset(vis,0,sizeof(vis));
+    memset(d,0x3f,sizeof(d));
+    priority_queue&lt;pair&lt;int,int&gt; &gt; q;
+    q.push(make_pair(0,1));
+    d[1]=0;
+    while(!q.empty()){
+        int u=q.top().second;
+        q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto ed:G1[u]){
+            int v=ed.v,w=ed.w;
+            if(d[u]+w&lt;d[v]){
+                d[v]=d[u]+w;
+                q.push(make_pair(-d[v],v));
+            }
+        }
+    }
+}
+int dp(int u,int k){
+    if(k&lt;0)return 0;
+    if(ins[u][k]){
+        flag=1;
+        return 0;
+    }
+    if(f[u][k]) return f[u][k];
+    ins[u][k]=1;
+    int ans=0;
+    for(auto ed:G2[u]){
+        int v=ed.v,w=ed.w;
+        ans=(ans+dp(v,d[u]-d[v]+k-w))%p;
+        if(flag==1)return 0;
+    }
+    ins[u][k]=0;
+    return f[u][k]=ans;
+}
+int main(){
+    cin&gt;&gt;t;
+    while(t--){
+        cin&gt;&gt;n&gt;&gt;m&gt;&gt;k&gt;&gt;p;
+        for(int i=1,u,v,w;i&lt;=m;i++){
+            cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+            G1[u].push_back({v,w});
+            G2[v].push_back({u,w});
+        }
+        dijkstra();
+        dp(1,0);
+        f[1][0]=1;
+        int ans=0;
+        for(int i=0;i&lt;=k;i++){
+            ans=(ans+dp(n,i))%p;
+        }
+        if(flag==1)puts("-1");
+        else cout&lt;&lt;ans&lt;&lt;'\n';
+        flag=0;
+        memset(f,0,sizeof(f));
+        memset(ins,0,sizeof(ins));
+        for(int i=1;i&lt;=n;i++){
+            G1[i].clear();G2[i].clear();
+        }
+    }
+    return 0;
+}
+</pre><i>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3953">题解区@tth37</a></i></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2986">P2986 [USACO10MAR] Great Cow Gathering G</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题一看就有思路，但是链式前向星很难看。<p>还是树形DP，满足方程：d[v] = d[u] - siz[v]*a[i].w + (cnt - siz[v])*a[i].w;</p><pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;cctype&gt;
+#include &lt;cmath&gt;
+#define ll long long
+using namespace std;
+const int N = 1000010;
+const ll INF = 1e55;
+ll m,n,ans=INF,cnt,inde,head[N],siz[N],c[N],f[N],d[N];
+struct Edge{
+    ll nxt,to,w;
+}a[N];
+void add(int x,int y,int w){
+    a[++inde].to=y;
+    a[inde].nxt=head[x];
+    a[inde].w=w;
+    head[x]=inde;
+}
+void dfs(int u,int fa){
+    siz[u]=c[u];
+    for(int i=head[u];i;i=a[i].nxt){
+        int v=a[i].to;
+        if(v==fa)continue;
+        dfs(v,u);
+        siz[u]+=siz[v];
+        f[u]=f[u]+f[v]+siz[v]*a[i].w;
+    }
+}
+void dp(int u,int fa){
+    for(int i=head[u];i;i=a[i].nxt){
+        int v=a[i].to;
+        if(v==fa)continue;
+        d[v]=1ll*d[u]-siz[v]*a[i].w+(cnt-siz[v])*a[i].w;
+        ans=min(ans,d[v]);
+        dp(v,u);
+    }
+}
+int main(){
+    int u,v,w;
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;c[i];
+        cnt+=c[i];
+    }
+    for(int j=1;j&lt;n;j++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        add(u,v,w);
+        add(v,u,w);
+    }
+    dfs(1,0);
+    d[1]=f[1];
+    ans=min(ans,d[1]);
+    dp(1,0);
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2986">题解区@xfydemx</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2515">P2515 [HAOI2010] 软件安装</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是树形DP，就是一个依赖背包，说白了就是树上背包，但是这道题有环，因此还要缩点，所以最后就是tarjan缩点后dfs求树上DP。难就难在它有磁盘空间限制。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 2000
+int n,m,f[120][510],w[maxn],v[maxn];
+vector&lt;int&gt; e[maxn],_e[maxn];
+int sum_w[maxn],sum_v[maxn],du[maxn];
+int low[maxn],dfn[maxn],cnt,tot,s[maxn],top,c[maxn];
+void tarjan(int x){
+    dfn[x]=low[x]=++tot;
+    s[++top]=x;
+    for(auto t:e[x]){
+        if(!dfn[t]){
+            tarjan(t);
+            low[x]=min(low[x],low[t]);
+        }
+        else if(!c[t]){
+            low[x]=min(low[x],dfn[t]);
+        }
+    }
+    if(dfn[x]==low[x]){
+        ++cnt;
+        while(s[top+1]!=x){
+            c[s[top]]=cnt;
+            sum_v[cnt]+=v[s[top]];
+            sum_w[cnt]+=w[s[top]];
+            top--;
+        }
+    }
+}
+void dfs(int u,int sum){
+    if(sum&lt;=0) return;
+    for(auto t:_e[u]){
+        for(int i=0;i&lt;=sum-sum_w[t];i++){
+            f[t][i]=f[u][i];
+        }
+        dfs(t,sum-sum_w[t]);
+        for(int i=sum_w[t];i&lt;=sum;i++){
+            f[u][i]=max(f[u][i],f[t][i-sum_w[t]]+sum_v[t]);
+        }
+    }
+}
+int main(){
+    int d[maxn]; 
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;w[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;v[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;d[i];
+        if(d[i]){
+            e[d[i]].push_back(i);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i]){
+            tarjan(i);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=0,u,v;j&lt;e[i].size();j++){
+            u=c[i],v=c[e[i][j]];
+            if(u==v)continue;
+            du[v]++;
+            _e[u].push_back(v);
+        }
+    }
+    for(int i=1;i&lt;=cnt;i++){
+        if(!du[i]) _e[0].push_back(i);
+    }
+    dfs(0,m);
+    cout&lt;&lt;f[0][m];
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2515">题解区@zfz04</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1273">P1273 有线电视网</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是分组背包，有点复杂，不会写所以抄的答案。这里面的memset(f,~0x3f,sizeof(f))的意思是将f赋值为一个极小值，~相当于加了负号了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 4000
+struct node{
+    int v,w;
+};
+int n,m,k,val[maxn];
+vector&lt;node&gt; e[maxn];
+int f[maxn][maxn];
+int dfs(int u){
+    if(u&gt;n-m){
+        f[u][1]=val[u];
+        return 1;
+    }
+    int sum=0,t;
+    for(auto ed:e[u]){
+        int v=ed.v,w=ed.w;
+        t=dfs(v);
+        sum+=t;
+        for(int j=sum;j&gt;=1;j--){
+            for(int i=1;i&lt;=t;i++){
+                if(j-i&gt;=0) f[u][j]=max(f[u][j],f[u][j-i]+f[v][i]-w);
+            }
+        }
+    }
+    return sum;
+}
+
+int main(){
+    memset(f,~0x3f,sizeof(f));
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int u=1,v,w;u&lt;=n-m;u++){
+        cin&gt;&gt;k;
+        for(int i=1;i&lt;=k;i++){
+            cin&gt;&gt;v&gt;&gt;w;
+            e[u].push_back({v,w});
+        }
+    }
+    for(int i=n-m+1;i&lt;=n;i++) cin&gt;&gt;val[i];
+    for(int i=1;i&lt;=n;i++) f[i][0]=0;
+    dfs(1);
+    for(int i=m;i&gt;=1;i--){
+        if(f[1][i]&gt;=0){
+            cout&lt;&lt;i;
+            break;
+        }
+    }
+    return 0;
+}
+    
+</pre><I><a href="https://www.luogu.com.cn/problem/solution/P1273">题解区@LengChu</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2585">P2585 [ZJOI2006] 三色二叉树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题和之前的题有点像，但是这道有点怪，因为这是给你一个字符串，让你按照字符串上面的数字往前走，然后回溯阶段要dp，而且DP要分类讨论，字符串上的字符不同，dp方程也就不一样。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;string&gt;
+#include &lt;cmath&gt;
+using namespace std;
+#define maxn 600000
+string s;
+int n,minf[maxn][3],maxf[maxn][3],maxans=1,tot;
+void dfs(int u){
+    if(s[u]=='0'){
+        minf[u][0]=maxf[u][0]=1;
+        return;
+    }
+    dfs(++tot);
+    if(s[u]=='1'){
+        int v=u+1;
+        minf[u][0]+=min(minf[v][1],minf[v][2])+1;
+        minf[u][1]+=min(minf[v][0],minf[v][2]);
+        minf[u][2]+=min(minf[v][1],minf[v][0]);
+        
+        maxf[u][0]=max(maxf[v][1],maxf[v][2])+1;
+        maxf[u][1]=max(maxf[v][0],maxf[v][2]);
+        maxf[u][2]=max(maxf[v][1],maxf[v][0]);
+    }
+    else if(s[u]=='2'){
+        int k=++tot,v=u+1;
+        dfs(k);
+        minf[u][0]+=min(minf[v][1]+minf[k][2],minf[v][2]+minf[k][1])+1;
+        minf[u][1]+=min(minf[v][0]+minf[k][2],minf[v][2]+minf[k][0]);
+        minf[u][2]+=min(minf[v][0]+minf[k][1],minf[v][1]+minf[k][0]);
+        
+        maxf[u][0]=max(maxf[v][1]+maxf[k][2],maxf[v][2]+maxf[k][1])+1;
+        maxf[u][1]=max(maxf[v][0]+maxf[k][2],maxf[v][2]+maxf[k][0]);
+        maxf[u][2]=max(maxf[v][0]+maxf[k][1],maxf[v][1]+maxf[k][0]);
+    }
+    maxans=max(maxans,maxf[u][0]);
+}
+int main(){
+    cin&gt;&gt;s;
+    n=s.length();
+    s=" "+s;
+    dfs(++tot);
+    cout&lt;&lt;maxans&lt;&lt;" "&lt;&lt;min(minf[1][0],min(minf[1][1],minf[1][2]));
+    return 0;
+}
+        </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2585">题解区@hs_black</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2016">P2016 战略游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题很简单啊，类似没有上司的舞会。直接存图，但别忘了，这里一定要存无向边，因为这是无根树，类似发散图。遍历整棵树回溯阶段大胆DP就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 20000
+int n,f[maxn][2];
+vector&lt;int&gt; e[maxn];
+void dfs(int u,int fa){
+    f[u][1]=1;f[u][0]=0;
+    for(auto v:e[u]){
+        if(v==fa)continue;
+        dfs(v,u);
+        f[u][1]+=min(f[v][0],f[v][1]);
+        f[u][0]+=f[v][1];
+    }
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1,u,m,v;i&lt;=n;i++){
+        cin&gt;&gt;u&gt;&gt;m;
+        for(int j=1;j&lt;=m;j++){
+            cin&gt;&gt;v;
+            e[u].push_back(v);
+            e[v].push_back(u);
+        }
+    }
+    dfs(0,-1);
+    cout&lt;&lt;min(f[0][1],f[0][0]);
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2016">题解区@kikuss</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1040">P1040 [NOIP2003 提高组] 加分二叉树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是一道基础DP的题目我居然没有做出来，呜呜呜~我们不需要管它二叉树如何存储，只需要按照DP的形式，假设每一个点都是根，然后去DP就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+#define maxn 500
+#define int long long
+int n;
+int f[maxn][maxn],root[maxn][maxn];
+void print(int l,int r){
+    if(l&gt;r)return;
+    cout&lt;&lt;root[l][r]&lt;&lt;" ";
+    if(l==r)return;
+    print(l,root[l][r]-1);
+    print(root[l][r]+1,r);
+}
+signed main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;f[i][i];
+        f[i][i-1]=1;
+        root[i][i]=i;
+    }
+    for(int L=1;L&lt;n;L++){
+        for(int i=1;i+L&lt;=n;i++){
+            int j=i+L;
+            f[i][j]=f[i+1][j]+f[i][i];
+            root[i][j]=i;
+            for(int k=i+1;k&lt;j;k++){
+                if(f[i][j]&lt;f[i][k-1]*f[k+1][j]+f[k][k]){
+                    f[i][j]=f[i][k-1]*f[k+1][j]+f[k][k];
+                    root[i][j]=k;
+                }
+            }
+        }
+    }
+    cout&lt;&lt;f[1][n]&lt;&lt;'\n';
+    print(1,n);
+    return 0;
+}
+    </pre><p>f<sub>i,j</sub>表示节点i到节点j成树的最大加分</p><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1040">题解区@冒泡ioa</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2656">P2656 采蘑菇</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题要用tarjan缩点后进行spfa，最后输出答案即可。但是我不会。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;stack&gt;
+#include &lt;queue&gt;
+using namespace std;
+const int N = 8e4+10,M=2e5+10;
+int n,m,t,cnt,tot,T,s,ans;
+int head[N],dfn[N],low[N],vis[N];
+int col[N],H[N],sum[N],dis[N],V[N];
+struct edge{
+    int frm,to,nxt,val,k;
+}e[M],E[M];
+stack&lt;int&gt; st;
+queue&lt;int&gt; q;
+void addedge(int u,int v,int w,int k){
+    e[++t]=(edge){
+        u,v,head[u],w,k
+    };
+    head[u]=t;
+}
+void add(int u,int v,int w){
+    E[++T].to=v;
+    E[T].nxt=H[u];
+    E[T].val=w;
+    H[u]=T;
+}
+void tarjan(int u){
+    dfn[u]=low[u]=++cnt;
+    vis[u]=1;
+    st.push(u);
+    for(int i=head[u];i;i=e[i].nxt){
+        int v=e[i].to;
+        if(!dfn[v]){
+            tarjan(v);
+            low[u]=min(low[u],low[v]);
+        }
+        else if(vis[v]){
+            low[u]=min(low[u],dfn[v]);
+        }
+    }
+    if(dfn[u]==low[u]){
+        tot++;
+        int v;
+        do{
+            v=st.top();
+            st.pop();
+            col[v]=tot;
+            vis[v]=0;
+        }while(v!=u);
+    }
+}
+void spfa(int s){
+    memset(dis,-1,sizeof(dis));
+    memset(V,0,sizeof(V));
+    dis[s]=sum[s];
+    V[s]=1;
+    q.push(s);
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();
+        V[u]=0;
+        for(int i=H[u];i;i=E[i].nxt){
+            int v=E[i].to,w=E[i].val;
+            if(dis[v]&lt;dis[u]+w+sum[v]){
+                dis[v]=dis[u]+w+sum[v];
+                if(!V[v]){
+                    V[v]=1;
+                    q.push(v);
+                }
+            }
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        int x,y,z;
+        double k;
+        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z&gt;&gt;k;
+        addedge(x,y,z,k*10);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i]){
+            tarjan(i);
+        }
+    }
+    for(int i=1;i&lt;=m;i++){
+        int x=e[i].frm,y=e[i].to,z=e[i].val,k=e[i].k;
+        if(col[x]==col[y]){
+            while(z){
+                sum[col[x]]+=z;
+                z=z*k/10;
+            }
+        }
+        else{
+            add(col[x],col[y],z);
+        }
+    }
+    cin&gt;&gt;s;
+    s=col[s];
+    spfa(s);
+    for(int i=1;i&lt;=tot;i++){
+        ans=max(ans,dis[i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>
+        参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2656">题解区@银杉水杉秃杉</a>
+    </I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4316">P4316 绿豆蛙的归宿</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是期望DP，没学过期望，据说这是一道期望DP模板题。主要思路是按照拓扑序去跑一遍求从终点到起点的期望。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstdio&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+using namespace std;
+#define maxn 400000
+struct node{
+    int v,w;
+};
+int n,m;
+vector&lt;node&gt; e[maxn];
+double f[maxn];
+int ind[maxn],deg[maxn];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        e[v].push_back({u,w});
+        ind[u]++,deg[u]++;
+    }
+    queue&lt;int&gt; q;
+    q.push(n);
+    while(!q.empty()){
+        int u=q.front();q.pop();
+        for(auto ed:e[u]){
+            int v=ed.v,w=ed.w;
+            f[v]+=(f[u]+w)/(deg[v]);
+            --ind[v];
+            if(!ind[v]) q.push(v);
+        }
+    }
+    printf("%.2lf",f[1]);
+    return 0;
+}
+</pre>代码中的deg数组意思是degree，就是一个点的度的意思，不是入度也不是出度，就是“度”！<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P4316">题解区@___new2zy___</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P6772">P6772 [NOI2020] 美食家</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题有点难，没看懂。大概意思是矩阵快速幂优化动态规划。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define int long long
+int n,m,T,k;
+const int maxn = 2.5e2+7,inf=1e18+7;
+int C[maxn],id[maxn][10],id_cnt;
+struct Matrix{
+    int a[maxn][maxn],n,m;
+    Matrix(int n=0,int m=0):n(n),m(m){
+        for(int i=1;i&lt;=maxn-7;i++){
+            for(int j=1;j&lt;=maxn-7;j++){
+                a[i][j]=-inf;
+            }
+        }
+    }
+    Matrix operator * (const Matrix b){
+        Matrix c=Matrix{n,b.m};
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=b.m;j++){
+                for(int k=1;k&lt;=m;k++){
+                    if(a[i][k]!=-inf&&b.a[k][j]!=-inf){
+                        c.a[i][j]=max(a[i][k]+b.a[k][j],c.a[i][j]);
+                    }
+                }
+            }
+        }
+        return c;
+    }
+}E,G,A,K[50];
+Matrix qpow(Matrix a,int b){
+    Matrix ans=E;
+    while(b){
+        if(b&1)ans=ans*a;
+        a=a*a;
+        b&gt;&gt;=1;
+    }
+    return ans;
+}
+void init(){
+    E.n=E.m=5*n;
+    for(int i=1;i&lt;=n;i++){
+        E.a[i][i]=1;
+    }
+    A.n=1;A.m=5*n;A.a[1][id[1][1]]=C[1];
+    K[0]=G;
+    for(int i=1;i&lt;=30;i++){
+        K[i]=K[i-1]*K[i-1];
+    }
+}
+struct Node{
+    int t,x,y;
+    bool operator &lt; (const Node other) const{
+        return t &lt; other.t;
+    }
+}Ev[maxn];
+void mul(Matrix &A,int b){
+    for(int i=0;i&lt;=30;i++){
+        if(b&(1&lt;&lt;i)){
+            A=A*K[i];
+        }
+    }
+}
+signed main(){
+    cin&gt;&gt;n&gt;&gt;m&gt;&gt;T&gt;&gt;k;
+    for(int i=1;i&lt;=n;i++)cin&gt;&gt;C[i];
+    G=Matrix{5*n,5*n};
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=5;j++){
+            id[i][j]=++id_cnt;
+        }
+        for(int j=1;j&lt;5;j++){
+            G.a[id[i][j]][id[i][j+1]]=0;
+        }
+    }
+    for(int i=1,u,v,w;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        G.a[id[u][w]][id[v][1]]=C[v];
+    }
+    for(int i=1;i&lt;=k;i++){
+        cin&gt;&gt;Ev[i].t&gt;&gt;Ev[i].x&gt;&gt;Ev[i].y;
+    }
+    sort(Ev+1,Ev+1+k);
+    init();
+    int last=0;
+    for(int i=1;i&lt;=k;i++){
+        int pw=Ev[i].t-last;
+        mul(A,pw);
+        if(A.a[1][id[Ev[i].x][1]]!=-inf){
+            A.a[1][id[Ev[i].x][1]]+=Ev[i].y;
+        }
+        last=Ev[i].t;
+    }
+    if(last!=T)mul(A,T-last);
+    if(A.a[1][id[1][1]]==-inf)cout&lt;&lt;-1&lt;&lt;'\n';
+    else cout&lt;&lt;A.a[1][id[1][1]]&lt;&lt;'\n';
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.cnblogs.com/Phrvth/p/17641885.html#">博客园题解</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1613">P1613 跑路</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是最短路的题目，简单的解法应该是预处理出所有能一秒到达的路，然后用最短路算法直接求最短路即可。<b>任何一条长度为2<sup>k</sup>的路都可以拆成两个2<sup>k-1</sup>的路程。</b>理论结束，开始实践！<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxn 100
+int n,m;
+int dis[maxn][maxn],g[maxn][maxn][60];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    memset(dis,0x3f,sizeof(dis));
+    for(int i=1,u,v;i&lt;=m;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        g[u][v][1]=1; //g[u][v][1]: distance of u and v is 1.
+        dis[u][v]=1;
+    }
+    for(int k=1;k&lt;=60;k++){ //enumeration path distance 
+        for(int i=1;i&lt;=n;i++){ //start point
+            for(int t=1;t&lt;=n;t++){ //center point
+                for(int j=1;j&lt;=n;j++){ //end point
+                    if(g[i][t][k-1]&&g[t][j][k-1]){ 
+                    //if i to t and t to j is 2^(k-1) distance , they can get there 1s.
+                        g[i][j][k]=1;
+                        dis[i][j]=1;
+                    }
+                }
+            }
+        }
+    }
+    //↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓
+    //Floyd finds the shortest path.
+    for(int k=1;k&lt;=n;k++){
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=n;j++){
+                dis[i][j]=min(dis[i][j],dis[i][k]+dis[k][j]);
+            }
+        }
+    }
+    cout&lt;&lt;dis[1][n];
+    return 0;
+}  
+    </pre><p>g数组存是否能一秒到达，dis数组存i和j之间的最短路。时间复杂度O(n<sup>4</sup>)，对于本题小数据是够了。</p>但是，正解也是这么写的~<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1613">题解区@Hydra_</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2014">P2014 [CTSC1997] 选课</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a><b>小技巧：</b>可以将根节点设为0，这样就不用考虑合并两棵树的问题了，但是m要加一，因为0作为根节点是必选的。<br><br><p>用f[u][i][j]表示节点u的前i个子节点，限重为j能得到的最大权值和。像01背包一样压缩得到f[u][j]表示节点u，限重j的最大权值和（价值和）</p><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 2000
+int n,m,f[maxn][maxn];
+vector&lt;int&gt; e[maxn];
+void dfs(int u){
+    for(auto v:e[u]){
+        dfs(v);
+        for(int i=m;i&gt;0;i--){
+            for(int j=0;j&lt;i;j++){
+                f[u][i]=max(f[u][i],f[u][i-j]+f[v][j]);
+            }
+        } 
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    m++;
+    for(int u=1,v;u&lt;=n;u++){
+        cin&gt;&gt;v&gt;&gt;f[u][1];
+        e[v].push_back(u);
+    }
+    dfs(0);
+    cout&lt;&lt;f[0][m];
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2014">题解区@He_Ren</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2015">P2015 二叉苹果树</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>树上01背包，这道题f数组要到序遍历，而且是在树上跑。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 1000
+struct node{
+    int v,w;
+};
+vector&lt;node&gt; e[maxn];
+int n,q;
+int f[maxn][maxn];
+int siz[maxn];
+void dfs(int u,int fa){
+    for(auto ed:e[u]){
+        int v=ed.v,w=ed.w;
+        if(v==fa)continue;
+        dfs(v,u);
+        siz[u]+=siz[ed.v]+1;
+        for(int i=min(siz[u],q);i&gt;0;i--){
+            for(int j=min(siz[v],i-1);j&gt;=0;j--){
+                f[u][i]=max(f[u][i],f[u][i-j-1]+f[v][j]+w);
+            }
+        }
+    }
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;q;
+    for(int i=1,u,v,w;i&lt;n;i++){
+        cin&gt;&gt;u&gt;&gt;v&gt;&gt;w;
+        e[u].push_back({v,w});
+        e[v].push_back({u,w});
+    }
+    dfs(1,0);
+    cout&lt;&lt;f[1][q];
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2015">题解区@子谦。</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1122">P1122 最大子树和</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题跟前面一道题是很像的，我们直接dfs，在回溯的时候让f[u]取最大值即可。但是这道题有一个坑点，ans有可能是负数，也就是说你的花不能剪完，你至少要留一株，那么我们的ans赋的初值就得从输入中选，最后与f[root]比较。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 20000
+int n,ind[maxn],f[maxn],ans=-0x3f3f3f3f;
+vector&lt;int&gt; e[maxn];
+void dfs(int u){
+    for(auto v:e[u]){
+        dfs(v);
+        f[u]+=max(0,f[v]);
+    }
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;f[i];
+        ans=max(ans,f[i]);
+    }
+    for(int i=1,u,v;i&lt;n;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        e[v].push_back(u);
+        ind[u]++;
+    }
+    int root=1;
+    for(int i=1;i&lt;=n;i++){
+        if(!ind[i]){
+            root=i;
+            break;
+        }
+    }
+    dfs(root);
+    ans=max(ans,f[root]);
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/discuss/970627">讨论区[90分WA最后一个点，求调，赏悬关注一个]@yanzhouyehaojun</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1352">P1352 没有上司的舞会</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题暴力能拿90分，只需要把这棵树看成是一个发散图，然后dfs隔一个点求一下就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 10000
+int n,w[maxn],du[maxn],sum,ans;
+vector&lt;int&gt; e[maxn];
+bool vis[maxn],join[maxn];
+bool check(int u){
+    for(auto v:e[u]){
+        if(join[v]){
+            return 0;
+        }
+    }
+    return 1;
+}
+void dfs(int u){
+    if(vis[u]){
+        return;
+    }
+    vis[u]=1;
+    if(check(u)){
+        sum+=w[u];
+        join[u]=1;
+    }
+    for(auto v:e[u]){
+        dfs(v);
+    }
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;w[i];
+    }
+    for(int i=1,u,v;i&lt;n;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        e[v].push_back(u);
+        e[u].push_back(v);
+    }
+    for(int i=1;i&lt;=n;i++){
+        memset(vis,0,sizeof(vis));
+        memset(join,0,sizeof(join));
+        sum=0;
+        dfs(i);
+        ans=max(sum,ans);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre>当然，正解是树形DP。树形DP的主要实现形式是dfs，<img src="https://upload-bbs.miyoushe.com/upload/2024/11/18/198629752/bb2d64425ae25440b889c49297f6bd6d_2185844582388627914.png" alt="树形DP"><pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;vector&gt;
+using namespace std;
+#define maxn 10000
+int n,ind[maxn],f[maxn][2];
+vector&lt;int&gt; e[maxn];
+void dfs(int u){
+    for(auto v:e[u]){
+        dfs(v);
+        f[u][1]=max(f[v][0],max(f[u][1],f[u][1]+f[v][0]));
+        f[u][0]=max(max(f[v][0],f[v][1]),max(f[u][0],f[v][1]+f[u][0]));
+    }
+}
+int main(){
+    cin&gt;&gt;n;
+    for(int i=1;i&lt;=n;i++){
+        cin&gt;&gt;f[i][1];
+    }
+    for(int i=1,u,v;i&lt;n;i++){
+        cin&gt;&gt;u&gt;&gt;v;
+        e[v].push_back(u);
+        ind[u]++;
+    }
+    int root=1;
+    for(int i=1;i&lt;=n;i++){
+        if(!ind[i]){
+            root=i;
+            break;
+        }
+    }
+    dfs(root);
+    cout&lt;&lt;max(f[root][1],f[root][0]);
+    return 0;
+}
+    </pre><p>f<sub>i,1</sub>表示我选了i的子树中我能得到的最大价值</p><p>f<sub>i,0</sub>表示我不选i的子树中我能得到的最大价值</p>dfs内的方程的含义：<p>如果我选了u，那我可以从不选v和选只选u和选了u并且不选v的子树中取最大值。反之，类似的。</p><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1352">题解区@我没有小白</a></I></div>
     <div class="t1">树上与图上动态规划<img src="https://upload-bbs.miyoushe.com/upload/2024/11/17/198629752/7b76bd0a6d782eda3db201ed13b2b19e_4822780433215427247.png" alt="树上与图上动态规划"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1220">P1220 关路灯</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a><b>好题中的好题！</b>填表法就是利用状态转移方程和上一个状态来推导出现在的状态（相当于知道已知条件，将答案填入）。刷表法就是利用当前的状态，把有关联的下一状态都推出来。这道题可以反向思考，<p>f<sub>i,j</sub>表示我将i~j的灯都关掉，剩下的灯的总功率。</p>当然，这道题没有这么简单，而是<p>f<sub>i,j,0</sub>表示怪掉i~j的灯后老张站在左端点，反之f<sub>i,j,1</sub>老张站在右端点。</p><pre>
 #include &lt;iostream&gt;
