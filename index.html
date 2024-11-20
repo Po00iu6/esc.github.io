@@ -90,6 +90,458 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1879">P1879 [USACO06NOV] Corn Fields G</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>类似互不侵犯，不过我还是连转移方程都写不对。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define mod 100000000
+int m,n;
+int f[13][1&lt;&lt;13];
+int st[13];
+int main(){
+    cin&gt;&gt;m&gt;&gt;n;
+    for(int i=1,x;i&lt;=m;i++){
+        for(int j=1;j&lt;=n;j++){
+            cin&gt;&gt;x;
+            st[i]=st[i]&lt;&lt;1|x;
+        } 
+    }
+    f[0][0]=1;
+    for(int i=1;i&lt;=m;i++){
+        for(int s1=0;s1&lt;(1&lt;&lt;n);s1++){
+            for(int s2=0;s2&lt;(1&lt;&lt;n);s2++){
+                if(!(s1&(s1&gt;&gt;1))&&!(s2&(s2&gt;&gt;1))&&!(s1&s2)&&(s1|st[i])==st[i]&&(s2|st[i-1])==st[i-1]){
+                    f[i][s1]=(f[i][s1]+f[i-1][s2])%mod;
+                }
+            }
+        }
+    }
+    int ans=0;
+    for(int i=0;i&lt;(1&lt;&lt;n);i++){
+        ans=(ans+f[m][i])%mod;
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.cnblogs.com/xixike/p/15168218.html">博客园题解</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1441">P1441 砝码称重</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是dfs+dp。<pre>
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int maxn = 22;
+const int maxm = 2010;
+int n,m,a[maxn],ans,tot,ret;
+bool tf[maxn],f[maxm];
+void dp(){
+    memset(f,0,sizeof(f));
+    f[0]=1;ans=0;tot=0;
+    for(int i=0;i&lt;n;i++){
+        if(tf[i])continue;
+        for(int j=tot;j&gt;=0;j--){
+            if(f[j]&&!f[j+a[i]]){
+                f[j+a[i]]=1;
+                ans++;
+            }
+        }
+        tot+=a[i];
+    }
+    ret=max(ans,ret);
+}
+void dfs(int cur,int now){
+    if(now&gt;m)return;
+    if(cur==n){
+        if(now==m)dp();
+        return;
+    }
+    dfs(cur+1,now);
+    tf[cur]=1;
+    dfs(cur+1,now+1);
+    tf[cur]=0;
+}
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=0;i&lt;n;i++){
+        cin&gt;&gt;a[i];
+    }
+    dfs(0,0);
+    cout&lt;&lt;ret;
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1441">题解区@hsfzLZH1</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3694">P3694 邦邦的大合唱站队</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>状态压缩典型题目。但我不会。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int maxn = 22,maxm = 1e5+5;
+int f[1&lt;&lt;maxn];
+int num[maxn],sum[maxm][maxn];
+int main(){
+    int n,m;
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1,aa;i&lt;=n;i++){
+        cin&gt;&gt;aa;
+        num[aa]++;
+        for(int j=1;j&lt;=m;j++){
+            sum[i][j]=sum[i-1][j];
+        }
+        sum[i][aa]++;
+    }
+    memset(f,0x3f,sizeof(f));
+    f[0]=0;
+    for(int i=1;i&lt;(1&lt;&lt;m);i++){
+        int len=0;
+        for(int j=1;j&lt;=m;j++){
+            if(i&(1&lt;&lt;(j-1)))len+=num[j];
+        }
+        for(int j=1;j&lt;=m;j++){
+            if(i&(1&lt;&lt;(j-1)))f[i]=min(f[i],f[i^(1&lt;&lt;(j-1))]+num[j]-sum[len][j]+sum[len-num[j]][j]);
+        }
+    }
+    cout&lt;&lt;f[(1&lt;&lt;m)-1];
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3694">题解区@hzoi_liuchang</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1450">P1450 [HAOI2008] 硬币购物</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题是一道数学集合与状态压缩的题目，具体来说，我不会。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define ll long long
+const int N = 1e5+5;
+ll f[N],c[10],d[10],s;
+int main(){
+    cin&gt;&gt;c[1]&gt;&gt;c[2]&gt;&gt;c[3]&gt;&gt;c[4];
+    int n;
+    cin&gt;&gt;n;
+    f[0]=1;
+    for(int i=1;i&lt;=4;i++){
+        for(int j=c[i];j&lt;=1e5;j++){
+            f[j]+=f[j-c[i]];
+        }
+    }
+    while(n--){
+        for(int i=1;i&lt;=4;i++) cin&gt;&gt;d[i];
+        cin&gt;&gt;s;
+        ll ans=f[s];
+        for(int i=1;i&lt;=15;i++){
+            ll k=0,num=0;
+            for(int j=0;j&lt;4;j++){
+                if(i&(1&lt;&lt;j)){
+                    num++;
+                    k+=c[j+1]*(d[j+1]+1);
+                }
+            }
+            ll fl=1;
+            if(num%2)fl=-1;
+            if(s&gt;=k)ans+=fl*f[s-k];
+        }
+        printf("%lld\n",ans);
+    }
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1450">题解区@Y_B_Y</a>，而且大佬还是OP，必须要灌注一下她了！</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1357">P1357 花园</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题需要矩阵乘法和状态压缩动态规划，我大概率是看不懂的。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define maxs 72
+#define maxn 200010
+const int mod = 1e9+7;
+long long N ,res;
+bool ok[maxs];
+int M,L,K,o[maxs],dp[maxn][maxs];
+struct Matrix{
+    long long M[maxs][maxs];
+    void clear(){
+        memset(M,0,sizeof(M));
+    }
+    void reset(){
+        clear();
+        for(int i=0;i&lt;=L;i++)M[i][i]=1;
+    }
+    Matrix friend operator *(const Matrix &A,const Matrix &B){
+        Matrix Ans;Ans.clear();
+        for(int i=0;i&lt;=L;i++){
+            for(int j=0;j&lt;=L;j++){
+                for(int k=0;k&lt;=L;k++){
+                    Ans.M[i][j]=(Ans.M[i][j]+A.M[i][k]*B.M[k][j])%mod;
+                }
+            }
+        }
+        return Ans;
+    }
+}t,ans;
+Matrix expow(Matrix T,long long P){
+    Matrix Ans;
+    Ans.reset();
+    while(P){
+        if(P&1){
+            Ans=Ans*T;
+        }
+        T=T*T,P&gt;&gt;=1;
+    }
+    return Ans;
+}
+void calc(int used,int st){
+    ok[st]=1;
+    int stt=st&gt;&gt;1;
+    t.M[stt][st]=1;
+    if(used==K&&!(st&1)) return;
+    t.M[stt|o[M]][st]=1;
+}
+void dfs(int now,int used,int st){
+    if(now==M+1){
+        calc(used,st);
+        return ;
+    }
+    dfs(now+1,used,st);
+    if(used&lt;K){
+        dfs(now+1,used+1,st|o[now]);
+    }
+}
+int main(){
+    cin&gt;&gt;N&gt;&gt;M&gt;&gt;K;
+    int i;
+    o[1]=1;
+    L=(1&lt;&lt;M)-1;
+    for(i=2;i&lt;=M;i++){
+        o[i]=o[i-1]&lt;&lt;1;
+        dfs(1,0,0);
+    }
+    ans=expow(t,N);
+    for(i=0;i&lt;=L;i++){
+        if(ok[i]){
+            (res+=ans.M[i][i])%=mod;
+        }
+    }
+    cout&lt;&lt;(res%mod);
+    return 0;
+}
+    </pre><I>参考资料：深进p274</I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4363">P4363 [九省联考 2018] 一双木棋 chess</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题是对抗式搜索，我起码对对抗式搜索这种决策题有一个初步的了解了，这道题还是动态规划的变种，每次选择对于当前状态下的最大值。<pre>
+#include &lt;cstdio&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int inf= 0x3f3f3f3f;
+int n,m,a[12][12],b[12][12],dp[2000000],used[2000000];
+void init(){
+    scanf("%d%d",&n,&m);
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=m;j++){
+            scanf("%d",&a[i][j]);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=m;j++){
+            scanf("%d",&b[i][j]);
+        }
+    }
+}
+int dfs(int s,int who){
+    if(used[s]){
+        return dp[s];
+    }
+    used[s]=1;
+    dp[s]=who?-inf:inf;
+    int x=1,y=m,tmp;
+    for(int i=0;i&lt;n+m-1;i++){
+        if(((s&gt;&gt;i)&1)&&!((s&gt;&gt;i+1)&1)){
+            tmp=s^(3&lt;&lt;i);
+            if(who){
+                dp[s]=max(dp[s],dfs(tmp,who^1)+a[x][y]);
+            }
+            else{
+                dp[s]=min(dp[s],dfs(tmp,who^1)-b[x][y]);
+            }
+        }
+        if((s&gt;&gt;i)&1)y--;
+        else x++;
+    }
+    return dp[s];
+}
+int main(){
+    init();
+    used[(1&lt;&lt;n+m)-(1&lt;&lt;n)]=1;
+    printf("%d\n",dfs((1&lt;&lt;m)-1,1));
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.cnblogs.com/butterflydew/p/9271758.html">CSDN大佬</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4484">P4484 [BJWC2018] 最长上升子序列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题我目前的解法就是打表，先正解后打表，n不大，只有28，重复执行28次程序，把表给打出来，直接输出就好了。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+using namespace std;
+#define ll long long
+const ll mod = 998244353ll;
+ll dp[2][64217730],getlen[64217730];
+ll Mx,N,i,j,k,ans,fac=1,now,t,pos;
+inline ll lowbit(ll x){
+    return x&(-x);
+}
+inline ll my_pow(ll a,ll b){
+    ll res=1;
+    while(b){
+        if(b&1) res=(res*a)%mod;
+        a=(a*a)%mod;
+        b&gt;&gt;=1;
+    }
+    return res;
+}
+int main(){
+    scanf("%d",&N);
+    N--;
+    dp[0][0]=1;
+    Mx=1&lt;&lt;N;
+    for(now=i=1;i&lt;=N;now^=1,i++){
+        fill(dp[now],dp[now]+(1&lt;&lt;j),0);
+        for(j=0;j&lt;(1&lt;&lt;(i-1));j++){
+            dp[now][j&lt;&lt;1]=(dp[now][j&lt;&lt;1]+dp[now^1][j])%mod,pos=-1;
+            for(k=i-1;~k;k--){
+                t=((j&gt;&gt;k)&lt;&lt;(k+1))|(1&lt;&lt;k)|(j&((1&lt;&lt;k)-1));
+                if(j&(1&lt;&lt;k))pos=k;
+                if(~pos) t^=(1&lt;&lt;(pos+1));
+                dp[now][t]=(dp[now][t]+dp[now^1][j])%mod;
+            }
+        }
+    }
+    for(i=1;i&lt;Mx;i++) getlen[i]=getlen[i-lowbit(i)]+1;
+    for(i=0;i&lt;Mx;i++) ans=( ans+1ll*dp[N&1][i]*(getlen[i]+1))%mod;
+    for(i=1;i&lt;=N+1;i++) fac=(fac*i)%mod;
+    ans=ans*my_pow(fac,mod-2)%mod;
+    printf("%d",ans);
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P4484">题解区@皎月半洒花</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1896">P1896 [SCOI2005] 互不侵犯</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>可算是把互不侵犯这道题搞懂了。<a href="https://www.bilibili.com/video/BV1pf4y1q7hU/?spm_id_from=333.999.0.0&vd_source=6fce07010bed0a9439ed5f28c8717550">董晓算法 E25 状态压缩DP 小国王</a>这道题要用到位运算和多重背包。先说一下位运算：!(i&i>>1)代表将i右移一维看看和原来的i有没有重叠的1，如果有，那么结果不为零，前面的感叹号取反后不为0，if语句就为假，那他有什么用呢？作用就是判断i的二进制是否有无相邻的1。!(a&b)表示判断a和b的二进制有无相同位置的1，!(a&lt;&lt;1&b)表示a的右边有没有1，如果有的话会和b的二进制的某一位重合导致结果为真，取反后结果为假，!(a>>1&b)同理。这样我们就可以用二进制来筛选符合条件的国王的排列了。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+#define maxn 100
+#define int long long
+int N,K;
+int num[maxn];
+int st[maxn],top;
+int f[10][100][8192];
+signed main(){
+    cin&gt;&gt;N&gt;&gt;K;
+    for(int i=0;i&lt;(1&lt;&lt;N);i++){
+        if(!(i&i&gt;&gt;1)){
+            st[top++]=i;
+            for(int j=0;j&lt;N;j++){
+                num[i]+=(i&gt;&gt;j&1);
+            }
+        }
+    }
+    f[0][0][0]=1;
+    for(int i=1;i&lt;=N;i++){
+        for(int j=0;j&lt;=K;j++){
+            for(int a=0;a&lt;top;a++){
+                for(int b=0;b&lt;top;b++){
+                    if((j-num[st[a]]&gt;=0)&&!(st[a]&st[b])&&!(st[a]&lt;&lt;1&st[b])&&!(st[a]&gt;&gt;1&st[b])){
+                        f[i][j][a]+=f[i-1][j-num[st[a]]][b];
+                    }
+                }
+            }
+        }
+    }
+    int ans=0;
+    for(int i=0;i&lt;top;i++){
+        ans+=f[N][K][i];
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.bilibili.com/video/BV1pf4y1q7hU/?spm_id_from=333.999.0.0&vd_source=6fce07010bed0a9439ed5f28c8717550">bilibili董晓算法</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2622">P2622 关灯问题II</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这道题不是动态规划，这道题是宽搜，动态规划状态压缩只能拿到100分subtask1，subtask2没法拿。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;queue&gt;
+using namespace std;
+const int N = 1&lt;&lt;10;
+int vis[N],n,m,a[N][N&gt;&gt;5];
+int main(){
+    cin&gt;&gt;n&gt;&gt;m;
+    for(int i=1;i&lt;=m;i++){
+        for(int j=1;j&lt;=n;j++){
+            cin&gt;&gt;a[i][j];
+        }
+    }
+    fill(vis,vis+N,-1);
+    queue&lt;int&gt; Q;
+    vis[(1&lt;&lt;n)-1]=0;
+    Q.push((1&lt;&lt;n)-1);
+    while(!Q.empty()){
+        int x=Q.front(),y;
+        Q.pop();
+        if(x==0){
+            cout&lt;&lt;vis[x];exit(0);
+        }
+        for(int i=1;i&lt;=m;i++){
+            y=x;
+            for(int j=1;j&lt;=n;j++){
+                if(a[i][j]==1){
+                    y&=(~(1&lt;&lt;(j-1)));
+                }
+                if(a[i][j]==-1){
+                    y|=(1&lt;&lt;(j-1));
+                }
+            }
+            if(vis[y]==-1){
+                Q.push(y);
+                vis[y]=vis[x]+1;
+            }
+        }
+    }
+    cout&lt;&lt;-1;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://blog.csdn.net/conti123/article/details/134687184">CSDN题解</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1896">P1896 [SCOI2005] 互不侵犯</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题状态压缩的经典题目，利用二进制存储当前行内国王存放的情况，0表示该位置没有国王，1表示有国王。<p>dp<sub>i,j,s</sub>表示第i行放了j个国王，摆放方式为s，比如第一位放一个国王和第二位放一个国王是2种不同的摆放方式。</p><pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+int n,k,num;
+long long cnt[2000],ok[2000];
+long long dp[10][100][2000];
+int main(){
+    cin&gt;&gt;n&gt;&gt;k;
+    for(int s=0;s&lt;(1&lt;&lt;n);s++){
+        int tot=0,s1=s;
+        while(s1){
+            if(s1&1)tot++;
+            s1&gt;&gt;=1;
+        }
+        cnt[s]=tot;
+        if((((s&lt;&lt;1)|(s&gt;&gt;1))&s)==0) ok[++num]=s;
+    }
+    dp[0][0][0]=1;
+    for(int i=1;i&lt;=n;i++){
+        for(int l=1;l&lt;=num;l++){
+            int s1=ok[l];
+            for(int r=1;r&lt;=num;r++){
+                int s2=ok[r];
+                if(((s2|(s2&lt;&lt;1)|(s2&gt;&gt;1))&s1)==0){
+                    for(int j=0;j&lt;=k;j++){
+                        if(j-cnt[s1]&gt;=0){
+                            dp[i][j][s1]+=dp[i-1][j-cnt[s1]][s2];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    long long ans=0;
+    for(int i=1;i&lt;=num;i++)ans+=dp[n][k][ok[i]];
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P1896">题解区@暗ざ之殇</a></I></div>
+    <div class="t1">状态压缩动态规划<img src="https://upload-bbs.miyoushe.com/upload/2024/11/19/198629752/6636b6e52f7d0f1691bbca07dc665c32_8889289915921841887.png" alt="状态压缩动态规划"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7516">P7516 [省选联考 2021 A/B 卷] 图函数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>很短的代码AC了，但是我是抄的，题目勉强看懂了。<pre>
 #include &lt;cstdio&gt;
 #include &lt;algorithm&gt;
