@@ -90,6 +90,433 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7115">P7115 [NOIP2020] 移球游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题对思维有一定的挑战。<pre>
+#include &lt;iostream>
+#include &lt;cstdio>
+#include &lt;cstring>
+using namespace std;
+const int N = 55;
+const int M = 405;
+const int OPT = 820005;
+int L[OPT],R[OPT],CNT=0,n,m;
+int a[N][M],cnt[N],tot[N],p[N];
+void move(int x,int y){
+    ++CNT;
+    L[CNT]=x;
+    R[CNT]=y;
+    a[y][++cnt[y]]=a[x][cnt[x]--];
+}
+int count(int x,int y){
+    int ret=0;
+    for(int i=1;i&lt;=m;i++){
+        ret+=a[x][i]==y;
+    }
+    return ret;
+}
+inline int top(int x){
+    return a[x][cnt[x]];
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i&lt;=n;i++){
+        cnt[i]=m;
+        for(int j=1;j&lt;=m;j++){
+            cin>>a[i][j];
+        }
+    }
+    cnt[n+1]=0;
+    for(int i=1;i&lt;=n+1;i++){
+        p[i]=i;
+    }
+    for(int now=n;now>=3;now--){
+        int tmp=count(p[1],now);
+        for(int i=1;i&lt;=tmp;i++){
+            move(p[now],p[now+1]);
+        }
+        for(int i=1;i&lt;=m;i++){
+            if(top(p[1])==now){
+                move(p[1],p[now]);
+            }
+            else{
+                move(p[1],p[now+1]);
+            }
+        }
+        for(int i=1;i&lt;=m-tmp;i++){
+            move(p[now+1],p[1]);
+        }
+        for(int i=1;i&lt;=m;i++){
+            if(top(p[2])==now||cnt[p[1]]==m){
+                move(p[2],p[now+1]);
+            }
+            else{
+                move(p[2],p[1]);
+            }
+        }
+        swap(p[1],p[now]);
+        swap(p[2],p[now+1]);
+        for(int k=1;k&lt;now;k++){
+            tmp=count(p[k],now);
+            for(int i=1;i&lt;=tmp;i++){
+                move(p[now],p[now+1]);
+            }
+            for(int i=1;i&lt;=m;i++){
+                if(top(p[k])==now){
+                    move(p[k],p[now]);
+                }
+                else{
+                    move(p[k],p[now+1]);
+                }
+            }
+            swap(p[k],p[now+1]);
+            swap(p[k],p[now]);
+        }
+        for(int i=1;i&lt;now;i++){
+            while(top(p[i])==now){
+                move(p[i],p[now+1]);
+            }
+        }
+        for(int i=1;i&lt;now;i++){
+            while(cnt[p[i]]&lt;m){
+                move(p[now],p[i]);
+            }
+        }
+    }
+    int tmp=count(p[1],1);
+    for(int i=1;i&lt;=tmp;i++){
+        move(p[2],p[3]);
+    }
+    for(int i=1;i&lt;=m;i++){
+        if(top(p[1])==1){
+            move(p[1],p[2]);
+        }
+        else{
+            move(p[1],p[3]);
+        }
+    }
+    for(int i=1;i&lt;=tmp;i++){
+        move(p[2],p[1]);
+    }
+    for(int i=1;i&lt;=m-tmp;i++){
+        move(p[3],p[1]);
+    }
+    while(cnt[p[3]]){
+        move(p[3],p[2]);
+    }
+    for(int i=1;i&lt;=m-tmp;i++){
+        move(p[1],p[3]);
+    }
+    for(int i=1;i&lt;=m;i++){
+        if(top(p[2])==1){
+            move(p[2],p[1]);
+        }
+        else{
+            move(p[2],p[3]);
+        }
+    }
+    cout&lt;&lt;CNT&lt;&lt;'\n';
+    for(int i=1;i&lt;=CNT;i++){
+        cout&lt;&lt;L[i]&lt;&lt;" "&lt;&lt;R[i]&lt;&lt;'\n';
+    }
+}
+            
+    </pre>这就是一道纯思维题<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P7115">题解区@QwQcOrZ</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7114">P7114 [NOIP2020] 字符串匹配</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>不懂，抄的。<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+using namespace std;
+const int maxn = (1&lt;&lt;20)+5;
+char s[maxn];
+int n,z[maxn];
+int before[30],after[30];
+int pre,suf,all;
+int c[30];
+inline int lbt(int x){
+    return x&-x;
+}
+void update(int x){
+    while(x&lt;=27){
+        c[x]++;
+        x+=lbt(x);
+    }
+}
+int sum(int x){
+    int r=0;
+    while(x&gt;0){
+        r+=c[x];
+        x-=lbt(x);
+    }
+    return r;
+}
+void Z(){
+    z[0]=n;
+    int now=0;
+    while(now+1&lt;n&&s[now]==s[now+1]){
+        now++;
+    }
+    z[1]=now;
+    int p0=1;
+    for(int i=2;i&lt;n;i++){
+        if(i+z[i-p0]&lt;p0+z[p0]){
+            z[i]=z[i-p0];
+        }
+        else{
+            now=p0+z[p0]-i;
+            now=max(now,0);
+            while(now+i&lt;n&&s[now]==s[now+i]){
+                now++;
+            }
+            z[i]=now;
+            p0=i;
+        }
+    }
+}
+int main(){
+    int T;
+    cin&gt;&gt;T;
+    while(T--){
+        cin&gt;&gt;s;
+        n=strlen(s);
+        memset(before,0,sizeof(before));
+        memset(after,0,sizeof(after));
+        memset(c,0,sizeof(c));
+        all=pre=suf=0;
+        Z();
+        for(int i=0;i&lt;n;i++){
+            if(i+z[i]==n)z[i]--;
+        }
+        for(int i=0;i&lt;n;i++){
+            after[s[i]-'a']++;
+        }
+        for(int i=0;i&lt;26;i++){
+            if(after[i]&1){
+                all++;
+            }
+        }
+        suf=all;
+        long long ans=0;
+        for(int i=0;i&lt;n;i++){
+            if(after[s[i]-'a']&1){
+                suf--;
+            }
+            else{
+                suf++;
+            }
+            after[s[i]-'a']--;
+            if(before[s[i]-'a']&1){
+                pre--;
+            }
+            else{
+                pre++;
+            }
+            before[s[i]-'a']++;
+            if(i!=0&&i!=n-1){
+                int t=z[i+1]/(i+1)+1;
+                ans+=1LL*(t/2)*sum(all+1)+1LL*(t-t/2)*sum(suf+1);
+            }
+            update(pre+1);
+        }
+        cout&lt;&lt;ans&lt;&lt;'\n';
+    }
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P7114">题解区@泥土笨笨</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P5410">P5410 【模板】扩展 KMP/exKMP（Z 函数）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>模板<pre>
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;cstdio&gt;
+using namespace std;
+const int N = 2e7 + 5;
+char t[N],s[N];
+int z[N],p[N];
+void get_z(char *s,int n){
+    z[1]=n;
+    for(int i=2,l,r=0;i&lt;=n;i++){
+        if(i&lt;=r){
+            z[i]=min(z[i-l+1],r-i+1);
+        }
+        while(s[1+z[i]]==s[i+z[i]]){
+            z[i]++;
+        }
+        if(i+z[i]-1&gt;r){
+            l=i,r=i+z[i]-1;
+        }
+    }
+}
+void get_p(char *s,int n,char *t,int m){
+    for(int i=1,l,r=0;i&lt;=m;i++){
+        if(i&lt;=r){
+            p[i]=min(z[i-l+1],r-i+1);
+        }
+        while(1+p[i]&lt;=n&&i+p[i]&lt;=m&&s[1+p[i]]==t[i+p[i]]){
+            p[i]++;
+        }
+        if(i+p[i]-1&gt;r){
+            l=i,r=i+p[i]-1;
+        }
+    }
+}
+int main(){
+    scanf("%s%s",t+1,s+1);
+    int m=strlen(t+1),n=strlen(s+1);
+    get_z(s,n);
+    get_p(s,n,t,m);
+    long long ans1=0,ans2=0;
+    for(int i=1;i&lt;=n;i++){
+        ans1^=1LL*i*(z[i]+1);
+    }
+    for(int i=1;i&lt;=m;i++){
+        ans2^=1LL*i*(p[i]+1);
+    }
+    cout&lt;&lt;ans1&lt;&lt;'\n'&lt;&lt;ans2;
+    return 0;
+}
+    </pre></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3375">P3375 【模板】KMP</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>模版<pre>
+#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int N = 1000010;
+int m,n;
+char S[N],P[N];
+int nxt[N];
+int main(){
+    cin&gt;&gt;S+1&gt;&gt;P+1;
+    m=strlen(S+1),n=strlen(P+1);
+    nxt[1]=0;
+    for(int i=2,j=0;i&lt;=n;i++){
+        while(j&&P[i]!=P[j+1]){
+            j=nxt[j];
+        }
+        if(P[i]==P[j+1]){
+            j++;
+        }
+        nxt[i]=j;
+    }
+    for(int i=1,j=0;i&lt;=m;i++){
+        while(j&&S[i]!=P[j+1]){
+            j=nxt[j];
+        }
+        if(S[i]==P[j+1]){
+            j++;
+        }
+        if(j==n){
+            printf("%d\n",i-n+1);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        printf("%d ",nxt[i]);
+    }
+    return 0;
+}
+</pre>此题事NOIP 2020 T2的前置知识</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7113">P7113 [NOIP2020] 排水系统</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>我调了半天，30分。后来在大佬的帮助下，发现原来是拓扑排序没有在枚举边的时候将入度减减，导致出错。<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;cmath&gt;
+#include &lt;cstdio&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;cctype&gt;
+using namespace std;
+#define int __int128
+#define maxn 200000
+int read(){
+    int s=0;char ch=getchar();
+    while(!isdigit(ch)){
+        ch=getchar();
+    }
+    while(isdigit(ch)){
+        s=s*10+ch-'0';
+        ch=getchar();
+    }
+    return s;
+}
+void write(int x){
+    if(x&gt;9)write(x/10);
+    putchar(x%10+'0');
+}
+struct Fen{
+    int zi,mu;
+//	Fen operator + (Fen a){
+//		if(mu==0)return a;
+//		if(a.mu==0)return (Fen){zi,mu};
+//		int xia=a.mu*mu;
+//		int shang=zi*a.mu+a.zi*mu;
+//		a.zi=shang;
+//		a.mu=xia;
+//		int x=__gcd(a.zi,a.mu);
+//		a.zi/=x;
+//		a.mu/=x;
+//		return a;
+//	}
+//	Fen operator * (Fen a){
+//		if(zi==0)return a;
+//		if(a.zi==0)return (Fen){zi,mu};
+//		a.zi*=zi;
+//		a.mu*=mu;
+//		return a;
+//	}
+}fen[maxn];
+vector&lt;int&gt; e[maxn];
+queue&lt;int&gt; q;
+int n,m;
+int ind[maxn],outd[maxn];
+int vis[maxn];
+signed main(){
+    n=read();m=read();
+    for(int u=1,d,v;u&lt;=n;u++){
+        d=read();
+        for(int j=1;j&lt;=d;j++){
+            v=read();
+            e[u].push_back(v);
+            ind[v]++;outd[u]++;
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(ind[i]==0){
+            fen[i]=(Fen){1,1};
+            q.push(i);
+        }
+    }
+    while(!q.empty()){
+        int u=q.front();q.pop();
+        if(vis[u])continue;
+        vis[u]=1;
+        for(auto v:e[u]){
+            int fenliumu=fen[u].mu*e[u].size();
+            int fenliuzi=fen[u].zi;
+            if(fen[v].mu==0) {
+                fen[v].mu=fenliumu;
+                fen[v].zi=fenliuzi;
+            }
+            else{
+                int gcd=__gcd(fenliumu,fen[v].mu);
+                int lcm=fenliumu*fen[v].mu/gcd;
+                int mu=lcm;
+                int zi=fenliuzi*(lcm/fenliumu)+fen[v].zi*(lcm/fen[v].mu);
+                fen[v].mu=mu;
+                fen[v].zi=zi;
+            }
+            ind[v]--;
+            if(ind[v]==0){
+                q.push(v);
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(outd[i]==0){
+            int x=__gcd(fen[i].zi,fen[i].mu);
+            write(fen[i].zi/x);
+            cout&lt;&lt;" ";
+            write(fen[i].mu/x);
+            cout&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre>这是我写的：<a href="https://www.luogu.com.cn/discuss/1000872">《警钟敲烂！！！30分的原因！》</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P1079">P1079 [NOIP2012 提高组] Vigenère 密码</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>这道题打表记录就好了。<pre>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
