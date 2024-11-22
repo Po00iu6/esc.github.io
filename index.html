@@ -90,6 +90,48 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7960">P7960 [NOIP2021] 报数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这是一个跳跃表，每一个都指向它的下一位。<pre>
+#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+inline bool P(int x){
+    while(x){
+        if(x%10==7)return 1;
+        x/=10;
+    }
+    return 0;
+}
+int a[10001000];
+int t,x;
+int main(){
+    int bef=1;
+    for(int i=2;i&lt;=10000010;i++){
+        if(a[i]==0){
+            if(P(i)){
+                for(int j=1;j&lt;=10000010/i;j++){
+                    a[i*j]=-1;
+                }
+            }
+            else{
+                a[bef]=i;
+                bef=i;
+            }
+        }
+    }
+    scanf("%d",&t);
+    while(t--){
+        scanf("%d",&x);
+        if(a[x]==-1){
+            puts("-1");
+        }
+        else{
+            cout&lt;&lt;a[x]&lt;&lt;'\n';
+        }
+    }
+    return 0;
+}
+    </pre></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7116">P7116 [NOIP2020] 微信步数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题我第一次拿了25分，之后抄了100。<pre>
 #include &lt;cstdio>
 #include &lt;iostream>
