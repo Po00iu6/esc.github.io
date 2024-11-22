@@ -90,6 +90,62 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7962">P7962 [NOIP2021] 方差</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>动规+数学，看来我省选前面要学一学IMO了。<pre>
+#include &lt;iostream>
+#include &lt;cmath>
+#include &lt;algorithm>
+using namespace std;
+#define int long long
+const int maxn = 10100,inf=2e9;
+int a[maxn],dif[maxn],sum[maxn],n;
+int dp[2][500010],maxa;
+signed main(){
+    cin>>n;
+    for(int i=1;i&lt;=n;i++){
+        cin>>a[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        dif[i]=a[i+1]-a[i];
+    }
+    sort(dif+1,dif+n),maxa=a[n];
+    int cnt0=1;
+    for(int i=1;i&lt;n;i++){
+        if(!dif[i]){
+            cnt0++;
+        }
+    }
+    for(int i=1;i&lt;n;i++){
+        sum[i]=sum[i-1]+dif[i];
+    }
+    int now=0,las=1,lim=maxa*n;
+    for(int i=0;i&lt;=lim;i++){
+        dp[now][i]=inf;
+    }
+    dp[now][dif[cnt0]]=dif[cnt0]*dif[cnt0];
+    dp[now][dif[cnt0]*cnt0]=dif[cnt0]*dif[cnt0]*cnt0;
+    for(int i=cnt0+1;i&lt;n;i++){
+        now^=1,las^=1;
+        for(int s=0;s&lt;=lim;s++){
+            dp[now][s]=inf;
+        }
+        for(int s=0;s&lt;=lim;s++){
+            if(dp[las][s]==inf){
+                continue;
+            }
+            dp[now][s+dif[i]*i]=min(dp[now][s+dif[i]*i],dp[las][s]+2*s*dif[i]+dif[i]*dif[i]*i);
+            dp[now][s+sum[i]]=min(dp[now][s+sum[i]],dp[las][s]+sum[i]*sum[i]);
+        }
+    }
+    int ans=inf;
+    for(int i=0;i&lt;=maxa*n;i++){
+        if(dp[now][i]!=inf){
+            ans=min(ans,n*dp[now][i]-i*i);
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P7962">题解区@shenxinge</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7961">P7961 [NOIP2021] 数列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>动态规划状态压缩，因为你会发现这道题跟排列有关，而且还跟二进制1的个数有关，自然而然就会想到状压。（但我没想到。<pre>
 #include &lt;iostream>
 #include &lt;cstdio>
