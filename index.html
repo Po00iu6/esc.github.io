@@ -90,6 +90,65 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7961">P7961 [NOIP2021] 数列</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>动态规划状态压缩，因为你会发现这道题跟排列有关，而且还跟二进制1的个数有关，自然而然就会想到状压。（但我没想到。<pre>
+#include &lt;iostream>
+#include &lt;cstdio>
+using namespace std;
+#define ll long long
+const int ll mod = 998244353;
+ll ans,v[105],dp[105][35][35][16],pv[105][35];
+ll C[35][35];
+inline void init(int n){
+    for(int i=0;i&lt;=n;i++){
+        C[i][0]=1;
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(int j=1;j&lt;=i;j++){
+            C[i][j]=(C[i-1][j]+C[i-1][j-1])%mod;
+        }
+    }
+}
+inline int popcnt(int n){
+    int res=0;
+    while(n){
+        res+=n&1;n>>=1;
+    }
+    return res;
+}
+int main(){
+    init(30);
+    int n,m,K;
+    cin>>n>>m>>K;
+    for(int i=0;i&lt;=m;i++){
+        cin>>v[i];
+        pv[i][0]=1;
+        for(int j=1;j&lt;=n;j++){
+            pv[i][j]=pv[i][j-1]*v[i]%mod;
+        }
+    }
+    dp[0][0][0][0]=1;
+    for(int i=0;i&lt;=m;i++){
+        for(int j=0;j&lt;=n;j++){
+            for(int k=0;k&lt;=K;k++){
+                for(int p=0;p&lt;=n>>1;p++){
+                    for(int t=0;t&lt;=n-j;t++){
+                        dp[i+1][j+t][k+(t+p&1)][t+p>>1]=(dp[i+1][j+t][k+(t+p&1)][t+p>>1]+dp[i][j][k][p]*pv[i][t]%mod*C[n-j][t]%mod)%mod;
+                    }
+                }
+            }
+        }
+    }
+    for(int k=0;k&lt;=K;k++){
+        for(int p=0;p&lt;=n>>1;p++){
+            if(k+popcnt(p)&lt;=K){
+                ans=(ans+dp[m+1][n][k][p])%mod;
+            }
+        }
+    }
+    printf("%lld",ans);
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P7961">题解区@SDqwq</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7960">P7960 [NOIP2021] 报数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>这是一个跳跃表，每一个都指向它的下一位。<pre>
 #include &lt;iostream&gt;
 #include &lt;cmath&gt;
