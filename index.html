@@ -90,6 +90,129 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7116">P7116 [NOIP2020] 微信步数</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题我第一次拿了25分，之后抄了100。<pre>
+#include &lt;cstdio>
+#include &lt;iostream>
+#include &lt;cmath>
+#include &lt;algorithm>
+using namespace std;
+const int M = 15;
+const int N = 500005;
+const int MOD = 1e9+7;
+#define int long long
+int n,k,inv[M],s[M][M],w[M],a[M],dt[M];
+int ans,c[N],d[N],l[M],r[M],z[M];
+int walk(int x,int y){
+    z[x]+=y;
+    if(l[x]>z[x]||r[x]&lt;z[x]){
+        l[x]=min(l[x],z[x]);
+        r[x]=max(r[x],z[x]);
+        return 1;
+    }
+    return 0;
+}
+void init(int k){
+    s[0][0]=inv[0]=inv[1]=1;
+    for(int i=1;i&lt;=k;i++){
+        for(int j=1;j&lt;=k;j++){
+            s[i][j]=(s[i-1][j-1]+s[i-1][j]*j)%MOD;
+        }
+    }
+    for(int i=2;i&lt;=k+1;i++){
+        inv[i]=(MOD-MOD/i)*inv[MOD%i]%MOD;
+    }
+}
+int cal(int k,int n){
+    int sum=0,c=1;
+    for(int i=0;i&lt;=k;i++){
+        c=c*max(0ll,n-i)%MOD;
+        sum=(sum+c*inv[i+1]%MOD*s[k][i])%MOD;
+    }
+    return sum;
+}
+int work(){
+    int lim=MOD,res=0;
+    for(int i=1;i&lt;=k;i++){
+        if(dt[i]){
+            lim=min(lim,(a[i]+dt[i]-1)/dt[i]);
+        }
+    }
+    int dp[M]={1};
+    for(int i=1;i&lt;=k;i++){
+        for(int j=i;j>=0;j--){
+            dp[j+1]=(dp[j+1]-dt[i]*dp[j])%MOD;
+            dp[j]=dp[j]*a[i]%MOD;
+        }
+    }
+    for(int i=0;i&lt;=k;i++){
+        res=(res+dp[i]*cal(i,lim))%MOD;
+    }
+    return res;
+}
+signed main(){
+    cin>>n>>k;
+    init(k);
+    for(int i=1;i&lt;=k;i++){
+        cin>>w[i];
+    }
+    for(int i=1;i&lt;=n;i++){
+        cin>>c[i]>>d[i];
+        if(walk(c[i],d[i])&&r[c[i]]-l[c[i]]&lt;=w[c[i]]){
+            int x=1;
+            for(int j=1;j&lt;=k;j++){
+                if(j!=c[i]){
+                    x=(x*max(0ll,w[j]-r[j]+l[j]))%MOD;
+                }
+            }
+            ans=(ans+i*x)%MOD;
+        }
+    }
+    int fl=1;
+    for(int i=1;i&lt;=k;i++){
+        fl&=(z[i]==0);
+        dt[i]=abs(z[i]);
+    }
+    if(fl==1){
+        for(int i=1;i&lt;=k;i++){
+            fl|=(r[i]-l[i]>=w[i]);
+        }
+        if(fl){
+            puts("-1");
+        }
+        else{
+            printf("%lld\n",ans);
+        }
+        return 0;
+    }
+    for(int i=1;i&lt;=k;i++){
+        a[i]=max(0ll,w[i]-r[i]+l[i]);
+    }
+    ans=(ans+n*work())%MOD;
+    for(int i=1;i&lt;=n;i++){
+        if(walk(c[i],d[i])&&r[c[i]]-l[c[i]]&lt;=w[c[i]]){
+            fl=1;
+            for(int j=1;j&lt;=k;j++){
+                if(j!=c[i]){
+                    fl&=(w[j]-r[j]+l[j]>0);
+                }
+            }
+            if(!fl){
+                continue;
+            }
+            for(int j=0;j&lt;k;j++){
+                if(j!=c[i]){
+                    a[j]=max(0ll,w[j]-r[j]+l[j]);
+                }
+            }
+            a[c[i]]=w[c[i]]-r[c[i]]+l[c[i]]+1;
+            ans=(ans+i*work())%MOD;
+            a[c[i]]=w[c[i]]-r[c[i]]+l[c[i]];
+            ans=(ans-i*work())%MOD;
+        }
+    }
+    printf("%lld\n",(ans+MOD)%MOD);
+}
+</pre><I>参考资料：<a href="https://www.cnblogs.com/C202044zxy/p/14160167.html">博客园题解</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7115">P7115 [NOIP2020] 移球游戏</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题对思维有一定的挑战。<pre>
 #include &lt;iostream>
 #include &lt;cstdio>
