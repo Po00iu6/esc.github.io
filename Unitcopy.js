@@ -319,3 +319,29 @@ var parentElement = document.getElementById('h_16');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
 parentElement.insertAdjacentHTML('beforeend', "比赛回顾");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('_header');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"db\" id=\"h_17\" onclick=\"window.location.href=\'https://po00iu6.github.io/sqhgxsq.github.io/'\">");
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('h_17');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "商丘回高");
