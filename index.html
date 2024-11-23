@@ -31,6 +31,13 @@
         .videodiv{
             z-index: -1;
             position: fixed;
+            width: 100vw;
+            height: 100vh;
+        }
+        .videodiv video{
+            width: 1920px;
+            height: 1080px;
+            position: fixed;
         }
         @media screen and (max-width:600px) {
             .bg1{
@@ -78,7 +85,7 @@
         <video id="video" autoplay loop muted preload="auto" playsinline data-autoplay="true">
             <source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4" type="video/mp4" >
         </video>
-        <canvas id="canvas" width="1920" height="1080"></canvas>
+        <canvas id="canvas" width="100vw" height="100vh" style="position: fixed;width: 100vw;height: 100vh;"></canvas>
     </div>
     
     <div class="bg2"></div>
