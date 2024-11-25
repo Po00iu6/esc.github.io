@@ -19,7 +19,7 @@
                 l: script_len, //长度，用于生成id用
                 z: get_attribute(script, "zIndex", -1), //z-index
                 o: get_attribute(script, "opacity", 1), //opacity
-                c: get_attribute(script, "color", "138,211,254"), //color
+                c: get_attribute(script, "color", "252,238,185"), //color
                 n: get_attribute(script, "count", 50) //count
             };
         }
@@ -55,7 +55,7 @@
                             d = (e.max - dist) / e.max,
                             context.beginPath(),
                             context.lineWidth = d / 2,
-                            context.strokeStyle = "#77c6f1",
+                            context.strokeStyle = "#FDD890",
                             context.moveTo(r.x, r.y),
                             context.lineTo(e.x, e.y),
                             context.stroke());
@@ -75,7 +75,7 @@
             current_point = {
                 x: null, //当前鼠标x
                 y: null, //当前鼠标y
-                max: 20000 // 圈半径的平方
+                max: 10000 // 圈半径的平方
             },
             all_array;
         the_canvas.id = canvas_id;

@@ -113,6 +113,68 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8865">P8865 [NOIP2022] 种花</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题很怪诶，我暴力能拿100分（CCF的数据能拿100，但洛谷只能拿80），我一旦前缀和优化就变成了12分了。迫不得已只能抄题解了，很奇怪，题解到底是什么逻辑啊，难道不是枚举点，然后分别向右边和下边延伸长度吗？怎么会是先枚举列再枚举行呢？<pre>
+#include &lt;iostream>
+#include &lt;algorithm>
+#include &lt;cmath>
+#include &lt;cstdio>
+#include &lt;cstring>
+using namespace std;
+#define int long long
+#define mod 998244353
+int max(int x,int y){
+    return x>y?x:y;
+}
+int t,id,n,m,c,f,G[2000][2000];
+int presum[2000][2000];
+pair&lt;int,int> V(){
+    int sumc=0,sumf=0;
+    for(int j=1;j&lt;m;j++){
+        int jil=0,jilf=0;
+        for(int i=1;i&lt;=n;i++){
+            if(presum[i][j]==-1){
+                jil=jilf=0;
+                continue;
+            }
+            sumc+=presum[i][j]*jil;
+            sumc%=mod;
+            sumf+=jilf;
+            sumf%=mod;
+            jilf=(jilf+presum[i][j]*jil)%mod;
+            jil+=max(0,presum[i-1][j]);
+        }
+    }
+    return make_pair(sumc,sumf);
+}
+signed main(){
+    scanf("%d%d",&t,&id);
+    while(t--){
+        memset(presum,0,sizeof(presum));
+        memset(G,0,sizeof(G));
+        scanf("%d%d%d%d",&n,&m,&c,&f);
+        for(int i=1;i&lt;=n;i++){
+            for(int j=1;j&lt;=m;j++){
+                char ch=getchar();
+                while(!isdigit(ch))ch=getchar();
+                G[i][j]=(ch=='1');
+            }
+        }
+        for(int i=1;i&lt;=n;i++){
+            for(int j=m-1;j>=1;j--){
+                if(G[i][j]==1){
+                    presum[i][j]=-1; 
+                }
+                else if(G[i][j+1]==0){
+                    presum[i][j]=presum[i][j+1]+1;
+                }
+            }
+        }
+        pair&lt;int,int> par = V();
+        printf("%llu %llu\n",(c*par.first)%mod,(f*par.second)%mod);
+    }
+    return 0;
+}
+</pre>代码经过翻改，与题解区做法一样，但是码风更加亲民。<I><a href="https://www.luogu.com.cn/problem/solution/P8865">题解区@CuSO4_and_5H2O</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P7963">P7963 [NOIP2021] 棋局</a><a href="https://www.luogu.com.cn/problem/list?difficulty=7">NOI/NOI+/CTSC</a><h2 style="font-size: 1.8rem;line-height: 1.9rem;">说句闲话：研究柯学的最好方法是</h2><b>A了这道题</b><h2>祝你们成功！（滑稽</h2><pre>
 #include &lt;iostream>
 #include &lt;cstdio>
