@@ -1,16 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>使用prism美化网页中的代码</title>
-	<link rel="stylesheet" href="../libaray/prismjs/prism.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toggle Div Display</title>
+    <style>
+        #toggleButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #toggleDiv {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #000;
+            display: none; /* 初始状态为隐藏 */
+        }
+    </style>
 </head>
 <body>
-<pre class="line-numbers"><code class="language-javascript">function add(a, b){
-	return a + b;
-}</code>
-</pre>
 
-<script src="../libaray/prismjs/prism.js"></script>
+<button id="">滑动选项（显示/隐藏）</button>
+<div id="toggleDiv">
+    这是一个可以显示或隐藏的div。
+</div>
+
+<script src="demo.js"></script>
 </body>
 </html>

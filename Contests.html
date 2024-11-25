@@ -22,17 +22,35 @@
     <title>错题集</title>
 
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./SBU.css">
 
     <!--  -->
     <style>
+        
+        .videodiv{
+            z-index: -1;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+        }
+        .videodiv video{
+            height: 100vh;
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+        }
         @media screen and (max-width:600px) {
             .bg1{
         background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/09/26/c27c7b23731aa5a60374b57013fcc62c_8061592060424930446.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+            }
+            .videodiv video{
+                width: 0px;
             }
         }
         @media screen and (min-width:601px){
             .bg1{
         background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/09/26/6c21127c8aad75330ef7032197c2280e_4894746016024104932.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+        z-index: -2;
     }
         }
     </style>
@@ -59,7 +77,30 @@
     </header>
     
     <!--  -->
+    
+    <button class="SBU" id="BGMusicButton" style="bottom: 40px;left: 0px;">开/关 背景音乐</button>
+
     <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/希望有羽毛和翅膀.mp3" id="dd" autoplay style="display: none;"></audio>
+
+
+
+    
+
+
+    <button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
+    
+    <div class="videodiv" id="BGdiv">
+        <video id="video" autoplay loop muted preload="auto" playsinline data-autoplay="true">
+            <source src="https://webstatic.mihoyo.com/upload/op-public/2020/09/27/fd431739ff26ceeb3010ac561d68446b_345688670889091949.mp4" type="video/mp4" >
+        </video>
+        <canvas id="canvas" width="100vw" height="100vh" style="position: fixed;width: 100vw;height: 100vh;"></canvas>
+    </div>
+
+
+
+
+
+
     <!--  -->
     <div class="bg1"></div>
     <div class="bg2"></div>
@@ -337,4 +378,5 @@ int main() {
 <script src="./ChangSpanColor.js"></script>
 <script src="./a_blank.js"></script>
 <script src="./yanhua.js"></script>
+<script src="./changeBG.js"></script>
 </html>

@@ -1,0 +1,15 @@
+.SBU{
+    position: fixed;
+    z-index: 5;
+    width: 120px;
+    height: 30px;
+    margin: 20px;
+    border-radius: 100px;
+    border-width: 0;
+    border: 0 solid white;
+    background-color: #F9DB97;
+}
+.SBU:hover{
+    background-color: #FFEDDF;
+    cursor: pointer;
+}

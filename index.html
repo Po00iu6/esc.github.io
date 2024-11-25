@@ -25,6 +25,7 @@
     <title>错题集</title>
 
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./SBU.css">
 
     <!--  -->
     <style>
@@ -38,6 +39,8 @@
             width: 1920px;
             height: 1080px;
             position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
         }
         @media screen and (max-width:600px) {
             .bg1{
@@ -77,11 +80,17 @@
     </header>
     
     <!--  -->
+    <button class="SBU" id="BGMusicButton" style="bottom: 40px;left: 0px;">开/关 背景音乐</button>
+
     <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay style="display: none;"></audio>
     <!--  -->
     <div class="bg1"></div>
+
+
+
+    <button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
     
-    <div class="videodiv">
+    <div class="videodiv" id="BGdiv">
         <video id="video" autoplay loop muted preload="auto" playsinline data-autoplay="true">
             <source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4" type="video/mp4" >
         </video>
@@ -113,6 +122,552 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2607">P2607 [ZJOI2008] 骑士</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>注意是谁仇恨谁，然后建边，别建反了。这是一个基环树的题目，先破环成树，然后树上DP。<pre>
+#include &lt;iostream>
+#include &lt;vector>
+#include &lt;cstring>
+#include &lt;algorithm>
+#include &lt;cmath>
+using namespace std;
+#define int long long
+const int maxn = 1e6+10;
+int w[maxn];
+int r1,r2,sum,res1,res2,n;
+bool vis[maxn];
+vector&lt;int> e[maxn];
+void find(int u,int root){
+    vis[u]=1;
+    for(auto v:e[u]){
+        if(v==root){
+            r1=u,r2=v;
+            return;
+        }
+        if(vis[v])continue;
+        find(v,root);
+    }
+}
+int f[maxn][2];
+int dfs(int u,int root){
+    f[u][0]=0;f[u][1]=w[u];
+    for(auto v:e[u]){
+        if(v==root)continue;
+        dfs(v,root);
+        f[u][0]+=max(f[v][0],f[v][1]);
+        f[u][1]+=f[v][0];
+    }
+    return f[u][0];
+}
+signed main(){
+    cin>>n;
+    for(int u=1,v;u&lt;=n;u++){
+        cin>>w[u]>>v;
+        e[v].push_back(u);
+    }
+    for(int u=1;u&lt;=n;u++){
+        if(vis[u])continue;
+        r1=r2=0;
+        find(u,u);
+        if(r1){
+            res1=dfs(r1,r1);
+            res2=dfs(r2,r2);
+            sum+=max(res1,res2);
+        }
+    }
+    cout&lt;&lt;sum;
+    return 0;
+}
+            
+</pre><I>参考资料：<a href="https://www.bilibili.com/video/BV1Aa411Q7qp?t=1003.9">【Bilibili视频弹幕网】D28 基环树 P2607 [ZJOI2008] 骑士</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P9868">P9868 [NOIP2023] 词典</a><a href="https://www.luogu.com.cn/problem/list?difficulty=2">普及-</a>轻松切掉！<pre>
+#include &lt;iostream>
+#include &lt;cstring>
+#include &lt;string>
+using namespace std;
+const int maxn = 3e3+10;
+int minchar[maxn],maxchar[maxn];
+int n,m;
+int main(){
+    memset(minchar,0x3f,sizeof(minchar));
+    cin>>n>>m;
+    string w;
+    for(int i=1;i&lt;=n;i++){
+        cin>>w;
+        for(int j=0;j&lt;m;j++){
+            if(w[j]&lt;minchar[i]){
+                minchar[i]=w[j];
+            }
+            if(w[j]>maxchar[i]){
+                maxchar[i]=w[j];
+            }
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        bool flag=0;
+        for(int j=1;j&lt;=n;j++){
+            if(j==i)continue;
+            if(maxchar[j]&lt;=minchar[i]){
+                cout&lt;&lt;0;
+                flag=1;
+                break;
+            }
+        }
+        if(flag)continue;
+        cout&lt;&lt;1;
+    }
+    return 0;
+}
+    </pre>只需要检查每一个单词的最小字符是否大于其他单词的最大字符即可输出1，否则输出0。</div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8868">P8868 [NOIP2022] 比赛</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题可以用分治，或者是群论，或者是扫描线。我的暴力拿了8分。<pre>
+#include &lt;iostream>
+#include &lt;cstdio>
+using namespace std;
+#define int unsigned long long
+#define lc p&lt;&lt;1
+#define rc p&lt;&lt;1|1
+#define N 500005
+const int maxn = 2.5e5+10;
+int t,n,a[maxn],b[maxn];
+int Q,l,r;
+struct SegmentTree{
+    int n,w[N];
+    struct node{
+        int l,r,maxnum;
+    }tr[N*4];
+    void build(int p,int l,int r){
+        tr[p]={l,r,w[l]};
+        if(l==r)return;
+        int m=l+r>>1;
+        build(lc,l,m);
+        build(rc,m+1,r);
+        tr[p].maxnum=max(tr[lc].maxnum,tr[rc].maxnum);
+    }
+    int query(int p,int x,int y){
+        if(x&lt;=tr[p].l&&tr[p].r&lt;=y){
+            return tr[p].maxnum;
+        }
+        int m=tr[p].l+tr[p].r>>1;
+        int maxnum=0;
+        if(x&lt;=m)maxnum=max(maxnum,query(lc,x,y));
+        if(y>m)maxnum=max(maxnum,query(rc,x,y));
+        return maxnum;
+    }
+}T[3];
+int sol(int p,int q){
+    return T[1].query(1,p,q)*T[2].query(1,p,q);
+}
+signed main(){
+    cin>>t>>n;
+    for(int i=1;i&lt;=n;i++){
+        scanf("%d",&T[1].w[i]);
+    }
+    T[1].build(1,1,n);
+    for(int i=1;i&lt;=n;i++){
+        scanf("%d",&T[2].w[i]);
+    }
+    T[2].build(1,1,n);
+    scanf("%d",&Q);
+    int ans;
+    while(Q--){
+        ans=0;
+        scanf("%d%d",&l,&r);
+        for(int p=l;p&lt;=r;p++){
+            for(int q=p;q&lt;=r;q++){
+                ans+=sol(p,q);
+            }
+        }
+        cout&lt;&lt;ans&lt;&lt;'\n';
+    }
+}
+    </pre>下面的100分是copy的，以后有实力了在回来写一遍吧。<pre>
+#include &lt;bits/stdc++.h>
+using namespace std;
+typedef unsigned long long ULL;
+const int N = 250005;
+
+struct Qode {
+    int l, id;
+};
+vector&lt;Qode> d[N];
+ULL a[N], b[N];
+ULL ans[N];
+int la[N], lb[N];
+struct Node {
+    ULL s, xy, x, y;
+} tr[N &lt;&lt; 2];
+struct Tag {
+    // 先应用加标记，再应用覆盖标记
+    ULL cx, cy;  //覆盖标记,0 表示无覆盖
+    ULL add_xy, add_x, add_y, add_c;
+} lazy[N &lt;&lt; 2];
+
+void push_up(int u) {
+    tr[u] = {tr[u &lt;&lt; 1].s + tr[u &lt;&lt; 1 | 1].s,
+             tr[u &lt;&lt; 1].xy + tr[u &lt;&lt; 1 | 1].xy,
+             tr[u &lt;&lt; 1].x + tr[u &lt;&lt; 1 | 1].x,
+             tr[u &lt;&lt; 1].y + tr[u &lt;&lt; 1 | 1].y};
+}
+
+void gx(int u, int len, Tag t) {
+    // 标记更新标记
+    auto &[cx, cy, add_xy, add_x, add_y, add_c] = lazy[u];
+
+    if (cx && cy) {
+        add_c += t.add_xy * cx * cy + t.add_x * cx + t.add_y * cy + t.add_c;
+    } else if (cx) {
+        add_c += t.add_x * cx + t.add_c;
+        add_y += t.add_xy * cx + t.add_y;
+    } else if (cy) {
+        add_c += t.add_y * cy + t.add_c;
+        add_x += t.add_xy * cy + t.add_x;
+    } else {
+        add_xy += t.add_xy;
+        add_x += t.add_x;
+        add_y += t.add_y;
+        add_c += t.add_c;
+    }
+    if (t.cx) cx = t.cx;
+    if (t.cy) cy = t.cy;
+
+    // 标记更新信息
+    auto &[s, xy, x, y] = tr[u];
+    s += t.add_xy * xy + t.add_x * x + t.add_y * y + t.add_c * len;
+    if (t.cx && t.cy) {
+        xy = t.cx * t.cy * len;
+        x = t.cx * len;
+        y = t.cy * len;
+    } else if (t.cx) {
+        xy = t.cx * y;
+        x = t.cx * len;
+    } else if (t.cy) {
+        xy = t.cy * x;
+        y = t.cy * len;
+    }
+}
+void push_down(int u, int len1, int len2) {
+    if (lazy[u].cx || lazy[u].cy || lazy[u].add_xy || lazy[u].add_x || lazy[u].add_y || lazy[u].add_c) {
+        gx(u &lt;&lt; 1, len1, lazy[u]);
+        gx(u &lt;&lt; 1 | 1, len2, lazy[u]);
+        lazy[u] = {0, 0, 0, 0, 0, 0};
+    }
+}
+
+void update(int u, int l, int r, int x, int y, Tag t) {
+    if (x &lt;= l && r &lt;= y) {
+        gx(u, r - l + 1, t);
+        return;
+    }
+    int mid = l + r >> 1;
+    push_down(u, mid - l + 1, r - mid);
+    if (x &lt;= mid) update(u &lt;&lt; 1, l, mid, x, y, t);
+    if (y > mid) update(u &lt;&lt; 1 | 1, mid + 1, r, x, y, t);
+    push_up(u);
+}
+
+ULL query(int u, int l, int r, int x, int y) {
+    if (x &lt;= l && r &lt;= y) return tr[u].s;
+    int mid = l + r >> 1;
+    push_down(u, mid - l + 1, r - mid);
+    ULL res = 0;
+    if (x &lt;= mid) res += query(u &lt;&lt; 1, l, mid, x, y);
+    if (y > mid) res += query(u &lt;&lt; 1 | 1, mid + 1, r, x, y);
+    return res;
+}
+
+int main() {
+    int n, q;
+    scanf("%*d%d", &n);
+    a[0] = b[0] = 1e9;
+    for (int i = 1; i &lt;= n; i++) {
+        scanf("%llu", &a[i]);
+        la[i] = i;
+        while (a[i] > a[la[i] - 1]) la[i] = la[la[i] - 1];
+    }
+    for (int i = 1; i &lt;= n; i++) {
+        scanf("%llu", &b[i]);
+        lb[i] = i;
+        while (b[i] > b[lb[i] - 1]) lb[i] = lb[lb[i] - 1];
+    }
+    scanf("%d", &q);
+    for (int i = 1; i &lt;= q; i++) {
+        int l, r;
+        scanf("%d%d", &l, &r);
+        d[r].push_back({l, i});
+    }
+    for (int r = 1; r &lt;= n; r++) {
+        update(1, 1, n, la[r], r, (Tag){a[r], 0, 0, 0, 0, 0});
+        update(1, 1, n, lb[r], r, (Tag){0, b[r], 0, 0, 0, 0});
+        update(1, 1, n, 1, r, (Tag){0, 0, 1, 0, 0, 0});
+        for (auto [l, id] : d[r]) {
+            ans[id] = query(1, 1, n, l, r);
+        }
+    }
+    for (int i = 1; i &lt;= q; i++) printf("%llu\n", ans[i]);
+    return 0;
+}
+</pre><I>参考资料：<a href="https://zhuanlan.zhihu.com/p/588820093">知乎@幻想家协会会长</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8867P8867 [NOIP2022] 建造军营https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>具体思路呢，就是tarjan缩点，然后建树，树上DP，具体需要分类讨论。<b>我讨厌分类讨论！(超大声)</b><pre>
+#include &lt;iostream>
+#include &lt;vector>
+#include &lt;algorithm>
+using namespace std;
+#define int long long
+const int maxn = 5e5+10;
+
+vector&lt;int> e[maxn];
+vector&lt;int> e2[maxn];
+int E[maxn];
+int s[maxn],f[maxn][2];
+int ans;
+
+int n,m;
+const int mod = 1e9+7;
+
+int dfn[maxn],low[maxn],tot;
+int stk[maxn],instk[maxn],top;
+int scc[maxn],siz[maxn],cnt;
+void tarjan(int u,int fa){
+    dfn[u]=low[u]=++tot;
+    stk[++top]=u;instk[u]=1;
+    for(int v:e[u]){
+        if(v==fa){
+            continue;
+        }
+        if(!dfn[v]){
+            tarjan(v,u);
+            low[u]=min(low[u],low[v]);
+        }
+        else if(instk[v]){
+            low[u]=min(low[u],dfn[v]);
+        }
+    }
+    if(dfn[u]==low[u]){
+        int y;
+        ++cnt;
+        do{
+            y=stk[top--];
+            instk[y]=0;
+            scc[y]=cnt;
+            ++siz[cnt];
+        }while(y!=u);
+    }
+}
+
+int pow(int base, int e)
+{
+    int res = 1;
+    while (e)
+    {
+        if (e & 1)
+            res = res * base % mod;
+        base = base * base % mod;
+        e >>= 1;
+    }
+    return res;
+}
+
+void dfs(int u,int fa){
+    s[u]=E[u];
+    for(auto v:e2[u]){
+        if(v==fa){
+            continue;
+        }
+        dfs(v,u);
+        s[u]+=s[v]+1;
+    }
+}
+
+void dp(int u,int fa){
+    for(auto v:e2[u]){
+        if(v==fa){
+            continue;
+        }
+        dp(v,u);
+        f[u][1]=(f[u][1]*(((f[v][0]&lt;&lt;1)+f[v][1])%mod)%mod+f[u][0]*f[v][1]%mod)%mod;
+        f[u][0]=f[u][0]*((f[v][0]&lt;&lt;1)%mod)%mod;
+    }
+    if(u==1){
+        ans=(ans+f[u][1])%mod;
+    }
+    else{
+        ans=(ans+(f[u][1]*pow(2,s[1]-s[u]-1)))%mod;
+    }
+}
+
+signed main(){
+    cin>>n>>m;
+    for(int i=1,u,v;i&lt;=m;i++){
+        cin>>u>>v;
+        e[u].push_back(v);
+        e[v].push_back(u);
+    }
+    tarjan(1,0);
+    for(int u=1;u&lt;=n;u++){
+        for(auto v:e[u]){
+            if(scc[u]!=scc[v]){
+                e2[scc[u]].push_back(scc[v]);
+            }
+            else{
+                E[scc[u]]++;
+            }
+        }
+    }
+    for(int i=1;i&lt;=cnt;i++){
+        E[i]>>=1;
+        f[i][0]=pow(2,E[i]);
+        f[i][1]=pow(2,E[i]+siz[i])-f[i][0];
+    }
+    dfs(1,0);
+    dp(1,0);
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P8867">题解区@Chy12321</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8866">P8866 [NOIP2022] 喵了个喵</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题我只拿了15分，这是一个大模拟了算是，和猪国杀有的一拼。 <img src="https://upload-bbs.miyoushe.com/upload/2024/11/25/198629752/63ca7e9fea167f1258943c1ebd8fcd8e_233806960659797586.png" alt=""> 最终我copy的题解。下面是我15分代码：<pre>
+#include &lt;iostream>
+#include &lt;cstdio>
+#include &lt;vector>
+#include &lt;queue>
+#include &lt;cstring>
+using namespace std;
+deque&lt;int> dq[350];
+int dqsiz[350],cur,freedq;
+//双端队列模拟栈  cur表示单词current目前操作的栈  freedq表示空闲栈
+int t,n,m,k; 
+//就是输入的那些变量
+int a[1000000]; 
+//输入的卡牌数组
+vector&lt;pair&lt;int,int> > ans; 
+//记录ans，至于如何记录的，见下文输出
+void cam(int fi,int se){
+    ans.push_back(make_pair(fi,se)); 
+    //写了一个函数方便记录ans，同时增加可读性
+}
+int main(){
+    // freopen("meow2.in","r",stdin);
+    // freopen("meow2.out","w",stdout);
+    scanf("%d",&t);
+    while(t--){
+        memset(dqsiz,0,sizeof(dqsiz));
+        memset(a,0,sizeof(a));
+        for(int i=1;i&lt;=349;i++){
+            while(!dq[i].empty()){
+                dq[i].pop_front();
+            }
+        }
+        // ↑这些就是初始化，将数组都清空
+        scanf("%d%d%d",&n,&m,&k);
+        for(int i=1;i&lt;=m;i++){
+            cin>>a[i];
+        }
+        //下面这个n==1特判
+        if(n==1){
+            for(int i=1;i&lt;=m;i++){
+                cout&lt;&lt;"1 1\n";
+            }
+            continue;
+        }
+        cur=1,freedq=n;//初始化这两个变量
+        for(int i=1;i&lt;=m;i++){
+            //--------------↓这个循环里头的是找能消除的两个栈底，提前消除
+            for(int j=1;j&lt;=n;j++){
+                for(int k=j+1;k&lt;=n;k++){
+                    if(!dq[j].empty()&&!dq[k].empty()&&dq[j].back()==dq[k].back()){
+                        dq[j].pop_back();
+                        dq[k].pop_back();
+                        cam(j,k);//cam做记录
+                    }
+                }
+            }
+            //---找空闲栈↓---
+            for(int j=1;j&lt;=n;j++){
+                if(dqsiz[j]==0){
+                    freedq=j;
+                    break;
+                }
+            }
+            bool isbreak=0;//接下来我是否要停下
+            for(int j=1;j&lt;=n;j++){
+                if(dq[j].empty())continue;
+                int tmp=dq[j].front();
+                if(tmp==a[i]){ //如果某一个栈顶和当前要放入的元素相同，就直接消除
+                    dq[j].pop_front();
+                    dqsiz[j]--;
+                    isbreak=1; //然后break
+                    cam(0,j);
+                    break;
+                }
+            }
+            if(isbreak)continue; //到这里continue
+            isbreak=0;
+            for(int j=1;j&lt;=n;j++){
+                if(dq[j].empty())continue;
+                int tmp=dq[j].back();
+                if(tmp==a[i]){ //如果某一个栈底和当前要放入的元素相同，就直接消除
+                    dq[j].pop_back();
+                    dqsiz[j]--;
+                    isbreak=1; //然后break
+                    cam(0,freedq);
+                    cam(j,freedq);
+                    break;
+                }
+            }
+            if(isbreak)continue;
+            if(dqsiz[cur]&lt;2){ //如果当前栈的大小小于2
+                dq[cur].push_front(a[i]);
+                dqsiz[cur]++;
+                cam(0,cur);
+            }
+            else if(cur&lt;=n-1){ //否则如果我当前栈不等于n
+                cur=1;
+                while(dqsiz[cur]>=2&&cur&lt;=n){
+                    cur++;
+                }
+                dq[cur].push_front(a[i]);
+                dqsiz[cur]++;
+                cam(0,cur);
+            }
+            else{ //否则分类讨论
+                int nxt=a[i+1],pos=0;
+                isbreak=0;
+                for(int j=1;j&lt;=n;j++){
+                    if(dq[j].empty())continue;
+                    int tmp=dq[j].back();
+                    if(tmp==nxt){ //如果下一个要放入的牌和某一个栈底相同
+                        pos=j;
+                        isbreak=1;
+                        break;
+                    }
+                }
+                if(isbreak){
+                    dq[pos].push_front(a[i]); //我就把当前牌放到目标位置的栈顶
+                    dqsiz[pos]++;//如果不出所料，栈的大小此时为3
+                    cam(0,pos);
+                    continue;
+                }
+                dq[freedq].push_front(a[i]);//那否则我就把当前牌放到空闲栈
+                dqsiz[freedq]++;
+                cam(0,freedq);
+            }
+        }
+        for(int j=1;j&lt;=n;j++){
+            for(int k=j+1;k&lt;=n;k++){
+                if(!dq[j].empty()&&!dq[k].empty()&&dq[j].back()==dq[k].back()){ //最后再遍历一遍，能消除的都消除掉
+                    dq[j].pop_back();
+                    dq[k].pop_back();
+                    cam(j,k);
+                }
+            }
+        }
+        cout&lt;&lt;ans.size()&lt;&lt;'\n';//输出答案
+        for(auto ed:ans){
+            if(ed.first!=0) cout&lt;&lt;2&lt;&lt;" "&lt;&lt;ed.first&lt;&lt;" "&lt;&lt;ed.second&lt;&lt;'\n';
+            else cout&lt;&lt;1&lt;&lt;" "&lt;&lt;ed.second&lt;&lt;'\n';
+        }
+        ans.clear();//清空答案数组
+    }
+    return 0;
+}
+</pre>求助贴已经发在了讨论区：<a href="https://www.luogu.com.cn/discuss/1005201">15分求调！</a></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P8865">P8865 [NOIP2022] 种花</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题很怪诶，我暴力能拿100分（CCF的数据能拿100，但洛谷只能拿80），我一旦前缀和优化就变成了12分了。迫不得已只能抄题解了，很奇怪，题解到底是什么逻辑啊，难道不是枚举点，然后分别向右边和下边延伸长度吗？怎么会是先枚举列再枚举行呢？<pre>
 #include &lt;iostream>
 #include &lt;algorithm>
@@ -13110,4 +13665,5 @@ int main()
 <script src="./Unitcopy.js"></script>
 <script src="./ChangSpanColor.js"></script>
 <script src="./a_blank.js"></script>
+<script src="./changeBG.js"></script>
 </html>
