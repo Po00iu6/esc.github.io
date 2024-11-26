@@ -16,6 +16,26 @@ document.addEventListener("DOMContentLoaded", function() {
         isDivVisible = !isDivVisible;
     });
 });
+document.addEventListener("DOMContentLoaded", function() {
+    const toggleButton = document.getElementById("VBGButton");
+    const toggleDiv = document.getElementById("video");
+    document.getElementById("video").volume=0.5;
+    let bef = document.getElementById("video").volume;
+    let isDivVisible = true; // 跟踪div的当前可见性状态
+
+    toggleButton.addEventListener("click", function() {
+        // 切换div的显示状态
+        if (isDivVisible) {
+            toggleDiv.volume = 0;
+            toggleButton.style.backgroundColor="#D3BA80";
+        } else {
+            toggleDiv.volume = bef;
+            toggleButton.style.backgroundColor="#F9DB97";
+        }
+        // 更新状态
+        isDivVisible = !isDivVisible;
+    });
+});
 
 document.addEventListener("DOMContentLoaded", function() {
     const toggleButton = document.getElementById("BGMusicButton");
