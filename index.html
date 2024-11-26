@@ -39,8 +39,9 @@
             width: 1920px;
             height: 1080px;
             position: fixed;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%,-50%);
         }
         @media screen and (max-width:600px) {
             .bg1{
@@ -122,6 +123,69 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P9869">P9869 [NOIP2023] 三值逻辑</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>一道并查集的题目，真的考得如此惨败！<pre>
+#include &lt;iostream&gt;
+#include &lt;cstdio&gt;
+#include &lt;cstring&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int maxn = 2e5+10;
+const int U=maxn-1;
+const int T=maxn-2;
+int fa[maxn],X[maxn];
+int c,t,n,m;
+int find(int a){
+    if(a==fa[a])return a;
+    return fa[a]=find(fa[a]);
+}
+void merge(int a,int b){
+    fa[find(a)]=find(b);
+}
+int main(){
+    cin&gt;&gt;c&gt;&gt;t;
+    int UK=0;
+    while(t--){
+        cin&gt;&gt;n&gt;&gt;m;
+        for(int i=1;i&lt;=n;i++){
+            X[i]=i;
+        }
+        char v;
+        for(int i=1,x,y;i&lt;=m;i++){
+            cin&gt;&gt;v;
+            if(v=='+'||v=='-'){
+                cin&gt;&gt;x&gt;&gt;y;
+                X[x]=(v=='+'?X[y]:-X[y]);
+            }
+            else{
+                cin&gt;&gt;x;
+                X[x]=(v=='U'?U:T);
+            }
+        }
+        for(int i=1;i&lt;=2*n;i++){
+            fa[i]=i;
+        }
+        for(int i=1;i&lt;=n;i++){
+            if(abs(X[i])==U){
+                merge(i,i+n);
+            }
+            else if(abs(X[i])==T);
+            else if(X[i]&gt;0){
+                merge(X[i],i);merge(X[i]+n,i+n);
+            }
+            else if(X[i]&lt;0){
+                merge(-X[i],i+n);merge(-X[i]+n,i);
+            }
+        }
+        UK=0;
+        for(int i=1;i&lt;=n;i++){
+            if(find(i)==find(i+n)){
+                UK++;
+            }
+        }
+        cout&lt;&lt;UK&lt;&lt;'\n';
+    }
+}
+</pre></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P2607">P2607 [ZJOI2008] 骑士</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>注意是谁仇恨谁，然后建边，别建反了。这是一个基环树的题目，先破环成树，然后树上DP。<pre>
 #include &lt;iostream>
 #include &lt;vector>
