@@ -123,6 +123,184 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11290">P11290 【MX-S6-T2】「KDOI-11」飞船</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题很难，但是做完却感觉收获满满！首先你能从中学会到dp的高级用法，这是教科书上见不到的。其次，你能对于这种复杂题目更加适应。最后，你还可以学会如何思考这类题目。<pre>
+#include &lt;iostream>
+#include &lt;cstdio>
+#include &lt;algorithm>
+#include &lt;cstring>
+#include &lt;cmath>
+using namespace std;
+const int maxn = 1e5+10;
+double f[2][33][22];
+double ans[maxn];
+pair&lt;int,int> y[maxn];
+int n,q;
+double t[maxn],s[maxn];
+int p[maxn];
+int x[maxn];
+double pow2[40],pow3[40];
+int main(){
+    pow2[0]=pow3[0]=1;
+    for(int i=1;i&lt;=32;i++){
+        pow2[i]=pow2[i-1]*2;
+    }
+    for(int i=1;i&lt;=32;i++){
+        pow3[i]=pow3[i-1]*3;
+    } <span>//初始化2的n次方和3的n次方</span>
+
+    cin>>n>>q;
+    for(int i=1;i&lt;=n;i++){
+        cin>>p[i]>>t[i]>>s[i];
+    } <span>//正常读入数据</span>
+    for(int i=1;i&lt;=q;i++){
+        cin>>y[i].first;
+        y[i].second=i;
+    } <span>//待会要按照询问端点排序，因此要搞一个pair做离线</span>
+    for(int i=0;i&lt;2;i++){
+        for(int j=0;j&lt;33;j++){
+            for(int k=0;k&lt;23;k++){
+                f[i][j][k]=1e18;
+            }
+        }
+    } <span>//这就是初始化f数组了，但是我不知道memset怎么对double类型初始化，就干脆写循环了</span>
+    f[0][0][0]=0; <span>//边界条件你懂的</span>
+    sort(y+1,y+q+1); <span>//将询问排序</span>
+    int cury=1; <span>//如字面意思，current就是当前的意思，cury充当了一个目前的指针</span>
+    for(int i=1;i&lt;=n;i++){
+        double curp=p[i],befp=p[i-1],ti=t[i];
+        int xi=s[i];
+        <span>//这几个变量也都是字面意思，curp目前的p，befp之前的p，ti时间，xi加倍的速度</span>
+        while(cury&lt;=q&&y[cury].first&lt;curp){ <span>//先处理完所有小于当前加油站的询问</span>
+            double sum=1e18;
+            for(int j=0;j&lt;31;j++){
+                for(int k=0;k&lt;20;k++){
+                    sum=min(sum,f[0][j][k]+(y[cury].first-befp)/pow2[j]/pow3[k]); <span>就是路程除以速度的公式，这里分母是pow2和pow3</span>
+                    <span>//计算结果是时间，相当于预处理将所有可能的时间贡献都枚举出来了</span>
+                }
+            } <span>//这就是枚举速度加多少能产生多少时间</span>
+            ans[y[cury].second]=sum; <span>//选一个最小的作为当前询问的答案</span>
+            cury++; <span>//指针自增，没问题吧</span>
+        }
+        for(int j=31;j>=0;j--){
+            for(int k=20;k>=0;k--){
+                f[1][j][k]=f[0][j][k]+(curp-befp)/pow2[j]/pow3[k];
+            } <span>//前面的while计算的是询问距离befp的时间，这里是当前加油站距离befp的时间</span>
+        }
+        for(int j=31;j>=0;j--){
+            for(int k=20;k>=0;k--){
+                switch(xi){
+                    case 1:{
+                        break;
+                    }
+                    case 2:{
+                        if(j>0)f[1][j][k]=min(f[1][j][k],f[1][j-1][k]+ti);
+                        break;
+                    }
+                    case 3:{
+                        if(k>0)f[1][j][k]=min(f[1][j][k],f[1][j][k-1]+ti);
+                        break;
+                    }
+                    case 4:{
+                        if(j>1)f[1][j][k]=min(f[1][j][k],f[1][j-2][k]+ti);
+                        break;
+                    }
+                    <span>//根据选项做转移，挺好理解的</span>
+                }
+            }
+        }
+        for(int j=31;j>=0;j--){
+            for(int k=20;k>=0;k--){
+                f[0][j][k]=f[1][j][k];
+            }
+        } <span>//我们发现你的时间贡献只跟你上一个加油站有关，因此f第一维只开了2</span>
+        <span>//因为我们这里是滚动DP，因此要将f[1]的copy给f[0]，就这样滚起来，内存重复利用</span>
+    }
+    while(cury&lt;=q){
+        double sum=1e18;
+        for(int j=0;j&lt;=31;j++){
+            for(int k=0;k&lt;=20;k++){
+                sum=min(sum,f[0][j][k]+(y[cury].first-p[n])/pow2[j]/pow3[k]);
+            }
+        }
+        ans[y[cury].second]=sum;
+        cury++;
+    } <span>//这里是处理末尾多出来的尾巴</span>
+    for(int i=1;i&lt;=q;i++){
+        printf("%.8lf\n",ans[i]);
+    } <span>//最后输出答案</span>
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P11290">题解区@cff_0102</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11289">P11289 【MX-S6-T1】「KDOI-11」打印</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题可太恶心了，调了2天才调好。结果居然是因为等待那块没有将now+e[i].s倒直地。<pre>
+#include &lt;iostream>
+#include &lt;queue>
+#include &lt;vector>
+#include &lt;algorithm>
+using namespace std;
+#define maxn 3000000
+#define int long long
+struct File
+{
+    int s,t, fileId;
+} e[maxn];
+bool operator &lt; (File a,File b){
+    return a.t&lt;b.t;
+}
+struct Print{
+    int now,printMachineId;
+    bool operator &lt; (const Print &a)const{
+        return now==a.now?printMachineId>a.printMachineId:now>a.now;
+    }
+};
+priority_queue&lt;Print> runingPrintMachine,leisurePrintMachine;
+priority_queue&lt;int, vector&lt;int>, greater&lt;int>> ans[maxn];
+int n, m;
+signed main()
+{
+    cin >> n >> m;
+    for (int i = 1; i &lt;= m; i++)
+    {
+        leisurePrintMachine.push({0,i});
+    }
+    for (int i = 1, s, t; i &lt;= n; i++)
+    {
+        cin >> s >> t;
+        e[i].s = s, e[i].t = t, e[i].fileId = i;
+    }
+    sort(e + 1, e + n + 1);
+    for (int i = 1; i &lt;= n; i++)
+    {
+        while (!runingPrintMachine.empty() && (runingPrintMachine.top().now &lt;= e[i].t))
+        {
+            leisurePrintMachine.push({0,runingPrintMachine.top().printMachineId});
+            runingPrintMachine.pop();
+        }
+        int id;
+        if(!leisurePrintMachine.empty()){
+            id=leisurePrintMachine.top().printMachineId;
+            leisurePrintMachine.pop();
+            runingPrintMachine.push({e[i].t+e[i].s,id});
+        }
+        else{
+            id=runingPrintMachine.top().printMachineId;
+            runingPrintMachine.push({runingPrintMachine.top().now+e[i].s,id});
+            runingPrintMachine.pop();
+        }
+        ans[id].push(e[i].fileId);
+    }
+    for (int i = 1; i &lt;= m; i++)
+    {
+        cout &lt;&lt; ans[i].size() &lt;&lt; " ";
+        while (!ans[i].empty())
+        {
+            cout &lt;&lt; ans[i].top() &lt;&lt; " "; 
+            ans[i].pop();
+        }
+        cout &lt;&lt; '\n';
+    }
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P11289">题解区@zhujiangyuan</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P9871">P9871 [NOIP2023] 天天爱打卡</a><a href="https://www.luogu.com.cn/problem/list?difficulty=6">省选/NOI-</a>这道题还是根据出题人给的数据范围和特殊性质一步一步引导你想出正解，但是我却想不出来，因此我甚至直接copy。<pre>
 #include&lt;bits/stdc++.h>
 #define ll long long
