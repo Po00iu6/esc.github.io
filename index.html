@@ -123,6 +123,46 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我NOIP2024 RP++直接拿下400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11268">P11268 【MX-S5-T2】买东西题</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是反悔背包的题目，不过可以使用另一种解法，也就是构造出n个虚拟优惠券，然后加上题目给出的优惠券，从中挑选n个优惠券最后用不用优惠券的钱来减去全部使用这n个优惠券的钱数就好了。也算是给了我们一个新的思路<pre>
+#include &lt;iostream>
+#include &lt;algorithm>
+#include &lt;queue>
+using namespace std;
+#define int long long
+struct node{
+    int x,y;
+    bool operator &lt; (const node &a)const{
+        return x>a.x||(x==a.x&&y>a.y);
+    }
+}a[1500000],b[1500000];
+int ans,n,m;
+signed main(){
+    cin>>n>>m;
+    for(int i=1;i&lt;=n;i++){
+        cin>>a[i].x>>a[i].y;
+        a[i].y=a[i].x-a[i].y;
+        ans+=a[i].x;
+    }
+    for(int i=1;i&lt;=m;i++){
+        cin>>b[i].x>>b[i].y;
+    }
+    sort(a+1,a+n+1);
+    sort(b+1,b+m+1);
+    priority_queue&lt;int,vector&lt;int>,greater&lt;int> > q;
+    int j=1;
+    for(int i=1;i&lt;=m;i++){
+        while(j&lt;=n&&a[j].x>=b[i].x)q.push(a[j].y),j++;
+        if(!q.empty()&&q.top()&lt;b[i].y){
+            q.pop();
+            q.push(b[i].y);
+        }
+    }
+    while(j&lt;=n)q.push(a[j].y),j++;
+    while(!q.empty()) ans-=q.top(),q.pop();
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.cnblogs.com/CodingGoat/p/18536731">博客园题解</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P11267">P11267 【MX-S5-T1】王国边缘</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题倍增才能满分，不过二分算法可以拿80，为了时间，我还是copy了题解。<pre>
 #include&lt;iostream>
 #include&lt;cstdio>
