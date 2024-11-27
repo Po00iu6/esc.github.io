@@ -109,7 +109,7 @@
 
 
     <div class="op">
-        <h1>下拉查看OI错题</h1>
+        <h1>下拉查看OI错题<br>NOIP2024 RP++</h1>
     </div>
 
 
@@ -122,7 +122,68 @@
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/60fcdfbd4e12245f4d69315c48a80154_7170574471892578999.png" alt="johnson" onclick="window.open('https:\/\/upload-bbs.miyoushe.com\/upload\/2024\/10\/22\/286158760\/60fcdfbd4e12245f4d69315c48a80154_7170574471892578999.png')"></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
-    <div class="t1">AC(Accepted)保佑我CSP-S复赛400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1">AC(Accepted)保佑我NOIP2024 RP++直接拿下400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11267">P11267 【MX-S5-T1】王国边缘</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题倍增才能满分，不过二分算法可以拿80，为了时间，我还是copy了题解。<pre>
+#include&lt;iostream>
+#include&lt;cstdio>
+#define int long long
+using namespace std;
+const int mod=1e9+7;
+int n,m,q,a[400010],last[400010];
+int d1[200010][70],d2[200010][70];
+signed main()
+{
+    scanf("%lld%lld%lld",&n,&m,&q);
+    for(int i=1;i&lt;=n;i++)
+    {
+        char c;
+        cin>>c;
+        a[i]=a[i+n]=c-'0';
+    }
+    for(int i=1;i&lt;=2*n;i++)
+    {
+        if(a[i]==1)last[i]=i;
+        else last[i]=last[i-1];
+    }
+    for(int i=1;i&lt;=n;i++)
+        if(m&lt;n)
+        {
+            if(last[i+m]&lt;=i)d1[i][0]=d2[i][0]=1;
+            else d1[i][0]=d2[i][0]=last[i+m]-i;
+        }
+        else
+        {
+            if(!last[n])d1[i][0]=1%n,d2[i][0]=1;
+            else
+            {
+                int r=n+(i+m-1)%n+1;
+                d1[i][0]=(m-r+last[r])%n,d2[i][0]=(m-r+last[r])%mod;
+            }
+        }
+    for(int j=1;j&lt;=61;j++)
+        for(int i=1;i&lt;=n;i++)
+        {
+            int nxt=(i+d1[i][j-1]-1)%n+1;
+            d1[i][j]=(d1[i][j-1]+d1[nxt][j-1])%n;
+            d2[i][j]=(d2[i][j-1]+d2[nxt][j-1])%mod;
+        }
+    while(q--)
+    {
+        int ss,k;
+        scanf("%lld%lld",&ss,&k);
+        int now=(ss-1)%n+1,ans=ss%mod;
+        for(int i=61;i>=0;i--)
+            if(k>=(1ll&lt;&lt;i))
+            {
+                k-=(1ll&lt;&lt;i);
+                ans=(ans+d2[now][i])%mod;
+                now=(now+d1[now][i]-1)%n+1;
+            }
+        printf("%lld\n",ans);
+    }
+    return 0;
+}
+</pre><I>抄袭资料：<a href="https://www.luogu.com.cn/problem/solution/P11267">题解区@Night_sea_64</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P11290">P11290 【MX-S6-T2】「KDOI-11」飞船</a><a href="https://www.luogu.com.cn/problem/list?difficulty=5">提高+/省选-</a>这道题很难，但是做完却感觉收获满满！首先你能从中学会到dp的高级用法，这是教科书上见不到的。其次，你能对于这种复杂题目更加适应。最后，你还可以学会如何思考这类题目。<pre>
 #include &lt;iostream>
 #include &lt;cstdio>
