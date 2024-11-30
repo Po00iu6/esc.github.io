@@ -123,6 +123,498 @@
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P4779">P4779 【模板】单源最短路径（标准版）</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>不愧是模板题，我也是直接秒了！看好了，板子是这么背的！<a href="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/bc91f2048feafc821d94d2184a1939fc_3137352780557072498.png">单源最短路模板</a></div>
     <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/10/21/286158760/4be9add32577548a072645ce77498592_4896357184329688696.jpg" alt="">我要省一，呜呜呜！我也是赌上去了！</div>
     <div class="t1">AC(Accepted)保佑我NOIP2024 RP++直接拿下400pts！！！<img src="https://upload-bbs.miyoushe.com/upload/2024/10/22/286158760/d4264f3bf787c0d054258a9bddd5c129_6098923047941144383.png" alt="AC"></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1038">P1038 [NOIP2003 提高组] 神经网络</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题真是把我坑惨了，预处理的顺序不一样还会出错。而且输出的是输出层，题目中说了，我没看见。<pre>
+#include &lt;iostream>
+#include &lt;algorithm>
+#include &lt;vector>
+#include &lt;queue>
+#include &lt;map>
+using namespace std;
+#define int long long
+#define pii pair&lt;int,int>
+const int N = 200;
+struct Node{
+    int C,U;
+}node[N];
+vector&lt;pii> e[N];
+int n,p;
+int ind[N],outd[N];
+signed main(){
+    cin>>n>>p;
+    for(int i=1;i&lt;=n;i++){
+        cin>>node[i].C>>node[i].U;
+        node[i].C-=node[i].U;
+    }
+    for(int i=1,u,v,w;i&lt;=p;i++){
+        cin>>u>>v>>w;
+        e[u].push_back({v,w});
+        ind[v]++;outd[u]++;
+    }
+    queue&lt;int> q;
+    for(int i=1;i&lt;=n;i++){
+        if(ind[i]==0){
+            q.push(i);
+            node[i].C+=node[i].U;
+        }
+    }
+    while(!q.empty()){
+        int u=q.front();
+        q.pop();
+        for(auto ed:e[u]){
+            int v=ed.first,w=ed.second;
+            if(node[u].C>0)node[v].C+=node[u].C*w;
+            ind[v]--;
+            if(ind[v]==0){
+                q.push(v);
+            }
+        }
+    }
+    bool flag=1;
+    for(int i=1;i&lt;=n;i++){
+        if((!outd[i])&&node[i].C>0){
+            cout&lt;&lt;i&lt;&lt;" "&lt;&lt;node[i].C&lt;&lt;'\n';
+            flag=0;
+        }
+    }
+    if(flag){
+        cout&lt;&lt;"NULL";
+    }
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://blog.csdn.net/Salvator_/article/details/123056485">CSDN题解</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P9228">P9228 原神</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a>大佬的压行真牛逼，这道题是贪心，就是2种情况，详细见题解。<pre>
+#include &lt;iostream>
+#include &lt;vector>
+#include &lt;cstring>
+#include &lt;algorithm>
+using namespace std;
+#define int long long
+const int N = 2e6;
+bool cmp(int a,int b){
+    return a>b;
+}
+int n,m,k,kk;
+int a[N],b[N],ans;
+signed main(){
+    cin>>n>>m>>k;
+    for(int i=1;i&lt;=n;i++)cin>>a[i],ans+=a[i];
+    for(int i=1;i&lt;=m;i++)cin>>b[i],ans+=b[i];
+    sort(a+1,a+n+1,cmp);
+    int minn=min(n,m);
+    for(int i=1;i&lt;=minn;i++)if(a[i]>k)ans+=a[i],kk++;
+    ans+=k*(minn-kk);
+    return cout&lt;ans,0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P9228">题解区@封禁用户</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P8881">P8881 懂事时理解原神</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高</a>这道题是判断环的题目，如果有环，那么一定输出0，无环就是1。<pre>
+#include &lt;iostream>
+#include &lt;vector>
+#include &lt;cstring>
+using namespace std;
+const int N = 2e5;
+vector&lt;int> e[N];
+int t,n,m,ans;
+bool vis[N];
+void dfs(int u,int fa){
+    vis[u]=1;
+    for(auto v:e[u]){
+        if(v==fa)continue;
+        if(!vis[v])dfs(v,u);
+        else ans=0;
+        if(!ans)return;
+    }
+}
+int main(){
+    cin>>t;
+    while(t--){
+        memset(vis,0,sizeof(vis));
+        ans=1;
+        cin>>n>>m;
+        for(int i=1;i&lt;=n;i++){
+            e[i].clear();
+        }
+        for(int i=1,u,v;i&lt;=m;i++){
+            cin>>u>>v;
+            e[u].push_back(v);
+            e[v].push_back(u);
+        }
+        dfs(1,0);
+        cout&lt;&lt;ans&lt;&lt;".000\n";
+    }
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P8881">题解区@Manchester_Is_Blue</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3197">P3197 [HNOI2008] 越狱</a><a href="https://www.luogu.com.cn/problem/list?difficulty=3">普及/提高-</a><p>这道题是组合数学的题目。我们想简单一点，第一个人有m种宗教可以选，第二个人为了和第一个人不同，那么她就只有m-1种宗教可以选，第三种为了和第二种不同，也只有m-1种宗教可以选，以此类推，那么不会冲突的情况就有m*(m-1)<sup>n-1</sup>种。那么总的情况数减去她就是不合法的情况数了，总的情况就是每个人都可以选择m种宗教，最后就是m<sup>n</sup>种。<br>综上，答案就是m<sup>n</sup>-m*(m-1)<sup>n-1</sup>。</p><pre>
+#include &lt;iostream>
+#include &lt;algorithm>
+using namespace std;
+#define int long long
+const int mod = 100003;
+int n,m;
+int pow(int x,int y){
+    int res=1;
+    while(y){
+        if(y&1){
+            res*=x;
+            res%=mod;
+        }
+        x*=x;
+        x%=mod;
+        y>>=1;
+    }
+    return res%mod;
+}
+signed main(){
+    cin>>m>>n;
+    cout&lt;&lt;((pow(m,n))-m%mod*(pow((m-1),(n-1)))%mod+mod)%mod;
+    return 0;
+}
+</pre>注意加法取模的顺序不同会导致结果不同！只有乘法取模顺序不同才是等价的，加法不等价！<I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P3197">题解区@蒟蒻初音ミク</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P2024">P2024 [NOI2001] 食物链</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题很有意思，就是将并查集放大3倍，分为3类：fa[x]表示x本身，fa[x+n]表示x的猎物，fa[x+2*n]表示x的天敌。其中x的猎物的天敌是猎物。总之这个关系有点蒙，画个有向图就好了。总之这个关系怎么表示都可以，最后只要输出正确就行了。<pre>
+#include &lt;iostream>
+#include &lt;cstdio>
+#include &lt;algorithm>
+using namespace std;
+const int N = 5e5+10;
+int n,k;
+int fa[N],ans;
+int find(int x){
+    if(x==fa[x])return x;
+    return fa[x]=find(fa[x]);
+}
+void merge(int x,int y){
+    x=find(fa[x]),y=find(fa[y]);
+    fa[x]=y;
+}
+int main(){
+    cin>>n>>k;
+    for(int i=1;i&lt;=n*3;i++)fa[i]=i;
+    int opt,x,y;
+    while(k--){
+        cin>>opt>>x>>y;
+        if(x>n||y>n){
+            ans++;
+        }
+        else if(opt==1){
+            if(find(x+n)==find(y)||find(x+2*n)==find(y)){
+                ans++;
+            }
+            else{
+                merge(x,y);
+                merge(x+n,y+n);
+                merge(x+2*n,y+2*n);
+            }
+        }
+        else{
+            if(x==y){
+                ans++;
+            }
+            else{
+                if(find(x+2*n)==find(y)||find(x)==find(y)){
+                    ans++;
+                }
+                else{
+                    merge(x+n,y);
+                    merge(y+2*n,x);
+                    merge(x+2*n,y+n);
+                }
+            }
+        }
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P2024">题解区@檀黎斗·神</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3387">P3387 【模板】缩点</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>隔了一段时间再来写这道题真的受罪匪浅。<pre>
+#include &lt;iostream>
+#include &lt;vector>
+#include &lt;queue>
+#include &lt;algorithm>
+using namespace std;
+#define int long long
+const int maxn = 2e6;
+vector&lt;int> e[maxn],e2[maxn];
+int dfn[maxn],low[maxn],tot;
+int stk[maxn],instk[maxn],top;
+int scc[maxn],cnt;
+int w[maxn],w2[maxn];
+int n,m;
+void tarjan(int u){
+    dfn[u]=low[u]=++tot;
+    stk[++top]=u;instk[u]=1;
+    for(auto v:e[u]){
+        if(!dfn[v]){
+            tarjan(v);
+            low[u]=min(low[u],low[v]);
+        }
+        else if(instk[v]){
+            low[u]=min(low[u],dfn[v]);
+        }
+    }
+    if(low[u]==dfn[u]){
+        cnt++;
+        int v;
+        do{
+            v=stk[top--];
+            instk[v]=0;
+            scc[v]=cnt;
+            w2[cnt]+=w[v];
+        }while(v!=u);
+    }
+}
+int f[maxn];
+signed main(){
+    cin>>n>>m;
+    for(int i=1;i&lt;=n;i++){
+        cin>>w[i];
+    }
+    for(int i=1,u,v;i&lt;=m;i++){
+        cin>>u>>v;
+        e[u].push_back(v);
+    }
+    for(int i=1;i&lt;=n;i++){
+        if(!dfn[i]){
+            tarjan(i);
+        }
+    }
+    for(int i=1;i&lt;=n;i++){
+        for(auto v:e[i]){
+            if(scc[v]!=scc[i]){
+                e2[scc[i]].push_back(scc[v]);
+            }
+        }
+    }
+    for(int i=cnt;i>=1;i--){
+        if(!f[i]){
+            f[i]=w2[i];
+        }
+        for(auto v:e2[i]){
+            if(f[v]&lt;f[i]+w2[v]){
+                f[v]=f[i]+w2[v];
+            }
+        }
+    }
+    int ans=0;
+    for(int i=1;i&lt;=cnt;i++){
+        ans=max(ans,f[i]);
+    }
+    cout&lt;&lt;ans;
+    return 0;
+}
+    </pre><I>参考资料；<a href="https://www.cnblogs.com/avarice/p/16500338.html">博客园题解</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/record/191541429">P11324 【MX-S7-T2】「SMOI-R2」Speaker</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是熟练剖分+分类讨论，其实看了题解之后也能看出来了，确实是分类讨论。<pre>
+#include &lt;iostream>
+#include &lt;cstring>
+#include &lt;cstdio>
+#include &lt;algorithm>
+#include &lt;cmath>
+    
+using namespace std;
+    
+typedef long long LL;
+    
+const int N = 200010, M = N * 2, K = log2(N) + 2;
+    
+int n, m;
+int h[N], e[M], ne[M], w[M], idx;
+LL v[N];
+LL depth[N], fa[N][K], maxv[N][K]; 
+LL dist[N], max1[N], max2[N], max3[N];
+LL mak1[N], mak2[N], mak3[N];
+LL sum[N], res, kk;
+    
+void add(int a, int b, int c)
+{
+    e[idx] = b, ne[idx] = h[a], w[idx] = c, h[a] = idx ++ ; 
+}
+    
+void dfs1(int u, int fas)
+{
+    max1[u] = v[u];
+    
+    for (int i = h[u]; i != -1; i = ne[i])
+    {
+        int j = e[i];
+        if (fas == j) continue;
+        dist[j] = dist[u] + w[i];
+        dfs1(j, u);
+        // cout &lt;&lt; u &lt;&lt; ' ' &lt;&lt; max1[u] &lt;&lt; endl;
+        // cout &lt;&lt; j &lt;&lt; ' ' &lt;&lt; max1[j] &lt;&lt; endl; 
+        if (max1[j] - 2 * w[i] >= max1[u])
+        {
+            max3[u] = max2[u], mak3[u] = mak2[u];
+            max2[u] = max1[u]; mak2[u] = mak1[u];
+            max1[u] = max1[j] - 2 * w[i], mak1[u] = j;
+            // cout &lt;&lt; max1[u] &lt;&lt; endl;
+        }
+        else if (max1[j] - 2 * w[i] >= max2[u])
+        {
+            max3[u] = max2[u], mak3[u] = mak2[u];
+            max2[u] = max1[j] - 2 * w[i], mak2[u] = j;
+        }
+        else if (max1[j] - 2 * w[i] >= max3[u]) 
+        {
+            max3[u] = max1[j] - 2 * w[i];
+            mak3[u] = j;
+        }
+        // cout &lt;&lt; 'a';
+        
+    }
+}
+    
+void dfs2(int u, int fas)
+{
+    depth[u] = depth[fas] + 1;
+    fa[u][0] = fas;
+    if (mak1[fas] != u) maxv[u][0] = max(v[u], max1[fas]);
+    else maxv[u][0] = max(v[u], max2[fas]);
+    
+    for (int j = 1; j &lt; K; j ++ )
+    {
+        fa[u][j] = fa[fa[u][j - 1]][j - 1];
+        maxv[u][j] = max(maxv[u][j - 1], maxv[fa[u][j - 1]][j - 1]);
+    }
+    
+    for (int i = h[u]; i != -1; i = ne[i])
+    {
+        int j = e[i];
+        if (j == fas) continue;
+        if (mak1[u] != j) sum[j] = max(sum[u], max1[u]) - 2 * w[i];
+        else sum[j] = max(sum[u], max2[u]) - 2 * w[i];
+        dfs2(j, u);
+    }
+}
+    
+int lca(int a, int b)
+{
+    if (depth[a] &lt; depth[b]) swap(a, b);
+    
+    for (int j = K - 1; j >= 0; j -- )
+        if (depth[fa[a][j]] >= depth[b])
+        {
+            if (depth[fa[a][j]] == depth[b]) kk = a;
+            res = max(res, maxv[a][j]);
+            a = fa[a][j];
+            
+        }
+        
+    if (a == b) 
+    {
+        
+        res = max(res, v[a]);
+        return a;
+    }
+    
+    for (int j = K - 1; j >= 0; j -- )
+        if (fa[a][j] != fa[b][j])
+        {
+            res = max({res, maxv[a][j], maxv[b][j]});
+            a = fa[a][j];
+            b = fa[b][j];
+        }
+    kk = a;
+    int u = fa[a][0];
+    if (a != mak1[u] && b != mak1[u]) res = max(res, max1[u]);
+    else if (a != mak2[u] && b != mak2[u]) res = max(res, max2[u]);
+    else res = max(res, max3[u]);
+    
+    return u;
+}
+    
+int main()
+{
+//  	freopen("speaker4.in", "r", stdin);
+//  	freopen("speaker4.out", "w", stdout);
+    cin >> n >> m;
+    for (int i = 1; i &lt;= n; i ++ ) scanf("%lld", &v[i]);
+    
+    memset(h, -1, sizeof h);
+    for (int i = 1; i &lt; n; i ++ )
+    {
+        int a, b, c;
+        scanf("%d%d%d", &a, &b, &c);
+        add(a, b, c);
+        add(b, a, c);
+        // cout &lt;&lt; a &lt;&lt; ' ' &lt;&lt; b &lt;&lt; ' ' &lt;&lt;  c &lt;&lt; endl;
+    }
+    
+    dfs1(1, 0);
+    dfs2(1, 0);
+    
+    while (m -- )
+    {
+        int a, b;
+        res = 0;
+        scanf("%d%d", &a, &b);
+        int p = lca(a, b);
+        // printf("%d %d %d\n", a, b, p);     
+        LL ans = max({sum[p], res});
+        if (p == a) 
+        {
+            if (mak1[a] != kk) ans = max({ans, max1[b], max1[a]});
+            else ans = max({ans, max1[b], max2[a]});
+        }
+        else if (p == b)
+        {
+            if (mak1[b] != kk) ans = max({ans, max1[a], max1[b]});
+            else ans = max({ans, max1[a], max2[b]});
+        }
+        else 
+        {
+            ans = max({ans, max1[a], max1[b]});
+        }
+        printf("%lld\n", ans - (dist[a] + dist[b] - 2 * dist[p]) + v[a] + v[b]);
+        // printf("%lld %lld %lld %lld %lld\n", sum[p], max1[a], max1[b], res, ans);
+        
+    }
+    
+    return 0;
+}
+    </pre><I>参考资料：<a href="https://www.cnblogs.com/blind5883/p/18565823">博客园题解</a></I></div>
+    <div class="t1"><a href="https://www.luogu.com.cn/problem/P11323">P11323 【MX-S7-T1】「SMOI-R2」Happy Card</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题需要找规律，构造，分类讨论。最核心的就是将三带一和炸放在一起出。<pre>
+#include&lt;bits/stdc++.h>
+using namespace std;
+const int MAXN = 3e5 + 10;
+long long a[MAXN];
+int main()
+{
+    int T,n;
+    long long sum = 0;
+    long long cnt1 = 0 , cnt2 = 0 , cnt3 = 0;
+    cin >> T; // 输入询问次数
+    for (int t = 1 ; t &lt;= T ; ++t)
+	{
+        memset(a,0,sizeof(a));
+        cnt1 = cnt2 = cnt3 = sum = 0;
+        cin >> n;
+        for (int i = 1 ; i &lt;= n ; ++i)
+		{
+            cin >> a[i]; // 输入每种牌的数量
+            sum += a[i];
+            cnt3 += a[i]/3;// 累加可以组成三张的组合
+        }
+        if (cnt3 > sum/4) // 如果所有“三张”的总数足以覆盖至少四张一组的分布
+		{
+            if (sum % 4 == 1) cout &lt;&lt; sum / 4 + 1 &lt;&lt; endl;
+            else if (sum % 4 ==2) cout &lt;&lt; sum / 4 + 1 &lt;&lt; endl;
+            else if (sum % 4 == 3) cout &lt;&lt; sum / 4 + 2 &lt;&lt; endl;
+            else if (sum % 4 == 0) cout &lt;&lt; sum / 4 &lt;&lt; endl;
+        }
+        else if (cnt3 &lt;= sum/4)
+		{
+            for (int i = 1 ; i &lt;= n ; i++)
+			{
+                if (a[i] % 3 == 1) cnt1++;// 模 3 余 1 的牌数量
+                else if (a[i] % 3 == 2) cnt2++;// 模 3 余 2 的牌数量
+            }
+            if (cnt3 &lt;= cnt1) cout &lt;&lt; cnt1 + cnt2 &lt;&lt; endl;// 如果“三张”不足够，使用余数牌
+            else if (cnt3 > cnt1) cout &lt;&lt; cnt3 + cnt2 - (cnt3 - cnt1) / 2 &lt;&lt; endl;// 用余数的 2 补充“三带一”或其他牌
+        }
+    }
+
+    return 0;
+}
+</pre><I>参考资料：<a href="https://www.luogu.com.cn/problem/solution/P11323">题解区@Exsinly</a></I></div>
     <div class="t1"><a href="https://www.luogu.com.cn/problem/P11268">P11268 【MX-S5-T2】买东西题</a><a href="https://www.luogu.com.cn/problem/list?difficulty=4">普及+/提高</a>这道题是反悔背包的题目，不过可以使用另一种解法，也就是构造出n个虚拟优惠券，然后加上题目给出的优惠券，从中挑选n个优惠券最后用不用优惠券的钱来减去全部使用这n个优惠券的钱数就好了。也算是给了我们一个新的思路<pre>
 #include &lt;iostream>
 #include &lt;algorithm>
