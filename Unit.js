@@ -17,6 +17,26 @@ parentElement.insertAdjacentHTML('beforeend', "NOI");
 
 
 
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('_header');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"ph\" id=\"imo\" onclick=\"window.location.href=\'../IMO.html\'\">");
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('imo');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "数学");
+
+
+
+
+
+
+
+
 
 // 获取要插入的位置的父元素
 var parentElement = document.getElementById('_header');
