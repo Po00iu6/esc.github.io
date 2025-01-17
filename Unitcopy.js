@@ -391,3 +391,30 @@ var parentElement = document.getElementById('h_18');
 
 // 在 parentElement 的末尾插入新的 HTML 字符串
 parentElement.insertAdjacentHTML('beforeend', "站主喜欢的视频");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('_header');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "<div class=\"db\" id=\"h_19\" onclick=\"window.location.href=\'./RPJJ.html'\">");
+
+
+// 获取要插入的位置的父元素
+var parentElement = document.getElementById('h_19');
+
+// 在 parentElement 的末尾插入新的 HTML 字符串
+parentElement.insertAdjacentHTML('beforeend', "期末考试RP++");
