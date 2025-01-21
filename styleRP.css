@@ -124,8 +124,8 @@ header{
 h1{
     font-size: 2rem;
     height: 80vh;
-    text-align: center; 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
