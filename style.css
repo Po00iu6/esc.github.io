@@ -15,6 +15,11 @@ body{
     scrollbar-width: none;
 }
 
+
+
+
+
+
 #day{
     z-index: 3;
     background-color: rgb(255,255,255);
@@ -200,7 +205,7 @@ header{
     margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .ph:hover{
     animation: fontaction 0.3s;
@@ -216,7 +221,7 @@ header{
     margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .wj:hover{
     animation: fontaction 0.3s;
@@ -232,7 +237,7 @@ header{
     margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .db:hover{
     animation: fontaction 0.3s;
@@ -249,7 +254,7 @@ header{
     margin-bottom: 10px;
     margin-left: 10px;
     margin-right: 10px;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 .ct:hover{
     animation: fontaction 0.3s;
@@ -339,4 +344,45 @@ header{
         background-size: cover;
         background-position: center;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*此为笔者网站较为个性化的鼠标指针样式，可结合个人需要自行修改*/
+body {
+	cursor: url(Cursor.cur), default;
+}
+select{
+	cursor: url(Cursor.cur), pointer;
+}
+button,a:hover{
+	cursor: url(Cursor.cur), pointer;
+}
+input{
+	cursor:url(Cursor.cur), text;	
+}
+textarea,input:focus{
+	cursor:url(Cursor.cur), text;	
+}
+code{
+	cursor: url(Cursor.cur), default;	
+}
+pre>code{
+	cursor: url(Cursor.cur), default;
 }
