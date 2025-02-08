@@ -1,7 +1,12 @@
+@font-face{
+    font-family: 'GenshinFont'; /* 自定义字体的名称 */
+    src: url('Genshin.ttf') format('truetype'); /* 字体文件的路径和格式 */
+}
+
 *{
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", "Noto Sans", "Noto Sans CJK SC", "Noto Sans CJK", "Source Han Sans", "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif;
+    font-family: 'GenshinFont',-apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", "Noto Sans", "Noto Sans CJK SC", "Noto Sans CJK", "Source Han Sans", "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif;
 }
 body{
     width: 100%;
