@@ -1,30 +1,27 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
-    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <meta name="renderer" content="webkit">
-    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no,email=no,adress=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
-    <meta name="description" content="OIer的错题集,ESC,ESC.html">
-
-    <!-- bing sitmap system -->
-    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
-    <!--  -->
-
-    <title>错题集</title>
-
-    <link rel="stylesheet" href="../style.css">
-
-    <!--  -->
-    <style>
+<head><link href="../pwd.css" rel="stylesheet" type="text/css"/>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<meta content="webkit" name="renderer"/>
+<meta content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png" property="og:image"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no,email=no,adress=no" name="format-detection"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="keywords"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="description"/>
+<!-- bing sitmap system -->
+<meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+<!-- -->
+<title>错题集</title>
+<link href="../style.css" rel="stylesheet"/>
+<!-- -->
+<style>
         @media screen and (max-width:600px) {
             .bg1{
         background-image: url("https://act-webstatic.mihoyo.com/event-static/2023/12/20/cb5ee9ac9ade73fac79e9aee96bbf57b_4631184775587555783.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
@@ -36,63 +33,57 @@
     }
         }
     </style>
-    <!--  -->
-</head>
+<!-- -->
+</meta></head>
 <body>
-    <header id="_header">
-        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+<header id="_header">
+<!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
             NOI
         </div> -->
-        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+<!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
             物理
         </div> -->
-        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+<!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
             化学
         </div> -->
-        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+<!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
             生物
         </div> -->
-        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+<!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
             OIWiki
         </div> -->
-    </header>
-    
-    <!--  -->
-    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay style="display: none;"></audio>
-    <!--  -->
-    <div class="bg1"></div>
-    <div class="bg2"></div>
-    <div class="bg3"></div>
-    <div class="bg4"></div>
-    <div class="bg5"></div>
-    <div class="bg6"></div>
-    <div class="bg7"></div>
-    <div class="bg8"></div>
-    <!--  -->
-
-
-    <div class="op">
-        <h1>下拉查看OI错题</h1>
-    </div>
-
-
-
-    <br>
-    <h1>错题集</h1>
-    <br>
-    <hr style="z-index: 1;">
-    <br>
-    <!--  -->
-    <div class="t1">认真读题，有些题里面要求对答案进行mod多少，别忘了mod，否则就会WA。</div>
-    <div class="t1">异或：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/19/286158760/b8355bb0bb08782bd17367225f5f18cc_2398932819789195744.png" alt="异或"></div>
-    <div class="t1"><a href="https://contest.xinyoudui.com/contest/280/problem/1503">A.  火柴</a>注意for循环的范围，我把数组的范围写成了1-39，正确做法应该是0-39,39取不到。</div>
-    <div class="t1">常见的优化技巧<img src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png" alt="优化技巧"></div>
-    <div class="t1">局部变量一定要初始化，轻则TLE，重则RE，其间就是WA。</div>
-    <div class="t1">cout输出字符串占时间，而且占的不少，容易超时。建议用printf输出字符串！！！(后来经过调查，原来是endl的问题，endl占的时间比较多，以后换行就用'\n'吧，尽量别用endl了，endl不仅仅是换行，endl还要清除缓存区，所以慢得多)</div>
-    <div class="t1">千万不要忘记检查代码输出格式，比如把“YES”写成“Yes”结果直接0分，幸好不是在赛场上，否则直接见祖宗！<br><br>图论当中要注意在删除点的时候，推荐使用二维矩阵，因为二维表会出问题。<br><br><code>memset(g[i],0,sizeof(g[i]))</code>可以对一个数组的某一个维度单独初始化，这个操作我才知道！<br><br>如何输入当中给你的是无法用cin和scanf区分的数据，那么就把这串数据当成字符串来处理输入，之后转成自己想要的数据。</div>
-    <!--  -->
-    <!--  -->
-    <!--  -->
+</header>
+<!-- -->
+<audio autoplay="" id="dd" src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" style="display: none;"></audio>
+<!-- -->
+<div class="bg1"></div>
+<div class="bg2"></div>
+<div class="bg3"></div>
+<div class="bg4"></div>
+<div class="bg5"></div>
+<div class="bg6"></div>
+<div class="bg7"></div>
+<div class="bg8"></div>
+<!-- -->
+<div class="op">
+<h1>下拉查看OI错题</h1>
+</div>
+<br/>
+<h1>错题集</h1>
+<br/>
+<hr style="z-index: 1;"/>
+<br/>
+<!-- -->
+<div class="t1">认真读题，有些题里面要求对答案进行mod多少，别忘了mod，否则就会WA。</div>
+<div class="t1">异或：<img alt="异或" src="https://upload-bbs.miyoushe.com/upload/2024/10/19/286158760/b8355bb0bb08782bd17367225f5f18cc_2398932819789195744.png"/></div>
+<div class="t1"><a href="https://contest.xinyoudui.com/contest/280/problem/1503">A.  火柴</a>注意for循环的范围，我把数组的范围写成了1-39，正确做法应该是0-39,39取不到。</div>
+<div class="t1">常见的优化技巧<img alt="优化技巧" src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png"/></div>
+<div class="t1">局部变量一定要初始化，轻则TLE，重则RE，其间就是WA。</div>
+<div class="t1">cout输出字符串占时间，而且占的不少，容易超时。建议用printf输出字符串！！！(后来经过调查，原来是endl的问题，endl占的时间比较多，以后换行就用'\n'吧，尽量别用endl了，endl不仅仅是换行，endl还要清除缓存区，所以慢得多)</div>
+<div class="t1">千万不要忘记检查代码输出格式，比如把“YES”写成“Yes”结果直接0分，幸好不是在赛场上，否则直接见祖宗！<br/><br/>图论当中要注意在删除点的时候，推荐使用二维矩阵，因为二维表会出问题。<br/><br/><code>memset(g[i],0,sizeof(g[i]))</code>可以对一个数组的某一个维度单独初始化，这个操作我才知道！<br/><br/>如何输入当中给你的是无法用cin和scanf区分的数据，那么就把这串数据当成字符串来处理输入，之后转成自己想要的数据。</div>
+<!-- -->
+<!-- -->
+<!-- -->
 </body>
 <script src="../CanvasFor_index.js"></script>
 <!-- <script src="./Canvas2.js"></script> -->

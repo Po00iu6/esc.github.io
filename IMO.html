@@ -1,68 +1,62 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
-    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <meta name="renderer" content="webkit">
-    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no,email=no,adress=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
-    <meta name="description" content="OIer的错题集,ESC,ESC.html">
-
-    <!-- bing sitmap system -->
-    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
-    <!--  -->
-
-    <title>错题集</title>
-
-    <link rel="stylesheet" href="./imoCSS.css">
-    <link rel="stylesheet" href="./SBU.css">
-
-    <!--  -->
-    <style>
-    </style>
-    <!--  -->
-      
-</head>
+<head><link href="pwd.css" rel="stylesheet" type="text/css"/>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<meta content="webkit" name="renderer"/>
+<meta content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png" property="og:image"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no,email=no,adress=no" name="format-detection"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="keywords"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="description"/>
+<!-- bing sitmap system -->
+<meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+<!-- -->
+<title>错题集</title>
+<link href="./imoCSS.css" rel="stylesheet"/>
+<link href="./SBU.css" rel="stylesheet"/>
+<!-- -->
+<style>
+</style>
+<!-- -->
+</meta></head>
 <body style="background-color: white;">
-    <header id="_header"></header>
-    
-    <!--  -->
-    <button class="SBU" id="BGMusicButton" style="bottom: 10px;left: 0px;">开/关 背景音乐</button>
-
-    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay style="display: none;"></audio>
-    <!--  -->
-    <div style="color: #09EAFE;font-size: 64px;text-align: center;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100vh;font-style:normal;font-weight: 600;letter-spacing: 1rem;">
+<header id="_header"></header>
+<!-- -->
+<button class="SBU" id="BGMusicButton" style="bottom: 10px;left: 0px;">开/关 背景音乐</button>
+<audio autoplay="" id="dd" src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" style="display: none;"></audio>
+<!-- -->
+<div style="color: #09EAFE;font-size: 64px;text-align: center;display: flex;flex-direction: column;justify-content: center;align-items: center;height: 100vh;font-style:normal;font-weight: 600;letter-spacing: 1rem;">
         数学
         <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 10%;background-size: contain;background-repeat: no-repeat;opacity: 0.1;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 20%;background-size: contain;background-repeat: no-repeat;opacity: 0.2;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 30%;background-size: contain;background-repeat: no-repeat;opacity: 0.3;"></div><div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 40%;background-size: contain;background-repeat: no-repeat;opacity: 0.4;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 50%;background-size: contain;background-repeat: no-repeat;opacity: 0.5;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 60%;background-size: contain;background-repeat: no-repeat;opacity: 0.6;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 70%;background-size: contain;background-repeat: no-repeat;opacity: 0.7;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 80%;background-size: contain;background-repeat: no-repeat;opacity: 0.8;"></div>
-        <div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 90%;background-size: contain;background-repeat: no-repeat;opacity: 0.9;"></div>
-    </div>
-    <!--  -->
-    <div style="margin-bottom: 50vh;">
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/9ca6aea9d5684b34ab8511f358373219_3224642657231147573.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/ee9e83400e16ecca8601b04f19e8a349_5931387194127934998.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/db0acaf01009ef16946315fe92492068_89475201381913056.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/7fa3618173e547599df3e3eaab8be98d_3423231908082614696.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/3c07667d65198516454a16558ad818a2_6508445038996047663.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/bd5322707ef8dde8973c7a044ddc3db8_5248254597302208406.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/71868179c3ee362226e4e913d58fa1bc_4669818106233662032.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/0bb19a9df8a26fe3c9f9a185d95ae104_648518947431676148.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/38aedeb16c2f0c5bf5a37d60735c5865_8468029528159559550.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/a72871eed1c8866c2495bf524d63179a_1140170361983079907.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/477068c20416aa648327aabe09b8aba9_1316910460308380653.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/4703b340e693b804d5a349fd4f026746_6825459386513114560.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/7d0f9fcebd9d31d0c6faf19c8e05494c_8926722564667568713.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/885acbe2d0571174814770473c6c7d20_4655377234676856613.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/decf7d8aa133d987ab389bfe8c78178b_2669580023836561517.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/ec22aaa95f4be758317a13e855afa55b_4074505721450473292.png" alt=""></div>
-        <div class="t1"><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/1e7445fcee7fec12b7c31bc42b70c393_4164100062156479033.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/877673df9328faddaf78dcb0b55d954c_5436379816930290743.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/c6e9efbf32a4acd6e5023816e1b59c68_4281893467551162613.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/45d11b9e106bf28aafc646b7aa689595_7357335826427627815.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/32224e292e34687a4c0450f7ba49c557_884318528919733714.png" alt=""><img src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/f92bef28555b1cc48c9f2ce7fa5f8574_5086732375437291921.png" alt=""></div>
-    </div>
-    <!--  -->
-    <!--  -->
-    <!--  -->
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 20%;background-size: contain;background-repeat: no-repeat;opacity: 0.2;"></div>
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 30%;background-size: contain;background-repeat: no-repeat;opacity: 0.3;"></div><div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 40%;background-size: contain;background-repeat: no-repeat;opacity: 0.4;"></div>
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 50%;background-size: contain;background-repeat: no-repeat;opacity: 0.5;"></div>
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 60%;background-size: contain;background-repeat: no-repeat;opacity: 0.6;"></div>
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 70%;background-size: contain;background-repeat: no-repeat;opacity: 0.7;"></div>
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 80%;background-size: contain;background-repeat: no-repeat;opacity: 0.8;"></div>
+<div style="position: absolute;width: 100vw;z-index: -1;height: 100vh;background-image: url(https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/64c64ac85125d718eb05f347c6e62a9d_5461923112560988730.png);background-position: 90%;background-size: contain;background-repeat: no-repeat;opacity: 0.9;"></div>
+</div>
+<!-- -->
+<div style="margin-bottom: 50vh;">
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/9ca6aea9d5684b34ab8511f358373219_3224642657231147573.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/ee9e83400e16ecca8601b04f19e8a349_5931387194127934998.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/db0acaf01009ef16946315fe92492068_89475201381913056.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/7fa3618173e547599df3e3eaab8be98d_3423231908082614696.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/3c07667d65198516454a16558ad818a2_6508445038996047663.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/bd5322707ef8dde8973c7a044ddc3db8_5248254597302208406.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/71868179c3ee362226e4e913d58fa1bc_4669818106233662032.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/0bb19a9df8a26fe3c9f9a185d95ae104_648518947431676148.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/38aedeb16c2f0c5bf5a37d60735c5865_8468029528159559550.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/a72871eed1c8866c2495bf524d63179a_1140170361983079907.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/477068c20416aa648327aabe09b8aba9_1316910460308380653.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/4703b340e693b804d5a349fd4f026746_6825459386513114560.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/7d0f9fcebd9d31d0c6faf19c8e05494c_8926722564667568713.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/885acbe2d0571174814770473c6c7d20_4655377234676856613.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/decf7d8aa133d987ab389bfe8c78178b_2669580023836561517.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/ec22aaa95f4be758317a13e855afa55b_4074505721450473292.png"/></div>
+<div class="t1"><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/1e7445fcee7fec12b7c31bc42b70c393_4164100062156479033.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/877673df9328faddaf78dcb0b55d954c_5436379816930290743.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/c6e9efbf32a4acd6e5023816e1b59c68_4281893467551162613.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/45d11b9e106bf28aafc646b7aa689595_7357335826427627815.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/32224e292e34687a4c0450f7ba49c557_884318528919733714.png"/><img alt="" src="https://upload-bbs.miyoushe.com/upload/2024/12/03/198629752/f92bef28555b1cc48c9f2ce7fa5f8574_5086732375437291921.png"/></div>
+</div>
+<!-- -->
+<!-- -->
+<!-- -->
 </body>
 <script src="./Volume.js"></script>
 <script src="./Unitcopy.js"></script>

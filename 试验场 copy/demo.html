@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>成绩曲线图</title>
+    <style>
+        #chartContainer {
+            margin: 20px;
+            position: relative;
+        }
+        #ratingChart {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .axis-label {
+            position: absolute;
+            color: #666;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chartContainer">
+        <canvas id="ratingChart"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('ratingChart');
+        const ctx = canvas.getContext('2d');
+        
+        // 配置参数
+        const config = {
+            width: 800,
+            height: 400,
+            padding: { top: 30, right: 40, bottom: 50, left: 60 },
+            colorStops: [
+                { score: 60, color: '#ff4d4d' },   // 红色
+                { score: 80, color: '#ffa500' },   // 橙色
+                { score: Infinity, color: '#4CAF50' } // 绿色
+            ],
+            lineWidth: 3,
+            dotRadius: 5
+        };
+
+        // 示例数据（可修改）
+        const scores = [45, 58, 72, 65, 85, 92, 88, 95,352,1042];
+        
+        function initCanvas() {
+            canvas.width = config.width;
+            canvas.height = config.height;
+        }
+
+        function drawChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 计算绘图区域
+            const graphWidth = config.width - config.padding.left - config.padding.right;
+            const graphHeight = config.height - config.padding.top - config.padding.bottom;
+
+            // 计算坐标范围
+            const maxScore = Math.max(...scores);
+            const minScore = Math.min(...scores);
+            const yMax = Math.ceil(maxScore / 10) * 10 || 100;
+            const yMin = Math.floor(minScore / 10) * 10;
+
+            // 生成坐标点
+            const points = scores.map((score, index) => ({
+                x: config.padding.left + (index * graphWidth) / (scores.length - 1),
+                y: config.padding.top + graphHeight - (score - yMin) / (yMax - yMin) * graphHeight,
+                score: score
+            }));
+
+            // 绘制网格
+            drawGrid(yMax, yMin);
+
+            // 绘制曲线
+            drawCurve(points);
+
+            // 绘制坐标轴
+            drawAxes(yMax, yMin);
+        }
+
+        function drawGrid(yMax, yMin) {
+            ctx.strokeStyle = '#e0e0e0';
+            ctx.lineWidth = 0.5;
+            ctx.setLineDash([5, 3]);
+
+            // 水平网格线
+            const ySteps = 5;
+            for (let i = 0; i <= ySteps; i++) {
+                const y = config.padding.top + (i * (config.height - config.padding.top - config.padding.bottom)) / ySteps;
+                ctx.beginPath();
+                ctx.moveTo(config.padding.left, y);
+                ctx.lineTo(config.width - config.padding.right, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawCurve(points) {
+            // 绘制连接线
+            for (let i = 0; i < points.length - 1; i++) {
+                const start = points[i];
+                const end = points[i+1];
+                
+                // 获取颜色
+                const color = getColor(end.score);
+                
+                // 绘制线段
+                ctx.beginPath();
+                ctx.moveTo(start.x, start.y);
+                ctx.lineTo(end.x, end.y);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = config.lineWidth;
+                ctx.stroke();
+
+                // 绘制数据点
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(end.x, end.y, config.dotRadius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 绘制第一个数据点
+            const firstColor = getColor(points[0].score);
+            ctx.fillStyle = firstColor;
+            ctx.beginPath();
+            ctx.arc(points[0].x, points[0].y, config.dotRadius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawAxes(yMax, yMin) {
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([]);
+
+            // Y轴
+            ctx.beginPath();
+            ctx.moveTo(config.padding.left, config.padding.top);
+            ctx.lineTo(config.padding.left, config.height - config.padding.bottom);
+            ctx.stroke();
+
+            // X轴
+            ctx.beginPath();
+            ctx.moveTo(config.padding.left, config.height - config.padding.bottom);
+            ctx.lineTo(config.width - config.padding.right, config.height - config.padding.bottom);
+            ctx.stroke();
+
+            // 添加Y轴标签
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            const ySteps = 5;
+            for (let i = 0; i <= ySteps; i++) {
+                const value = yMin + (i * (yMax - yMin)) / ySteps;
+                const y = config.padding.top + (config.height - config.padding.top - config.padding.bottom) - 
+                         (i * (config.height - config.padding.top - config.padding.bottom)) / ySteps;
+                ctx.fillText(value.toFixed(0), config.padding.left - 10, y);
+            }
+
+            // 添加X轴标签
+            ctx.textAlign = 'center';
+            points.forEach((point, index) => {
+                ctx.fillText(`第${index + 1}次`, point.x, config.height - config.padding.bottom + 20);
+            });
+        }
+
+        function getColor(score) {
+            for (const stop of config.colorStops) {
+                if (score <= stop.score) {
+                    return stop.color;
+                }
+            }
+            return '#000';
+        }
+
+        // 初始化
+        initCanvas();
+        drawChart();
+    </script>
+</body>
+</html>

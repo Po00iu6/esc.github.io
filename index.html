@@ -1,60 +1,65 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
-    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <meta name="renderer" content="webkit">
-    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no,email=no,adress=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
-    <meta name="description" content="OIer的错题集,ESC,ESC.html">
-
+    <link href="pwd.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta content="webkit" name="renderer" />
+    <meta
+        content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png"
+        property="og:image" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,adress=no" name="format-detection" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="OIer的错题集,ESC,ESC.html" name="keywords" />
+    <meta content="OIer的错题集,ESC,ESC.html" name="description" />
     <!-- bing sitmap system -->
-    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
-    <!--  -->
-
+    <meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+    <!-- -->
     <title>错题集</title>
-
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./SBU.css">
-
-    <!--  -->
+    <link href="./style.css" rel="stylesheet" />
+    <link href="./SBU.css" rel="stylesheet" />
+    <!-- -->
     <style>
-        .videodiv{
+        .videodiv {
             z-index: -1;
             position: fixed;
             width: 100vw;
             height: 100vh;
         }
-        .videodiv video{
+
+        .videodiv video {
             width: 1920px;
             height: 1080px;
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
         }
+
         @media screen and (max-width:600px) {
-            .bg1{
+            .bg1 {
                 background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/570fc67f4b580da77f9af206eb3bc0a5_7858946434453008095.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
             }
-            .videodiv video{
+
+            .videodiv video {
                 width: 0px;
             }
         }
-        @media screen and (min-width:601px){
-            .bg1{
+
+        @media screen and (min-width:601px) {
+            .bg1 {
                 background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/94fe58803161e06dd1e2fcea8ba56a41_8214787202754590749.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
             }
         }
 
-        .jieshao{
+        .jieshao {
             display: flex;
             width: 80%;
             height: 100vh;
@@ -62,11 +67,11 @@
             flex-wrap: wrap;
             justify-content: space-evenly;
             align-items: center;
-            
+
             z-index: 2;
         }
 
-        .jie1{
+        .jie1 {
             width: 260px;
             height: 450px;
             background-color: #c0332c4e;
@@ -74,7 +79,8 @@
             border-radius: 10px;
             backdrop-filter: blur(20px);
         }
-        .jie1>div{
+
+        .jie1>div {
             width: 100%;
             height: 100%;
             border-radius: 10px;
@@ -85,7 +91,8 @@
             padding: 10px;
             color: #3C4341;
         }
-        .jie2{
+
+        .jie2 {
             width: 260px;
             height: 450px;
             background-color: #23aaf24e;
@@ -93,7 +100,8 @@
             border-radius: 10px;
             backdrop-filter: blur(20px);
         }
-        .jie2>div{
+
+        .jie2>div {
             width: 100%;
             height: 100%;
             border-radius: 10px;
@@ -105,19 +113,20 @@
             color: #3C4341;
         }
 
-        .jie1:hover .js1{
+        .jie1:hover .js1 {
             color: rgb(0, 0, 0);
             border-color: rgb(255, 238, 0);
         }
 
-        .jie2:hover .js2{
+        .jie2:hover .js2 {
             color: rgb(0, 0, 0);
             border-color: rgb(255, 255, 255);
         }
     </style>
-    <!--  -->
-      
+    <!-- -->
+    </meta>
 </head>
+
 <body>
     <header id="_header">
         <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
@@ -136,25 +145,21 @@
             OIWiki
         </div> -->
     </header>
-    
-    <!--  -->
+    <!-- -->
     <button class="SBU" id="BGMusicButton" style="bottom: 40px;left: 0px;">开/关 背景音乐</button>
-
-    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3" id="dd" autoplay style="display: none;"></audio>
-    <!--  -->
+    <audio autoplay="" id="dd"
+        src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/时暮的思眷.mp3"
+        style="display: none;"></audio>
+    <!-- -->
     <div class="bg1"></div>
-
-
-
     <button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
-    
     <div class="videodiv" id="BGdiv">
-        <video id="video" autoplay loop muted preload="auto" playsinline data-autoplay="true">
-            <source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4" type="video/mp4" >
+        <video autoplay="" data-autoplay="true" id="video" loop="" muted="" playsinline="" preload="auto">
+            <source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4"
+                type="video/mp4" />
         </video>
-        <canvas id="canvas" width="100vw" height="100vh" style="position: fixed;width: 100vw;height: 100vh;"></canvas>
+        <canvas height="100vh" id="canvas" style="position: fixed;width: 100vw;height: 100vh;" width="100vw"></canvas>
     </div>
-    
     <div class="bg2"></div>
     <div class="bg3"></div>
     <div class="bg4"></div>
@@ -162,34 +167,40 @@
     <div class="bg6"></div>
     <div class="bg7"></div>
     <div class="bg8"></div>
-    <!--  -->
-
-
+    <!-- -->
     <div class="jieshao">
         <div class="jie1" onclick="window.open('./Fenleiindex.html')">
             <div class="js1">
-                <div style="text-align: center;width: 100%;height: 20%;display: flex;flex-direction: column;align-items: center;"><p style="line-height: 80px;">分类后的主页</p></div>
-                <div style="width: 100%;height: 20%;">不算是规整吧，但是起码分类了。<br>有些不知道归类到哪里的，我就分类到其他地方了。</div>
-                <div style="background-image: url(https://upload-bbs.miyoushe.com/upload/2024/03/31/287286066/302b4507d63a1491d89fc4b5b1217e41_8703112711769544498.png?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png);width: 100%;height: 20%;background-repeat: no-repeat;background-size: contain;background-position: center;margin-top: 100px;"></div>
+                <div
+                    style="text-align: center;width: 100%;height: 20%;display: flex;flex-direction: column;align-items: center;">
+                    <p style="line-height: 80px;">分类后的主页</p>
+                </div>
+                <div style="width: 100%;height: 20%;">不算是规整吧，但是起码分类了。<br />有些不知道归类到哪里的，我就分类到其他地方了。</div>
+                <div
+                    style="background-image: url(https://upload-bbs.miyoushe.com/upload/2024/03/31/287286066/302b4507d63a1491d89fc4b5b1217e41_8703112711769544498.png?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png);width: 100%;height: 20%;background-repeat: no-repeat;background-size: contain;background-position: center;margin-top: 100px;">
+                </div>
                 <!-- <b>分类后的主页</b>
                 <p>不算是规整吧，但是起码分类了。<br>有些不知道归类到哪里的，我就分类到其他地方了。</p> -->
             </div>
         </div>
         <div class="jie2" onclick="window.open('./NOI.html')">
             <div class="js2">
-                <div style="text-align: center;width: 100%;height: 20%;display: flex;flex-direction: column;align-items: center;"><p style="line-height: 80px;">分类前的主页</p></div>
+                <div
+                    style="text-align: center;width: 100%;height: 20%;display: flex;flex-direction: column;align-items: center;">
+                    <p style="line-height: 80px;">分类前的主页</p>
+                </div>
                 <div style="width: 100%;height: 20%;">全都堆到一个html里面了，打开即爆炸！</div>
-                <div style="background-image: url(https://upload-bbs.miyoushe.com/upload/2024/03/31/287286066/2ac933c3ff0da28914aeedcd933250ac_296248933624907157.png?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png);width: 100%;height: 20%;background-repeat: no-repeat;background-size: contain;background-position: center;margin-top: 100px;"></div>
+                <div
+                    style="background-image: url(https://upload-bbs.miyoushe.com/upload/2024/03/31/287286066/2ac933c3ff0da28914aeedcd933250ac_296248933624907157.png?x-oss-process=image//resize,s_600/quality,q_80/auto-orient,0/interlace,1/format,png);width: 100%;height: 20%;background-repeat: no-repeat;background-size: contain;background-position: center;margin-top: 100px;">
+                </div>
                 <!-- <b>分类前的主页</b>
                 <p>全都堆到一个html里面了，打开即爆炸！</p> -->
             </div>
         </div>
     </div>
-
-
-    <!--  -->
-    <!--  -->
-    <!--  -->
+    <!-- -->
+    <!-- -->
+    <!-- -->
 </body>
 <script src="./CanvasFor_index.js"></script>
 <!-- <script src="./Canvas2.js"></script> -->
@@ -198,4 +209,5 @@
 <script src="./ChangSpanColor.js"></script>
 <script src="./a_blank.js"></script>
 <script src="./changeBG.js"></script>
+
 </html>

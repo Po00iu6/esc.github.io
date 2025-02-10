@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="zh-CN">
-<head><link href="../pwd.css" rel="stylesheet" type="text/css"/>
+<head><link href="pwd.css" rel="stylesheet" type="text/css"/>
 <meta charset="utf-8"/>
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
 <link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
@@ -17,13 +17,16 @@
 <meta content="OIer的错题集,ESC,ESC.html" name="description"/>
 <!-- bing sitmap system -->
 <meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
-<title>错题集 离线OJ评测平台</title>
-</meta></head>
+    <title>我的历次文化课成绩</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="chart.js"></script>
+</head>
 <body>
-<h1>离线OJ评测平台</h1>
-<hr/>
-<ol>
-<li><a href="./oj1.html">环上最大子段和</a></li>
-</ol>
+    <div class="container">
+        <h1>历次文化课成绩Rated</h1><p>由于竞赛回归，因此10月月考没考，所以0分。再加上NOIP回来已经是11月中旬了，那个时候文化课比较赶。</p>
+        <canvas id="scoreChart" style="width: 80vw;height: 80vh;"></canvas>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

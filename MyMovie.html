@@ -1,31 +1,28 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
-    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <meta name="renderer" content="webkit">
-    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no,email=no,adress=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
-    <meta name="description" content="OIer的错题集,ESC,ESC.html">
-
-    <!-- bing sitmap system -->
-    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
-    <!--  -->
-
-    <title>错题集</title>
-
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./SBU.css">
-
-    <!--  -->
-    <style>
+<head><link href="pwd.css" rel="stylesheet" type="text/css"/>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<meta content="webkit" name="renderer"/>
+<meta content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png" property="og:image"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no,email=no,adress=no" name="format-detection"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="keywords"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="description"/>
+<!-- bing sitmap system -->
+<meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+<!-- -->
+<title>错题集</title>
+<link href="./style.css" rel="stylesheet"/>
+<link href="./SBU.css" rel="stylesheet"/>
+<!-- -->
+<style>
         .videodiv{
             z-index: -1;
             position: fixed;
@@ -55,60 +52,51 @@
         }
 
     </style>
-    <!--  -->
-      
-</head>
+<!-- -->
+</meta></head>
 <body>
-    <header id="_header">
-        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+<header id="_header">
+<!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
             NOI
         </div> -->
-        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+<!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
             物理
         </div> -->
-        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+<!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
             化学
         </div> -->
-        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+<!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
             生物
         </div> -->
-        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+<!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
             OIWiki
         </div> -->
-    </header>
-    
-    <!--  -->
-
-
-    <button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
-    
-    <div class="videodiv" id="BGdiv">
-        <video id="video" autoplay loop muted preload="auto" playsinline data-autoplay="true">
-            <source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4" type="video/mp4" >
-        </video>
-        <canvas id="canvas" width="100vw" height="100vh" style="position: fixed;width: 100vw;height: 100vh;"></canvas>
-    </div>
-    
-    <div class="bg2"></div>
-    <div class="bg3"></div>
-    <div class="bg4"></div>
-    <div class="bg5"></div>
-    <div class="bg6"></div>
-    <div class="bg7"></div>
-    <div class="bg8"></div>
-    <!--  -->
-
-
-    <div class="op">
-    </div>
-
-    <hr style="z-index: 1;">
-    <br>
-    <!--  -->
-    <div class="t1" style="background-color: rgba(255,255,255,0.1);"><iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113497648141761&bvid=BV1D4U6Y4Eb5&cid=26807307092&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="688px" height="387px"></iframe></div>
-    <!--  -->
-    <!--  -->
-    <!--  -->
+</header>
+<!-- -->
+<button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
+<div class="videodiv" id="BGdiv">
+<video autoplay="" data-autoplay="true" id="video" loop="" muted="" playsinline="" preload="auto">
+<source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4" type="video/mp4"/>
+</video>
+<canvas height="100vh" id="canvas" style="position: fixed;width: 100vw;height: 100vh;" width="100vw"></canvas>
+</div>
+<div class="bg2"></div>
+<div class="bg3"></div>
+<div class="bg4"></div>
+<div class="bg5"></div>
+<div class="bg6"></div>
+<div class="bg7"></div>
+<div class="bg8"></div>
+<!-- -->
+<div class="op">
+</div>
+<hr style="z-index: 1;"/>
+<br/>
+<!-- -->
+<div class="t1" style="background-color: rgba(255,255,255,0.1);"><iframe allowfullscreen="true" border="0" frameborder="no" framespacing="0" height="387px" scrolling="no" src="//player.bilibili.com/player.html?isOutside=true&amp;aid=113497648141761&amp;bvid=BV1D4U6Y4Eb5&amp;cid=26807307092&amp;p=1" width="688px"></iframe></div>
+<!-- -->
+<!-- -->
+<!-- -->
 </body>
 <script src="./CanvasFor_index.js"></script>
 <!-- <script src="./Canvas2.js"></script> -->

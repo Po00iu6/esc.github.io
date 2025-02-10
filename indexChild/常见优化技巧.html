@@ -1,30 +1,27 @@
 <!DOCTYPE html>
+
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <link rel="apple-touch-icon" href="../../../sqhgxsq/next/Material/logo.png">
-    <link rel="icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="https://ys.mihoyo.com/main/favicon.ico" type="image/x-icon">
-    <meta name="renderer" content="webkit">
-    <meta property="og:image" content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no,email=no,adress=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="keywords" content="OIer的错题集,ESC,ESC.html">
-    <meta name="description" content="OIer的错题集,ESC,ESC.html">
-
-    <!-- bing sitmap system -->
-    <meta name="msvalidate.01" content="E636B33C63F884A1E40D913638E2424B" />
-    <!--  -->
-
-    <title>错题集</title>
-
-    <link rel="stylesheet" href="../style.css">
-
-    <!--  -->
-    <style>
+<head><link href="../pwd.css" rel="stylesheet" type="text/css"/>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+<link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<meta content="webkit" name="renderer"/>
+<meta content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png" property="og:image"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="telephone=no,email=no,adress=no" name="format-detection"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="keywords"/>
+<meta content="OIer的错题集,ESC,ESC.html" name="description"/>
+<!-- bing sitmap system -->
+<meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+<!-- -->
+<title>错题集</title>
+<link href="../style.css" rel="stylesheet"/>
+<!-- -->
+<style>
         @media screen and (max-width:600px) {
             .bg1{
         background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/07/16/1270bf36629ae123b55a966f6b1062ee_821426095055248623.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
@@ -36,77 +33,71 @@
     }
         }
     </style>
-    <!--  -->
-</head>
+<!-- -->
+</meta></head>
 <body>
-    <header id="_header">
-        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+<header id="_header">
+<!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
             NOI
         </div> -->
-        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+<!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
             物理
         </div> -->
-        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+<!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
             化学
         </div> -->
-        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+<!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
             生物
         </div> -->
-        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+<!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
             OIWiki
         </div> -->
-    </header>
-    
-    <!--  -->
-    <audio src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/在银河中孤独摇摆.mp3" id="dd" autoplay style="display: none;"></audio>
-    <!--  -->
-    <div class="bg1"></div>
-    <div class="bg2"></div>
-    <div class="bg3"></div>
-    <div class="bg4"></div>
-    <div class="bg5"></div>
-    <div class="bg6"></div>
-    <div class="bg7"></div>
-    <div class="bg8"></div>
-    <!--  -->
-
-
-    <div class="op">
-        <h1>下拉查看OI错题</h1>
-    </div>
-
-
-
-    <br>
-    <h1>错题集</h1>
-    <br>
-    <hr style="z-index: 1;">
-    <br>
-    <!--  -->
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1725">P1725 琪露诺</a>这道题用动态规划+单调队列优化。<a href="https://www.luogu.com.cn/record/181197716">题解</a>如果仅仅用动态规划只能拿80分，剩下的就TLE了。<a href="https://www.luogu.com.cn/record/181189437">80分的题解</a></div>
-    <div class="t1">注意函数返回值，如果该返回的没有返回，结果会TLE。而且在本机上跑的是正确的，在评测机上就会TLE。因此这个错误很重要。</div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1714">P1714 切蛋糕</a>这道题需要前缀和+单调序列，当时我以为不能是单调队列，于是我的代码就写成了这样：<a href="https://www.luogu.com.cn/record/181183317">代码</a>后来看了题解才知道，必须得是单调队列，而且还得要前缀和。于是后来改成了这样<a href="https://www.luogu.com.cn/record/181185448">代码</a></div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1886">P1886 滑动窗口 /【模板】单调队列</a><P>滑动窗口这道题需要注意，这道题中有一个位置容易错。请看 <a href="https://www.luogu.com.cn/record/181171733">代码</a> ，这里的
+</header>
+<!-- -->
+<audio autoplay="" id="dd" src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/在银河中孤独摇摆.mp3" style="display: none;"></audio>
+<!-- -->
+<div class="bg1"></div>
+<div class="bg2"></div>
+<div class="bg3"></div>
+<div class="bg4"></div>
+<div class="bg5"></div>
+<div class="bg6"></div>
+<div class="bg7"></div>
+<div class="bg8"></div>
+<!-- -->
+<div class="op">
+<h1>下拉查看OI错题</h1>
+</div>
+<br/>
+<h1>错题集</h1>
+<br/>
+<hr style="z-index: 1;"/>
+<br/>
+<!-- -->
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P1725">P1725 琪露诺</a>这道题用动态规划+单调队列优化。<a href="https://www.luogu.com.cn/record/181197716">题解</a>如果仅仅用动态规划只能拿80分，剩下的就TLE了。<a href="https://www.luogu.com.cn/record/181189437">80分的题解</a></div>
+<div class="t1">注意函数返回值，如果该返回的没有返回，结果会TLE。而且在本机上跑的是正确的，在评测机上就会TLE。因此这个错误很重要。</div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P1714">P1714 切蛋糕</a>这道题需要前缀和+单调序列，当时我以为不能是单调队列，于是我的代码就写成了这样：<a href="https://www.luogu.com.cn/record/181183317">代码</a>后来看了题解才知道，必须得是单调队列，而且还得要前缀和。于是后来改成了这样<a href="https://www.luogu.com.cn/record/181185448">代码</a></div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P1886">P1886 滑动窗口 /【模板】单调队列</a><p>滑动窗口这道题需要注意，这道题中有一个位置容易错。请看 <a href="https://www.luogu.com.cn/record/181171733">代码</a> ，这里的
         <pre>
-while((!mindq.empty())&&i-k>=mindq.front())
+while((!mindq.empty())&amp;&amp;i-k&gt;=mindq.front())
 {
     mindq.pop_front();
 }
-while((!maxdq.empty())&&i-k>=maxdq.front())
+while((!maxdq.empty())&amp;&amp;i-k&gt;=maxdq.front())
 {
     maxdq.pop_front();
 }
-    </pre>其中<code>i-k>=mindq.front()</code>可以写成<code>mindq.back()-mindq.front()>=k-1</code>但是不能写成<code>mindq.back()-mindq.front()>=k</code>因为当我们的区间的序列长度已经等于k的时候，我们就应该把<code>front()</code>pop掉，因为后面还要push一个i，这就意味着如果我们的序列长度等于k，那么后面再加入i的时候长度就会大于k，因此代码才这么写。<br>&nbsp;&nbsp;&nbsp;&nbsp;*当然，你要是把push语句放前面的话那就没事了。</P></div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3467">P3467 [POI2008] PLA-Postering</a>这道题需要有反向思维，既然海报数一个一个加不好办，那么我们就反向减。具体思路见题解。<a href="https://www.luogu.com.cn/problem/solution/P3467">题解</a>代码很简单，但这个思路绝了！<b>选自题解的一句核心句：因为题目要求海报不可超出建筑物链，那么我们即可用单调栈维护：初始海报数为建筑物数，入栈建筑物链的高度序列，当栈顶大于即将入栈元素时弹栈，若最后弹栈元素与即将入栈元素等高，需要的海报数-1；</b></div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P1578">P1578 奶牛浴场</a><p>小心！这道题和<a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a>不一样。这道题的数据范围不适用悬线法，否则会MLE！经过我查找题解，发现某年的国家队wzk大佬的论文《浅谈用极大化思想解决最大子矩形问题》，一共有两种：1.悬线法 2.通过障碍点找子矩形。我们也只能用第二种了。<a href="https://www.luogu.com.cn/problem/solution/P1578">题解</a>太绝喵了！我正在研究中......</p><br><br>这道题抄都能抄错，l和1长得太像啦！很容易把l抄成1。</div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a><p>这是一道经典的求区间边界的题目，可以用悬线法求解，悬线怎么理解？当时我想了一天，后来遇到<a href="https://www.luogu.com.cn/problem/P1578">奶牛浴场</a>这道题我才醒悟。你可以理解为PS的裁剪工具，如图：<img src="https://upload-bbs.miyoushe.com/upload/2024/10/09/198629752/7b03d2e7bb2ca7c0f5bc82d4033c2195_2942403461030409694.png" alt="PS"></p>悬线就是裁剪边缘的框框，框住了哪里，哪里就要被保留，其余的就被裁剪掉了。这两道题悬线的概念就是这么理解的。<br><br>我们设置一个h数组记录从第(i,j)这一点向上能到达的最大长度，碰到障碍物或者边界就break。l数组记录左边最远到达的长度，r数组记录右边。*此时你会问了，为什么没有down数组记录下面到达的最远位置？A:因为不需要，那样做太多余了，我们的for循环是从上往下遍历的，而且答案也是从上往下遍历的，我们迟早要遍历到下边，因此down数组没有任何作用。最后的最大面积就是答案，面积=底乘高，底=(l+r-1),为什么要减一，因为l和r在一个点重合了，高=h，那么面积=h*(l+r-1)，之后取最大值就是最终结果。</div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P7910">P7910 [CSP-J 2021] 插入排序</a>还是需要插入排序，我觉得最简单的方法就是按照题目要求每次进行插入排序就好了，只不过我们无需对全部区间排序，只需要判断：如果修改后的值改小了，那么对她前面的区间排序，否则对她后面的区间排序。<a href="https://www.luogu.com.cn/problem/solution/P7910">感谢@Inaba_Meguru的题解</a></div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P3143">P3143 [USACO16OPEN] Diamond Collector S</a><p>这是一道好题啊！我看到一篇题解十分牛逼：<a href="https://www.luogu.com.cn/problem/solution/P3143">@a1455520571</a>感谢这位大佬带来的题解。思路很绝妙。就是类似DP+双指针。i表示左侧第一个架子上最多能放多少钻石，i~r的差就是右侧能放的最多的钻石数量。用ma记录左侧能放的最大值，然后ans更新成ma+(r-i)<b style="color: rgba(0, 0, 0, 0.371);"> (式子展开就是ma+r-i) </b>的最大值。</p><br><a href="https://www.luogu.com.cn/record/181024731">我的题解</a></div>
-    <div class="t1"><a href="https://www.luogu.com.cn/problem/P4653">P4653 [CEOI2017] Sure Bet</a>要用双指针+前缀和，当然，就算不用前缀和也没事，就是有点麻烦，这道题有点像贪心。<a href="https://www.luogu.com.cn/record/181010663">题解</a></div>
-    <div class="t1">常见的优化技巧<img src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png" alt="优化技巧"></div>
-    <!--  -->
-    <!--  -->
-    <!--  -->
+    </pre>其中<code>i-k&gt;=mindq.front()</code>可以写成<code>mindq.back()-mindq.front()&gt;=k-1</code>但是不能写成<code>mindq.back()-mindq.front()&gt;=k</code>因为当我们的区间的序列长度已经等于k的时候，我们就应该把<code>front()</code>pop掉，因为后面还要push一个i，这就意味着如果我们的序列长度等于k，那么后面再加入i的时候长度就会大于k，因此代码才这么写。<br/>    *当然，你要是把push语句放前面的话那就没事了。</p></div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P3467">P3467 [POI2008] PLA-Postering</a>这道题需要有反向思维，既然海报数一个一个加不好办，那么我们就反向减。具体思路见题解。<a href="https://www.luogu.com.cn/problem/solution/P3467">题解</a>代码很简单，但这个思路绝了！<b>选自题解的一句核心句：因为题目要求海报不可超出建筑物链，那么我们即可用单调栈维护：初始海报数为建筑物数，入栈建筑物链的高度序列，当栈顶大于即将入栈元素时弹栈，若最后弹栈元素与即将入栈元素等高，需要的海报数-1；</b></div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P1578">P1578 奶牛浴场</a><p>小心！这道题和<a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a>不一样。这道题的数据范围不适用悬线法，否则会MLE！经过我查找题解，发现某年的国家队wzk大佬的论文《浅谈用极大化思想解决最大子矩形问题》，一共有两种：1.悬线法 2.通过障碍点找子矩形。我们也只能用第二种了。<a href="https://www.luogu.com.cn/problem/solution/P1578">题解</a>太绝喵了！我正在研究中......</p><br/><br/>这道题抄都能抄错，l和1长得太像啦！很容易把l抄成1。</div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P4147">P4147 玉蟾宫</a><p>这是一道经典的求区间边界的题目，可以用悬线法求解，悬线怎么理解？当时我想了一天，后来遇到<a href="https://www.luogu.com.cn/problem/P1578">奶牛浴场</a>这道题我才醒悟。你可以理解为PS的裁剪工具，如图：<img alt="PS" src="https://upload-bbs.miyoushe.com/upload/2024/10/09/198629752/7b03d2e7bb2ca7c0f5bc82d4033c2195_2942403461030409694.png"/></p>悬线就是裁剪边缘的框框，框住了哪里，哪里就要被保留，其余的就被裁剪掉了。这两道题悬线的概念就是这么理解的。<br/><br/>我们设置一个h数组记录从第(i,j)这一点向上能到达的最大长度，碰到障碍物或者边界就break。l数组记录左边最远到达的长度，r数组记录右边。*此时你会问了，为什么没有down数组记录下面到达的最远位置？A:因为不需要，那样做太多余了，我们的for循环是从上往下遍历的，而且答案也是从上往下遍历的，我们迟早要遍历到下边，因此down数组没有任何作用。最后的最大面积就是答案，面积=底乘高，底=(l+r-1),为什么要减一，因为l和r在一个点重合了，高=h，那么面积=h*(l+r-1)，之后取最大值就是最终结果。</div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P7910">P7910 [CSP-J 2021] 插入排序</a>还是需要插入排序，我觉得最简单的方法就是按照题目要求每次进行插入排序就好了，只不过我们无需对全部区间排序，只需要判断：如果修改后的值改小了，那么对她前面的区间排序，否则对她后面的区间排序。<a href="https://www.luogu.com.cn/problem/solution/P7910">感谢@Inaba_Meguru的题解</a></div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P3143">P3143 [USACO16OPEN] Diamond Collector S</a><p>这是一道好题啊！我看到一篇题解十分牛逼：<a href="https://www.luogu.com.cn/problem/solution/P3143">@a1455520571</a>感谢这位大佬带来的题解。思路很绝妙。就是类似DP+双指针。i表示左侧第一个架子上最多能放多少钻石，i~r的差就是右侧能放的最多的钻石数量。用ma记录左侧能放的最大值，然后ans更新成ma+(r-i)<b style="color: rgba(0, 0, 0, 0.371);"> (式子展开就是ma+r-i) </b>的最大值。</p><br/><a href="https://www.luogu.com.cn/record/181024731">我的题解</a></div>
+<div class="t1"><a href="https://www.luogu.com.cn/problem/P4653">P4653 [CEOI2017] Sure Bet</a>要用双指针+前缀和，当然，就算不用前缀和也没事，就是有点麻烦，这道题有点像贪心。<a href="https://www.luogu.com.cn/record/181010663">题解</a></div>
+<div class="t1">常见的优化技巧<img alt="优化技巧" src="https://upload-bbs.miyoushe.com/upload/2024/10/08/198629752/b7726f0ceadc1d948614c82f2ebd11e0_6626171470311379944.png"/></div>
+<!-- -->
+<!-- -->
+<!-- -->
 </body>
 <script src="../CanvasFor_index.js"></script>
 <!-- <script src="./Canvas2.js"></script> -->
