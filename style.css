@@ -1,7 +1,7 @@
-@font-face{
-    font-family: 'GenshinFont'; /* 自定义字体的名称 */
-    src: url('Genshin.ttf') format('truetype'); /* 字体文件的路径和格式 */
-}
+/* @font-face{ */
+    /* font-family: 'GenshinFont'; 自定义字体的名称 */
+    /* src: url('Genshin.ttf') format('truetype'); 字体文件的路径和格式 */
+/* } */
 
 *{
     margin: 0;
