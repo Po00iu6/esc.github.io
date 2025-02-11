@@ -1,102 +1,199 @@
 <!DOCTYPE html>
 
 <html lang="zh-CN">
-<head><link href="pwd.css" rel="stylesheet" type="text/css"/>
-<meta charset="utf-8"/>
-<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
-<link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
-<link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-<meta content="webkit" name="renderer"/>
-<meta content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png" property="og:image"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
-<meta content="telephone=no,email=no,adress=no" name="format-detection"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<meta content="OIer的错题集,ESC,ESC.html" name="keywords"/>
-<meta content="OIer的错题集,ESC,ESC.html" name="description"/>
-<!-- bing sitmap system -->
-<meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
-<!-- -->
-<title>错题集</title>
-<link href="./style.css" rel="stylesheet"/>
-<link href="./SBU.css" rel="stylesheet"/>
-<!-- -->
-<style>
-        .videodiv{
+
+<head>
+    <link href="pwd.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta content="webkit" name="renderer" />
+    <meta
+        content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png"
+        property="og:image" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,adress=no" name="format-detection" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="OIer的错题集,ESC,ESC.html" name="keywords" />
+    <meta content="OIer的错题集,ESC,ESC.html" name="description" />
+    <!-- bing sitmap system -->
+    <meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+    <!-- -->
+    <title>错题集</title>
+    <link href="./style.css" rel="stylesheet" />
+    <link href="./SBU.css" rel="stylesheet" />
+    <!-- -->
+    <style>
+        .videodiv {
             z-index: -1;
             position: fixed;
             width: 100vw;
             height: 100vh;
         }
-        .videodiv video{
+
+        .videodiv video {
             width: 1920px;
             height: 1080px;
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
         }
+
         @media screen and (max-width:600px) {
-            .bg1{
+            .bg1 {
                 background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/570fc67f4b580da77f9af206eb3bc0a5_7858946434453008095.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
             }
-            .videodiv video{
+
+            .videodiv video {
                 width: 0px;
             }
         }
-        @media screen and (min-width:601px){
-            .bg1{
+
+        @media screen and (min-width:601px) {
+            .bg1 {
                 background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/94fe58803161e06dd1e2fcea8ba56a41_8214787202754590749.png?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
             }
         }
 
+        .mf{
+            width: 100%;
+            height: 50vh;
+        }
     </style>
-<!-- -->
-</meta></head>
+    <!-- -->
+    </meta>
+</head>
+
 <body>
-<header id="_header">
-<!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+    <header id="_header">
+        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
             NOI
         </div> -->
-<!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
             物理
         </div> -->
-<!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
             化学
         </div> -->
-<!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
             生物
         </div> -->
-<!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
             OIWiki
         </div> -->
-</header>
-<!-- -->
-<button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
-<div class="videodiv" id="BGdiv">
-<video autoplay="" data-autoplay="true" id="video" loop="" muted="" playsinline="" preload="auto">
-<source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4" type="video/mp4"/>
-</video>
-<canvas height="100vh" id="canvas" style="position: fixed;width: 100vw;height: 100vh;" width="100vw"></canvas>
-</div>
-<div class="bg2"></div>
-<div class="bg3"></div>
-<div class="bg4"></div>
-<div class="bg5"></div>
-<div class="bg6"></div>
-<div class="bg7"></div>
-<div class="bg8"></div>
-<!-- -->
-<div class="op">
-</div>
-<hr style="z-index: 1;"/>
-<br/>
-<!-- -->
-<div class="t1" style="background-color: rgba(255,255,255,0.1);"><iframe allowfullscreen="true" border="0" frameborder="no" framespacing="0" height="387px" scrolling="no" src="//player.bilibili.com/player.html?isOutside=true&amp;aid=113497648141761&amp;bvid=BV1D4U6Y4Eb5&amp;cid=26807307092&amp;p=1" width="688px"></iframe></div>
-<!-- -->
-<!-- -->
-<!-- -->
+    </header>
+    <!-- -->
+    <button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
+    <div class="videodiv" id="BGdiv">
+        <video autoplay="" data-autoplay="true" id="video" loop="" muted="" playsinline="" preload="auto">
+            <source src="https://webstatic.mihoyo.com/ys/event/e20200710-subscribe-register/medias/bg.6545fc82.mp4"
+                type="video/mp4" />
+        </video>
+        <canvas height="100vh" id="canvas" style="position: fixed;width: 100vw;height: 100vh;" width="100vw"></canvas>
+    </div>
+    <div class="bg2"></div>
+    <div class="bg3"></div>
+    <div class="bg4"></div>
+    <div class="bg5"></div>
+    <div class="bg6"></div>
+    <div class="bg7"></div>
+    <div class="bg8"></div>
+    <!-- -->
+    <div class="op">
+    </div>
+    <hr style="z-index: 1;" />
+    <br />
+    <!-- -->
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe class="mf" allowfullscreen="true" border="0"
+            frameborder="no" framespacing="0" scrolling="no"
+            src="//player.bilibili.com/player.html?isOutside=true&amp;aid=113497648141761&amp;bvid=BV1D4U6Y4Eb5&amp;cid=26807307092&amp;p=1"
+            ></iframe>
+        <p>
+            鬼知道我看了几遍啊？
+        </p>
+    </div>
+        
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe class="mf" src="//player.bilibili.com/player.html?isOutside=true&aid=918158839&bvid=BV14u4y187Rg&cid=1326712770&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+        <p style="color: #00AEEC;">
+            永世传颂，不休独舞，神爱众人，芙门永存！！！
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1455999641&bvid=BV11i421a7K5&cid=1598527624&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p style="color: #00AEEC;">
+            头悬剑，翩齐舞，罪人舞步旋！万千幕，百年间，凡人舞翩翩！黑白交加，水之我命，喜怒哀乐，芙门永恒!头悬剑，翩起舞，罪人舞步旋；神座崩，终成人，宣布无人罪！永世传颂，不休独舞，神爱众人
+        </p>
+        <p>
+            看了4遍，次次泪目！<img src="https://i0.hdslb.com/bfs/emote/2caafee2e5db4db72104650d87810cc2c123fc86.png@20w_20h.avif" alt=""><img src="https://i0.hdslb.com/bfs/emote/2caafee2e5db4db72104650d87810cc2c123fc86.png@20w_20h.avif" alt=""><img src="https://i0.hdslb.com/bfs/emote/2caafee2e5db4db72104650d87810cc2c123fc86.png@20w_20h.avif" alt="">
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=408009058&bvid=BV1ZG411X71k&cid=1324065383&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p>
+            还是不行啊，我这都看了5遍了，每次到最后那一段泪水还是止不住<img src="https://i0.hdslb.com/bfs/emote/2caafee2e5db4db72104650d87810cc2c123fc86.png@20w_20h.avif" alt=""><img src="https://i0.hdslb.com/bfs/emote/2caafee2e5db4db72104650d87810cc2c123fc86.png@20w_20h.avif" alt=""><img src="https://i0.hdslb.com/bfs/emote/2caafee2e5db4db72104650d87810cc2c123fc86.png@20w_20h.avif" alt="">
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113892399255201&bvid=BV1MaFAeUECm&cid=28085518819&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p style="color: red;">
+            ꧁꫞桃☬门꫞꧂
+        </p>
+        <p>
+            明年也要和胡桃一起过海灯节！
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113893774987421&bvid=BV1YUFPedE29&cid=28090237234&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p style="color: red;">
+            ꧁꫞桃☬门꫞꧂
+        </p>
+        <p>
+            赤团开时斜飞去，最不安神晴又复雨，逗留采血色，伴君眠花房，无可奈何燃花作香，
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113894244750139&bvid=BV1FGf6YPE6g&cid=28090437113&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p style="color: red;">
+            ꧁꫞桃☬门꫞꧂
+        </p>
+        <p>
+            幽蝶能留一缕芳。
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113916776682675&bvid=BV1AbFLegEZb&cid=28173731202&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p style="color: red;">
+            ꧁꫞桃☬门꫞꧂
+        </p>
+        <p>
+            欢迎回来，我的大英雄！
+        </p>
+    </div>
+
+    <div class="t1" style="background-color: rgba(255,255,255,0.1);">
+        <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113927295934304&bvid=BV1oncFepEC3&cid=28172225655&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" class="mf"></iframe>
+        <p style="color: red;">
+            ꧁꫞桃☬门꫞꧂
+        </p>
+        <p>
+            谁叫你这么点胡桃6命的？
+        </p>
+    </div>
+    <!-- -->
+    <!-- -->
+    <!-- -->
 </body>
 <script src="./CanvasFor_index.js"></script>
 <!-- <script src="./Canvas2.js"></script> -->
@@ -105,4 +202,5 @@
 <script src="./ChangSpanColor.js"></script>
 <script src="./a_blank.js"></script>
 <script src="./changeBG.js"></script>
+
 </html>
