@@ -28,8 +28,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/百味一锅.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/华霄纪事.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/烟火人间月.mp3',
-        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/有你刚刚好.mp3',
-        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/雨物语.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/归途.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/给另一个世界的你.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/终焉.mp3',
@@ -44,8 +42,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/溜达谣.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/雨物语.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/有你刚刚好.mp3',
-        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/烟火人间月.mp3',
-        'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/百味一锅.mp3',
         'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/红色高跟鞋.mp3'
         // Add more URLs as needed
     ];
