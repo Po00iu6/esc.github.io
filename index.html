@@ -33,10 +33,21 @@
             width: 100vw;
             height: 100vh;
         }
+        @media (min-aspect-ratio: 1920/1080) {
+            .videodiv video {
+                width: 100vw;
+                height: auto;
+            }
+        }
+
+        @media (max-aspect-ratio: 1920/1080) {
+            .videodiv video {
+                width: auto;
+                height: 100vh;
+            }
+        }
 
         .videodiv video {
-            width: 1920px;
-            height: 1080px;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -48,9 +59,9 @@
                 background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/06/24/570fc67f4b580da77f9af206eb3bc0a5_7858946434453008095.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
             }
 
-            .videodiv video {
+            /* .videodiv video {
                 width: 0px;
-            }
+            } */
         }
 
         @media screen and (min-width:601px) {

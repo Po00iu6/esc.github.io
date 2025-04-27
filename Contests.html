@@ -1,108 +1,139 @@
 <!DOCTYPE html>
 
 <html lang="zh-CN">
-<head><link href="pwd.css" rel="stylesheet" type="text/css"/>
-<meta charset="utf-8"/>
-<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
-<link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon"/>
-<link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon"/>
-<link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
-<meta content="webkit" name="renderer"/>
-<meta content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png" property="og:image"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="black" name="apple-mobile-web-app-status-bar-style"/>
-<meta content="telephone=no,email=no,adress=no" name="format-detection"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-<meta content="OIer的错题集,ESC,ESC.html" name="keywords"/>
-<meta content="OIer的错题集,ESC,ESC.html" name="description"/>
-<!-- bing sitmap system -->
-<meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
-<!-- -->
-<title>错题集</title>
-<link href="./style.css" rel="stylesheet"/>
-<link href="./SBU.css" rel="stylesheet"/>
-<!-- -->
-<style>
-        
-        .videodiv{
+
+<head>
+    <link href="pwd.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <link href="../../../sqhgxsq/next/Material/logo.png" rel="apple-touch-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta content="webkit" name="renderer" />
+    <meta
+        content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png"
+        property="og:image" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no,email=no,adress=no" name="format-detection" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <meta content="OIer的错题集,ESC,ESC.html" name="keywords" />
+    <meta content="OIer的错题集,ESC,ESC.html" name="description" />
+    <!-- bing sitmap system -->
+    <meta content="E636B33C63F884A1E40D913638E2424B" name="msvalidate.01">
+    <!-- -->
+    <title>错题集</title>
+    <link href="./style.css" rel="stylesheet" />
+    <link href="./SBU.css" rel="stylesheet" />
+    <!-- -->
+    <style>
+        .videodiv {
             z-index: -1;
             position: fixed;
             width: 100vw;
             height: 100vh;
         }
-        .videodiv video{
-            width: 1920px;
-            height: 1080px;
+
+        @media (min-aspect-ratio: 1920/1080) {
+            .videodiv video {
+                width: 100vw;
+                height: auto;
+            }
+        }
+
+        @media (max-aspect-ratio: 1920/1080) {
+            .videodiv video {
+                width: auto;
+                height: 100vh;
+            }
+        }
+
+        .videodiv video {
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
+            transform: translate(-50%, -50%);
         }
+
         @media screen and (max-width:600px) {
-            .bg1{
-        background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/09/26/c27c7b23731aa5a60374b57013fcc62c_8061592060424930446.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+            .bg1 {
+                background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/09/26/c27c7b23731aa5a60374b57013fcc62c_8061592060424930446.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+                z-index: -2;
             }
-            .videodiv video{
+/* 
+            .videodiv video {
                 width: 0px;
-            }
+            } */
         }
-        @media screen and (min-width:601px){
-            .bg1{
-        background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/09/26/6c21127c8aad75330ef7032197c2280e_4894746016024104932.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
-        z-index: -2;
-    }
+
+        @media screen and (min-width:601px) {
+            .bg1 {
+                background-image: url("https://act-webstatic.mihoyo.com/event-static/2024/09/26/6c21127c8aad75330ef7032197c2280e_4894746016024104932.jpg?x-oss-process=image/quality,Q_80/resize,m_lfit,s_700");
+                z-index: -2;
+            }
         }
     </style>
-<!-- -->
-</meta></head>
+    <!-- -->
+    </meta>
+</head>
+
 <body>
-<header id="_header">
-<!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
+    <header id="_header">
+        <!-- <div class="ph" id="h_1" onclick="window.open('./index.html')">
             NOI
         </div> -->
-<!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
+        <!-- <div class="ph" id="h_2" onclick="window.open('./PH.html')">
             物理
         </div> -->
-<!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
+        <!-- <div class="ph" id="h_3" onclick="window.open('./CM.html')">
             化学
         </div> -->
-<!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
+        <!-- <div class="ph" id="h_4" onclick="window.open('./BO.html')">
             生物
         </div> -->
-<!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
+        <!-- <div class="ph" id="h_5" onclick="window.open('https://oi-wiki.org/')">
             OIWiki
         </div> -->
-</header>
-<!-- -->
-<button class="SBU" id="BGMusicButton" style="bottom: 80px;left: 0px;">开/关 背景音乐</button>
-<audio autoplay="" id="dd" src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/希望有羽毛和翅膀.mp3" style="display: none;"></audio>
-<button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
-<button class="SBU" id="VBGButton" style="bottom: 40px;left: 0px;">开/关 视频音乐</button>
-<div class="videodiv" id="BGdiv">
-<video autoplay="" data-autoplay="true" id="video" loop="" playsinline="" preload="auto">
-<source src="https://webstatic.mihoyo.com/upload/op-public/2020/09/27/fd431739ff26ceeb3010ac561d68446b_345688670889091949.mp4" type="video/mp4"/>
-</video>
-<canvas height="100vh" id="canvas" style="position: fixed;width: 100vw;height: 100vh;" width="100vw"></canvas>
-</div>
-<!-- -->
-<div class="bg1"></div>
-<div class="bg2"></div>
-<div class="bg3"></div>
-<div class="bg4"></div>
-<div class="bg5"></div>
-<div class="bg6"></div>
-<div class="bg7"></div>
-<div class="bg8"></div>
-<!-- -->
-<div class="op">
-<h1>下拉查看比赛回顾</h1>
-</div>
-<br/>
-<h1>比赛回顾</h1>
-<br/>
-<hr style="z-index: 1;"/>
-<br/>
-<div class="t1" id="AT"><a href="https://atcoder.jp/contests/abc379">Toyota Programming Contest 2024#11（AtCoder Beginner Contest 379）</a><a href="#">Rated</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_a">A - Cyclic</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_b">B - Strawberries</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_c">C - Sowing Stones</a>A题和B题太简单直接略。<b>*本题注意石子只能向右移动。</b>这道题算是把我给搞蒙了，看了题解才知道这玩意就是模拟。考验你的代码能力。<pre>
+    </header>
+    <!-- -->
+    <button class="SBU" id="BGMusicButton" style="bottom: 80px;left: 0px;">开/关 背景音乐</button>
+    <audio autoplay="" id="dd"
+        src="https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/希望有羽毛和翅膀.mp3"
+        style="display: none;"></audio>
+    <button class="SBU" id="BGButton" style="bottom: 0px;left: 0px;">开/关 背景视频</button>
+    <button class="SBU" id="VBGButton" style="bottom: 40px;left: 0px;">开/关 视频音乐</button>
+    <div class="videodiv" id="BGdiv">
+        <video autoplay="" data-autoplay="true" id="video" loop="" muted="" playsinline="" preload="auto">
+            <source
+                src="https://webstatic.mihoyo.com/upload/op-public/2020/09/27/fd431739ff26ceeb3010ac561d68446b_345688670889091949.mp4"
+                type="video/mp4" />
+        </video>
+        <canvas height="100vh" id="canvas" style="position: fixed;width: 100vw;height: 100vh;" width="100vw"></canvas>
+    </div>
+    <!-- -->
+    <div class="bg1"></div>
+    <div class="bg2"></div>
+    <div class="bg3"></div>
+    <div class="bg4"></div>
+    <div class="bg5"></div>
+    <div class="bg6"></div>
+    <div class="bg7"></div>
+    <div class="bg8"></div>
+    <!-- -->
+    <div class="op">
+        <h1>下拉查看比赛回顾</h1>
+    </div>
+    <br />
+    <h1>比赛回顾</h1>
+    <br />
+    <hr style="z-index: 1;" />
+    <br />
+    <div class="t1" id="AT"><a href="https://atcoder.jp/contests/abc379">Toyota Programming Contest 2024#11（AtCoder
+            Beginner Contest 379）</a><a href="#">Rated</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_a">A
+            - Cyclic</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_b">B - Strawberries</a><a
+            href="https://atcoder.jp/contests/abc379/tasks/abc379_c">C - Sowing
+            Stones</a>A题和B题太简单直接略。<b>*本题注意石子只能向右移动。</b>这道题算是把我给搞蒙了，看了题解才知道这玩意就是模拟。考验你的代码能力。
+        <pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 #include &lt;algorithm&gt;
@@ -143,7 +174,10 @@ signed main(){
     cout&lt;&lt;ans;<span>//输出即可 </span>
     return 0;
 }
-</pre>这个题解跟官方的题解差不多，长得很像，但这个更易懂。<i>参考资料：<a href="https://www.luogu.com.cn/problem/solution/AT_abc379_c">洛谷题解区@IGA_Indigo</a></i><a href="https://atcoder.jp/contests/abc379/tasks/abc379_d">D - Home Garden</a>这道题就是队列+时间戳就好了。<pre>
+</pre>这个题解跟官方的题解差不多，长得很像，但这个更易懂。<i>参考资料：<a
+                href="https://www.luogu.com.cn/problem/solution/AT_abc379_c">洛谷题解区@IGA_Indigo</a></i><a
+            href="https://atcoder.jp/contests/abc379/tasks/abc379_d">D - Home Garden</a>这道题就是队列+时间戳就好了。
+        <pre>
 #include &lt;iostream&gt;
 #include &lt;queue&gt;
 #include &lt;cstdio&gt;
@@ -180,8 +214,17 @@ signed main(){
         }
     }
 }
-</pre>感谢HA大佬@Y_Ruiy给我的启发。<i>参考资料：<a href="https://atcoder.jp/users/Y_Ruiy">大佬的指导@Y_Ruiy</a></i><a href="https://atcoder.jp/contests/abc379/tasks/abc379_e">E - Sum of All Substrings</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_f">F - Buildings 2</a><a href="https://atcoder.jp/contests/abc379/tasks/abc379_g">G - Count Grid 3-coloring</a>*目前EFG还没写。</div>
-<div class="t1" id="CF"><a href="https://codeforces.com/contest/2035">Codeforces Global Round 27</a><a href="#">Rated</a><a href="https://codeforces.com/contest/2035/problem/A">A. Sliding</a><a href="https://codeforces.com/contest/2035/problem/B">B. Everyone Loves Tres</a><a href="https://codeforces.com/contest/2035/problem/C">C. Alya and Permutation</a>A和B题都太简单了，我来说一下C题，这道题就是一道构造题，不过有点难度，大概是洛谷的黄题水平。先将1,2,3,4,7,8,2^k-1,2^k放在序列最后，然后前面的奇数位置放剩下的偶数，偶数位置放剩下的奇数即可。<pre>
+</pre>感谢HA大佬@Y_Ruiy给我的启发。<i>参考资料：<a href="https://atcoder.jp/users/Y_Ruiy">大佬的指导@Y_Ruiy</a></i><a
+            href="https://atcoder.jp/contests/abc379/tasks/abc379_e">E - Sum of All Substrings</a><a
+            href="https://atcoder.jp/contests/abc379/tasks/abc379_f">F - Buildings 2</a><a
+            href="https://atcoder.jp/contests/abc379/tasks/abc379_g">G - Count Grid 3-coloring</a>*目前EFG还没写。
+    </div>
+    <div class="t1" id="CF"><a href="https://codeforces.com/contest/2035">Codeforces Global Round 27</a><a
+            href="#">Rated</a><a href="https://codeforces.com/contest/2035/problem/A">A. Sliding</a><a
+            href="https://codeforces.com/contest/2035/problem/B">B. Everyone Loves Tres</a><a
+            href="https://codeforces.com/contest/2035/problem/C">C. Alya and
+            Permutation</a>A和B题都太简单了，我来说一下C题，这道题就是一道构造题，不过有点难度，大概是洛谷的黄题水平。先将1,2,3,4,7,8,2^k-1,2^k放在序列最后，然后前面的奇数位置放剩下的偶数，偶数位置放剩下的奇数即可。
+        <pre>
 #include &lt;cstdio&gt;
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
@@ -223,8 +266,21 @@ int main(){
     }
     return 0;
 }
-        </pre>这道题我赛时没写出来，索性赛后看了题解。像这种构造题不要慌，一定要手动模拟一遍，观察样例，从样例中找到启发。<i>题解来源：<a href="https://www.cnblogs.com/cjjsb/p/18533864">博客园某大佬</a></i><a href="https://codeforces.com/contest/2035/problem/D">D. Yet Another Real Number Problem</a></div>
-<div class="t1" id="LG"><a href="https://www.luogu.com.cn/contest/159723#problems">【LGR-178-Div.4】洛谷入门赛 #21</a><a href="#">Rated</a><a href="https://www.luogu.com.cn/problem/B3942">A.B3942 [语言月赛 202403] Qiu</a><a href="https://www.luogu.com.cn/problem/B3943">B.B3943 [语言月赛 202403] 雀？雀！</a><a href="https://www.luogu.com.cn/problem/B3944">C.B3944 [语言月赛 202403] 传染病</a><a href="https://www.luogu.com.cn/problem/B3945">D.B3945 [语言月赛 202403] 数数，数数，数数</a><a href="https://www.luogu.com.cn/problem/T432581?contestId=159723">E.T432581 2014</a>前几道题过于简单，略。这道题甚至没有录入题库，因为太简单了，只需要记录2、0、1、4的个数，然后判断是否相等就好了。<a href="https://www.luogu.com.cn/problem/B3947">F.B3947 [语言月赛 202403] 大西洋船王</a>这道题只需要预处理收益就好了，然后取每i个任务的最大值，累加每个任务产生的最大值即可。<a href="https://www.luogu.com.cn/problem/B3948">G.B3948 [语言月赛 202403] 土块</a>这道题有些点要注意，如果你要AC，那么必须认真读题。<pre>
+        </pre>这道题我赛时没写出来，索性赛后看了题解。像这种构造题不要慌，一定要手动模拟一遍，观察样例，从样例中找到启发。<i>题解来源：<a
+                href="https://www.cnblogs.com/cjjsb/p/18533864">博客园某大佬</a></i><a
+            href="https://codeforces.com/contest/2035/problem/D">D. Yet Another Real Number Problem</a>
+    </div>
+    <div class="t1" id="LG"><a href="https://www.luogu.com.cn/contest/159723#problems">【LGR-178-Div.4】洛谷入门赛 #21</a><a
+            href="#">Rated</a><a href="https://www.luogu.com.cn/problem/B3942">A.B3942 [语言月赛 202403] Qiu</a><a
+            href="https://www.luogu.com.cn/problem/B3943">B.B3943 [语言月赛 202403] 雀？雀！</a><a
+            href="https://www.luogu.com.cn/problem/B3944">C.B3944 [语言月赛 202403] 传染病</a><a
+            href="https://www.luogu.com.cn/problem/B3945">D.B3945 [语言月赛 202403] 数数，数数，数数</a><a
+            href="https://www.luogu.com.cn/problem/T432581?contestId=159723">E.T432581
+            2014</a>前几道题过于简单，略。这道题甚至没有录入题库，因为太简单了，只需要记录2、0、1、4的个数，然后判断是否相等就好了。<a
+            href="https://www.luogu.com.cn/problem/B3947">F.B3947 [语言月赛 202403]
+            大西洋船王</a>这道题只需要预处理收益就好了，然后取每i个任务的最大值，累加每个任务产生的最大值即可。<a href="https://www.luogu.com.cn/problem/B3948">G.B3948
+            [语言月赛 202403] 土块</a>这道题有些点要注意，如果你要AC，那么必须认真读题。
+        <pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 #include &lt;algorithm&gt;
@@ -271,7 +327,10 @@ signed main(){
     }
     return 0;
 } 
-</pre>代码也是相当的简单。<i>参考资料：无</i><a href="https://www.luogu.com.cn/problem/B3949">H.B3949 [语言月赛 202403] 星云</a><a href="https://www.luogu.com.cn/problem/P1708">I.P1708 [入门赛 #21] 星云 hard ver.</a>H和I题一样的，我可以暴力预处理出对于每一个n而言不小于k的满足条件的数的个数。<h3>预处理的代码文件：</h3><pre>
+</pre>代码也是相当的简单。<i>参考资料：无</i><a href="https://www.luogu.com.cn/problem/B3949">H.B3949 [语言月赛 202403] 星云</a><a
+            href="https://www.luogu.com.cn/problem/P1708">I.P1708 [入门赛 #21] 星云 hard
+            ver.</a>H和I题一样的，我可以暴力预处理出对于每一个n而言不小于k的满足条件的数的个数。<h3>预处理的代码文件：</h3>
+        <pre>
 #include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 #include &lt;algorithm&gt;
@@ -307,9 +366,13 @@ signed main(){
     cout&lt;&lt;"}";
     return 0;
 } 
-</pre><h3>biao.out文件：</h3><pre>
+</pre>
+        <h3>biao.out文件：</h3>
+        <pre>
 {{0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },{0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 ,9 },{0 ,2 ,5 ,9 ,14 ,20 ,27 ,35 ,44 ,54 ,63 ,71 ,78 ,84 ,89 ,93 ,96 ,98 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 ,99 },{0 ,3 ,9 ,19 ,34 ,55 ,83 ,119 ,164 ,219 ,282 ,351 ,424 ,499 ,574 ,647 ,716 ,779 ,834 ,879 ,915 ,943 ,964 ,979 ,989 ,995 ,998 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 ,999 },{0 ,4 ,14 ,34 ,69 ,125 ,209 ,329 ,494 ,714 ,996 ,1344 ,1759 ,2239 ,2779 ,3371 ,4004 ,4664 ,5334 ,5994 ,6627 ,7219 ,7759 ,8239 ,8654 ,9002 ,9284 ,9504 ,9669 ,9789 ,9873 ,9929 ,9964 ,9984 ,9994 ,9998 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 ,9999 },{0 ,5 ,20 ,55 ,125 ,251 ,461 ,791 ,1286 ,2001 ,2997 ,4337 ,6082 ,8287 ,10997 ,14243 ,18038 ,22373 ,27213 ,32493 ,38124 ,43999 ,49999 ,55999 ,61874 ,67505 ,72785 ,77625 ,81960 ,85755 ,89001 ,91711 ,93916 ,95661 ,97001 ,97997 ,98712 ,99207 ,99537 ,99747 ,99873 ,99943 ,99978 ,99993 ,99998 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 ,99999 },{0 ,6 ,27 ,83 ,209 ,461 ,923 ,1715 ,3002 ,5004 ,8001 ,12333 ,18395 ,26627 ,37499 ,51491 ,69068 ,90650 ,116577 ,147069 ,182196 ,221858 ,265775 ,313487 ,364364 ,417626 ,472373 ,527625 ,582372 ,635634 ,686511 ,734223 ,778140 ,817802 ,852929 ,883421 ,909348 ,930930 ,948507 ,962499 ,973371 ,981603 ,987665 ,991997 ,994994 ,996996 ,998283 ,999075 ,999537 ,999789 ,999915 ,999971 ,999992 ,999998 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 ,999999 },{0 ,7 ,35 ,119 ,329 ,791 ,1715 ,3431 ,6434 ,11439 ,19440 ,31767 ,50135 ,76679 ,113969 ,164999 ,233144 ,322079 ,435654 ,577719 ,751914 ,961439 ,1208819 ,1495679 ,1822544 ,2188679 ,2591984 ,3028959 ,3494754 ,3983319 ,4487634 ,4999999 ,5512364 ,6016679 ,6505244 ,6971039 ,7408014 ,7811319 ,8177454 ,8504319 ,8791179 ,9038559 ,9248084 ,9422279 ,9564344 ,9677919 ,9766854 ,9834999 ,9886029 ,9923319 ,9949863 ,9968231 ,9980558 ,9988559 ,9993564 ,9996567 ,9998283 ,9999207 ,9999669 ,9999879 ,9999963 ,9999991 ,9999998 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 ,9999999 },{0 ,8 ,44 ,164 ,494 ,1286 ,3002 ,6434 ,12869 ,24309 ,43749 ,75509 ,125610 ,7672297 ,315809 ,480017 ,711446 ,1030095 ,1459314 ,2025594 ,2758068 ,3687740 ,4846424 ,6265424 ,7973999 ,9997679 ,12356519 ,15063399 ,18122499 ,21528099 ,25263819 ,29302379 ,33605924 ,38126924 ,42809624 ,47591984 ,52408014 ,57190374 ,61873074 ,66394074 ,70697619 ,74736179 ,78471899 ,81877499 ,84936599 ,87643479 ,90002319 ,92025999 ,93734574 ,95153574 ,96312258 ,97241930 ,97974404 ,98540684 ,98969904 ,99288552 ,99519981 ,99684189 ,99797829 ,99874389 ,99924489 ,99956249 ,99975689 ,99987129 ,99993564 ,99996996 ,99998712 ,99999504 ,99999834 ,99999954 ,99999990 ,99999998 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 ,99999999 }}
-</pre>滑动biao.out文件的滑动条，你也看到了，没错，就是这么暴力~将这个文件当中的内容复制，然后粘贴到dp[8][1000]后面，加上=号，然后带上这串很长的预处理。最后代码写出来只需要根据n和k直接输出dp[n][k]即可。当然，考试的时候并不建议这么做，但这是最终手段。这道题有点怪，因为如果让k只循环到100，则会WA好几个点，如果循环到101就AC了。<a href="https://www.luogu.com.cn/problem/B3950">J.B3950 [语言月赛 202403] szmgo</a>我感觉这不是一个算法题，他在考你英语:）这道题略。代码我抄的。<pre>
+</pre>滑动biao.out文件的滑动条，你也看到了，没错，就是这么暴力~将这个文件当中的内容复制，然后粘贴到dp[8][1000]后面，加上=号，然后带上这串很长的预处理。最后代码写出来只需要根据n和k直接输出dp[n][k]即可。当然，考试的时候并不建议这么做，但这是最终手段。这道题有点怪，因为如果让k只循环到100，则会WA好几个点，如果循环到101就AC了。<a
+            href="https://www.luogu.com.cn/problem/B3950">J.B3950 [语言月赛 202403] szmgo</a>我感觉这不是一个算法题，他在考你英语:）这道题略。代码我抄的。
+        <pre>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -345,8 +408,9 @@ int main() {
         } cout &lt;&lt; (cnt == 1 ? "Yes, Commander\n" : "No, Commander\n");
     } return 0;
 }
-</pre></div>
-<!-- -->
+</pre>
+    </div>
+    <!-- -->
 </body>
 <script src="./CanvasFor_index.js"></script>
 <!-- <script src="./Canvas2.js"></script> -->
@@ -356,4 +420,5 @@ int main() {
 <script src="./a_blank.js"></script>
 <script src="./yanhua.js"></script>
 <script src="./changeBG.js"></script>
+
 </html>
