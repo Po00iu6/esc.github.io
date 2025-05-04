@@ -13,6 +13,7 @@ let yy = [0,81,79];
 let wl = [0,28,31];
 let hf = [0,55,80];
 let sf = [0,64,75];
+let pm = [1879,808,450];
 
 
 
@@ -29,6 +30,16 @@ const chart = new Chart(ctx, {
             borderWidth: 2,
             pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
             tension: 0.1
+        },{
+            label: '年级排名',
+            data: pm,
+            fill: true,
+            backgroundColor: ['rgba(246, 255, 0, 0)'],
+            borderColor: 'rgba(255, 0, 0, 0.4)',
+            borderWidth: 2,
+            pointHoverRadius: 5,
+            tension: 0.1,
+            hidden: true  // 添加这行使数据集默认隐藏
         },{
             label: '语文',
             data: yw,
