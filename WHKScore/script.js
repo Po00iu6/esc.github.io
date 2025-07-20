@@ -3,17 +3,18 @@ const ctx = document.getElementById('scoreChart').getContext('2d');
 let labels = [
     '2024年10月月考',
     '2025年1月期末考试',
-    '2025年4月期中考试'
+    '2025年4月期中考试',
+    '2025年7月期末考试'
 ]
 
-let whkzcj = [0,352,426];
-let yw = [0,79,75];
-let sx = [0,45,86];
-let yy = [0,81,79];
-let wl = [0,28,31];
-let hf = [0,55,80];
-let sf = [0,64,75];
-let pm = [1879,808,450];
+let whkzcj = [0,352,426,471];
+let yw = [0,79,75,91];
+let sx = [0,45,86,80];
+let yy = [0,81,79,86];
+let wl = [0,28,31,48];
+let hf = [0,55,80,79];
+let sf = [0,64,75,87];
+let pm = [1879,808,381];
 
 
 
