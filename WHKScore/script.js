@@ -16,8 +16,6 @@ let hf = [0,55,80,79];
 let sf = [0,64,75,87];
 let pm = [1879,808,381,222];
 
-
-
 const chart = new Chart(ctx, {
     type: 'line',
     data: {
@@ -29,7 +27,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgb(0, 153, 255)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         },{
             label: '年级排名',
@@ -40,7 +38,7 @@ const chart = new Chart(ctx, {
             borderWidth: 2,
             pointHoverRadius: 5,
             tension: 0.1,
-            hidden: true  // 添加这行使数据集默认隐藏
+            hidden: true
         },{
             label: '语文',
             data: yw,
@@ -48,7 +46,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgba(114, 0, 0, 0.4)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         },{
             label: '数学',
@@ -57,7 +55,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgba(0, 106, 255, 0.4)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         },{
             label: '英语',
@@ -66,7 +64,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgba(216, 20, 255, 0.4)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         },{
             label: '物理',
@@ -75,7 +73,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgba(14, 255, 30, 0.4)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         },{
             label: '化赋',
@@ -84,7 +82,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgba(32, 0, 192, 0.4)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         },{
             label: '生赋',
@@ -93,7 +91,7 @@ const chart = new Chart(ctx, {
             backgroundColor: ['rgba(246, 255, 0, 0)'],
             borderColor: 'rgba(119, 177, 1, 0.4)',
             borderWidth: 2,
-            pointHoverRadius: 5, //设置鼠标移动上去后圆点半径
+            pointHoverRadius: 5,
             tension: 0.1
         }]
     },
@@ -106,21 +104,35 @@ const chart = new Chart(ctx, {
     }
 });
 
-// // 添加成绩的函数
-// function addScore() {
-//     const score = prompt("请输入新的成绩:");
-//     const parsedScore = parseInt(score);
-//     if (!isNaN(parsedScore)) {
-//         scores.push(parsedScore);
-//         updateChart();
-//     } else {
-//         alert("请输入有效的成绩!");
-//     }
-// }
+// 添加第二个折线图，保持与第一个图表相同的风格
+const dynamicCtx = document.getElementById('dynamicScoreChart').getContext('2d');
 
-// // 更新图表数据
-// function updateChart() {
-//     chart.data.labels = scores.map((_, index) => `第 ${index + 1} 次`);
-//     chart.data.datasets[0].data = scores;
-//     chart.update();
-// }3
+let Shijian = [
+    '2025/9/7'
+]
+
+let Nsx = [66];
+
+const dynamicChart = new Chart(dynamicCtx, {
+    type: 'line',
+    data: {
+        labels: Shijian,
+        datasets: [{
+            label: '数学',
+            data: Nsx,
+            fill: true,
+            backgroundColor: ['rgba(246, 255, 0, 0)'],
+            borderColor: 'rgba(0, 106, 255, 0.4)',
+            borderWidth: 2,
+            pointHoverRadius: 5,
+            tension: 0.1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
