@@ -108,10 +108,11 @@ const chart = new Chart(ctx, {
 const dynamicCtx = document.getElementById('dynamicScoreChart').getContext('2d');
 
 let Shijian = [
-    '2025/9/7'
+    '2025/9/7',
+    '2025/9/28'
 ]
 
-let Nsx = [66];
+let Nsx = [66,75];
 
 const dynamicChart = new Chart(dynamicCtx, {
     type: 'line',
