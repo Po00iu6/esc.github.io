@@ -4,17 +4,18 @@ let labels = [
     '2024年10月月考',
     '2025年1月期末考试',
     '2025年4月期中考试',
-    '2025年7月期末考试'
+    '2025年7月期末考试',
+    '2025年10月月考'
 ]
 
-let whkzcj = [0,352,426,471];
-let yw = [0,79,75,91];
-let sx = [0,45,86,80];
-let yy = [0,81,79,86];
-let wl = [0,28,31,48];
-let hf = [0,55,80,79];
-let sf = [0,64,75,87];
-let pm = [1879,808,381,222];
+let whkzcj = [0,352,426,471,432];
+let yw = [0,79,75,91,102];
+let sx = [0,45,86,80,78];
+let yy = [0,81,79,86,57];
+let wl = [0,28,31,48,41];
+let hf = [0,55,80,79,68];
+let sf = [0,64,75,87,86];
+let pm = [1879,808,381,222,596];
 
 const chart = new Chart(ctx, {
     type: 'line',
@@ -109,10 +110,11 @@ const dynamicCtx = document.getElementById('dynamicScoreChart').getContext('2d')
 
 let Shijian = [
     '2025/9/7',
-    '2025/9/28'
+    '2025/9/28',
+    '2025/10/10'
 ]
 
-let Nsx = [66,75];
+let Nsx = [66,75,78];
 
 const dynamicChart = new Chart(dynamicCtx, {
     type: 'line',
