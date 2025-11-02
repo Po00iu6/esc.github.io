@@ -112,10 +112,11 @@ let Shijian = [
     '2025/9/7',
     '2025/9/28',
     '2025/10/10',
-    '2025/10/19'
+    '2025/10/19',
+    '2025/11/2'
 ]
 
-let Nsx = [66,75,78,55];
+let Nsx = [66,75,78,55,74];
 
 const dynamicChart = new Chart(dynamicCtx, {
     type: 'line',
