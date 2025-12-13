@@ -216,17 +216,10 @@ const dynamicChart = new Chart(dynamicCtx, {
         datasets: [{
             label: '数学',
             data: Nsx,
-            // fill: true,
-            // backgroundColor: ['rgba(246, 255, 0, 0)'],
-            // borderColor: 'rgba(0, 106, 255, 0.4)',
-            // borderWidth: 2,
-            // pointHoverRadius: 5,
-            // tension: 0.1,
-            
             fill: true,
-            backgroundColor: ['rgba(246, 255, 0, 0.02)'],
-            borderColor: '#21c0faff',
-            borderWidth: 3,
+            backgroundColor: ['rgba(246, 255, 0, 0)'],
+            borderColor: 'rgba(0, 106, 255, 0.4)',
+            borderWidth: 2,
             pointHoverRadius: 5,
             tension: 0.1,
             ...getPointStyles(Nsx)
