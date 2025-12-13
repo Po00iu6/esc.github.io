@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D物理引擎 - 小球碰撞</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            margin: 0 0 20px 0;
+            color: #333;
+            text-align: center;
+        }
+        
+        .main-container {
+            display: flex;
+            width: 100%;
+        }
+        
+        /* 左侧对象列表 */
+        #object-list {
+            width: 200px;
+            background-color: #e0e0e0;
+            padding: 15px;
+            border-right: 2px solid #ccc;
+            overflow-y: auto;
+        }
+        
+        #object-list h2 {
+            font-size: 18px;
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .object-item {
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .object-item:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .object-item.selected {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #45a049;
+        }
+        
+        /* 中间游戏区域 */
+        .game-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        #gameCanvas {
+            border: 2px solid #333;
+            background-color: #ffffff;
+            cursor: crosshair;
+        }
+        
+        #controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="range"] {
+            width: 150px;
+        }
+        
+        /* 右侧数据面板 */
+        #data-panel {
+            width: 250px;
+            background-color: #e0e0e0;
+            padding: 15px;
+            border-left: 2px solid #ccc;
+        }
+        
+        #data-panel h2 {
+            font-size: 18px;
+            margin: 0 0 15px 0;
+            color: #333;
+        }
+        
+        .property-group {
+            margin-bottom: 15px;
+        }
+        
+        .property-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .property-value {
+            margin-left: 10px;
+            color: #333;
+        }
+        
+        /* 重置按钮 */
+        #reset-container {
+            margin-top: 20px;
+        }
+        
+        #resetBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        
+        /* 绳子创建按钮 */
+        #rope-controls {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+        
+        #rope-controls button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            margin-right: 10px;
+        }
+        
+        #rope-controls button:hover {
+            background-color: #0b7dda;
+        }
+        
+        /* 底部创建面板 */
+        #creation-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #e0e0e0;
+            padding: 15px;
+            border-top: 2px solid #ccc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #creation-panel h3 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        #creation-panel button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        
+        #creation-panel button:hover {
+            background-color: #45a049;
+        }
+        
+        /* 模态窗口样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        
+        .form-group input[type="color"] {
+            height: 40px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .form-actions button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #da190b;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 左侧对象列表 -->
+        <div id="object-list">
+            <h2>对象列表</h2>
+            <div id="object-items-container"></div>
+        </div>
+        
+        <!-- 中间游戏区域 -->
+        <div class="game-area">
+            <h1>2D物理引擎 - 小球碰撞</h1>
+            <canvas id="gameCanvas" width="800" height="600"></canvas>
+            <div id="controls">
+                <div class="control-group">
+                    <label for="gravity">重力强度: <span id="gravityValue">0.05</span></label>
+                    <input type="range" id="gravity" min="0" max="0.2" step="0.01" value="0.05">
+                </div>
+                <div class="control-group">
+                    <label for="friction">摩擦系数: <span id="frictionValue">0.99</span></label>
+                    <input type="range" id="friction" min="0" max="1" step="0.01" value="0.99">
+                </div>
+                <div class="control-group">
+                    <label for="restitution">弹性系数: <span id="restitutionValue">0.80</span></label>
+                    <input type="range" id="restitution" min="0" max="1" step="0.01" value="0.8">
+                </div>
+            </div>
+            <div id="reset-container">
+                <button id="resetBtn">重置小球</button>
+            </div>
+            <div id="rope-controls">
+                <button id="create-rope-btn">创建绳子</button>
+                <span id="rope-status">选择两个小球来创建绳子</span>
+            </div>
+        </div>
+        
+        <!-- 右侧数据面板 -->
+        <div id="data-panel">
+            <h2>对象属性</h2>
+            <div id="object-properties">
+                <p>请选择一个对象</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 底部创建面板 -->
+    <div id="creation-panel">
+        <h3>创建物体</h3>
+        <button id="create-ball-btn">创建小球</button>
+        <button id="create-rope-btn-new">创建绳子</button>
+    </div>
+    
+    <!-- 小球创建模态窗口 -->
+    <div id="ball-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>创建小球</h2>
+                <span class="close" id="ball-modal-close">&times;</span>
+            </div>
+            <form id="ball-form">
+                <div class="form-group">
+                    <label for="ball-nickname">昵称:</label>
+                    <input type="text" id="ball-nickname" name="nickname" placeholder="小球1" required>
+                </div>
+                <div class="form-group">
+                    <label for="ball-mass">质量:</label>
+                    <input type="number" id="ball-mass" name="mass" min="0.1" step="0.1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="ball-radius">半径:</label>
+                    <input type="number" id="ball-radius" name="radius" min="10" max="100" value="30" required>
+                </div>
+                <div class="form-group">
+                    <label for="ball-color">颜色:</label>
+                    <input type="color" id="ball-color" name="color" value="#FF6B6B" required>
+                </div>
+                <div class="form-group">
+                    <label for="ball-x">位置 X:</label>
+                    <input type="number" id="ball-x" name="x" min="0" max="800" value="400" required>
+                </div>
+                <div class="form-group">
+                    <label for="ball-y">位置 Y:</label>
+                    <input type="number" id="ball-y" name="y" min="0" max="600" value="300" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="ball-cancel-btn">取消</button>
+                    <button type="submit" class="btn-primary">创建</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 绳子创建模态窗口 -->
+    <div id="rope-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>创建绳子</h2>
+                <span class="close" id="rope-modal-close">&times;</span>
+            </div>
+            <form id="rope-form">
+                <div class="form-group">
+                    <label for="rope-nickname">昵称:</label>
+                    <input type="text" id="rope-nickname" name="nickname" placeholder="绳子1" required>
+                </div>
+                <div class="form-group">
+                    <label for="rope-length">长度:</label>
+                    <input type="number" id="rope-length" name="length" min="10" max="500" value="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="rope-color">颜色:</label>
+                    <input type="color" id="rope-color" name="color" value="#333333" required>
+                </div>
+                <div class="form-group">
+                    <label for="rope-point-a">A点类型:</label>
+                    <select id="rope-point-a" name="pointA" required>
+                        <option value="new">新建点</option>
+                        <option value="existing">关联现有物体</option>
+                    </select>
+                </div>
+                <div class="form-group" id="rope-a-existing-container" style="display: none;">
+                    <label for="rope-a-object">选择物体:</label>
+                    <select id="rope-a-object" name="aObject">
+                        <!-- 动态填充物体列表 -->
+                    </select>
+                </div>
+                <div class="form-group" id="rope-a-coords-container">
+                    <label>A点坐标:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <input type="number" id="rope-a-x" name="aX" min="0" max="800" value="200" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <input type="number" id="rope-a-y" name="aY" min="0" max="600" value="200" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rope-point-b">B点类型:</label>
+                    <select id="rope-point-b" name="pointB" required>
+                        <option value="new">新建点</option>
+                        <option value="existing">关联现有物体</option>
+                    </select>
+                </div>
+                <div class="form-group" id="rope-b-existing-container" style="display: none;">
+                    <label for="rope-b-object">选择物体:</label>
+                    <select id="rope-b-object" name="bObject">
+                        <!-- 动态填充物体列表 -->
+                    </select>
+                </div>
+                <div class="form-group" id="rope-b-coords-container">
+                    <label>B点坐标:</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <input type="number" id="rope-b-x" name="bX" min="0" max="800" value="400" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <input type="number" id="rope-b-y" name="bY" min="0" max="600" value="200" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="rope-cancel-btn">取消</button>
+                    <button type="submit" class="btn-primary">创建</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // 获取Canvas和上下文
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 获取控制元素
+        const gravitySlider = document.getElementById('gravity');
+        const frictionSlider = document.getElementById('friction');
+        const restitutionSlider = document.getElementById('restitution');
+        const gravityValue = document.getElementById('gravityValue');
+        const frictionValue = document.getElementById('frictionValue');
+        const restitutionValue = document.getElementById('restitutionValue');
+        
+        // 物理参数
+        let gravity = parseFloat(gravitySlider.value);
+        let friction = parseFloat(frictionSlider.value);
+        let restitution = parseFloat(restitutionSlider.value);
+        
+        // 更新参数显示
+        function updateParameterDisplay() {
+            gravityValue.textContent = gravity.toFixed(2);
+            frictionValue.textContent = friction.toFixed(2);
+            restitutionValue.textContent = restitution.toFixed(2);
+        }
+        
+        // 初始更新
+        updateParameterDisplay();
+        
+        // 控制参数变化
+        gravitySlider.addEventListener('input', (e) => {
+            gravity = parseFloat(e.target.value);
+            updateParameterDisplay();
+        });
+        
+        frictionSlider.addEventListener('input', (e) => {
+            friction = parseFloat(e.target.value);
+            updateParameterDisplay();
+        });
+        
+        restitutionSlider.addEventListener('input', (e) => {
+            restitution = parseFloat(e.target.value);
+            updateParameterDisplay();
+        });
+        
+        // 小球类
+        class Ball {
+            constructor(x, y, radius, color, mass = 1, nickname = '') {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.mass = mass;
+                this.vx = 0;
+                this.vy = 0;
+                this.isDragging = false;
+                this.isSelected = false;
+                this.offsetX = 0;
+                this.offsetY = 0;
+                this.id = `ball-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                this.nickname = nickname;
+            }
+            
+            // 更新物理状态
+            update() {
+                // 应用重力（拖拽时也受重力影响）
+                this.vy += gravity;
+                
+                // 应用摩擦力
+                this.vx *= friction;
+                this.vy *= friction;
+                
+                // 更新位置
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // 边界碰撞检测与响应
+                this.handleBoundaryCollision();
+            }
+            
+            // 处理边界碰撞
+            handleBoundaryCollision() {
+                // 左右边界
+                if (this.x - this.radius <= 0) {
+                    this.x = this.radius;
+                    this.vx = -this.vx * restitution;
+                } else if (this.x + this.radius >= canvas.width) {
+                    this.x = canvas.width - this.radius;
+                    this.vx = -this.vx * restitution;
+                }
+                
+                // 上下边界
+                if (this.y - this.radius <= 0) {
+                    this.y = this.radius;
+                    this.vy = -this.vy * restitution;
+                } else if (this.y + this.radius >= canvas.height) {
+                    this.y = canvas.height - this.radius;
+                    this.vy = -this.vy * restitution;
+                }
+            }
+            
+            // 绘制小球
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.strokeStyle = this.isSelected ? '#FF0000' : '#333';
+                ctx.lineWidth = this.isSelected ? 3 : 2;
+                ctx.stroke();
+                ctx.closePath();
+                
+                // 绘制质量标签
+                ctx.fillStyle = '#333';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(this.mass, this.x, this.y + 5);
+            }
+            
+            // 检查点是否在小球内
+            containsPoint(mouseX, mouseY) {
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                return Math.sqrt(dx * dx + dy * dy) <= this.radius;
+            }
+            
+            // 检查与另一个小球的碰撞（使用距离平方优化）
+            checkCollision(other) {
+                const dx = other.x - this.x;
+                const dy = other.y - this.y;
+                const distanceSquared = dx * dx + dy * dy;
+                const minDistance = this.radius + other.radius;
+                return distanceSquared <= minDistance * minDistance;
+            }
+            
+            // 处理与另一个小球的碰撞
+            resolveCollision(other) {
+                // 计算碰撞法线
+                let dx = other.x - this.x;
+                let dy = other.y - this.y;
+                let distanceSquared = dx * dx + dy * dy;
+                
+                if (distanceSquared === 0) return; // 避免除以零
+                
+                let distance = Math.sqrt(distanceSquared);
+                
+                // 归一化碰撞法线
+                const nx = dx / distance;
+                const ny = dy / distance;
+                
+                // 计算相对速度
+                const relativeVelocityX = other.vx - this.vx;
+                const relativeVelocityY = other.vy - this.vy;
+                
+                // 计算相对速度在碰撞法线上的投影
+                const velocityAlongNormal = relativeVelocityX * nx + relativeVelocityY * ny;
+                
+                // 如果小球正在分离，不处理碰撞
+                if (velocityAlongNormal > 0) return;
+                
+                // 计算冲量标量
+                const restitutionFactor = Math.min(this.restitution || restitution, other.restitution || restitution);
+                const impulseScalar = -(1 + restitutionFactor) * velocityAlongNormal / (this.mass + other.mass);
+                
+                // 应用冲量
+                const impulseX = impulseScalar * nx;
+                const impulseY = impulseScalar * ny;
+                
+                this.vx -= impulseX * this.mass;
+                this.vy -= impulseY * this.mass;
+                other.vx += impulseX * other.mass;
+                other.vy += impulseY * other.mass;
+                
+                // 分离重叠的小球
+                const overlap = this.radius + other.radius - distance;
+                const separationX = (overlap / 2) * nx;
+                const separationY = (overlap / 2) * ny;
+                
+                this.x -= separationX;
+                this.y -= separationY;
+                other.x += separationX;
+                other.y += separationY;
+            }
+            
+            // 开始拖动
+            startDrag(mouseX, mouseY) {
+                this.isDragging = true;
+                this.isSelected = true;
+                this.offsetX = mouseX - this.x;
+                this.offsetY = mouseY - this.y;
+                this.vx = 0;
+                this.vy = 0;
+            }
+            
+            // 拖动中
+            drag(mouseX, mouseY) {
+                if (this.isDragging) {
+                    // 计算目标位置
+                    const targetX = mouseX - this.offsetX;
+                    const targetY = mouseY - this.offsetY;
+                    
+                    // 计算方向向量
+                    const dx = targetX - this.x;
+                    const dy = targetY - this.y;
+                    
+                    // 计算距离
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 0.1) {
+                        // 非常接近目标时，直接设置位置并停止移动，消除微小抖动
+                        this.x = targetX;
+                        this.y = targetY;
+                        this.vx = 0;
+                        this.vy = 0;
+                    } else {
+                        // 平滑移动逻辑
+                        const maxSpeed = 8; // 降低最大速度，减少抖动
+                        const minSpeed = 1; // 最小速度，确保小球能到达目标
+                        const damping = 0.8; // 速度平滑过渡系数
+                        
+                        // 根据距离调整速度
+                        let speed;
+                        if (distance < 10) {
+                            // 接近目标时，使用较小的速度
+                            speed = Math.max(distance * 0.5, minSpeed);
+                        } else {
+                            // 远离目标时，使用较大的速度
+                            speed = Math.min(distance * 0.4, maxSpeed);
+                        }
+                        
+                        // 计算目标速度
+                        const targetVx = (dx / distance) * speed;
+                        const targetVy = (dy / distance) * speed;
+                        
+                        // 速度平滑过渡，减少抖动
+                        this.vx = this.vx * damping + targetVx * (1 - damping);
+                        this.vy = this.vy * damping + targetVy * (1 - damping);
+                    }
+                }
+            }
+            
+            // 结束拖动
+            endDrag() {
+                this.isDragging = false;
+            }
+        }
+        
+        // 固定点类
+        class AnchorPoint {
+            constructor(x, y, nickname = '') {
+                this.x = x;
+                this.y = y;
+                this.id = `anchor-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                this.color = '#333333';
+                this.radius = 5; // 固定点的半径
+                this.isSelected = false;
+                this.nickname = nickname;
+            }
+            
+            // 绘制固定点
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.isSelected ? '#FF0000' : this.color;
+                ctx.fill();
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+                
+                // 绘制十字标记
+                ctx.beginPath();
+                ctx.moveTo(this.x - 10, this.y);
+                ctx.lineTo(this.x + 10, this.y);
+                ctx.moveTo(this.x, this.y - 10);
+                ctx.lineTo(this.x, this.y + 10);
+                ctx.strokeStyle = this.isSelected ? '#FF0000' : this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.closePath();
+            }
+            
+            // 检查点是否在固定点内
+            containsPoint(mouseX, mouseY) {
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                return Math.sqrt(dx * dx + dy * dy) <= this.radius + 5; // 增加点击区域
+            }
+        }
+        
+        // 绳子类
+        class Rope {
+            constructor(obj1, obj2, length = null, nickname = '') {
+                this.obj1 = obj1; // 可以是小球或固定点
+                this.obj2 = obj2; // 可以是小球或固定点
+                // 如果没有指定长度，使用两个对象之间的初始距离
+                this.length = length || this.calculateDistance();
+                this.id = `rope-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+                this.color = '#333333';
+                this.thickness = 2;
+                this.isSelected = false;
+                this.nickname = nickname;
+            }
+            
+            // 计算两个对象之间的距离
+            calculateDistance() {
+                const dx = this.obj2.x - this.obj1.x;
+                const dy = this.obj2.y - this.obj1.y;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+            
+            // 更新绳子的物理约束
+            update() {
+                // 计算当前两个对象之间的距离
+                const dx = this.obj2.x - this.obj1.x;
+                const dy = this.obj2.y - this.obj1.y;
+                const currentDistance = Math.sqrt(dx * dx + dy * dy);
+                
+                // 如果当前距离不等于绳子长度，调整对象位置
+                if (currentDistance !== this.length && currentDistance > 0) {
+                    const difference = this.length - currentDistance;
+                    const ratio = difference / currentDistance;
+                    
+                    // 计算调整量
+                    let adjustmentX = (dx * ratio * 0.5);
+                    let adjustmentY = (dy * ratio * 0.5);
+                    
+                    // 根据对象类型调整位置
+                    // 固定点不移动，只有小球会移动
+                    if (this.obj1 instanceof Ball) {
+                        if (this.obj2 instanceof Ball) {
+                            // 两个都是小球，根据质量分配调整量
+                            const totalMass = this.obj1.mass + this.obj2.mass;
+                            const obj1AdjustmentX = adjustmentX * (this.obj2.mass / totalMass);
+                            const obj1AdjustmentY = adjustmentY * (this.obj2.mass / totalMass);
+                            const obj2AdjustmentX = adjustmentX * (this.obj1.mass / totalMass);
+                            const obj2AdjustmentY = adjustmentY * (this.obj1.mass / totalMass);
+                            
+                            this.obj1.x -= obj1AdjustmentX;
+                            this.obj1.y -= obj1AdjustmentY;
+                            this.obj2.x += obj2AdjustmentX;
+                            this.obj2.y += obj2AdjustmentY;
+                            
+                            // 调整小球速度，模拟绳子张力
+                            if (!this.obj1.isDragging) {
+                                this.obj1.vx -= obj1AdjustmentX * 0.1;
+                                this.obj1.vy -= obj1AdjustmentY * 0.1;
+                            }
+                            if (!this.obj2.isDragging) {
+                                this.obj2.vx += obj2AdjustmentX * 0.1;
+                                this.obj2.vy += obj2AdjustmentY * 0.1;
+                            }
+                        } else {
+                            // obj1是小球，obj2是固定点
+                            this.obj1.x -= adjustmentX * 2;
+                            this.obj1.y -= adjustmentY * 2;
+                            
+                            // 调整小球速度
+                            if (!this.obj1.isDragging) {
+                                this.obj1.vx -= adjustmentX * 0.2;
+                                this.obj1.vy -= adjustmentY * 0.2;
+                            }
+                        }
+                    } else {
+                        // obj1是固定点
+                        if (this.obj2 instanceof Ball) {
+                            // obj2是小球
+                            this.obj2.x += adjustmentX * 2;
+                            this.obj2.y += adjustmentY * 2;
+                            
+                            // 调整小球速度
+                            if (!this.obj2.isDragging) {
+                                this.obj2.vx += adjustmentX * 0.2;
+                                this.obj2.vy += adjustmentY * 0.2;
+                            }
+                        }
+                        // 如果两个都是固定点，不需要调整位置
+                    }
+                }
+            }
+            
+            // 绘制绳子
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.obj1.x, this.obj1.y);
+                ctx.lineTo(this.obj2.x, this.obj2.y);
+                ctx.strokeStyle = this.isSelected ? '#FF0000' : this.color;
+                ctx.lineWidth = this.isSelected ? this.thickness + 2 : this.thickness;
+                ctx.stroke();
+                ctx.closePath();
+            }
+            
+            // 设置绳子长度
+            setLength(newLength) {
+                this.length = Math.max(10, newLength); // 限制最小长度
+            }
+            
+            // 检查点是否在绳子附近
+            containsPoint(mouseX, mouseY) {
+                // 计算点到线段的距离
+                const dx = this.obj2.x - this.obj1.x;
+                const dy = this.obj2.y - this.obj1.y;
+                const segmentLength = Math.sqrt(dx * dx + dy * dy);
+                
+                if (segmentLength === 0) return false;
+                
+                const t = Math.max(0, Math.min(1, ((mouseX - this.obj1.x) * dx + (mouseY - this.obj1.y) * dy) / (segmentLength * segmentLength)));
+                
+                const closestX = this.obj1.x + t * dx;
+                const closestY = this.obj1.y + t * dy;
+                
+                const distanceToLine = Math.sqrt((mouseX - closestX) * (mouseX - closestX) + (mouseY - closestY) * (mouseY - closestY));
+                
+                return distanceToLine <= this.thickness + 5; // 增加点击区域
+            }
+        }
+        
+        // 对象数组
+        const balls = [];
+        const ropes = [];
+        const anchors = [];
+        
+        // 当前选中的对象
+        let selectedObject = null;
+        
+        // 用于创建绳子的临时变量
+        let ropeCreationMode = false;
+        let ropeCreationBalls = [];
+        
+        // 绳子创建按钮事件监听器
+        const createRopeBtn = document.getElementById('create-rope-btn');
+        createRopeBtn.addEventListener('click', () => {
+            ropeCreationMode = true;
+            ropeCreationBalls = [];
+            document.getElementById('rope-status').textContent = "选择两个物体来创建绳子";
+        });
+        
+        // 对象列表容器
+        const objectItemsContainer = document.getElementById('object-items-container');
+        
+        // 更新对象列表
+        function updateObjectList() {
+            objectItemsContainer.innerHTML = '';
+            
+            // 添加小球
+            balls.forEach((ball, index) => {
+                const item = document.createElement('div');
+                item.className = `object-item ${selectedObject === ball ? 'selected' : ''}`;
+                item.dataset.id = ball.id;
+                item.dataset.type = 'ball';
+                const displayName = ball.nickname ? ball.nickname : `小球 ${index + 1}`;
+                item.innerHTML = `${displayName} (${ball.color})`;
+                item.addEventListener('click', () => selectObject(ball));
+                objectItemsContainer.appendChild(item);
+            });
+            
+            // 添加固定点
+            anchors.forEach((anchor, index) => {
+                const item = document.createElement('div');
+                item.className = `object-item ${selectedObject === anchor ? 'selected' : ''}`;
+                item.dataset.id = anchor.id;
+                item.dataset.type = 'anchor';
+                const displayName = anchor.nickname ? anchor.nickname : `固定点 ${index + 1}`;
+                item.innerHTML = `${displayName}`;
+                item.addEventListener('click', () => selectObject(anchor));
+                objectItemsContainer.appendChild(item);
+            });
+            
+            // 添加绳子
+            ropes.forEach((rope, index) => {
+                const item = document.createElement('div');
+                item.className = `object-item ${selectedObject === rope ? 'selected' : ''}`;
+                item.dataset.id = rope.id;
+                item.dataset.type = 'rope';
+                const displayName = rope.nickname ? rope.nickname : `绳子 ${index + 1}`;
+                item.innerHTML = `${displayName}`;
+                item.addEventListener('click', () => selectObject(rope));
+                objectItemsContainer.appendChild(item);
+            });
+        }
+        
+        // 重置按钮功能
+        const resetBtn = document.getElementById('resetBtn');
+        resetBtn.addEventListener('click', () => {
+            // 清空所有小球和绳子
+            balls.length = 0;
+            ropes.length = 0;
+            
+            // 重置绳子创建模式
+            ropeCreationMode = false;
+            ropeCreationBalls = [];
+            document.getElementById('rope-status').textContent = '选择两个小球来创建绳子';
+            
+            // 重置选中对象
+            selectedObject = null;
+            updateObjectList();
+            updateObjectProperties();
+        });
+        
+        // 鼠标事件处理
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            // 先尝试选择绳子
+            for (let i = ropes.length - 1; i >= 0; i--) {
+                if (ropes[i].containsPoint(mouseX, mouseY)) {
+                    selectObject(ropes[i]);
+                    return;
+                }
+            }
+            
+            // 然后尝试选择固定点
+            for (let i = anchors.length - 1; i >= 0; i--) {
+                if (anchors[i].containsPoint(mouseX, mouseY)) {
+                    if (ropeCreationMode) {
+                        // 绳子创建模式下，选择固定点
+                        if (!ropeCreationBalls.includes(anchors[i])) {
+                            ropeCreationBalls.push(anchors[i]);
+                            anchors[i].isSelected = true;
+                            
+                            if (ropeCreationBalls.length === 2) {
+                                // 创建绳子
+                                const newRope = new Rope(ropeCreationBalls[0], ropeCreationBalls[1], null, `绳子${ropes.length + 1}`);
+                                ropes.push(newRope);
+                                
+                                // 重置绳子创建模式
+                                ropeCreationMode = false;
+                                ropeCreationBalls.forEach(obj => obj.isSelected = false);
+                                ropeCreationBalls = [];
+                                document.getElementById('rope-status').textContent = '选择两个物体来创建绳子';
+                                
+                                // 更新对象列表
+                                updateObjectList();
+                            } else {
+                                document.getElementById('rope-status').textContent = `已选择 ${ropeCreationBalls.length} 个物体，再选择一个创建绳子`;
+                            }
+                        }
+                    } else {
+                        // 普通模式下，选择固定点
+                        selectObject(anchors[i]);
+                    }
+                    return;
+                }
+            }
+            
+            // 然后尝试选择小球
+            for (let i = balls.length - 1; i >= 0; i--) {
+                if (balls[i].containsPoint(mouseX, mouseY)) {
+                    if (ropeCreationMode) {
+                        // 绳子创建模式下，选择小球
+                        if (!ropeCreationBalls.includes(balls[i])) {
+                            ropeCreationBalls.push(balls[i]);
+                            balls[i].isSelected = true;
+                            
+                            if (ropeCreationBalls.length === 2) {
+                                // 创建绳子
+                                const newRope = new Rope(ropeCreationBalls[0], ropeCreationBalls[1], null, `绳子${ropes.length + 1}`);
+                                ropes.push(newRope);
+                                
+                                // 重置绳子创建模式
+                                ropeCreationMode = false;
+                                ropeCreationBalls.forEach(obj => obj.isSelected = false);
+                                ropeCreationBalls = [];
+                                document.getElementById('rope-status').textContent = '选择两个物体来创建绳子';
+                                
+                                // 更新对象列表
+                                updateObjectList();
+                            } else {
+                                document.getElementById('rope-status').textContent = `已选择 ${ropeCreationBalls.length} 个物体，再选择一个创建绳子`;
+                            }
+                        }
+                    } else {
+                        // 普通模式下，拖拽小球
+                        selectObject(balls[i]);
+                        selectedObject.startDrag(mouseX, mouseY);
+                    }
+                    return;
+                }
+            }
+            
+            // 点击空白处，取消选择
+            selectObject(null);
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            // 拖动小球
+            if (selectedObject && selectedObject.isDragging) {
+                selectedObject.drag(mouseX, mouseY);
+                
+                // 检查与其他小球的碰撞并处理
+                for (let ball of balls) {
+                    if (ball !== selectedObject && selectedObject.checkCollision(ball)) {
+                        selectedObject.resolveCollision(ball);
+                    }
+                }
+            } else {
+                // 检查鼠标是否悬停在物体上
+                canvas.style.cursor = 'crosshair';
+                
+                // 检查是否悬停在固定点上
+                for (let anchor of anchors) {
+                    if (anchor.containsPoint(mouseX, mouseY)) {
+                        canvas.style.cursor = 'pointer';
+                        break;
+                    }
+                }
+                
+                // 检查是否悬停在小球上
+                for (let ball of balls) {
+                    if (ball.containsPoint(mouseX, mouseY)) {
+                        canvas.style.cursor = 'pointer';
+                        break;
+                    }
+                }
+                
+                // 检查是否悬停在绳子上
+                for (let rope of ropes) {
+                    if (rope.containsPoint(mouseX, mouseY)) {
+                        canvas.style.cursor = 'pointer';
+                        break;
+                    }
+                }
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            if (selectedObject && selectedObject.isDragging) {
+                selectedObject.endDrag();
+            }
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            if (selectedObject && selectedObject.isDragging) {
+                selectedObject.endDrag();
+            }
+        });
+        
+        // 选择对象函数
+        function selectObject(object) {
+            // 取消之前选中对象的选中状态
+            if (selectedObject) {
+                selectedObject.isSelected = false;
+            }
+            
+            // 设置新的选中对象
+            selectedObject = object;
+            
+            if (object) {
+                object.isSelected = true;
+            }
+            
+            // 更新对象列表
+            updateObjectList();
+            
+            // 更新属性面板
+            updateObjectProperties();
+        }
+        
+        // 更新对象属性面板
+        function updateObjectProperties() {
+            const propertiesContainer = document.getElementById('object-properties');
+            
+            if (!selectedObject) {
+                propertiesContainer.innerHTML = '<p>请选择一个对象</p>';
+                return;
+            }
+            
+            let propertiesHTML = '';
+            
+            if (selectedObject instanceof Ball) {
+                // 小球属性
+                propertiesHTML = `
+                    <div class="property-group">
+                        <span class="property-label">类型:</span>
+                        <span class="property-value">小球</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">质量:</span>
+                        <span class="property-value">${selectedObject.mass}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">速度 X:</span>
+                        <span class="property-value">${selectedObject.vx.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">速度 Y:</span>
+                        <span class="property-value">${selectedObject.vy.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">位置 X:</span>
+                        <span class="property-value">${selectedObject.x.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">位置 Y:</span>
+                        <span class="property-value">${selectedObject.y.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">半径:</span>
+                        <span class="property-value">${selectedObject.radius}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">颜色:</span>
+                        <span class="property-value">${selectedObject.color}</span>
+                    </div>
+                `;
+            } else if (selectedObject instanceof AnchorPoint) {
+                // 固定点属性
+                propertiesHTML = `
+                    <div class="property-group">
+                        <span class="property-label">类型:</span>
+                        <span class="property-value">固定点</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">位置 X:</span>
+                        <span class="property-value">${selectedObject.x.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">位置 Y:</span>
+                        <span class="property-value">${selectedObject.y.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">颜色:</span>
+                        <span class="property-value">${selectedObject.color}</span>
+                    </div>
+                `;
+            } else if (selectedObject instanceof Rope) {
+                // 绳子属性
+                // 确定连接类型
+                let connectionType = '';
+                if (selectedObject.obj1 instanceof Ball && selectedObject.obj2 instanceof Ball) {
+                    connectionType = '两个小球';
+                } else if (selectedObject.obj1 instanceof Ball && selectedObject.obj2 instanceof AnchorPoint) {
+                    connectionType = '小球和固定点';
+                } else if (selectedObject.obj1 instanceof AnchorPoint && selectedObject.obj2 instanceof Ball) {
+                    connectionType = '固定点和小球';
+                } else if (selectedObject.obj1 instanceof AnchorPoint && selectedObject.obj2 instanceof AnchorPoint) {
+                    connectionType = '两个固定点';
+                }
+                
+                propertiesHTML = `
+                    <div class="property-group">
+                        <span class="property-label">类型:</span>
+                        <span class="property-value">绳子</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">长度:</span>
+                        <span class="property-value">${selectedObject.length.toFixed(2)}</span>
+                    </div>
+                    <div class="property-group">
+                        <span class="property-label">连接:</span>
+                        <span class="property-value">${connectionType}</span>
+                    </div>
+                `;
+            }
+            
+            propertiesContainer.innerHTML = propertiesHTML;
+        }
+
+        // 小球创建模态窗口
+        const ballModal = document.getElementById('ball-modal');
+        const createBallBtn = document.getElementById('create-ball-btn');
+        const ballModalClose = document.getElementById('ball-modal-close');
+        const ballCancelBtn = document.getElementById('ball-cancel-btn');
+        const ballForm = document.getElementById('ball-form');
+
+        // 打开小球创建模态窗口
+        createBallBtn.addEventListener('click', () => {
+            ballModal.style.display = 'block';
+        });
+
+        // 关闭小球创建模态窗口
+        function closeBallModal() {
+            ballModal.style.display = 'none';
+            ballForm.reset();
+        }
+
+        ballModalClose.addEventListener('click', closeBallModal);
+        ballCancelBtn.addEventListener('click', closeBallModal);
+
+        // 点击模态窗口外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === ballModal) {
+                closeBallModal();
+            }
+        });
+
+        // 小球创建表单提交
+        ballForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const nickname = document.getElementById('ball-nickname').value;
+            const mass = parseFloat(document.getElementById('ball-mass').value);
+            const radius = parseFloat(document.getElementById('ball-radius').value);
+            const color = document.getElementById('ball-color').value;
+            const x = parseFloat(document.getElementById('ball-x').value);
+            const y = parseFloat(document.getElementById('ball-y').value);
+            
+            // 创建新小球
+            const newBall = new Ball(x, y, radius, color, mass, nickname);
+            balls.push(newBall);
+            
+            // 更新对象列表
+            updateObjectList();
+            
+            // 关闭模态窗口
+            closeBallModal();
+        });
+
+        // 绳子创建模态窗口
+        const ropeModal = document.getElementById('rope-modal');
+        const createRopeBtnNew = document.getElementById('create-rope-btn-new');
+        const ropeModalClose = document.getElementById('rope-modal-close');
+        const ropeCancelBtn = document.getElementById('rope-cancel-btn');
+        const ropeForm = document.getElementById('rope-form');
+        const ropePointA = document.getElementById('rope-point-a');
+        const ropePointB = document.getElementById('rope-point-b');
+        const ropeAExistingContainer = document.getElementById('rope-a-existing-container');
+        const ropeACoordsContainer = document.getElementById('rope-a-coords-container');
+        const ropeBExistingContainer = document.getElementById('rope-b-existing-container');
+        const ropeBCoordsContainer = document.getElementById('rope-b-coords-container');
+
+        // 打开绳子创建模态窗口
+        createRopeBtnNew.addEventListener('click', () => {
+            // 填充物体列表
+            populateObjectList();
+            
+            // 显示模态窗口
+            ropeModal.style.display = 'block';
+        });
+
+        // 关闭绳子创建模态窗口
+        function closeRopeModal() {
+            ropeModal.style.display = 'none';
+            ropeForm.reset();
+            // 重置显示状态
+            ropeAExistingContainer.style.display = 'none';
+            ropeACoordsContainer.style.display = 'block';
+            ropeBExistingContainer.style.display = 'none';
+            ropeBCoordsContainer.style.display = 'block';
+        }
+
+        ropeModalClose.addEventListener('click', closeRopeModal);
+        ropeCancelBtn.addEventListener('click', closeRopeModal);
+
+        // 点击模态窗口外部关闭
+        window.addEventListener('click', (e) => {
+            if (e.target === ropeModal) {
+                closeRopeModal();
+            }
+        });
+
+        // 动态填充物体列表
+        function populateObjectList() {
+            const ropeAObject = document.getElementById('rope-a-object');
+            const ropeBObject = document.getElementById('rope-b-object');
+            
+            // 清空现有选项
+            ropeAObject.innerHTML = '';
+            ropeBObject.innerHTML = '';
+            
+            // 如果没有物体，添加提示选项
+            if (balls.length === 0 && anchors.length === 0) {
+                const optionA = document.createElement('option');
+                optionA.value = '';
+                optionA.textContent = '没有可用的物体，请先创建小球或固定点';
+                optionA.disabled = true;
+                ropeAObject.appendChild(optionA);
+                
+                const optionB = document.createElement('option');
+                optionB.value = '';
+                optionB.textContent = '没有可用的物体，请先创建小球或固定点';
+                optionB.disabled = true;
+                ropeBObject.appendChild(optionB);
+            } else {
+                // 添加小球选项
+                if (balls.length > 0) {
+                    balls.forEach(ball => {
+                        const optionA = document.createElement('option');
+                        optionA.value = ball.id;
+                        const displayName = ball.nickname ? ball.nickname : `小球 ${balls.indexOf(ball) + 1}`;
+                        optionA.textContent = `[小球] ${displayName}`;
+                        ropeAObject.appendChild(optionA);
+                        
+                        const optionB = document.createElement('option');
+                        optionB.value = ball.id;
+                        optionB.textContent = `[小球] ${displayName}`;
+                        ropeBObject.appendChild(optionB);
+                    });
+                }
+                
+                // 添加固定点选项
+                if (anchors.length > 0) {
+                    anchors.forEach(anchor => {
+                        const optionA = document.createElement('option');
+                        optionA.value = anchor.id;
+                        const displayName = anchor.nickname ? anchor.nickname : `固定点 ${anchors.indexOf(anchor) + 1}`;
+                        optionA.textContent = `[固定点] ${displayName}`;
+                        ropeAObject.appendChild(optionA);
+                        
+                        const optionB = document.createElement('option');
+                        optionB.value = anchor.id;
+                        optionB.textContent = `[固定点] ${displayName}`;
+                        ropeBObject.appendChild(optionB);
+                    });
+                }
+            }
+        }
+
+        // A点类型变化处理
+        ropePointA.addEventListener('change', () => {
+            if (ropePointA.value === 'existing') {
+                ropeAExistingContainer.style.display = 'block';
+                ropeACoordsContainer.style.display = 'none';
+            } else {
+                ropeAExistingContainer.style.display = 'none';
+                ropeACoordsContainer.style.display = 'block';
+            }
+        });
+
+        // B点类型变化处理
+        ropePointB.addEventListener('change', () => {
+            if (ropePointB.value === 'existing') {
+                ropeBExistingContainer.style.display = 'block';
+                ropeBCoordsContainer.style.display = 'none';
+            } else {
+                ropeBExistingContainer.style.display = 'none';
+                ropeBCoordsContainer.style.display = 'block';
+            }
+        });
+
+        // 绳子创建表单提交
+        ropeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // 获取表单数据
+            const nickname = document.getElementById('rope-nickname').value;
+            const length = parseFloat(document.getElementById('rope-length').value);
+            const color = document.getElementById('rope-color').value;
+            
+            // 查找物体的辅助函数
+            function findObjectById(id) {
+                return balls.find(ball => ball.id === id) || anchors.find(anchor => anchor.id === id);
+            }
+            
+            // 处理A点
+            let objA;
+            if (ropePointA.value === 'existing') {
+                const objAId = document.getElementById('rope-a-object').value;
+                objA = findObjectById(objAId);
+            } else {
+                // 新建固定点作为A点
+                const aX = parseFloat(document.getElementById('rope-a-x').value);
+                const aY = parseFloat(document.getElementById('rope-a-y').value);
+                objA = new AnchorPoint(aX, aY, nickname ? `${nickname}-A` : `固定点A`);
+                anchors.push(objA);
+            }
+            
+            // 处理B点
+            let objB;
+            if (ropePointB.value === 'existing') {
+                const objBId = document.getElementById('rope-b-object').value;
+                objB = findObjectById(objBId);
+            } else {
+                // 新建固定点作为B点
+                const bX = parseFloat(document.getElementById('rope-b-x').value);
+                const bY = parseFloat(document.getElementById('rope-b-y').value);
+                objB = new AnchorPoint(bX, bY, nickname ? `${nickname}-B` : `固定点B`);
+                anchors.push(objB);
+            }
+            
+            // 创建新绳子
+            if (objA && objB) {
+                const newRope = new Rope(objA, objB, length, nickname);
+                newRope.color = color;
+                ropes.push(newRope);
+                
+                // 更新对象列表
+                updateObjectList();
+                
+                // 关闭模态窗口
+                closeRopeModal();
+            }
+        });
+        
+        // 游戏循环
+        function gameLoop() {
+            // 清空画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 更新所有小球
+            for (let ball of balls) {
+                ball.update();
+            }
+            
+            // 检查小球之间的碰撞
+            for (let i = 0; i < balls.length; i++) {
+                for (let j = i + 1; j < balls.length; j++) {
+                    if (balls[i].checkCollision(balls[j])) {
+                        balls[i].resolveCollision(balls[j]);
+                    }
+                }
+            }
+            
+            // 更新所有绳子
+            for (let rope of ropes) {
+                rope.update();
+            }
+            
+            // 绘制所有小球
+            for (let ball of balls) {
+                ball.draw();
+            }
+            
+            // 绘制所有固定点
+            for (let anchor of anchors) {
+                anchor.draw();
+            }
+            
+            // 绘制所有绳子
+            for (let rope of ropes) {
+                rope.draw();
+            }
+            
+            // 继续循环
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // 启动游戏循环
+        gameLoop();
+    </script>
+</body>
+</html>
