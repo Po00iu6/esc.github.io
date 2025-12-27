@@ -1,0 +1,261 @@
+// 科目配置列表 - 可以添加或减少科目
+const subjects = [
+    { id: 'chinese', name: '语文' },
+    { id: 'math', name: '数学' },
+    { id: 'english', name: '英语' },
+    { id: 'physics', name: '物理' },
+    { id: 'chemistry', name: '化学' },
+    { id: 'biology', name: '生物' }
+];
+
+// 静态日志数据 - 所有日志内容需通过直接修改此处源代码进行更新
+const logs = [
+    {
+        id: 1,
+        title: '2025/12/24高三联考河南',
+        date: '2025-12-24',
+        evaluation: '<p>百师联盟的卷子有点偏怪，物理题出的是个史啊。这次语文作文没写完，但还是考了94，惊险！感谢批卷老师的慈悲之心，我作文打了38分。</p><iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113247785060530&bvid=BV1az4ceJEaL&cid=26135298344&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>',
+        // 每个科目的试卷和答案图片链接列表
+        subjects: {
+            'chinese': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/b6a05977bb6469ef3ac1dc15e92e3d5c_2700357182182002029.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/8786bc9cef8c1c12504be8c039c88b84_5527057636689658014.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/873e2c67ee7d1dec67ee021880ed9f53_1697303412173868039.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/df5f619441c8195d49dc68e245614a80_8122169057967494422.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/17f1626614ae31fe32067ae6d6015d48_980502588474088098.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/49a3c8c465eb530e0204d247f8287a8b_73518930305145641.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/a23a7a368773d80608bc659b16259c7a_4101993624575736337.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/9093b2e9bf0a816a1c07b7cfa06d7652_5950425044771813916.jpg'
+                ],
+                answers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/e613fb41dddcec8e56901cb8622c4123_9191009360425896518.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/21a27935bb9bfc77e96656277b17c4c8_1692829348551497241.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/c800dc14fab24263ff7a66013fcebaf1_1182473180195651530.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/62779c3971b1a0b9c95107c643bb9741_120216286711265132.png'
+                ]
+            },
+            'math': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/901de5ab8c3d1220f2c319d94b33846b_1827482064415317783.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/da17e47626bbc823b0bb1303f930cb06_767212949184394454.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/77a49a9e81271ae5a04d22be9a1b841f_2501617749270448449.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/281612a53d65c65ac8f3323cad9309ee_7023502628849809652.jpg'
+                ],
+                answers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/bcdb8716baa1df69c938806e71fb808d_6742398441947985814.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/87a61400eeaea00216085aa6b967026a_595904378859496290.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/32ca42814768a40eb1da58dab27a20d5_6100249173294460417.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/b8e01a379abb8ab61f28e2966ba54587_3488305954167665161.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/9e8ae0cdf2f6d44132b9d142f35a1792_5439925530784581980.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/39c6f9b294bf35560a8b0192fa769858_1232346784096325889.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/f188fc811863d6badffc2a5fa214d469_4329490177749976540.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/e3594609547457caafd0c0df509a9451_4637973277529597377.png'
+                ]
+            },
+            'english': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/839f076f3d875bb8210cfe6fa0593fa0_2430124107512494256.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/62324bd505662e813770b0e0bf70b474_2878993092798613717.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/b9abee19ab382867806a2915e086c9d5_4794425538107076935.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/526abba753cc263e8bc172a356fe7150_4302880312821137761.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/4fd77d3ece09ce15498ba5a2980b17d2_5076180862411121895.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/63277095c3aceda60b85b1abd9e15060_5667290079079736916.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/5e16355c056ceae55d8f5e314c3a48c7_2961324164832035428.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/97a0e4a21908d5a008333b4d3abb6132_5100304831638976961.jpg'
+
+                ],
+                answers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/a14913838b410041d922b65aee4c9b6a_37958245729577325.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/7a21963535244fbc1e7d44c5bebc2252_6078574438122555154.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/41dc8b37c0905b4b4c43d059dbc19872_3618400271024549229.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/9bc44410196d727aee7e0b5bdca4fc36_8913346044005509701.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/01b10de8ad6f5b7fde83fffa9bc2e9c9_454151104173444918.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/343b0e8821759c91ad656b0df3055e8f_7954012591822189392.png'
+                ]
+            },
+            'physics': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/9b4be723f6c3c0475f7681e7122aab95_2272368749478384982.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/adbbfab7139760ee61c3c6320bdde994_7851599878258082499.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/d426b2268d3188f4faccd8c877827c81_2529786871141822627.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/c750701dc79ffcc40bdf8f849d22e745_4463968024929517104.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/6d4122685247388a13ca92d506e6646b_7982130577296608545.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/8e5852ccb1d0e132cd453fb7bd486e36_3370162329081781132.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/f73f341b02ab6793db13784f35b3a663_3837296513798636353.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/eac2ae45db517b36cc5681fba1fc698b_7340066923957398245.jpg'
+                ],
+                answers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/6034abb4d3db0da2ceffb271be487b1d_6586315885694661422.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/941a829841c60526be77c1f9d677704e_7928647355086925830.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/203cb8837037eead09d43926bb4c5073_7435692257505775840.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/0b202727200fc6ae5a265e045a05edf2_6289177102633190133.png'
+                ]
+            },
+            'chemistry': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/03fecb4a65cdddfa81be1398184bfdc8_3703131265978308849.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/f475d65fcc1cdc4975fb4dd005db4382_1816700135058627790.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/01a7a886a941efafc22c77e655ce4caa_8094553001472538094.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/c6e282d8dfa422d48e8ae740e39a81c6_8254584706905888818.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/8ff3a3171bad807eeb7f05367c3a149c_5804918625666480907.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/1e3d8acfd854fbcc01e39a09bea1c3d1_7947656082605739118.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/b977fca57cd4bca83b9edbcaa41f8783_8410744449642521400.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/449184704/fec75f5192653d7d72a43e7eb042f3de_4355771926572987692.jpg'
+                ],
+                answers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/c4cc90785676f56aab87d3f802f46f31_3809179147875333163.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/bec68a8aeb5057bd8705973fd102a63a_6930285007894705239.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/69babb2a64294c12e4ff3643ddb15530_5337445782172454311.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/f9bc6af14d4b136ff233c43b8e30ed45_6357623996429960195.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/e98093a2ca7b8337859b123a5789a1e3_347186700923797899.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/d3690110f5f15f32fa61e66fca6b764f_1067837488067001542.png'
+                ]
+            },
+            'biology': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/a98e0c67ee8bcdac6925baf0cb63d29c_5955705175025947558.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/4ad2de9ef698876aa61897d7709dccdd_6553906602221672963.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/13ccff45ac3afdfbda8b3457b355480c_8808505076008675071.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/fbe4fb2721c6d583c0d9da31fd7ef52b_7863291626074415596.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/79eec1b3bfa5900eb2ab67b97ad1d205_6878235428829634693.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/8cb305dae497280b3a30f56363a16613_7284243795856424578.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/c10be2da0593063e287a80257fb7d12d_4952443200037419442.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/fef60f82f1e0a365df85bbb0fe7bdabd_238552580527385377.jpg'
+                ],
+                answers: [
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/0aef4825923428fa83913e45c83e54a4_4574207267188940994.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/38d4f604e5ff0f30e29f2ec42309367b_3425687232485580003.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/59a448de1761168d270cb37ad7fc2214_1998071051400103011.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/5a33facea21c188b4b2961733cdda87e_3989893690182927075.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/521a8175f3e67883e704ee7fc5aded2c_6223850804481087246.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/018db8bc0f9cf9e7700f350b13e4d9e3_7041040309903149877.png',
+                    'https://upload-bbs.miyoushe.com/upload/2025/12/27/319434684/f7c203ccb14f08c97e32e8b7d15f6d77_2946700468772519710.png'
+                ]
+            }
+        }
+    },
+];
+
+// 页面加载完成后初始化日志
+document.addEventListener('DOMContentLoaded', function() {
+    // 生成日志列表
+    const leftPane = document.getElementById('leftPane');
+    logs.forEach(log => {
+        const logItem = document.createElement('div');
+        logItem.className = 'log-item';
+        logItem.style.cssText = `
+            padding: 12px;
+            border: 1px solid #333;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            background-color: #2a2a2a;
+            transition: all 0.3s ease;
+        `;
+        logItem.innerHTML = `
+            <strong>${log.title}</strong><br>
+            <small style="color: #888;">${log.date}</small>
+        `;
+        logItem.addEventListener('click', () => {
+            showLogDetails(log);
+            // 移除所有选中状态
+            document.querySelectorAll('.log-item').forEach(item => {
+                item.style.backgroundColor = '#2a2a2a';
+                item.style.borderColor = '#333';
+            });
+            // 设置当前选中状态
+            logItem.style.backgroundColor = '#3a3a3a';
+            logItem.style.borderColor = '#555';
+        });
+        leftPane.appendChild(logItem);
+    });
+});
+
+// 显示日志详情
+function showLogDetails(log) {
+    const logDetails = document.getElementById('logDetails');
+    let html = `
+        <div style="background-color: #2a2a2a; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); max-width: 100%; box-sizing: border-box;">
+            <div style="border-bottom: 2px solid #444; padding-bottom: 15px; margin-bottom: 20px;">
+                <h3 style="margin: 0 0 10px 0; font-size: 24px; color: #ffffff; font-weight: 600;">${log.title}</h3>
+                <p style="color: #888; margin: 0; font-size: 14px;">
+                    <span style="display: inline-block; padding: 3px 8px; background-color: #333; border-radius: 4px; margin-right: 10px;">
+                        <i style="margin-right: 5px;">📅</i>日期: ${log.date}
+                    </span>
+                </p>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 15px 0; font-size: 18px; color: #ffffff; font-weight: 500; display: flex; align-items: center;">
+                    <i style="margin-right: 8px; color: #4CAF50;">⭐</i>考试评价
+                </h4>
+                <div style="background-color: #333; border-radius: 6px; padding: 15px; border-left: 4px solid #4CAF50;">
+                    <div id="evaluationContent" style="color: #ffffff; line-height: 1.5; margin: 0;">${log.evaluation || '暂无评价'}</div>
+                </div>
+            </div>
+            
+            <!-- 科目图片部分 -->
+            <div style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 15px 0; font-size: 18px; color: #ffffff; font-weight: 500; display: flex; align-items: center;">
+                    <i style="margin-right: 8px; color: #9C27B0;">📚</i>科目试卷与答案
+                </h4>
+                <div id="subjectContainer" style="background-color: #333; border-radius: 6px; padding: 15px; border-left: 4px solid #9C27B0;">
+                    <div id="subjectList" style="display: flex; flex-direction: column; gap: 15px;"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    logDetails.innerHTML = html;
+    
+    // 加载科目列表
+    loadSubjects(log);
+}
+
+// 加载科目列表函数
+function loadSubjects(log) {
+    const container = document.getElementById('subjectList');
+    if (!container) return;
+    
+    let html = '';
+    
+    subjects.forEach(subject => {
+        const subjectData = log.subjects && log.subjects[subject.id];
+        if (subjectData) {
+            const examCount = subjectData.examPapers ? subjectData.examPapers.length : 0;
+            const answerCount = subjectData.answers ? subjectData.answers.length : 0;
+            
+            html += `
+                <div style="background-color: #2a2a2a; border-radius: 6px; padding: 15px; border: 1px solid #444;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h5 style="margin: 0; font-size: 16px; color: #ffffff; font-weight: 600;">${subject.name}</h5>
+                        <span style="color: #888; font-size: 12px;">试卷: ${examCount} | 答案: ${answerCount}</span>
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        ${examCount > 0 ? `
+                            <a href="image-viewer.html?subject=${encodeURIComponent(subject.name)}&type=exam&images=${encodeURIComponent(JSON.stringify(subjectData.examPapers))}" 
+                               style="flex: 1; padding: 10px; background-color: #2196F3; color: white; text-decoration: none; border-radius: 4px; text-align: center; font-size: 14px; transition: background-color 0.2s ease;"
+                               onmouseover="this.style.backgroundColor='#1976D2'"
+                               onmouseout="this.style.backgroundColor='#2196F3'">
+                                📄 查看试卷 (${examCount})
+                            </a>
+                        ` : ''}
+                        ${answerCount > 0 ? `
+                            <a href="image-viewer.html?subject=${encodeURIComponent(subject.name)}&type=answer&images=${encodeURIComponent(JSON.stringify(subjectData.answers))}" 
+                               style="flex: 1; padding: 10px; background-color: #FF9800; color: white; text-decoration: none; border-radius: 4px; text-align: center; font-size: 14px; transition: background-color 0.2s ease;"
+                               onmouseover="this.style.backgroundColor='#F57C00'"
+                               onmouseout="this.style.backgroundColor='#FF9800'">
+                                ✅ 查看答案 (${answerCount})
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    if (html === '') {
+        html = '<div style="text-align: center; color: #888; padding: 20px;">暂无科目数据</div>';
+    }
+    
+    container.innerHTML = html;
+}

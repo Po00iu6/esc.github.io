@@ -239,7 +239,6 @@ const musicPlayer = new MusicPlayer();
 const defaultPlaylist = [
     'Music/《回家的路》.mp3',
     'Music/「未行之路」.mp3',
-    'Music/「烬中歌」.mp3',
     'Music/一梦千宵.mp3',
     'Music/下一个远方.mp3',
     'Music/别让我担心.mp3',
@@ -247,7 +246,6 @@ const defaultPlaylist = [
     'Music/尘间星旅.mp3',
     'Music/我不曾忘记.mp3',
     'Music/提瓦特民谣.mp3',
-    'Music/空月之歌.mp3',
     'Music/让风告诉你.mp3'
 ];
 

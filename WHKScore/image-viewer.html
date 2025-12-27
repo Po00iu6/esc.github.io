@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>图片查看器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #1F1F1F;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #888;
+            font-size: 14px;
+        }
+        .image-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .image-wrapper {
+            width: 100%;
+            text-align: center;
+        }
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .image-number {
+            margin-top: 10px;
+            color: #888;
+            font-size: 14px;
+        }
+        .no-images {
+            text-align: center;
+            padding: 40px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            color: #888;
+        }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="back-button">← 返回</a>
+    
+    <div class="header">
+        <h1 id="title">图片查看器</h1>
+        <p id="subtitle">加载中...</p>
+    </div>
+    
+    <div id="imageContainer" class="image-container">
+        <div class="no-images">加载中...</div>
+    </div>
+
+    <script>
+        // 从URL参数中获取数据
+        const urlParams = new URLSearchParams(window.location.search);
+        const subjectName = urlParams.get('subject') || '';
+        const type = urlParams.get('type') || '';
+        const imagesParam = urlParams.get('images');
+
+        // 更新标题
+        const titleElement = document.getElementById('title');
+        const subtitleElement = document.getElementById('subtitle');
+        
+        if (subjectName && type) {
+            const typeText = type === 'exam' ? '试卷' : '答案';
+            titleElement.textContent = `${subjectName} - ${typeText}`;
+            subtitleElement.textContent = `共加载图片中...`;
+        }
+
+        // 解析图片URL列表
+        let images = [];
+        if (imagesParam) {
+            try {
+                images = JSON.parse(decodeURIComponent(imagesParam));
+            } catch (e) {
+                console.error('解析图片URL失败:', e);
+            }
+        }
+
+        // 显示图片
+        const imageContainer = document.getElementById('imageContainer');
+        
+        if (images.length === 0) {
+            imageContainer.innerHTML = '<div class="no-images">暂无图片</div>';
+            subtitleElement.textContent = '共 0 张图片';
+        } else {
+            subtitleElement.textContent = `共 ${images.length} 张图片`;
+            
+            images.forEach((imageUrl, index) => {
+                const imageWrapper = document.createElement('div');
+                imageWrapper.className = 'image-wrapper';
+                
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = `${subjectName} ${type === 'exam' ? '试卷' : '答案'} ${index + 1}`;
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    this.parentElement.querySelector('.image-number').textContent = `第 ${index + 1} 张图片加载失败`;
+                };
+                
+                const imageNumber = document.createElement('div');
+                imageNumber.className = 'image-number';
+                imageNumber.textContent = `第 ${index + 1} / ${images.length} 张`;
+                
+                imageWrapper.appendChild(img);
+                imageWrapper.appendChild(imageNumber);
+                imageContainer.appendChild(imageWrapper);
+            });
+        }
+    </script>
+</body>
+</html>
