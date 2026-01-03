@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>堕落记录</title>
+    <style>
+        body {
+            background-color: #0D1117;
+            color: #C9D1D9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* 音乐开关样式 */
+        .music-toggle-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .music-label {
+            font-size: 14px;
+            color: #8B949E;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #30363D;
+            transition: .4s;
+            border-radius: 20px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #58A6FF;
+        }
+
+        input:focus + .toggle-slider {
+            box-shadow: 0 0 1px #58A6FF;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #58A6FF;
+        }
+
+        .streak-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .streak-count {
+            color: #3FB950;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .total-count {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .contribution-graph {
+            margin: 20px 0;
+        }
+
+        .month-labels {
+            display: flex;
+            margin-bottom: 5px;
+        }
+
+        .month-label {
+            width: auto;
+            min-width: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #8B949E;
+            margin-right: 10px;
+        }
+
+        .graph-grid {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .day-labels {
+            display: flex;
+            flex-direction: column;
+            margin-right: 10px;
+        }
+
+        .day-label {
+            height: 12px;
+            margin-bottom: 3px;
+            font-size: 12px;
+            color: #8B949E;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .months {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .month {
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .month-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .month-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #8B949E;
+        }
+
+        .days {
+            display: flex;
+            flex-wrap: wrap;
+            width: 105px; /* 7个方块 * 15px (12px宽度 + 3px间距) */
+        }
+
+        .day {
+            width: 12px;
+            height: 12px;
+            margin-right: 3px;
+            margin-bottom: 3px;
+            border-radius: 2px;
+            background-color: #3FB950;
+            opacity: 0.2;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day:hover {
+            opacity: 0.8;
+        }
+
+        .day.purple {
+            background-color: #A855F7;
+        }
+
+        .day.red {
+            background-color: #EF4444;
+        }
+
+        .day.dark-red {
+            background-color: #DC2626;
+        }
+
+        .legend {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #8B949E;
+        }
+
+        .legend-color {
+            display: flex;
+            margin: 0 10px;
+        }
+
+        .legend-item {
+            width: 12px;
+            height: 12px;
+            margin-right: 3px;
+            border-radius: 2px;
+        }
+
+        .learn-more {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #58A6FF;
+            cursor: pointer;
+        }
+
+        .learn-more:hover {
+            text-decoration: underline;
+        }
+
+        #explanation {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #161B22;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 音乐开关 -->
+    <div class="music-toggle-container">
+        <span class="music-label">BGM</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="music-toggle">
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
+
+    <div class="container">
+        <h1>堕落记录</h1>
+        <div class="streak-info">
+            距离最近一次堕落后的坚持不堕落的天数: <span class="streak-count">0</span> 天
+        </div>
+        <div class="total-count">
+            总堕落次数: <span id="total-fallen">0</span> 天
+        </div>
+        <div class="contribution-graph">
+            <div class="graph-grid">
+                <div class="months" id="months-container">
+                    <!-- 月份和天数方格将通过JavaScript生成 -->
+                </div>
+            </div>
+            <div class="legend">
+                <span>Less</span>
+                <div class="legend-color">
+                    <div class="legend-item" style="background-color: #3FB950; opacity: 0.2;"></div>
+                    <div class="legend-item" style="background-color: #A855F7; opacity: 0.4;"></div>
+                    <div class="legend-item" style="background-color: #A855F7; opacity: 0.7;"></div>
+                    <div class="legend-item" style="background-color: #EF4444; opacity: 0.7;"></div>
+                    <div class="legend-item" style="background-color: #DC2626; opacity: 1.0;"></div>
+                </div>
+                <span>More</span>
+            </div>
+            <div class="learn-more" onclick="showExplanation()">Learn how we count fallen days</div>
+        </div>
+        <div id="explanation">
+            <h3>堕落记录说明</h3>
+            <p>1. 记录时间范围：2026/01/05 至 2026/06/07</p>
+            <p>2. 每个方格代表一天</p>
+            <p>3. 颜色含义：</p>
+            <ul>
+                <li>绿色（透明度0.2）：该天没有堕落记录</li>
+                <li>紫色（透明度0.4-1.0）：连续堕落天数较少，透明度越高表示连续堕落天数越多</li>
+                <li>红色（普通红色到深红色）：连续堕落天数较多，颜色越深表示连续堕落天数越多</li>
+            </ul>
+            <p>4. 更新方法：在Date.js文件中，将对应日期的0改为1表示该天堕落</p>
+            <p>5. 连续堕落计算：如果中间有一天堕落值是0，则连续计数归零</p>
+            <p>6. 堕落含义：熬夜、看黄片、射精、无意义消磨时光......等对学习无意义的行为被计入堕落。</p>
+        </div>
+    </div>
+
+    <script src="Date.js"></script>
+    <script src="volume.js"></script>
+    <script>
+        // 获取当前时间
+        function getCurrentDate() {
+            return new Date();
+        }
+
+        // 计算连续堕落天数（前缀和）
+        function calculateStreaks() {
+            const streaks = {};
+            let totalFallen = 0;
+            let currentStreak = 0;
+
+            // 遍历所有月份
+            for (const month in dateData) {
+                if (dateData.hasOwnProperty(month)) {
+                    streaks[month] = {};
+                    const days = dateData[month];
+                    
+                    // 获取所有日期键并按数字顺序排序
+                    const dayKeys = Object.keys(days).sort((a, b) => {
+                        return parseInt(a) - parseInt(b);
+                    });
+                    
+                    // 按顺序遍历当月的所有天数
+                    dayKeys.forEach(day => {
+                        if (days.hasOwnProperty(day)) {
+                            const isFallen = days[day];
+                            
+                            if (isFallen === 1) {
+                                currentStreak++;
+                                totalFallen++;
+                            } else {
+                                currentStreak = 0;
+                            }
+                            
+                            streaks[month][day] = currentStreak;
+                        }
+                    });
+                }
+            }
+
+            return { streaks, totalFallen };
+        }
+
+        // 计算距离最近一次堕落后的坚持不堕落的天数
+        function calculateCurrentStreak() {
+            const startDate = new Date('2026-01-05');
+            const endDate = new Date('2026-06-07');
+            const currentDate = getCurrentDate();
+            
+            // 如果当前时间早于开始时间，返回0
+            if (currentDate < startDate) {
+                return 0;
+            }
+            
+            // 如果当前时间晚于结束时间，使用结束时间
+            const checkDate = currentDate > endDate ? endDate : currentDate;
+            
+            // 转换为YYYY-MM-DD格式
+            const checkYear = checkDate.getFullYear();
+            const checkMonth = String(checkDate.getMonth() + 1).padStart(2, '0');
+            const checkDay = String(checkDate.getDate()).padStart(2, '0');
+            const checkDateStr = `${checkYear}-${checkMonth}`;
+            const checkDayStr = checkDay;
+            
+            let streak = 0;
+            let foundFallen = false;
+            
+            // 从当前日期往前遍历，计算坚持不堕落的天数
+            const months = Object.keys(dateData).reverse();
+            
+            for (const month of months) {
+                const days = dateData[month];
+                const dayKeys = Object.keys(days).reverse();
+                
+                for (const day of dayKeys) {
+                    // 如果还没到达当前检查日期，继续遍历
+                    if (month === checkDateStr && parseInt(day) > parseInt(checkDayStr)) {
+                        continue;
+                    }
+                    
+                    // 如果已经遍历完所有日期，退出
+                    if (month < '2026-01' && day < '05') {
+                        break;
+                    }
+                    
+                    const isFallen = days[day];
+                    
+                    if (isFallen === 1) {
+                        foundFallen = true;
+                        break;
+                    } else {
+                        streak++;
+                    }
+                    
+                    // 如果是开始日期，退出
+                    if (month === '2026-01' && day === '05') {
+                        break;
+                    }
+                }
+                
+                if (foundFallen) {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        // 根据连续堕落天数计算颜色和透明度
+        function getDayStyle(streak) {
+            const style = {
+                backgroundColor: '#3FB950',
+                opacity: 0.2
+            };
+            
+            if (streak > 0) {
+                if (streak <= 3) {
+                    // 紫色阶段
+                    style.backgroundColor = '#A855F7';
+                    style.opacity = 0.4 + (streak / 3) * 0.6;
+                } else if (streak <= 7) {
+                    // 红色阶段
+                    style.backgroundColor = '#EF4444';
+                    style.opacity = 0.7 + ((streak - 3) / 4) * 0.3;
+                } else {
+                    // 深红色阶段
+                    style.backgroundColor = '#DC2626';
+                    style.opacity = 1.0;
+                }
+            }
+            
+            return style;
+        }
+
+        // 生成日期表格
+        function generateGraph() {
+            const container = document.getElementById('months-container');
+            const { streaks, totalFallen } = calculateStreaks();
+            const currentStreak = calculateCurrentStreak();
+            
+            // 更新统计信息
+            document.querySelector('.streak-count').textContent = currentStreak;
+            document.getElementById('total-fallen').textContent = totalFallen;
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 遍历所有月份
+            for (const month in dateData) {
+                if (dateData.hasOwnProperty(month)) {
+                    const monthDiv = document.createElement('div');
+                    monthDiv.className = 'month';
+                    
+                    // 添加月份头部
+                    const monthHeaderDiv = document.createElement('div');
+                    monthHeaderDiv.className = 'month-header';
+                    
+                    // 添加月份名称
+                    const monthNameDiv = document.createElement('div');
+                    monthNameDiv.className = 'month-name';
+                    monthNameDiv.textContent = month.split('-')[1] + '月';
+                    monthHeaderDiv.appendChild(monthNameDiv);
+                    
+                    monthDiv.appendChild(monthHeaderDiv);
+                    
+                    // 添加天数方格
+                    const daysDiv = document.createElement('div');
+                    daysDiv.className = 'days';
+                    
+                    const days = dateData[month];
+                    const dayStreaks = streaks[month];
+                    
+                    // 获取所有日期键并按数字顺序排序
+                    const dayKeys = Object.keys(days).sort((a, b) => {
+                        return parseInt(a) - parseInt(b);
+                    });
+                    
+                    // 遍历当月的所有天数（按顺序）
+                    dayKeys.forEach(day => {
+                        if (days.hasOwnProperty(day)) {
+                            const dayDiv = document.createElement('div');
+                            dayDiv.className = 'day';
+                            
+                            const streak = dayStreaks[day];
+                            const style = getDayStyle(streak);
+                            
+                            dayDiv.style.backgroundColor = style.backgroundColor;
+                            dayDiv.style.opacity = style.opacity;
+                            
+                            // 添加悬停提示
+                            const dateStr = `${month}-${day}`;
+                            const isFallen = days[day] === 1;
+                            dayDiv.title = `${dateStr}: ${isFallen ? '堕落' : '未堕落'} (连续${streak}天)`;
+                            
+                            daysDiv.appendChild(dayDiv);
+                        }
+                    });
+                    
+                    monthDiv.appendChild(daysDiv);
+                    container.appendChild(monthDiv);
+                }
+            }
+        }
+
+        // 显示说明
+        function showExplanation() {
+            const explanation = document.getElementById('explanation');
+            // 使用更可靠的方式检查元素是否可见
+            const isVisible = explanation.offsetHeight > 0 || explanation.offsetWidth > 0;
+            explanation.style.display = isVisible ? 'none' : 'block';
+        }
+
+        // 页面加载时生成图表
+        window.addEventListener('load', generateGraph);
+    </script>
+</body>
+</html>
