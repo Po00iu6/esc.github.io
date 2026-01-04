@@ -54,3 +54,182 @@ canvas {
     scrollbar-width: thin;
     scrollbar-color: #4A4A4A #1F1F1F;
 }
+
+/* 个人名片样式 */
+.profile-card {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+/* 左侧个人信息 */
+.profile-left {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.profile-image-container {
+    width: 200px;
+    height: 280px;
+    position: relative;
+    margin-bottom: 20px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.profile-image {
+    width: 95%;
+    height: 95%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: rgba(0, 255, 255, 0.7);
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.profile-name {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #00ffff;
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    margin-top: 10px;
+    letter-spacing: 2px;
+    font-family: 'Arial Black', sans-serif;
+}
+
+/* 右侧分数信息 */
+.profile-right {
+    flex: 2 1 500px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    gap: 30px;
+}
+
+/* 分数概览 */
+.score-overview {
+    flex: 1 1 200px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.total-score h3 {
+    color: #00ffff;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.score-value {
+    font-size: 3em;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+    margin-bottom: 20px;
+}
+
+.subject-progress h4 {
+    color: #00ffff;
+    margin-bottom: 15px;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.progress-item {
+    color: #ffffff;
+    margin: 8px 0;
+    font-size: 1.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress-up {
+    color: #00ff00;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+}
+
+.progress-down {
+    color: #ff0000;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+}
+
+/* 六边形图表容器 */
+.hexagon-container {
+    flex: 2 1 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+#hexagonChart {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.5));
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .profile-card {
+        flex-direction: column;
+    }
+    
+    .profile-right {
+        flex-direction: column;
+    }
+    
+    .profile-image-container {
+        width: 150px;
+        height: 210px;
+    }
+    
+    .profile-name {
+        font-size: 2em;
+    }
+    
+    .score-value {
+        font-size: 2.5em;
+    }
+}

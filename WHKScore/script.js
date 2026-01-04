@@ -207,10 +207,11 @@ let Shijian = [
     '2025/12/7',
     '2025/12/13',
     '2025/12/21',
-    '2025/12/24'
+    '2025/12/24',
+    '2026/1/3'
 ]
 
-let Nsx = [66,75,78,55,74,90,74,65,82,87,89]
+let Nsx = [66,75,78,55,74,90,74,65,82,87,89,69]
 
 const dynamicChart = new Chart(dynamicCtx, {
     type: 'line',
@@ -242,4 +243,186 @@ const dynamicChart = new Chart(dynamicCtx, {
             }
         }
     }
+});
+
+// 创建六边形图线（雷达图）
+const hexagonCtx = document.getElementById('hexagonChart').getContext('2d');
+
+// 从现有数据中获取最近一次考试的成绩
+function getLatestScores() {
+    // 最近一次考试的索引是数组的最后一个元素
+    const latestIndex = labels.length - 1;
+    
+    // 语数英满分150，其他科目满分100，需要转换为百分比
+    const convertScore = (score, is150Full) => {
+        return is150Full ? (score / 150) * 100 : score;
+    };
+    
+    return {
+        labels: ['语文', '数学', '英语', '物理', '化赋', '生赋'],
+        scores: [
+            { raw: yw[latestIndex], converted: convertScore(yw[latestIndex], true) },
+            { raw: sx[latestIndex], converted: convertScore(sx[latestIndex], true) },
+            { raw: yy[latestIndex], converted: convertScore(yy[latestIndex], true) },
+            { raw: wl[latestIndex], converted: convertScore(wl[latestIndex], false) },
+            { raw: hf[latestIndex], converted: convertScore(hf[latestIndex], false) },
+            { raw: sf[latestIndex], converted: convertScore(sf[latestIndex], false) }
+        ],
+        totalScore: whkzcj[latestIndex]
+    };
+}
+
+// 获取最近一次考试数据
+const latestExamData = getLatestScores();
+
+// 更新总分显示
+const scoreValueElement = document.querySelector('.score-value');
+if (scoreValueElement) {
+    scoreValueElement.textContent = latestExamData.totalScore;
+}
+
+// 计算科目进步情况
+function calculateProgress() {
+    // 最近一次考试索引
+    const latestIndex = labels.length - 1;
+    // 前一次考试索引
+    const previousIndex = latestIndex - 1;
+    
+    // 确保有前一次数据
+    if (previousIndex < 0) {
+        return [];
+    }
+    
+    // 科目数据数组
+    const subjects = [
+        { name: '语文', latest: yw[latestIndex], previous: yw[previousIndex] },
+        { name: '数学', latest: sx[latestIndex], previous: sx[previousIndex] },
+        { name: '英语', latest: yy[latestIndex], previous: yy[previousIndex] },
+        { name: '物理', latest: wl[latestIndex], previous: wl[previousIndex] },
+        { name: '化学', latest: hf[latestIndex], previous: hf[previousIndex] },
+        { name: '生物', latest: sf[latestIndex], previous: sf[previousIndex] }
+    ];
+    
+    // 计算进步/退步
+    return subjects.map(subject => {
+        const difference = subject.latest - subject.previous;
+        return {
+            name: subject.name,
+            difference: difference,
+            isImproved: difference > 0
+        };
+    });
+}
+
+// 更新科目进步情况显示
+const progressData = calculateProgress();
+const progressContainer = document.querySelector('.subject-progress');
+if (progressContainer) {
+    // 清空现有内容，只保留标题
+    const titleElement = progressContainer.querySelector('h4');
+    progressContainer.innerHTML = '';
+    if (titleElement) {
+        progressContainer.appendChild(titleElement);
+    }
+    
+    // 添加进步情况
+    progressData.forEach(item => {
+        const progressItem = document.createElement('div');
+        progressItem.className = 'progress-item';
+        
+        const difference = Math.abs(item.difference);
+        const progressClass = item.isImproved ? 'progress-up' : 'progress-down';
+        const arrow = item.isImproved ? '↑' : '↓';
+        
+        progressItem.innerHTML = `${item.name}: <span class="${progressClass}">${arrow} ${difference}</span>`;
+        progressContainer.appendChild(progressItem);
+    });
+}
+
+// 雷达图数据
+const hexagonData = {
+    labels: latestExamData.labels,
+    datasets: [{
+        label: '最近一次考试分数',
+        data: latestExamData.scores.map(item => item.converted),
+        backgroundColor: 'rgba(0, 255, 255, 0.1)',
+        borderColor: '#00ffff',
+        borderWidth: 2,
+        pointBackgroundColor: '#00ffff',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2,
+        pointRadius: 5,
+        pointHoverRadius: 8,
+        pointHoverBackgroundColor: '#ffffff',
+        pointHoverBorderColor: '#00ffff',
+        pointHoverBorderWidth: 3
+    }]
+};
+
+// 雷达图配置
+const hexagonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        r: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+                display: false, // 隐藏刻度值
+                stepSize: 20
+            },
+            grid: {
+                color: 'rgba(0, 255, 255, 0.3)',
+                circular: true
+            },
+            angleLines: {
+                color: 'rgba(0, 255, 255, 0.5)'
+            },
+            pointLabels: {
+                color: '#00ffff',
+                font: {
+                    size: 14,
+                    weight: 'bold'
+                }
+            }
+        }
+    },
+    plugins: {
+        legend: {
+            display: false
+        },
+        tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#00ffff',
+            bodyColor: '#ffffff',
+            borderColor: '#00ffff',
+            borderWidth: 1,
+            padding: 12,
+            cornerRadius: 8,
+            callbacks: {
+                label: function(context) {
+                    const subject = context.label;
+                    const index = context.dataIndex;
+                    const rawScore = latestExamData.scores[index].raw;
+                    return `${subject}: ${rawScore}分`;
+                }
+            }
+        }
+    },
+    hover: {
+        mode: 'nearest',
+        intersect: true
+    },
+    animation: {
+        animateScale: true,
+        animateRotate: true,
+        duration: 2000
+    }
+};
+
+// 创建雷达图
+const hexagonChart = new Chart(hexagonCtx, {
+    type: 'radar',
+    data: hexagonData,
+    options: hexagonOptions
 });
