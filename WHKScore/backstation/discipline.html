@@ -2,6 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon" />
+    <link href="https://ys.mihoyo.com/main/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta
+        content="https://fastcdn.mihoyo.com/static-resource-v2/2023/12/20/e04bc0be964b4fc7056bc1128b35f200_4546122273706382871.png"
+        property="og:image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>堕落记录</title>
     <style>
@@ -261,6 +266,7 @@
 
     <div class="container">
         <h1>堕落记录</h1>
+        <div class="current-time" id="current-time" style="text-align: center; margin-bottom: 15px; font-size: 16px; color: #8B949E;"></div>
         <div class="streak-info">
             距离最近一次堕落后的坚持不堕落的天数: <span class="streak-count">0</span> 天
         </div>
@@ -298,7 +304,8 @@
             </ul>
             <p>4. 更新方法：在Date.js文件中，将对应日期的0改为1表示该天堕落</p>
             <p>5. 连续堕落计算：如果中间有一天堕落值是0，则连续计数归零</p>
-            <p>6. 堕落含义：熬夜、看黄片、射精、无意义消磨时光......等对学习无意义的行为被计入堕落。</p>
+            <p>6. 堕落含义：熬夜、看黄片、导管或挖喷泉、无意义消磨时光......等对学习无意义的行为被计入堕落。</p>
+            <p>7. 晚上 23:00 之前没有上床睡觉，一律算作堕落。</p>
         </div>
     </div>
 
@@ -308,6 +315,28 @@
         // 获取当前时间
         function getCurrentDate() {
             return new Date();
+        }
+
+        // 更新当前时间显示
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        // 启动实时时间更新
+        function startRealTimeClock() {
+            // 立即更新一次
+            updateCurrentTime();
+            // 每秒更新一次
+            setInterval(updateCurrentTime, 1000);
         }
 
         // 计算连续堕落天数（前缀和）
@@ -366,48 +395,35 @@
             const checkYear = checkDate.getFullYear();
             const checkMonth = String(checkDate.getMonth() + 1).padStart(2, '0');
             const checkDay = String(checkDate.getDate()).padStart(2, '0');
-            const checkDateStr = `${checkYear}-${checkMonth}`;
-            const checkDayStr = checkDay;
             
             let streak = 0;
             let foundFallen = false;
             
-            // 从当前日期往前遍历，计算坚持不堕落的天数
-            const months = Object.keys(dateData).reverse();
+            // 从当前日期开始，往前遍历所有日期
+            let currentCheckDate = new Date(checkDate);
             
-            for (const month of months) {
-                const days = dateData[month];
-                const dayKeys = Object.keys(days).reverse();
+            while (currentCheckDate >= startDate) {
+                const year = currentCheckDate.getFullYear();
+                const month = String(currentCheckDate.getMonth() + 1).padStart(2, '0');
+                const day = String(currentCheckDate.getDate()).padStart(2, '0');
+                const monthStr = `${year}-${month}`;
                 
-                for (const day of dayKeys) {
-                    // 如果还没到达当前检查日期，继续遍历
-                    if (month === checkDateStr && parseInt(day) > parseInt(checkDayStr)) {
-                        continue;
-                    }
-                    
-                    // 如果已经遍历完所有日期，退出
-                    if (month < '2026-01' && day < '05') {
-                        break;
-                    }
-                    
-                    const isFallen = days[day];
+                // 检查当前日期是否在dateData中
+                if (dateData[monthStr] && dateData[monthStr][day] !== undefined) {
+                    const isFallen = dateData[monthStr][day];
                     
                     if (isFallen === 1) {
+                        // 找到最近一次堕落，停止计数
                         foundFallen = true;
                         break;
                     } else {
+                        // 该天未堕落，增加坚持天数
                         streak++;
-                    }
-                    
-                    // 如果是开始日期，退出
-                    if (month === '2026-01' && day === '05') {
-                        break;
                     }
                 }
                 
-                if (foundFallen) {
-                    break;
-                }
+                // 往前移动一天
+                currentCheckDate.setDate(currentCheckDate.getDate() - 1);
             }
             
             return streak;
@@ -517,8 +533,11 @@
             explanation.style.display = isVisible ? 'none' : 'block';
         }
 
-        // 页面加载时生成图表
-        window.addEventListener('load', generateGraph);
+        // 页面加载时生成图表和启动实时时间
+        window.addEventListener('load', function() {
+            generateGraph();
+            startRealTimeClock();
+        });
     </script>
 </body>
 </html>

@@ -281,7 +281,7 @@ if (scoreValueElement) {
     scoreValueElement.textContent = latestExamData.totalScore;
 }
 
-// 计算科目进步情况
+// 计算进步情况
 function calculateProgress() {
     // 最近一次考试索引
     const latestIndex = labels.length - 1;
@@ -290,8 +290,18 @@ function calculateProgress() {
     
     // 确保有前一次数据
     if (previousIndex < 0) {
-        return [];
+        return {
+            subjects: [],
+            totalProgress: 0,
+            rankProgress: 0
+        };
     }
+    
+    // 计算总分进步
+    const totalProgress = whkzcj[latestIndex] - whkzcj[previousIndex];
+    
+    // 计算排名进步（注意排名是越小越好，所以进步是负数）
+    const rankProgress = pm[previousIndex] - pm[latestIndex];
     
     // 科目数据数组
     const subjects = [
@@ -303,8 +313,8 @@ function calculateProgress() {
         { name: '生物', latest: sf[latestIndex], previous: sf[previousIndex] }
     ];
     
-    // 计算进步/退步
-    return subjects.map(subject => {
+    // 计算科目进步/退步
+    const subjectProgress = subjects.map(subject => {
         const difference = subject.latest - subject.previous;
         return {
             name: subject.name,
@@ -312,10 +322,49 @@ function calculateProgress() {
             isImproved: difference > 0
         };
     });
+    
+    return {
+        subjects: subjectProgress,
+        totalProgress: totalProgress,
+        rankProgress: rankProgress
+    };
+}
+
+// 更新进步情况显示
+const progressData = calculateProgress();
+
+// 更新总分和排名进步
+const progressDetailsElement = document.querySelector('.progress-details');
+if (progressDetailsElement) {
+    // 清空现有内容
+    progressDetailsElement.innerHTML = '';
+    
+    // 添加总分进步
+    const totalProgressItem = document.createElement('span');
+    totalProgressItem.className = 'progress-item';
+    
+    const totalDifference = Math.abs(progressData.totalProgress);
+    const totalIsImproved = progressData.totalProgress > 0;
+    const totalProgressClass = totalIsImproved ? 'progress-up' : 'progress-down';
+    const totalArrow = totalIsImproved ? '↑' : '↓';
+    
+    totalProgressItem.innerHTML = `总分进步: <span class="${totalProgressClass}">${totalArrow} ${totalDifference}</span>`;
+    progressDetailsElement.appendChild(totalProgressItem);
+    
+    // 添加排名进步
+    const rankProgressItem = document.createElement('span');
+    rankProgressItem.className = 'progress-item';
+    
+    const rankDifference = Math.abs(progressData.rankProgress);
+    const rankIsImproved = progressData.rankProgress > 0;
+    const rankProgressClass = rankIsImproved ? 'progress-up' : 'progress-down';
+    const rankArrow = rankIsImproved ? '↑' : '↓';
+    
+    rankProgressItem.innerHTML = `排名进步: <span class="${rankProgressClass}">${rankArrow} ${rankDifference}</span>`;
+    progressDetailsElement.appendChild(rankProgressItem);
 }
 
 // 更新科目进步情况显示
-const progressData = calculateProgress();
 const progressContainer = document.querySelector('.subject-progress');
 if (progressContainer) {
     // 清空现有内容，只保留标题
@@ -326,7 +375,7 @@ if (progressContainer) {
     }
     
     // 添加进步情况
-    progressData.forEach(item => {
+    progressData.subjects.forEach(item => {
         const progressItem = document.createElement('div');
         progressItem.className = 'progress-item';
         
@@ -373,10 +422,12 @@ const hexagonOptions = {
             },
             grid: {
                 color: 'rgba(0, 255, 255, 0.3)',
-                circular: true
+                circular: false, // 关闭圆形网格，使用多边形网格
+                lineWidth: 2
             },
             angleLines: {
-                color: 'rgba(0, 255, 255, 0.5)'
+                color: 'rgba(0, 255, 255, 0.5)',
+                lineWidth: 2
             },
             pointLabels: {
                 color: '#00ffff',
