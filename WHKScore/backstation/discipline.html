@@ -9,9 +9,12 @@
         property="og:image" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>堕落记录</title>
+    <!-- Exo thin font from Google -->
+    <link href="https://fonts.googleapis.com/css?family=Exo:100" rel="stylesheet">
+    <!-- 背景动画样式 -->
+    <link rel="stylesheet" href="background-animation.css">
     <style>
         body {
-            background-color: #0D1117;
             color: #C9D1D9;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             margin: 0;
@@ -282,10 +285,10 @@
             <div class="legend">
                 <span>Less</span>
                 <div class="legend-color">
-                    <div class="legend-item" style="background-color: #3FB950; opacity: 0.2;"></div>
-                    <div class="legend-item" style="background-color: #A855F7; opacity: 0.4;"></div>
-                    <div class="legend-item" style="background-color: #A855F7; opacity: 0.7;"></div>
-                    <div class="legend-item" style="background-color: #EF4444; opacity: 0.7;"></div>
+                    <div class="legend-item" style="background-color: #3FB950; opacity: 0.4;"></div>
+                    <div class="legend-item" style="background-color: #A855F7; opacity: 0.6;"></div>
+                    <div class="legend-item" style="background-color: #A855F7; opacity: 0.8;"></div>
+                    <div class="legend-item" style="background-color: #EF4444; opacity: 0.9;"></div>
                     <div class="legend-item" style="background-color: #DC2626; opacity: 1.0;"></div>
                 </div>
                 <span>More</span>
@@ -433,18 +436,18 @@
         function getDayStyle(streak) {
             const style = {
                 backgroundColor: '#3FB950',
-                opacity: 0.2
+                opacity: 0.4
             };
             
             if (streak > 0) {
                 if (streak <= 3) {
                     // 紫色阶段
                     style.backgroundColor = '#A855F7';
-                    style.opacity = 0.4 + (streak / 3) * 0.6;
+                    style.opacity = 0.6 + (streak / 3) * 0.4;
                 } else if (streak <= 7) {
                     // 红色阶段
                     style.backgroundColor = '#EF4444';
-                    style.opacity = 0.7 + ((streak - 3) / 4) * 0.3;
+                    style.opacity = 0.8 + ((streak - 3) / 4) * 0.2;
                 } else {
                     // 深红色阶段
                     style.backgroundColor = '#DC2626';
@@ -510,6 +513,21 @@
                             dayDiv.style.backgroundColor = style.backgroundColor;
                             dayDiv.style.opacity = style.opacity;
                             
+                            // 检测是否是今天的日期
+                            const today = new Date();
+                            const todayYear = today.getFullYear();
+                            const todayMonth = String(today.getMonth() + 1).padStart(2, '0');
+                            const todayDay = String(today.getDate()).padStart(2, '0');
+                            const todayStr = `${todayYear}-${todayMonth}`;
+                            const todayDayStr = todayDay;
+                            
+                            if (month === todayStr && day === todayDayStr) {
+                                // 是今天的日期，添加白色描边
+                                dayDiv.style.border = '1px solid white';
+                                dayDiv.style.borderRadius = '2px';
+                                dayDiv.style.boxSizing = 'border-box';
+                            }
+                            
                             // 添加悬停提示
                             const dateStr = `${month}-${day}`;
                             const isFallen = days[day] === 1;
@@ -540,7 +558,7 @@
         });
     </script>
     <!-- 页尾 -->
-    <footer style="background-color: #0D1117; padding: 20px; text-align: center; color: #8B949E; font-size: 12px; margin-top: 40px; width: 100%;">
+    <footer style="background-color: #0b0e1400; padding: 20px; text-align: center; color: #8B949E; font-size: 12px; margin-top: 40px; width: 100%;">
         <p>© 2026 ESC. All rights reserved.</p>
         <p style="margin-top: 10px;">文化课成绩记录 豫ICP备19000007号-1</p>
     </footer>

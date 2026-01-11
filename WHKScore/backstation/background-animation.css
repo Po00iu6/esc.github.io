@@ -1,0 +1,46 @@
+/* 纯CSS无限背景动画 */
+
+/* Animations */
+@-webkit-keyframes bg-scrolling-reverse {
+    100% { background-position: 50px 50px; }
+}
+@-moz-keyframes    bg-scrolling-reverse {
+    100% { background-position: 50px 50px; }
+}
+@-o-keyframes      bg-scrolling-reverse {
+    100% { background-position: 50px 50px; }
+}
+@keyframes         bg-scrolling-reverse {
+    100% { background-position: 50px 50px; }
+}
+
+@-webkit-keyframes bg-scrolling {
+    0% { background-position: 50px 50px; }
+}
+@-moz-keyframes    bg-scrolling {
+    0% { background-position: 50px 50px; }
+}
+@-o-keyframes      bg-scrolling {
+    0% { background-position: 50px 50px; }
+}
+@keyframes         bg-scrolling {
+    0% { background-position: 50px 50px; }
+}
+
+body {
+    background-color: #000000;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: 0 0;
+    
+    /* 背景滚动动画 */
+    -webkit-animation: bg-scrolling-reverse .92s infinite; /* Safari 4+ */
+    -moz-animation:    bg-scrolling-reverse .92s infinite; /* Fx 5+ */
+    -o-animation:      bg-scrolling-reverse .92s infinite; /* Opera 12+ */
+    animation:         bg-scrolling-reverse .92s infinite; /* IE 10+ */
+    -webkit-animation-timing-function: linear;
+    -moz-animation-timing-function:    linear;
+    -o-animation-timing-function:      linear;
+    animation-timing-function:         linear;
+}
