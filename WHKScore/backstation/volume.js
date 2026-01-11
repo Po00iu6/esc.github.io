@@ -3,7 +3,8 @@ const MusicPlayer = {
     // 音乐播放列表
     playlist: [
         "music/热爱105的你.mp3",
-        "music/Wake.mp3"
+        "music/Wake.mp3",
+        "music/JourneytotheLight.mp3"
     ],
     
     // 当前播放索引
