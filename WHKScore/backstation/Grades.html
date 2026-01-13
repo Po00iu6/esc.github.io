@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试成绩查询与分析</title>
+    <!-- 引入Chart.js库 -->
+    <script src="../chart.js"></script>
+    <!-- 引入背景动画样式 -->
+    <link rel="stylesheet" href="background-animation.css">
+    <style>
+        body {
+            color: #C9D1D9;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #58A6FF;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            margin: 20px 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        #scoreChart {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        
+        .status {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            color: #8B949E;
+            font-size: 14px;
+        }
+        
+        .info {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            color: #8B949E;
+            font-size: 14px;
+        }
+        
+        .info b {
+            color: #58A6FF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>考试成绩查询与分析</h1>
+        
+        <div class="info">
+            <p>身份证号: <b>411402200807100124</b></p>
+            <p>正在从 <b>http://cjcx.sqshmzx.net/g3/</b> 获取成绩数据...</p>
+        </div>
+        
+        <div class="status" id="status">正在加载成绩数据，请稍候...</div>
+        
+        <div class="chart-container">
+            <canvas id="scoreChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- 引入Grades.js -->
+    <script src="Grades.js"></script>
+</body>
+</html>

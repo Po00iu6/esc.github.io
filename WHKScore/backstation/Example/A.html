@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>考试成绩查询系统</title>
+<link href="inc/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="inc/js/js.js"></script>
+</head>
+<body onLoad="inst();">
+<div class="html">
+<div class="divs" id="divs">
+<div id="head" class="head" onclick="location.href='?t=20260113232503';">
+考试成绩查询系统<!--div class="back" id="pageback">
+<a href="?t=20260113232503" class="d">更多</a>
+</div-->
+</div>
+<div class="main" id="main">
+<form name="queryForm" method="post" action="?t=20260113232503" onsubmit="return Check4S8(0);">
+<div class="select" id="10">
+<select name="time" id="time" onBlur="Check4S8(1)" >
+<option value="2025年12月份月考--高三">2025年12月份月考--高三</option>
+<option value="2025年11月期中考试--高三">2025年11月期中考试--高三</option>
+<option value="2025年10月考试--高三">2025年10月考试--高三</option>
+</select></div>
+<div class="so_box" id="11">
+<input name="name" type="text" class="txts" id="name" value="" placeholder="请输入身份证号" onfocus="st('name',1)" onBlur="Check4S8(2)" />
+</div>
+<div class="so_but">
+<input type="submit" name="button" class="buts" id="sub" value="立即查询" />
+<input type="button" class="buts" value="刷新本页" name="print" onclick="location.reload();">
+</div>
+<div class="so_bus" id="tishi">
+说明:【身份证号】都输入正确才显示相应结果。
+<!--你的其他说明在这里添加：开始-->
+﻿<BR><font color=red>请注意：身份证末位是X的，只能是大写X</font>
+<BR>
+<BR>
+<!--<div align="center"><img src="b.jpg" width=100%></div>--><!--你的其他说明在这里添加：结束-->
+</div>
+<div id="tishi1" style="display:none;">请输入身份证号</div>
+<div id="tishi4" style="display:none;">请输入4数字验证码</div>
+</form>
+<!----页面执行时间：0.001953125 ]秒---></div>
+<div class="boto" id="boto">
+&copy;2026&nbsp; <a href="http://www.sqshmzx.net" target="_blank">商丘市高级中学</a>
+</div>
+</div>
+</div>
+</body>
+ 
+</html>
