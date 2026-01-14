@@ -1,13 +1,83 @@
 // Grades.js - 自动获取考试成绩并绘制曲线
 
-// API端点
-const API_URL = '/api/scores';
+// 目标网址
+const TARGET_URL = 'http://cjcx.sqshmzx.net/g3/?t=back';
+
+// CORS代理服务
+const CORS_PROXY = 'https://cors.bridged.cc/';
 
 // 身份证号
 const ID_CARD = '411402200807100124';
 
 // 存储成绩数据
 let examData = [];
+
+// 为每个数据集的最高点添加特殊样式
+function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadius = 4, defaultColor = '#FFFFFF') {
+    const maxValue = Math.max(...data);
+    const maxIndex = data.indexOf(maxValue);
+    
+    return {
+        pointBackgroundColor: data.map((_, index) => index === maxIndex ? maxColor : defaultColor),
+        radius: data.map((_, index) => index === maxIndex ? maxRadius : defaultRadius)
+    };
+}
+
+// 静态数据作为备选方案
+const backupExamData = [
+    {
+        exam: '2025年12月份月考',
+        date: '2025-12-01',
+        scores: {
+            total: 580,
+            chinese: 95,
+            math: 105,
+            english: 90,
+            physics: 80,
+            chemistry: 70,
+            biology: 60
+        }
+    },
+    {
+        exam: '2025年11月份月考',
+        date: '2025-11-01',
+        scores: {
+            total: 560,
+            chinese: 90,
+            math: 100,
+            english: 85,
+            physics: 75,
+            chemistry: 65,
+            biology: 65
+        }
+    },
+    {
+        exam: '2025年10月份月考',
+        date: '2025-10-01',
+        scores: {
+            total: 540,
+            chinese: 85,
+            math: 95,
+            english: 80,
+            physics: 70,
+            chemistry: 60,
+            biology: 70
+        }
+    },
+    {
+        exam: '2025年9月份月考',
+        date: '2025-09-01',
+        scores: {
+            total: 520,
+            chinese: 80,
+            math: 90,
+            english: 75,
+            physics: 65,
+            chemistry: 55,
+            biology: 65
+        }
+    }
+];
 
 // 页面加载完成后执行
 window.addEventListener('load', function() {
@@ -20,33 +90,70 @@ async function getAllExamScores() {
     try {
         document.getElementById('status').textContent = '正在尝试连接到成绩查询系统...';
         
-        // 从API端点获取数据
-        console.log('正在从API端点获取数据:', API_URL);
-        const response = await fetch(API_URL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            cache: 'no-cache'
-        });
+        // 首先获取页面，提取所有考试选项
+        const fullUrl = CORS_PROXY + TARGET_URL;
+        console.log('正在获取目标页面:', TARGET_URL);
+        console.log('使用代理:', fullUrl);
         
-        console.log('API响应状态:', response.status);
-        if (!response.ok) {
-            throw new Error(`HTTP错误! 状态: ${response.status}`);
+        let pageHtml;
+        try {
+            const pageResponse = await fetch(fullUrl, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/html',
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                    'Origin': window.location.origin
+                },
+                cache: 'no-cache',
+                mode: 'cors',
+                credentials: 'omit'
+            });
+            
+            console.log('页面响应状态:', pageResponse.status);
+            console.log('页面响应头:', Object.fromEntries(pageResponse.headers.entries()));
+            
+            if (!pageResponse.ok) {
+                throw new Error(`HTTP错误! 状态: ${pageResponse.status}`);
+            }
+            
+            pageHtml = await pageResponse.text();
+            console.log('页面内容长度:', pageHtml.length);
+            console.log('页面内容预览:', pageHtml.substring(0, 200) + '...');
+            
+        } catch (error) {
+            console.error('获取页面时详细错误:', error);
+            console.error('错误类型:', error.name);
+            console.error('错误消息:', error.message);
+            console.error('错误堆栈:', error.stack);
+            throw error;
         }
         
-        const data = await response.json();
-        console.log('API响应数据:', data);
+        // 解析考试选项
+        const examOptions = parseExamOptions(pageHtml);
+        console.log('找到的考试:', examOptions);
         
-        if (data.success && data.data.length > 0) {
-            examData = data.data;
-            document.getElementById('status').textContent = `成功获取 ${examData.length} 次考试成绩`;
-            drawScoreChart();
-        } else if (data.staticData) {
-            // 使用API返回的静态数据
-            examData = data.staticData;
-            document.getElementById('status').textContent = '使用备用成绩数据';
+        if (examOptions.length === 0) {
+            throw new Error('未找到考试选项');
+        }
+        
+        document.getElementById('status').textContent = `找到 ${examOptions.length} 个考试，正在获取成绩...`;
+        
+        // 逐个获取每个考试的成绩
+        for (const exam of examOptions) {
+            console.log(`正在获取考试: ${exam.text}`);
+            const scoreData = await getExamScore(exam.value);
+            if (scoreData) {
+                examData.push(scoreData);
+            }
+        }
+        
+        // 按时间排序（最近的考试在后，这样最新成绩会在时间轴右边）
+        examData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        console.log('所有考试成绩:', examData);
+        
+        // 绘制成绩曲线
+        if (examData.length > 0) {
             drawScoreChart();
         } else {
             throw new Error('未找到成绩数据');
@@ -54,75 +161,154 @@ async function getAllExamScores() {
         
     } catch (error) {
         console.error('获取成绩时出错:', error);
+        document.getElementById('status').textContent = `获取成绩失败: ${error.message}，正在使用备选数据...`;
         
-        // 详细的错误信息
-        let errorMessage = '获取成绩失败';
-        if (error.message.includes('CORS')) {
-            errorMessage = '跨域请求被阻止，正在使用静态成绩数据...';
-        } else if (error.message.includes('HTTP')) {
-            errorMessage = `网络错误: ${error.message}，正在使用静态成绩数据...`;
-        } else if (error.message.includes('未找到')) {
-            errorMessage = `${error.message}，正在使用静态成绩数据...`;
-        } else {
-            errorMessage = '请检查网络连接，正在使用静态成绩数据...';
-        }
-        
-        document.getElementById('status').textContent = errorMessage;
-        
-        // 使用静态数据作为备选方案
-        setTimeout(useStaticData, 1000);
+        // 使用备选数据
+        examData = [...backupExamData];
+        // 按时间排序
+        examData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // 绘制成绩曲线
+        drawScoreChart();
+        document.getElementById('status').textContent = '使用备选数据成功绘制成绩曲线';
     }
 }
 
-// 静态成绩数据（作为备选方案）
-const staticExamData = [
-    {
-        exam: '2025年12月份月考--高三',
-        date: '2025-12-01',
-        scores: {
-            total: 549,
-            chinese: 98,
-            math: 108,
-            english: 83,
-            physics: 78,
-            chemistry: 88,
-            biology: 94
-        }
-    },
-    {
-        exam: '2025年11月期中考试--高三',
-        date: '2025-11-01',
-        scores: {
-            total: 520,
-            chinese: 95,
-            math: 100,
-            english: 80,
-            physics: 75,
-            chemistry: 85,
-            biology: 85
-        }
-    },
-    {
-        exam: '2025年10月考试--高三',
-        date: '2025-10-01',
-        scores: {
-            total: 490,
-            chinese: 90,
-            math: 95,
-            english: 75,
-            physics: 70,
-            chemistry: 80,
-            biology: 80
+// 解析考试选项
+function parseExamOptions(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const selectElement = doc.getElementById('time');
+    
+    if (!selectElement) {
+        console.error('未找到考试选项');
+        return [];
+    }
+    
+    const options = [];
+    for (const option of selectElement.options) {
+        if (option.value) { // 确保value不为空
+            options.push({
+                value: option.value,
+                text: option.text
+            });
         }
     }
-];
+    
+    return options;
+}
 
-// 使用静态数据
-function useStaticData() {
-    console.log('使用静态成绩数据');
-    examData = staticExamData;
-    document.getElementById('status').textContent = '使用静态成绩数据';
-    drawScoreChart();
+// 获取单个考试成绩
+async function getExamScore(examValue) {
+    try {
+        console.log(`正在提交表单获取考试成绩: ${examValue}`);
+        
+        // 构建表单数据
+        const formData = new URLSearchParams();
+        formData.append('time', examValue);
+        formData.append('name', ID_CARD);
+        formData.append('button', '立即查询');
+        
+        // 构建完整的请求URL
+        const postProxyUrl = CORS_PROXY + TARGET_URL;
+        console.log('提交表单到:', postProxyUrl);
+        
+        // 提交表单
+        const response = await fetch(postProxyUrl, {
+            method: 'POST',
+            body: formData.toString(),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'text/html',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Origin': window.location.origin
+            },
+            cache: 'no-cache',
+            mode: 'cors',
+            credentials: 'omit'
+        });
+        
+        console.log('表单提交响应状态:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP错误! 状态: ${response.status}`);
+        }
+        
+        const html = await response.text();
+        console.log('响应内容长度:', html.length);
+        
+        // 解析成绩
+        const scoreData = parseScoreData(html, examValue);
+        console.log('解析到的成绩数据:', scoreData);
+        return scoreData;
+        
+    } catch (error) {
+        console.error(`获取考试 ${examValue} 成绩时出错:`, error);
+        return null;
+    }
+}
+
+// 解析成绩数据
+function parseScoreData(html, examValue) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    
+    // 查找成绩表格
+    const table = doc.querySelector('table');
+    if (!table) {
+        console.error('未找到成绩表格');
+        return null;
+    }
+    
+    // 解析考试名称和日期
+    const examText = examValue;
+    let examDate = '';
+    
+    // 提取日期信息（例如：2025年12月份月考）
+    const dateMatch = examText.match(/(\d{4})年(\d{1,2})月份?/);
+    if (dateMatch) {
+        const year = dateMatch[1];
+        const month = String(dateMatch[2]).padStart(2, '0');
+        examDate = `${year}-${month}-01`; // 使用当月第一天作为日期
+    } else {
+        // 如果没有匹配到日期，使用当前日期
+        const now = new Date();
+        examDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    }
+    
+    // 解析成绩
+    const data = {
+        exam: examText,
+        date: examDate,
+        scores: {}
+    };
+    
+    // 遍历表格行
+    const rows = doc.querySelectorAll('table tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length >= 2) {
+            const label = cells[0].textContent.trim();
+            const value = cells[1].textContent.trim();
+            
+            // 提取关键数据
+            if (label.includes('总分')) {
+                data.scores.total = parseInt(value) || 0;
+            } else if (label === '语文') {
+                data.scores.chinese = parseInt(value) || 0;
+            } else if (label === '数学') {
+                data.scores.math = parseInt(value) || 0;
+            } else if (label === '英语') {
+                data.scores.english = parseInt(value) || 0;
+            } else if (label === '物理') {
+                data.scores.physics = parseInt(value) || 0;
+            } else if (label.includes('化学')) {
+                data.scores.chemistry = parseInt(value) || 0;
+            } else if (label.includes('生政地') || label.includes('生物')) {
+                data.scores.biology = parseInt(value) || 0;
+            }
+        }
+    });
+    
+    return data;
 }
 
 // 绘制成绩曲线
@@ -149,79 +335,138 @@ function drawScoreChart() {
                 {
                     label: '总分',
                     data: totalScores,
-                    borderColor: 'rgb(0, 153, 255)',
-                    backgroundColor: 'rgba(0, 153, 255, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: '#21c0faff',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(totalScores)
                 },
                 {
                     label: '语文',
                     data: chineseScores,
-                    borderColor: 'rgba(114, 0, 0, 0.4)',
-                    backgroundColor: 'rgba(114, 0, 0, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: 'rgba(114, 0, 0, 0.8)',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(chineseScores)
                 },
                 {
                     label: '数学',
                     data: mathScores,
-                    borderColor: 'rgba(0, 106, 255, 0.4)',
-                    backgroundColor: 'rgba(0, 106, 255, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: 'rgba(0, 106, 255, 0.8)',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(mathScores)
                 },
                 {
                     label: '英语',
                     data: englishScores,
-                    borderColor: 'rgba(216, 20, 255, 0.4)',
-                    backgroundColor: 'rgba(216, 20, 255, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: 'rgba(216, 20, 255, 0.8)',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(englishScores)
                 },
                 {
                     label: '物理',
                     data: physicsScores,
-                    borderColor: 'rgba(14, 255, 30, 0.4)',
-                    backgroundColor: 'rgba(14, 255, 30, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: 'rgba(14, 255, 30, 0.8)',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(physicsScores)
                 },
                 {
                     label: '化学',
                     data: chemistryScores,
-                    borderColor: 'rgba(32, 0, 192, 0.4)',
-                    backgroundColor: 'rgba(32, 0, 192, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: 'rgba(32, 0, 192, 0.8)',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(chemistryScores)
                 },
                 {
                     label: '生物',
                     data: biologyScores,
-                    borderColor: 'rgba(119, 177, 1, 0.4)',
-                    backgroundColor: 'rgba(119, 177, 1, 0.1)',
-                    borderWidth: 2,
-                    tension: 0.1
+                    fill: true,
+                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
+                    borderColor: 'rgba(119, 177, 1, 0.8)',
+                    borderWidth: 3,
+                    pointHoverRadius: 5,
+                    tension: 0.1,
+                    ...getPointStyles(biologyScores)
                 }
             ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            },
             scales: {
                 y: {
-                    beginAtZero: false,
-                    suggestedMin: 0,
-                    suggestedMax: 750
+                    beginAtZero: false
                 }
+            },
+            interaction: {
+                mode: 'nearest',
+                intersect: true
             },
             plugins: {
                 legend: {
-                    position: 'top'
+                    position: 'top',
+                    onClick: function(e, legendItem, legend) {
+                        // 切换数据集的可见性
+                        const index = legendItem.datasetIndex;
+                        const ci = legend.chart;
+                        ci.setDatasetVisibility(index, !ci.isDatasetVisible(index));
+                        // 更新图表，触发坐标重新计算
+                        ci.update();
+                    }
                 },
                 title: {
                     display: true,
                     text: '考试成绩趋势图'
+                },
+                tooltip: {
+                    enabled: true,
+                    mode: 'nearest',
+                    intersect: true,
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#00ffff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#00ffff',
+                    borderWidth: 1,
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            return tooltipItems[0].label;
+                        },
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y;
+                        }
+                    }
                 }
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
             }
         }
     });
