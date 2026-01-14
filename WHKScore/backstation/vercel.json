@@ -16,6 +16,10 @@
     {
       "src": "*.js",
       "use": "@vercel/static"
+    },
+    {
+      "src": "music/**/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -24,8 +28,12 @@
       "dest": "/api/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/(.*\\.(html|css|js|mp3))$",
       "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1.html"
     }
   ]
 }
