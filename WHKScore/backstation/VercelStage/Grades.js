@@ -17,6 +17,50 @@ const ID_CARD = '411402200807100124';
 // 存储成绩数据
 let examData = [];
 
+// 分数段背景配置
+const scoreSegments = [
+    { min: 0  , max: 150 , color: '#ffffff11' }, 
+    { min: 150, max: 250 , color: '#CCCCCC31' }, 
+    { min: 250, max: 300 , color: '#77FF7731' }, 
+    { min: 300, max: 350 , color: '#77DDBB31' }, 
+    { min: 350, max: 430 , color: '#AAAAFF31' }, 
+    { min: 430, max: 500 , color: '#FF88FF31' }, 
+    { min: 500, max: 540 , color: '#FFCC8831' }, 
+    { min: 540, max: 560 , color: '#FFBB5531' }, 
+    { min: 560, max: 600 , color: '#FF777731' }, 
+    { min: 600, max: 680 , color: '#FF333331' }, 
+    { min: 680, max: 9999, color: '#AA000031' } 
+];
+
+// 创建图表区域背景（使用自定义插件，仅应用到第一个图表）
+Chart.register({
+    id: 'scoreSegmentBackground',
+    beforeDraw: (chart) => {
+        // 仅对第一个图表（历次文化课成绩Rated）应用分段背景
+        if (chart.canvas.id === 'scoreChart') {
+            const ctx = chart.ctx;
+            const chartArea = chart.chartArea;
+            const yAxis = chart.scales.y;
+            
+            // 绘制分段背景
+            scoreSegments.forEach(segment => {
+                // 将分数转换为画布坐标
+                const yTop = yAxis.getPixelForValue(segment.max);
+                const yBottom = yAxis.getPixelForValue(segment.min);
+                
+                // 确保在图表区域内
+                const top = Math.max(yTop, chartArea.top);
+                const bottom = Math.min(yBottom, chartArea.bottom);
+                
+                if (top < bottom) {
+                    ctx.fillStyle = segment.color;
+                    ctx.fillRect(chartArea.left, top, chartArea.right - chartArea.left, bottom - top);
+                }
+            });
+        }
+    }
+});
+
 // 为每个数据集的最高点添加特殊样式
 function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadius = 4, defaultColor = '#FFFFFF') {
     const maxValue = Math.max(...data);
@@ -77,12 +121,30 @@ window.addEventListener('load', function() {
     getAllExamScores();
 });
 
-// 重试函数 - 当请求失败时重试指定次数，支持多个代理服务
-async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
+// 重试函数 - 优化后的版本，减少等待时间
+async function fetchWithRetry(url, options, maxRetries = 1, delay = 500) {
+    // 为fetch请求添加超时机制
+    const fetchWithTimeout = async (url, options, timeout = 5000) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeout);
+        
+        try {
+            const response = await fetch(url, {
+                ...options,
+                signal: controller.signal
+            });
+            clearTimeout(timeoutId);
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId);
+            throw error;
+        }
+    };
+    
     // 首先尝试直接请求（不使用代理）
     try {
         console.log('尝试直接请求，不使用代理...');
-        const response = await fetch(url, options);
+        const response = await fetchWithTimeout(url, options);
         if (response.ok) {
             return response;
         }
@@ -91,7 +153,7 @@ async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
         console.log('直接请求出错:', error.message);
     }
     
-    // 如果直接请求失败，尝试使用多个代理服务
+    // 如果直接请求失败，尝试使用代理服务
     for (let proxyIndex = 0; proxyIndex < CORS_PROXIES.length; proxyIndex++) {
         let retries = 0;
         const proxy = CORS_PROXIES[proxyIndex];
@@ -110,7 +172,7 @@ async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
         
         while (retries < maxRetries) {
             try {
-                const response = await fetch(proxiedUrl, options);
+                const response = await fetchWithTimeout(proxiedUrl, options);
                 if (!response.ok) {
                     throw new Error(`HTTP错误! 状态: ${response.status}`);
                 }
@@ -119,12 +181,12 @@ async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
             } catch (error) {
                 retries++;
                 if (retries >= maxRetries) {
-                    console.log(`代理 ${proxyIndex + 1} 重试次数用尽，切换到下一个代理...`);
+                    console.log(`代理 ${proxyIndex + 1} 重试次数用尽，结束请求...`);
                     break;
                 }
                 console.log(`代理 ${proxyIndex + 1} 请求失败，正在重试 (${retries}/${maxRetries})...`);
                 // 等待一段时间后重试
-                await new Promise(resolve => setTimeout(resolve, delay * retries)); // 指数退避
+                await new Promise(resolve => setTimeout(resolve, delay));
             }
         }
     }
@@ -135,103 +197,105 @@ async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
 
 // 获取所有考试成绩
 async function getAllExamScores() {
+    // 设置总超时时间，超过后直接使用备选数据
+    const MAX_WAIT_TIME = 8000; // 8秒
+    
     try {
         document.getElementById('status').textContent = '正在尝试连接到成绩查询系统...';
         
-        // 首先获取页面，提取所有考试选项
-        console.log('正在获取目标页面:', TARGET_URL);
-        
-        let pageHtml;
-        try {
-            // 直接将目标URL传递给fetchWithRetry，它会自动处理代理
-            const pageResponse = await fetchWithRetry(TARGET_URL, {
-                method: 'GET',
-                headers: {
-                    'Accept': 'text/html',
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-                    'Origin': window.location.origin
-                },
-                cache: 'no-cache',
-                mode: 'cors',
-                credentials: 'omit'
-            });
+        // 使用Promise.race来限制总等待时间
+        const result = await Promise.race([
+            // 尝试动态获取数据
+            (async () => {
+                // 首先获取页面，提取所有考试选项
+                console.log('正在获取目标页面:', TARGET_URL);
+                
+                let pageHtml;
+                try {
+                    // 直接将目标URL传递给fetchWithRetry，它会自动处理代理
+                    const pageResponse = await fetchWithRetry(TARGET_URL, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'text/html',
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                            'Origin': window.location.origin
+                        },
+                        cache: 'no-cache',
+                        mode: 'cors',
+                        credentials: 'omit'
+                    });
+                    
+                    console.log('页面响应状态:', pageResponse.status);
+                    
+                    pageHtml = await pageResponse.text();
+                    console.log('页面内容长度:', pageHtml.length);
+                    
+                } catch (error) {
+                    console.error('获取页面时详细错误:', error);
+                    throw error;
+                }
+                
+                // 解析考试选项
+                const examOptions = parseExamOptions(pageHtml);
+                console.log('找到的考试:', examOptions);
+                
+                if (examOptions.length === 0) {
+                    throw new Error('未找到考试选项');
+                }
+                
+                document.getElementById('status').textContent = `找到 ${examOptions.length} 个考试，正在获取成绩...`;
+                
+                // 逐个获取每个考试的成绩
+                for (const exam of examOptions) {
+                    console.log(`正在获取考试: ${exam.text}`);
+                    const scoreData = await getExamScore(exam.value);
+                    if (scoreData) {
+                        examData.push(scoreData);
+                    }
+                }
+                
+                // 按时间排序（最近的考试在后，这样最新成绩会在时间轴右边）
+                examData.sort((a, b) => new Date(a.date) - new Date(b.date));
+                
+                console.log('所有考试成绩:', examData);
+                
+                // 绘制成绩曲线
+                if (examData.length > 0) {
+                    drawScoreChart();
+                    document.getElementById('status').textContent = `成功获取 ${examData.length} 次考试成绩`;
+                    
+                    // 保存到 localStorage，下次刷新时可以直接使用
+                    localStorage.setItem('examDataCache', JSON.stringify(examData));
+                    localStorage.setItem('examDataCacheTime', Date.now());
+                } else {
+                    throw new Error('未找到成绩数据');
+                }
+                
+                return 'success';
+            })(),
             
-            console.log('页面响应状态:', pageResponse.status);
-            console.log('页面响应头:', Object.fromEntries(pageResponse.headers.entries()));
-            
-            pageHtml = await pageResponse.text();
-            console.log('页面内容长度:', pageHtml.length);
-            console.log('页面内容预览:', pageHtml.substring(0, 200) + '...');
-            
-        } catch (error) {
-            console.error('获取页面时详细错误:', error);
-            console.error('错误类型:', error.name);
-            console.error('错误消息:', error.message);
-            console.error('错误堆栈:', error.stack);
-            throw error;
-        }
-        
-        // 解析考试选项
-        const examOptions = parseExamOptions(pageHtml);
-        console.log('找到的考试:', examOptions);
-        
-        if (examOptions.length === 0) {
-            throw new Error('未找到考试选项');
-        }
-        
-        document.getElementById('status').textContent = `找到 ${examOptions.length} 个考试，正在获取成绩...`;
-        
-        // 逐个获取每个考试的成绩
-        for (const exam of examOptions) {
-            console.log(`正在获取考试: ${exam.text}`);
-            const scoreData = await getExamScore(exam.value);
-            if (scoreData) {
-                examData.push(scoreData);
-            }
-        }
-        
-        // 按时间排序（最近的考试在后，这样最新成绩会在时间轴右边）
-        examData.sort((a, b) => new Date(a.date) - new Date(b.date));
-        
-        console.log('所有考试成绩:', examData);
-        
-        // 绘制成绩曲线
-        if (examData.length > 0) {
-            drawScoreChart();
-            document.getElementById('status').textContent = `成功获取 ${examData.length} 次考试成绩`;
-            
-            // 保存到 localStorage，下次刷新时可以直接使用
-            localStorage.setItem('examDataCache', JSON.stringify(examData));
-            localStorage.setItem('examDataCacheTime', Date.now());
-        } else {
-            throw new Error('未找到成绩数据');
-        }
+            // 超时处理
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    reject(new Error('获取成绩超时'));
+                }, MAX_WAIT_TIME);
+            })
+        ]);
         
     } catch (error) {
         console.error('获取成绩时出错:', error);
-        document.getElementById('status').textContent = `获取成绩失败: ${error.message}，正在尝试使用缓存或备选数据...`;
         
-        // 尝试使用缓存数据
-        const cachedData = localStorage.getItem('examDataCache');
-        const cacheTime = localStorage.getItem('examDataCacheTime');
-        const oneHour = 60 * 60 * 1000;
+        // 快速切换到备选数据，减少用户等待时间
+        document.getElementById('status').textContent = '正在使用备选数据...';
         
-        if (cachedData && cacheTime && (Date.now() - cacheTime < oneHour)) {
-            // 使用最近1小时内的缓存数据
-            console.log('使用缓存数据');
-            examData = JSON.parse(cachedData);
-            drawScoreChart();
-            document.getElementById('status').textContent = '使用缓存数据成功绘制成绩曲线';
-        } else {
-            // 使用备选数据
-            console.log('使用备选数据');
-            examData = [...backupExamData];
-            // 按时间排序
-            examData.sort((a, b) => new Date(a.date) - new Date(b.date));
-            // 绘制成绩曲线
-            drawScoreChart();
-            document.getElementById('status').textContent = '使用备选数据成功绘制成绩曲线';
-        }
+        // 使用备选数据
+        console.log('使用备选数据');
+        examData = [...backupExamData];
+        // 按时间排序
+        examData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        // 绘制成绩曲线
+        drawScoreChart();
+        document.getElementById('status').textContent = '使用备选数据成功绘制成绩曲线';
     }
 }
 
@@ -394,9 +458,9 @@ function drawScoreChart() {
                     label: '总分',
                     data: totalScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: '#21c0faff',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(1, 153, 255, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(totalScores)
@@ -405,9 +469,9 @@ function drawScoreChart() {
                     label: '语文',
                     data: chineseScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: 'rgba(114, 0, 0, 0.8)',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(255, 14, 14, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(chineseScores)
@@ -416,9 +480,9 @@ function drawScoreChart() {
                     label: '数学',
                     data: mathScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: 'rgba(0, 106, 255, 0.8)',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(18, 117, 255, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(mathScores)
@@ -427,9 +491,9 @@ function drawScoreChart() {
                     label: '英语',
                     data: englishScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: 'rgba(216, 20, 255, 0.8)',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(216, 20, 255, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(englishScores)
@@ -438,9 +502,9 @@ function drawScoreChart() {
                     label: '物理',
                     data: physicsScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: 'rgba(14, 255, 30, 0.8)',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(14, 255, 30, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(physicsScores)
@@ -449,9 +513,9 @@ function drawScoreChart() {
                     label: '化学',
                     data: chemistryScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: 'rgba(32, 0, 192, 0.8)',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(74, 38, 255, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(chemistryScores)
@@ -460,9 +524,9 @@ function drawScoreChart() {
                     label: '生物',
                     data: biologyScores,
                     fill: true,
-                    backgroundColor: 'rgba(246, 255, 0, 0.02)',
-                    borderColor: 'rgba(119, 177, 1, 0.8)',
-                    borderWidth: 3,
+                    backgroundColor: ['rgba(246, 255, 0, 0)'],
+                    borderColor: 'rgba(176, 255, 17, 1)',
+                    borderWidth: 2,
                     pointHoverRadius: 5,
                     tension: 0.1,
                     ...getPointStyles(biologyScores)
@@ -470,55 +534,38 @@ function drawScoreChart() {
             ]
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: {
-                duration: 2000,
-                easing: 'easeOutQuart'
-            },
             scales: {
                 y: {
-                    beginAtZero: false
+                    beginAtZero: true
                 }
             },
+            responsive: true,
+            maintainAspectRatio: false,
+            // 修复悬停交互，只显示单个节点的信息
             interaction: {
                 mode: 'nearest',
                 intersect: true
             },
             plugins: {
-                legend: {
-                    position: 'top',
-                    onClick: function(e, legendItem, legend) {
-                        // 切换数据集的可见性
-                        const index = legendItem.datasetIndex;
-                        const ci = legend.chart;
-                        ci.setDatasetVisibility(index, !ci.isDatasetVisible(index));
-                        // 更新图表，触发坐标重新计算
-                        ci.update();
-                    }
-                },
-                title: {
-                    display: true,
-                    text: '考试成绩趋势图'
-                },
                 tooltip: {
                     enabled: true,
                     mode: 'nearest',
                     intersect: true,
+                    // 自定义提示框样式
                     backgroundColor: 'rgba(0, 0, 0, 0.8)',
                     titleColor: '#00ffff',
                     bodyColor: '#ffffff',
                     borderColor: '#00ffff',
                     borderWidth: 1,
                     padding: 12,
-                    cornerRadius: 8,
-                    callbacks: {
-                        title: function(tooltipItems) {
-                            return tooltipItems[0].label;
-                        },
-                        label: function(context) {
-                            return context.dataset.label + ': ' + context.parsed.y;
-                        }
+                    cornerRadius: 8
+                },
+                legend: {
+                    enabled: true,
+                    position: 'top',
+                    // 设置图例文字颜色
+                    labels: {
+                        color: 'rgba(255, 255, 255, 0.8)'
                     }
                 }
             },
@@ -531,4 +578,298 @@ function drawScoreChart() {
     
     // 更新状态
     document.getElementById('status').textContent = `成功获取 ${examData.length} 次考试成绩`;
+    
+    // 绘制雷达图
+    drawRadarChart();
+}
+
+// 获取最近一次考试数据
+function getLatestExamData() {
+    // 确保有数据
+    if (examData.length === 0) {
+        return null;
+    }
+    
+    // 按时间排序，最近的考试在最后
+    const sortedData = [...examData].sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // 返回最近一次考试数据
+    return sortedData[sortedData.length - 1];
+}
+
+// 绘制雷达图
+function drawRadarChart() {
+    // 获取最近一次考试数据
+    let latestExam = getLatestExamData();
+    
+    // 如果没有获取到数据，使用备选数据中的最新数据
+    if (!latestExam) {
+        // 按时间排序备选数据，最近的考试在最后
+        const sortedBackupData = [...backupExamData].sort((a, b) => new Date(a.date) - new Date(b.date));
+        latestExam = sortedBackupData[sortedBackupData.length - 1];
+    }
+    
+    // 确保有数据
+    if (!latestExam) {
+        console.error('没有可用的考试数据来绘制雷达图');
+        return;
+    }
+    
+    // 从最近一次考试数据中提取各科成绩
+    const subjects = [
+        { name: '语文', score: latestExam.scores.chinese || 0 },
+        { name: '数学', score: latestExam.scores.math || 0 },
+        { name: '英语', score: latestExam.scores.english || 0 },
+        { name: '物理', score: latestExam.scores.physics || 0 },
+        { name: '化学', score: latestExam.scores.chemistry || 0 },
+        { name: '生物', score: latestExam.scores.biology || 0 }
+    ];
+    
+    // 语数英满分150，其他科目满分100，需要转换为百分比
+    const convertScore = (score, is150Full) => {
+        return is150Full ? (score / 150) * 100 : score;
+    };
+    
+    // 准备雷达图数据
+    const radarData = {
+        labels: subjects.map(subject => subject.name),
+        datasets: [{
+            label: latestExam.exam,
+            data: subjects.map(subject => {
+                // 语文、数学、英语满分150，其他满分100
+                const is150Full = ['语文', '数学', '英语'].includes(subject.name);
+                return convertScore(subject.score, is150Full);
+            }),
+            backgroundColor: 'rgba(0, 255, 255, 0.1)',
+            borderColor: '#00ffff',
+            borderWidth: 2,
+            pointBackgroundColor: '#00ffff',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 2,
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverBorderColor: '#00ffff',
+            pointHoverBorderWidth: 3
+        }]
+    };
+    
+    // 雷达图配置
+    const radarOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    display: false, // 隐藏刻度值
+                    stepSize: 20
+                },
+                grid: {
+                    color: 'rgba(0, 255, 255, 0.3)',
+                    circular: false, // 关闭圆形网格，使用多边形网格
+                    lineWidth: 2
+                },
+                angleLines: {
+                    color: 'rgba(0, 255, 255, 0.5)',
+                    lineWidth: 2
+                },
+                pointLabels: {
+                    color: '#00ffff',
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            },
+            tooltip: {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                titleColor: '#00ffff',
+                bodyColor: '#ffffff',
+                borderColor: '#00ffff',
+                borderWidth: 1,
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                    label: function(context) {
+                        const subject = context.label;
+                        const value = context.parsed.r;
+                        // 将百分比转换回原始分数
+                        const is150Full = ['语文', '数学', '英语'].includes(subject);
+                        const rawScore = is150Full ? Math.round((value / 100) * 150) : Math.round(value);
+                        return `${subject}: ${rawScore}分`;
+                    }
+                }
+            }
+        },
+        hover: {
+            mode: 'nearest',
+            intersect: true
+        },
+        animation: {
+            animateScale: true,
+            animateRotate: true,
+            duration: 2000
+        }
+    };
+    
+    // 获取Canvas元素并绘制雷达图
+    const ctx = document.getElementById('hexagonChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'radar',
+        data: radarData,
+        options: radarOptions
+    });
+    
+    // 显示成绩升降分析
+    displayProgressAnalysis();
+}
+
+// 计算成绩进步情况
+function calculateProgress() {
+    // 首先尝试使用动态获取的数据
+    if (examData.length >= 2) {
+        // 按时间排序动态获取的数据
+        const sortedExamData = [...examData].sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // 获取最近两次考试数据
+        const latestIndex = sortedExamData.length - 1;
+        const previousIndex = latestIndex - 1;
+        
+        const latestExam = sortedExamData[latestIndex];
+        const previousExam = sortedExamData[previousIndex];
+        
+        // 计算总分进步
+        const totalProgress = (latestExam.scores.total || 0) - (previousExam.scores.total || 0);
+        
+        // 计算各科进步
+        const subjects = [
+            { name: '语文', progress: (latestExam.scores.chinese || 0) - (previousExam.scores.chinese || 0) },
+            { name: '数学', progress: (latestExam.scores.math || 0) - (previousExam.scores.math || 0) },
+            { name: '英语', progress: (latestExam.scores.english || 0) - (previousExam.scores.english || 0) },
+            { name: '物理', progress: (latestExam.scores.physics || 0) - (previousExam.scores.physics || 0) },
+            { name: '化学', progress: (latestExam.scores.chemistry || 0) - (previousExam.scores.chemistry || 0) },
+            { name: '生物', progress: (latestExam.scores.biology || 0) - (previousExam.scores.biology || 0) }
+        ];
+        
+        return {
+            totalProgress: totalProgress,
+            subjects: subjects
+        };
+    } 
+    // 如果动态获取的数据不足，尝试使用备选数据
+    else if (backupExamData.length >= 2) {
+        // 按时间排序备选数据
+        const sortedBackupData = [...backupExamData].sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // 获取最近两次考试数据
+        const latestIndex = sortedBackupData.length - 1;
+        const previousIndex = latestIndex - 1;
+        
+        const latestExam = sortedBackupData[latestIndex];
+        const previousExam = sortedBackupData[previousIndex];
+        
+        // 计算总分进步
+        const totalProgress = (latestExam.scores.total || 0) - (previousExam.scores.total || 0);
+        
+        // 计算各科进步
+        const subjects = [
+            { name: '语文', progress: (latestExam.scores.chinese || 0) - (previousExam.scores.chinese || 0) },
+            { name: '数学', progress: (latestExam.scores.math || 0) - (previousExam.scores.math || 0) },
+            { name: '英语', progress: (latestExam.scores.english || 0) - (previousExam.scores.english || 0) },
+            { name: '物理', progress: (latestExam.scores.physics || 0) - (previousExam.scores.physics || 0) },
+            { name: '化学', progress: (latestExam.scores.chemistry || 0) - (previousExam.scores.chemistry || 0) },
+            { name: '生物', progress: (latestExam.scores.biology || 0) - (previousExam.scores.biology || 0) }
+        ];
+        
+        return {
+            totalProgress: totalProgress,
+            subjects: subjects
+        };
+    } 
+    // 如果都没有足够的数据
+    else {
+        return {
+            totalProgress: 0,
+            subjects: []
+        };
+    }
+}
+
+// 显示成绩升降分析
+function displayProgressAnalysis() {
+    // 计算进步情况
+    const progressData = calculateProgress();
+    
+    // 获取容器
+    const container = document.getElementById('progress-details');
+    
+    // 如果没有数据，显示提示
+    if (progressData.subjects.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: #8B949E;">数据不足，无法分析成绩变化</p>';
+        return;
+    }
+    
+    // 生成HTML
+    let html = '<div style="display: flex; flex-wrap: wrap; gap: 20px;">';
+    
+    // 总分进步
+    const totalProgressClass = progressData.totalProgress > 0 ? 'progress-up' : 'progress-down';
+    const totalArrow = progressData.totalProgress > 0 ? '↑' : '↓';
+    html += `
+        <div style="flex: 1 1 200px;">
+            <h3 style="color: #00ffff; margin-bottom: 15px;">总分进步</h3>
+            <div style="font-size: 24px; font-weight: bold; color: #${totalProgressClass === 'progress-up' ? '00ff00' : 'ff0000'};">
+                ${totalArrow} ${Math.abs(progressData.totalProgress)}
+            </div>
+        </div>
+    `;
+    
+    // 科目进步
+    html += `
+        <div style="flex: 2 1 300px;">
+            <h3 style="color: #00ffff; margin-bottom: 15px;">科目进步情况</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+    `;
+    
+    progressData.subjects.forEach(subject => {
+        const progressClass = subject.progress > 0 ? 'progress-up' : 'progress-down';
+        const arrow = subject.progress > 0 ? '↑' : '↓';
+        html += `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #ffffff;">${subject.name}</span>
+                <span style="font-weight: bold; color: #${progressClass === 'progress-up' ? '00ff00' : 'ff0000'};">
+                    ${arrow} ${Math.abs(subject.progress)}
+                </span>
+            </div>
+        `;
+    });
+    
+    html += `
+            </div>
+        </div>
+    `;
+    
+    html += '</div>';
+    
+    // 添加CSS样式
+    html += `
+        <style>
+            .progress-up {
+                color: #00ff00;
+            }
+            .progress-down {
+                color: #ff0000;
+            }
+        </style>
+    `;
+    
+    // 设置HTML
+    container.innerHTML = html;
 }
