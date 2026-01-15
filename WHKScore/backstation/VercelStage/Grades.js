@@ -3,8 +3,13 @@
 // 目标网址
 const TARGET_URL = 'http://cjcx.sqshmzx.net/g3/?t=back';
 
-// CORS代理服务
-const CORS_PROXY = 'https://cors.bridged.cc/';
+// 只使用最可靠的CORS代理服务
+const CORS_PROXIES = [
+    'https://corsproxy.io/?' + encodeURIComponent(TARGET_URL)
+];
+
+// 当前使用的代理索引
+let currentProxyIndex = 0;
 
 // 身份证号
 const ID_CARD = '411402200807100124';
@@ -26,55 +31,42 @@ function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadi
 // 静态数据作为备选方案
 const backupExamData = [
     {
-        exam: '2025年12月份月考',
+        exam: '2025年12月份月考--高三',
         date: '2025-12-01',
         scores: {
-            total: 580,
-            chinese: 95,
-            math: 105,
-            english: 90,
-            physics: 80,
-            chemistry: 70,
-            biology: 60
+            total: 549,
+            chinese: 98,
+            math: 108,
+            english: 83,
+            physics: 78,
+            chemistry: 88,
+            biology: 94
         }
     },
     {
-        exam: '2025年11月份月考',
+        exam: '2025年11月期中考试--高三',
         date: '2025-11-01',
         scores: {
-            total: 560,
-            chinese: 90,
-            math: 100,
-            english: 85,
-            physics: 75,
-            chemistry: 65,
-            biology: 65
+            total: 527.5,
+            chinese: 97.5,
+            math: 107,
+            english: 100,
+            physics: 60,
+            chemistry: 82,
+            biology: 81
         }
     },
     {
-        exam: '2025年10月份月考',
+        exam: '2025年10月考试--高三',
         date: '2025-10-01',
         scores: {
-            total: 540,
-            chinese: 85,
+            total: 535.5,
+            chinese: 102.5,
             math: 95,
-            english: 80,
-            physics: 70,
-            chemistry: 60,
-            biology: 70
-        }
-    },
-    {
-        exam: '2025年9月份月考',
-        date: '2025-09-01',
-        scores: {
-            total: 520,
-            chinese: 80,
-            math: 90,
-            english: 75,
-            physics: 65,
-            chemistry: 55,
-            biology: 65
+            english: 101,
+            physics: 68,
+            chemistry: 89,
+            biology: 80
         }
     }
 ];
@@ -85,19 +77,74 @@ window.addEventListener('load', function() {
     getAllExamScores();
 });
 
+// 重试函数 - 当请求失败时重试指定次数，支持多个代理服务
+async function fetchWithRetry(url, options, maxRetries = 3, delay = 1000) {
+    // 首先尝试直接请求（不使用代理）
+    try {
+        console.log('尝试直接请求，不使用代理...');
+        const response = await fetch(url, options);
+        if (response.ok) {
+            return response;
+        }
+        console.log('直接请求失败，状态码:', response.status);
+    } catch (error) {
+        console.log('直接请求出错:', error.message);
+    }
+    
+    // 如果直接请求失败，尝试使用多个代理服务
+    for (let proxyIndex = 0; proxyIndex < CORS_PROXIES.length; proxyIndex++) {
+        let retries = 0;
+        const proxy = CORS_PROXIES[proxyIndex];
+        
+        // 构建使用当前代理的URL
+        let proxiedUrl;
+        if (proxy.includes('corsproxy.io')) {
+            // corsproxy.io 已经包含了完整的目标URL
+            proxiedUrl = proxy;
+        } else {
+            // 其他代理需要拼接目标URL
+            proxiedUrl = proxy + encodeURIComponent(url);
+        }
+        
+        console.log(`尝试使用代理 ${proxyIndex + 1}/${CORS_PROXIES.length}: ${proxy}`);
+        
+        while (retries < maxRetries) {
+            try {
+                const response = await fetch(proxiedUrl, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP错误! 状态: ${response.status}`);
+                }
+                console.log(`代理 ${proxyIndex + 1} 请求成功!`);
+                return response;
+            } catch (error) {
+                retries++;
+                if (retries >= maxRetries) {
+                    console.log(`代理 ${proxyIndex + 1} 重试次数用尽，切换到下一个代理...`);
+                    break;
+                }
+                console.log(`代理 ${proxyIndex + 1} 请求失败，正在重试 (${retries}/${maxRetries})...`);
+                // 等待一段时间后重试
+                await new Promise(resolve => setTimeout(resolve, delay * retries)); // 指数退避
+            }
+        }
+    }
+    
+    // 所有代理都尝试失败
+    throw new Error('所有代理服务都请求失败');
+}
+
 // 获取所有考试成绩
 async function getAllExamScores() {
     try {
         document.getElementById('status').textContent = '正在尝试连接到成绩查询系统...';
         
         // 首先获取页面，提取所有考试选项
-        const fullUrl = CORS_PROXY + TARGET_URL;
         console.log('正在获取目标页面:', TARGET_URL);
-        console.log('使用代理:', fullUrl);
         
         let pageHtml;
         try {
-            const pageResponse = await fetch(fullUrl, {
+            // 直接将目标URL传递给fetchWithRetry，它会自动处理代理
+            const pageResponse = await fetchWithRetry(TARGET_URL, {
                 method: 'GET',
                 headers: {
                     'Accept': 'text/html',
@@ -111,10 +158,6 @@ async function getAllExamScores() {
             
             console.log('页面响应状态:', pageResponse.status);
             console.log('页面响应头:', Object.fromEntries(pageResponse.headers.entries()));
-            
-            if (!pageResponse.ok) {
-                throw new Error(`HTTP错误! 状态: ${pageResponse.status}`);
-            }
             
             pageHtml = await pageResponse.text();
             console.log('页面内容长度:', pageHtml.length);
@@ -155,21 +198,40 @@ async function getAllExamScores() {
         // 绘制成绩曲线
         if (examData.length > 0) {
             drawScoreChart();
+            document.getElementById('status').textContent = `成功获取 ${examData.length} 次考试成绩`;
+            
+            // 保存到 localStorage，下次刷新时可以直接使用
+            localStorage.setItem('examDataCache', JSON.stringify(examData));
+            localStorage.setItem('examDataCacheTime', Date.now());
         } else {
             throw new Error('未找到成绩数据');
         }
         
     } catch (error) {
         console.error('获取成绩时出错:', error);
-        document.getElementById('status').textContent = `获取成绩失败: ${error.message}，正在使用备选数据...`;
+        document.getElementById('status').textContent = `获取成绩失败: ${error.message}，正在尝试使用缓存或备选数据...`;
         
-        // 使用备选数据
-        examData = [...backupExamData];
-        // 按时间排序
-        examData.sort((a, b) => new Date(a.date) - new Date(b.date));
-        // 绘制成绩曲线
-        drawScoreChart();
-        document.getElementById('status').textContent = '使用备选数据成功绘制成绩曲线';
+        // 尝试使用缓存数据
+        const cachedData = localStorage.getItem('examDataCache');
+        const cacheTime = localStorage.getItem('examDataCacheTime');
+        const oneHour = 60 * 60 * 1000;
+        
+        if (cachedData && cacheTime && (Date.now() - cacheTime < oneHour)) {
+            // 使用最近1小时内的缓存数据
+            console.log('使用缓存数据');
+            examData = JSON.parse(cachedData);
+            drawScoreChart();
+            document.getElementById('status').textContent = '使用缓存数据成功绘制成绩曲线';
+        } else {
+            // 使用备选数据
+            console.log('使用备选数据');
+            examData = [...backupExamData];
+            // 按时间排序
+            examData.sort((a, b) => new Date(a.date) - new Date(b.date));
+            // 绘制成绩曲线
+            drawScoreChart();
+            document.getElementById('status').textContent = '使用备选数据成功绘制成绩曲线';
+        }
     }
 }
 
@@ -208,12 +270,11 @@ async function getExamScore(examValue) {
         formData.append('name', ID_CARD);
         formData.append('button', '立即查询');
         
-        // 构建完整的请求URL
-        const postProxyUrl = CORS_PROXY + TARGET_URL;
-        console.log('提交表单到:', postProxyUrl);
+        // 直接使用目标URL，fetchWithRetry会自动处理代理
+        console.log('提交表单到:', TARGET_URL);
         
-        // 提交表单
-        const response = await fetch(postProxyUrl, {
+        // 提交表单，使用重试机制
+        const response = await fetchWithRetry(TARGET_URL, {
             method: 'POST',
             body: formData.toString(),
             headers: {
@@ -228,9 +289,6 @@ async function getExamScore(examValue) {
         });
         
         console.log('表单提交响应状态:', response.status);
-        if (!response.ok) {
-            throw new Error(`HTTP错误! 状态: ${response.status}`);
-        }
         
         const html = await response.text();
         console.log('响应内容长度:', html.length);
