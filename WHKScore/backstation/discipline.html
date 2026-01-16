@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <link href="https://ys.mihoyo.com/main/favicon.ico" rel="icon" type="image/x-icon" />
@@ -77,15 +78,15 @@
             border-radius: 50%;
         }
 
-        input:checked + .toggle-slider {
+        input:checked+.toggle-slider {
             background-color: #58A6FF;
         }
 
-        input:focus + .toggle-slider {
+        input:focus+.toggle-slider {
             box-shadow: 0 0 1px #58A6FF;
         }
 
-        input:checked + .toggle-slider:before {
+        input:checked+.toggle-slider:before {
             transform: translateX(20px);
         }
 
@@ -184,7 +185,8 @@
         .days {
             display: flex;
             flex-wrap: wrap;
-            width: 105px; /* 7个方块 * 15px (12px宽度 + 3px间距) */
+            width: 105px;
+            /* 7个方块 * 15px (12px宽度 + 3px间距) */
         }
 
         .day {
@@ -257,6 +259,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- 音乐开关 -->
     <div class="music-toggle-container">
@@ -269,15 +272,13 @@
 
     <div class="container">
         <h1>堕落记录</h1>
-        <div class="current-time" id="current-time" style="text-align: center; margin-bottom: 15px; font-size: 16px; color: #8B949E;"></div>
+        <div class="current-time" id="current-time"
+            style="text-align: center; margin-bottom: 15px; font-size: 16px; color: #8B949E;"></div>
         <div class="streak-info">
             距离最近一次堕落后的坚持不堕落的天数: <span class="streak-count">0</span> 天
         </div>
         <div class="total-count">
             总堕落次数: <span id="total-fallen">0</span> 天
-        </div>
-        <div style="text-align: center; margin: 15px 0;">
-            <a href="prevent.html" style="color: #58A6FF; text-decoration: none; font-size: 14px; padding: 5px 10px; border: 1px solid #58A6FF; border-radius: 5px; transition: all 0.3s ease;">查看考试成绩</a>
         </div>
         <div class="contribution-graph">
             <div class="graph-grid">
@@ -312,6 +313,11 @@
             <p>5. 连续堕落计算：如果中间有一天堕落值是0，则连续计数归零</p>
             <p>6. 堕落含义：熬夜、看黄片、导管或挖喷泉、无意义消磨时光......等对学习无意义的行为被计入堕落。</p>
             <p>7. 晚上 23:00 之前没有上床睡觉，一律算作堕落。</p>
+            <p>想回到上一个页面？点击<a href="../demo.html" style="color: #58A6FF;">这里</a></p>
+            <div style="text-align: center; margin: 15px 0;">
+                <a href="prevent.html"
+                    style="color: #58A6FF; text-decoration: none; font-size: 14px; padding: 5px 10px; border: 1px solid #58A6FF; border-radius: 5px; transition: all 0.3s ease;">查看女朋友的考试成绩</a>
+            </div>
         </div>
     </div>
 
@@ -356,24 +362,24 @@
                 if (dateData.hasOwnProperty(month)) {
                     streaks[month] = {};
                     const days = dateData[month];
-                    
+
                     // 获取所有日期键并按数字顺序排序
                     const dayKeys = Object.keys(days).sort((a, b) => {
                         return parseInt(a) - parseInt(b);
                     });
-                    
+
                     // 按顺序遍历当月的所有天数
                     dayKeys.forEach(day => {
                         if (days.hasOwnProperty(day)) {
                             const isFallen = days[day];
-                            
+
                             if (isFallen === 1) {
                                 currentStreak++;
                                 totalFallen++;
                             } else {
                                 currentStreak = 0;
                             }
-                            
+
                             streaks[month][day] = currentStreak;
                         }
                     });
@@ -388,36 +394,36 @@
             const startDate = new Date('2026-01-05');
             const endDate = new Date('2026-06-07');
             const currentDate = getCurrentDate();
-            
+
             // 如果当前时间早于开始时间，返回0
             if (currentDate < startDate) {
                 return 0;
             }
-            
+
             // 如果当前时间晚于结束时间，使用结束时间
             const checkDate = currentDate > endDate ? endDate : currentDate;
-            
+
             // 转换为YYYY-MM-DD格式
             const checkYear = checkDate.getFullYear();
             const checkMonth = String(checkDate.getMonth() + 1).padStart(2, '0');
             const checkDay = String(checkDate.getDate()).padStart(2, '0');
-            
+
             let streak = 0;
             let foundFallen = false;
-            
+
             // 从当前日期开始，往前遍历所有日期
             let currentCheckDate = new Date(checkDate);
-            
+
             while (currentCheckDate >= startDate) {
                 const year = currentCheckDate.getFullYear();
                 const month = String(currentCheckDate.getMonth() + 1).padStart(2, '0');
                 const day = String(currentCheckDate.getDate()).padStart(2, '0');
                 const monthStr = `${year}-${month}`;
-                
+
                 // 检查当前日期是否在dateData中
                 if (dateData[monthStr] && dateData[monthStr][day] !== undefined) {
                     const isFallen = dateData[monthStr][day];
-                    
+
                     if (isFallen === 1) {
                         // 找到最近一次堕落，停止计数
                         foundFallen = true;
@@ -427,11 +433,11 @@
                         streak++;
                     }
                 }
-                
+
                 // 往前移动一天
                 currentCheckDate.setDate(currentCheckDate.getDate() - 1);
             }
-            
+
             return streak;
         }
 
@@ -441,7 +447,7 @@
                 backgroundColor: '#3FB950',
                 opacity: 0.4
             };
-            
+
             if (streak > 0) {
                 if (streak <= 3) {
                     // 紫色阶段
@@ -457,7 +463,7 @@
                     style.opacity = 1.0;
                 }
             }
-            
+
             return style;
         }
 
@@ -466,56 +472,56 @@
             const container = document.getElementById('months-container');
             const { streaks, totalFallen } = calculateStreaks();
             const currentStreak = calculateCurrentStreak();
-            
+
             // 更新统计信息
             document.querySelector('.streak-count').textContent = currentStreak;
             document.getElementById('total-fallen').textContent = totalFallen;
-            
+
             // 清空容器
             container.innerHTML = '';
-            
+
             // 遍历所有月份
             for (const month in dateData) {
                 if (dateData.hasOwnProperty(month)) {
                     const monthDiv = document.createElement('div');
                     monthDiv.className = 'month';
-                    
+
                     // 添加月份头部
                     const monthHeaderDiv = document.createElement('div');
                     monthHeaderDiv.className = 'month-header';
-                    
+
                     // 添加月份名称
                     const monthNameDiv = document.createElement('div');
                     monthNameDiv.className = 'month-name';
                     monthNameDiv.textContent = month.split('-')[1] + '月';
                     monthHeaderDiv.appendChild(monthNameDiv);
-                    
+
                     monthDiv.appendChild(monthHeaderDiv);
-                    
+
                     // 添加天数方格
                     const daysDiv = document.createElement('div');
                     daysDiv.className = 'days';
-                    
+
                     const days = dateData[month];
                     const dayStreaks = streaks[month];
-                    
+
                     // 获取所有日期键并按数字顺序排序
                     const dayKeys = Object.keys(days).sort((a, b) => {
                         return parseInt(a) - parseInt(b);
                     });
-                    
+
                     // 遍历当月的所有天数（按顺序）
                     dayKeys.forEach(day => {
                         if (days.hasOwnProperty(day)) {
                             const dayDiv = document.createElement('div');
                             dayDiv.className = 'day';
-                            
+
                             const streak = dayStreaks[day];
                             const style = getDayStyle(streak);
-                            
+
                             dayDiv.style.backgroundColor = style.backgroundColor;
                             dayDiv.style.opacity = style.opacity;
-                            
+
                             // 检测是否是今天的日期
                             const today = new Date();
                             const todayYear = today.getFullYear();
@@ -523,23 +529,23 @@
                             const todayDay = String(today.getDate()).padStart(2, '0');
                             const todayStr = `${todayYear}-${todayMonth}`;
                             const todayDayStr = todayDay;
-                            
+
                             if (month === todayStr && day === todayDayStr) {
                                 // 是今天的日期，添加白色描边
                                 dayDiv.style.border = '1px solid white';
                                 dayDiv.style.borderRadius = '2px';
                                 dayDiv.style.boxSizing = 'border-box';
                             }
-                            
+
                             // 添加悬停提示
                             const dateStr = `${month}-${day}`;
                             const isFallen = days[day] === 1;
                             dayDiv.title = `${dateStr}: ${isFallen ? '堕落' : '未堕落'} (连续${streak}天)`;
-                            
+
                             daysDiv.appendChild(dayDiv);
                         }
                     });
-                    
+
                     monthDiv.appendChild(daysDiv);
                     container.appendChild(monthDiv);
                 }
@@ -555,15 +561,17 @@
         }
 
         // 页面加载时生成图表和启动实时时间
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             generateGraph();
             startRealTimeClock();
         });
     </script>
     <!-- 页尾 -->
-    <footer style="background-color: #0b0e1400; padding: 20px; text-align: center; color: #8B949E; font-size: 12px; margin-top: 40px; width: 100%;">
+    <footer
+        style="background-color: #0b0e1400; padding: 20px; text-align: center; color: #8B949E; font-size: 12px; margin-top: 40px; width: 100%;">
         <p>© 2026 ESC. All rights reserved.</p>
         <p style="margin-top: 10px;">文化课成绩记录 豫ICP备19000007号-1</p>
     </footer>
 </body>
+
 </html>

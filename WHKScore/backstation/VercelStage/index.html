@@ -13,77 +13,14 @@
     <script src="./chart.js"></script>
     <!-- 引入背景动画样式 -->
     <link rel="stylesheet" href="../background-animation.css">
-    <style>
-        body {
-            color: #C9D1D9;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-        }
-        
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #58A6FF;
-        }
-        
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 600px;
-            margin: 20px 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-        }
-        
-        #scoreChart {
-            width: 100% !important;
-            height: 100% !important;
-        }
-        
-        .status {
-            text-align: center;
-            margin: 20px 0;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
-            color: #8B949E;
-            font-size: 14px;
-        }
-        
-        .info {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 5px;
-            color: #8B949E;
-            font-size: 14px;
-        }
-        
-        .info b {
-            color: #58A6FF;
-        }
-    </style>
+    <!-- 引入自定义样式 -->
+    <link rel="stylesheet" href="verclestyle.css">
 </head>
 <body>
     <div class="container">
         <h1>考试成绩查询与分析</h1>
         
         <div class="info">
-            <!-- <p>身份证号: <b>411402200807100124</b></p> -->
             <p>正在从 <b>http://cjcx.sqshmzx.net/g3/</b> 获取成绩数据...</p>
         </div>
         
@@ -112,5 +49,35 @@
     
     <!-- 引入Grades.js -->
     <script src="Grades.js"></script>
+    
+    <!-- 网页说明区域 -->
+    <div class="container">
+        <div class="learn-more" onclick="showExplanation()">关于此网页</div>
+        <div id="explanation">
+            <p>此网页用于自动获取和分析考试成绩数据，主要功能包括：</p>
+            <ul>
+                <li>自动从学校成绩查询系统获取考试成绩</li>
+                <li>绘制成绩曲线图表，展示成绩变化趋势</li>
+                <li>生成最近一次考试成绩的雷达图，直观展示各科成绩分布</li>
+                <li>分析成绩升降情况，显示总分和各科的进步或退步</li>
+                <li>支持动态数据获取和备选数据切换</li>
+                <li>使用现代化的设计和交互效果</li>
+            </ul>
+            <p>数据更新频率：每次打开页面时自动获取最新数据</p>
+            <p>技术栈：HTML5、CSS3、JavaScript、Chart.js</p>
+            <p>本网页基本可以确定，如果没有程序员知道这个页面，你的隐私就是安全的。这个页面通常只有我和你知道，因此其他人是不会发现的。并且我没有在明面上泄露你的任何个人信息，一般普通学生无法获取你的个人信息，除非是程序员。当然，就算泄露，也没有任何影响。</p>
+            <p>想回到上一个页面？点击<a href="../discipline.html" style="color: #58A6FF;">这里</a></p>
+        </div>
+    </div>
+    
+    <script>
+        // 显示/隐藏说明
+        function showExplanation() {
+            const explanation = document.getElementById('explanation');
+            // 使用更可靠的方式检查元素是否可见
+            const isVisible = explanation.offsetHeight > 0 || explanation.offsetWidth > 0;
+            explanation.style.display = isVisible ? 'none' : 'block';
+        }
+    </script>
 </body>
 </html>
