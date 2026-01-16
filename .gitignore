@@ -1,0 +1,28 @@
+.git
+.idea
+.vscode
+.trae
+node_modules
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+*.bak
+*.tmp
+*.cache
+
+# 排除大型文件
+*.pack
+*.zip
+*.tar.gz
+*.rar
+
+# 排除临时目录
+api
+试验场 copy
+YouMustBeStop
+黑页
+
+# 排除特定大型文件
+Genshin.ttf

@@ -1,4 +1,4 @@
 {
   "name": "esc",
-  "pages_build_output_dir": "WHKScore/backstation/VercelStage"
+  "pages_build_output_dir": "./"
 }
