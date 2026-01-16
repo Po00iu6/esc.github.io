@@ -2,6 +2,6 @@
   "name": "esc",
   "pages": {
     "project_name": "esc",
-    "build_output_dir": "WHKScore/backstation/VercelStage"
+    "pages_build_output_dir": "WHKScore/backstation/VercelStage"
   }
 }
