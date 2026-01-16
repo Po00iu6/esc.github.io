@@ -1,7 +1,7 @@
 {
   "name": "esc",
-  "compatibility_date": "2026-01-16",
-  "assets": {
-    "directory": "./WHKScore"
+  "pages": {
+    "project_name": "esc",
+    "build_output_dir": "WHKScore/backstation/VercelStage"
   }
 }
