@@ -104,6 +104,13 @@ h1 {
     margin: 5px 0;
 }
 
+.signature {
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: right;
+    font-family: "Microsoft YaHei", "微软雅黑", "宋体", sans-serif;
+}
+
 /* 音乐开关样式 */
 .music-toggle-container {
     position: absolute;
@@ -226,4 +233,68 @@ input:checked+.toggle-slider:before {
     justify-content: center;
     width: 100%;
     margin-bottom: 5px;
+}
+
+/* 音乐列表样式 */
+#music-list {
+    list-style-position: inside;
+    padding: 0;
+    margin: 20px 0;
+    font-size: 12px;
+    font-family: "Microsoft YaHei", "微软雅黑", "宋体", sans-serif;
+}
+
+#music-list li {
+    margin: 0;
+    padding: 0;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* 当前播放音乐高亮样式 */
+#music-list li.playing {
+    color: #58A6FF;
+    background-color: rgba(88, 166, 255, 0.1);
+    box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+}
+
+/* 音乐波浪动画样式 */
+.music-wave {
+    margin-left: 10px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#music-list li.playing .music-wave {
+    opacity: 1;
+    animation: wave-animation 1s infinite linear;
+}
+
+/* 波浪动画关键帧 */
+@keyframes wave-animation {
+    0% { content: 'ı|l|ı'; }
+    25% { content: 'ıı|l|'; }
+    50% { content: '|ıı|l'; }
+    75% { content: 'l|ıı|'; }
+    100% { content: 'ı|l|ı'; }
+}
+
+/* 使用伪元素实现波浪字符的动态变化 */
+.music-wave::after {
+    content: 'ı|l|ı';
+    display: inline-block;
+    animation: wave-characters 1s infinite linear;
+}
+
+@keyframes wave-characters {
+    0% { content: 'ı|l|ı'; }
+    25% { content: 'ıı|l|'; }
+    50% { content: '|ıı|l'; }
+    75% { content: 'l|ıı|'; }
+    100% { content: 'ı|l|ı'; }
 }

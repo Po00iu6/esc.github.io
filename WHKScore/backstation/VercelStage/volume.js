@@ -298,6 +298,7 @@ const MusicPlayer = {
                 this.updateButtonState();
                 this.showNotification(); // 显示播放通知
                 this.preloadNext(); // 预加载下一首
+                this.updateCurrentPlaying(); // 更新当前播放高亮
             }).catch(error => {
                 console.log('音乐播放被浏览器拦截，请用户交互后重试');
             });
@@ -326,6 +327,7 @@ const MusicPlayer = {
         }
         this.isPlaying = !this.isPlaying;
         this.updateButtonState();
+        this.updateCurrentPlaying(); // 更新当前播放高亮
     },
     
     // 播放下一首
@@ -345,6 +347,7 @@ const MusicPlayer = {
         this.audio.play().then(() => {
             this.showNotification(); // 显示播放通知
             this.preloadNext(); // 预加载新的下一首
+            this.updateCurrentPlaying(); // 更新当前播放高亮
         }).catch(error => {
             console.error('播放下一首失败:', error);
             // 失败时回退到传统方式
@@ -354,11 +357,13 @@ const MusicPlayer = {
             this.audio.play().then(() => {
                 this.showNotification();
                 this.preloadNext();
+                this.updateCurrentPlaying(); // 更新当前播放高亮
             });
         });
         
         this.isPlaying = true;
         this.updateButtonState();
+        this.updateCurrentPlaying(); // 更新当前播放高亮
     },
     
     // 播放上一首
@@ -377,12 +382,14 @@ const MusicPlayer = {
         this.audio.play().then(() => {
             this.showNotification(); // 显示播放通知
             this.preloadNext(); // 预加载下一首
+            this.updateCurrentPlaying(); // 更新当前播放高亮
         }).catch(error => {
             console.error('播放上一首失败:', error);
         });
         
         this.isPlaying = true;
         this.updateButtonState();
+        this.updateCurrentPlaying(); // 更新当前播放高亮
     },
     
     // 设置音量
@@ -430,12 +437,67 @@ const MusicPlayer = {
         if (button) {
             button.checked = this.isPlaying;
         }
+    },
+    
+    // 自动生成音乐列表
+    generateMusicList() {
+        const musicList = document.getElementById('music-list');
+        if (!musicList) return;
+        
+        // 清空现有列表
+        musicList.innerHTML = '';
+        
+        // 遍历播放列表，生成li元素
+        this.playlist.forEach((musicPath, index) => {
+            // 提取音乐名称
+            let musicName = musicPath.replace('music/', '').replace('.mp3', '');
+            
+            // // 移除可能的艺术家信息，只保留歌曲名
+            // // 处理格式：艺术家---歌曲名 或 艺术家,艺术家---歌曲名
+            // const parts = musicName.split('---');
+            // if (parts.length > 1) {
+            //     musicName = parts.slice(1).join('---');
+            // }
+            
+            const li = document.createElement('li');
+            li.textContent = musicName;
+            li.dataset.index = index;
+            
+            // 添加波浪动画元素
+            const wave = document.createElement('span');
+            wave.className = 'music-wave';
+            // 内容留空，由CSS伪元素通过动画生成
+            li.appendChild(wave);
+            
+            musicList.appendChild(li);
+        });
+    },
+    
+    // 更新当前播放音乐的高亮和波浪动画
+    updateCurrentPlaying() {
+        const musicList = document.getElementById('music-list');
+        if (!musicList) return;
+        
+        // 移除所有高亮样式
+        const allLis = musicList.querySelectorAll('li');
+        allLis.forEach(li => {
+            li.classList.remove('playing');
+        });
+        
+        // 高亮当前播放的音乐
+        const currentLi = musicList.querySelector(`[data-index="${this.currentIndex}"]`);
+        if (currentLi) {
+            currentLi.classList.add('playing');
+        }
     }
 };
 
 // 初始化音乐播放器
 window.addEventListener('DOMContentLoaded', () => {
     MusicPlayer.init();
+    
+    // 生成音乐列表
+    MusicPlayer.generateMusicList();
     
     // 添加用户交互事件，尝试激活音乐
     document.addEventListener('mousemove', () => {
