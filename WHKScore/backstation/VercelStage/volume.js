@@ -62,8 +62,9 @@ const MusicPlayer = {
     // 当前播放索引
     currentIndex: -1,
     
-    // 音频元素
+    // 音频元素 - 使用两个音频对象，一个播放当前歌曲，一个预加载下一首
     audio: null,
+    nextAudio: null,
     
     // 播放状态
     isPlaying: false,
@@ -83,39 +84,82 @@ const MusicPlayer = {
     // 自动隐藏定时器
     autoHideTimer: null,
     
+    // 预加载状态
+    preloadedIndex: -1,
+    
     // 初始化音乐播放器
     init() {
-        // 延迟初始化音频元素，直到需要播放时
-        this.audio = null;
+        // 立即初始化两个音频对象，加载2个音乐文件
+        this.audio = new Audio();
+        this.nextAudio = new Audio();
         
         // 随机选择初始播放歌曲
         this.currentIndex = Math.floor(Math.random() * this.playlist.length);
+        this.preloadedIndex = -1;
+        
+        // 设置音量
+        this.audio.volume = this.volume;
+        this.nextAudio.volume = this.volume;
+        
+        // 设置循环属性
+        this.audio.loop = this.isLoopSingle;
+        this.nextAudio.loop = false;
+        
+        // 监听当前音频结束事件
+        this.audio.addEventListener('ended', () => {
+            // 音乐结束，完全隐藏通知
+            this.hideNotification();
+            
+            if (this.isLoopSingle) {
+                this.audio.play().then(() => {
+                    this.showNotification(); // 单曲循环时显示通知
+                });
+            } else {
+                this.playNext();
+            }
+        });
+        
+        // 添加播放进度监听器，在播放到80%时预加载下一首，确保有足够时间
+        this.audio.addEventListener('timeupdate', () => {
+            if (this.audio.duration > 0) {
+                // 当播放到80%时预加载下一首
+                if (this.audio.currentTime / this.audio.duration >= 0.8) {
+                    this.preloadNext();
+                }
+            }
+        });
+        
+        // 初始加载2个音乐文件：当前播放的和下一首要播放的
+        const randomParam = Math.random().toString(36).substring(2, 15);
+        this.audio.src = this.playlist[this.currentIndex] + '?v=' + randomParam;
+        this.preloadNext(); // 预加载下一首
         
         // 不自动播放音乐，等待用户交互
-        // 音乐将在用户有交互后才初始化和播放
     },
     
-    // 延迟初始化音频元素
+    // 延迟初始化音频元素（现在是冗余的，但为了兼容性保留）
     lazyInitAudio() {
-        if (!this.audio) {
-            this.audio = new Audio();
-            this.audio.volume = this.volume;
-            this.audio.loop = this.isLoopSingle;
-            
-            // 监听音乐结束事件
-            this.audio.addEventListener('ended', () => {
-                // 音乐结束，完全隐藏通知
-                this.hideNotification();
-                
-                if (this.isLoopSingle) {
-                    this.audio.play().then(() => {
-                        this.showNotification(); // 单曲循环时显示通知
-                    });
-                } else {
-                    this.playNext();
-                }
-            });
+        // 音频对象已经在init()中初始化，这里什么都不用做
+        // 保留此方法是为了兼容之前的调用
+    },
+    
+    // 预加载下一首歌曲
+    preloadNext() {
+        const nextIndex = (this.currentIndex + 1) % this.playlist.length;
+        
+        // 如果下一首已经预加载过，跳过
+        if (this.preloadedIndex === nextIndex) {
+            return;
         }
+        
+        // 预加载下一首歌曲
+        const nextMusic = this.playlist[nextIndex];
+        const randomParam = Math.random().toString(36).substring(2, 15);
+        this.nextAudio.src = nextMusic + '?v=' + randomParam;
+        this.nextAudio.preload = 'auto'; // 自动预加载完整音频
+        
+        this.preloadedIndex = nextIndex;
+        console.log('预加载完成:', nextMusic);
     },
     
     // 检查封面图片是否存在
@@ -235,7 +279,7 @@ const MusicPlayer = {
             // 延迟初始化音频元素
             this.lazyInitAudio();
             
-            // 设置音频源（只在第一次播放或切换歌曲时设置）
+            // 设置当前音频源
             const currentMusic = this.playlist[this.currentIndex];
             if (!this.audio.src || !this.audio.src.includes(currentMusic)) {
                 const randomParam = Math.random().toString(36).substring(2, 15);
@@ -246,6 +290,7 @@ const MusicPlayer = {
                 this.isPlaying = true;
                 this.updateButtonState();
                 this.showNotification(); // 显示播放通知
+                this.preloadNext(); // 预加载下一首
             }).catch(error => {
                 console.log('音乐播放被浏览器拦截，请用户交互后重试');
             });
@@ -260,7 +305,7 @@ const MusicPlayer = {
         if (this.isPlaying) {
             this.audio.pause();
         } else {
-            // 设置音频源（只在第一次播放或切换歌曲时设置）
+            // 设置当前音频源
             const currentMusic = this.playlist[this.currentIndex];
             if (!this.audio.src || !this.audio.src.includes(currentMusic)) {
                 const randomParam = Math.random().toString(36).substring(2, 15);
@@ -269,6 +314,7 @@ const MusicPlayer = {
             
             this.audio.play().then(() => {
                 this.showNotification(); // 恢复播放时显示通知
+                this.preloadNext(); // 预加载下一首
             });
         }
         this.isPlaying = !this.isPlaying;
@@ -280,14 +326,32 @@ const MusicPlayer = {
         // 延迟初始化音频元素
         this.lazyInitAudio();
         
+        // 使用预加载的音频对象播放下一首
         this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
-        // 添加随机参数，避免浏览器缓存影响
-        const currentMusic = this.playlist[this.currentIndex];
-        const randomParam = Math.random().toString(36).substring(2, 15);
-        this.audio.src = currentMusic + '?v=' + randomParam;
+        
+        // 交换音频对象
+        const tempAudio = this.audio;
+        this.audio = this.nextAudio;
+        this.nextAudio = tempAudio;
+        
+        // 播放当前音频（之前预加载的）
         this.audio.play().then(() => {
             this.showNotification(); // 显示播放通知
+            this.preloadNext(); // 预加载新的下一首
+        }).catch(error => {
+            console.error('播放下一首失败:', error);
+            // 失败时回退到传统方式
+            const currentMusic = this.playlist[this.currentIndex];
+            const randomParam = Math.random().toString(36).substring(2, 15);
+            this.audio.src = currentMusic + '?v=' + randomParam;
+            this.audio.play().then(() => {
+                this.showNotification();
+                this.preloadNext();
+            });
         });
+        
+        this.isPlaying = true;
+        this.updateButtonState();
     },
     
     // 播放上一首
@@ -296,25 +360,44 @@ const MusicPlayer = {
         this.lazyInitAudio();
         
         this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
-        // 添加随机参数，避免浏览器缓存影响
+        
+        // 设置当前音频源
         const currentMusic = this.playlist[this.currentIndex];
         const randomParam = Math.random().toString(36).substring(2, 15);
         this.audio.src = currentMusic + '?v=' + randomParam;
+        
+        // 播放当前音频
         this.audio.play().then(() => {
             this.showNotification(); // 显示播放通知
+            this.preloadNext(); // 预加载下一首
+        }).catch(error => {
+            console.error('播放上一首失败:', error);
         });
+        
+        this.isPlaying = true;
+        this.updateButtonState();
     },
     
     // 设置音量
     setVolume(volume) {
         this.volume = volume;
-        this.audio.volume = volume;
+        if (this.audio) {
+            this.audio.volume = volume;
+        }
+        if (this.nextAudio) {
+            this.nextAudio.volume = volume;
+        }
     },
     
     // 切换循环单曲
     toggleLoopSingle() {
         this.isLoopSingle = !this.isLoopSingle;
-        this.audio.loop = this.isLoopSingle;
+        if (this.audio) {
+            this.audio.loop = this.isLoopSingle;
+        }
+        if (this.nextAudio) {
+            this.nextAudio.loop = false;
+        }
         if (this.isLoopSingle) {
             this.isLoopList = false;
         }
@@ -325,7 +408,12 @@ const MusicPlayer = {
         this.isLoopList = !this.isLoopList;
         if (this.isLoopList) {
             this.isLoopSingle = false;
-            this.audio.loop = false;
+            if (this.audio) {
+                this.audio.loop = false;
+            }
+            if (this.nextAudio) {
+                this.nextAudio.loop = false;
+            }
         }
     },
     
