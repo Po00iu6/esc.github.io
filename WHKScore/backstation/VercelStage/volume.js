@@ -56,7 +56,7 @@ const MusicPlayer = {
     // 获取音乐对应的封面图片路径
     getCoverPath: function(musicPath) {
         var baseName = musicPath.replace('https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/', '').replace('.mp3', '');
-        return 'music_cover/' + baseName + '.jpg';
+        return 'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music_cover/' + baseName + '.jpg';
     },
     
     // 当前播放索引
