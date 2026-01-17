@@ -7,6 +7,8 @@ body {
     flex-direction: column;
     align-items: center;
     position: relative;
+    overflow-x: hidden;
+    /* width: 100vw; */
 }
 
 .container {
@@ -240,7 +242,7 @@ input:checked+.toggle-slider:before {
     list-style-position: inside;
     padding: 0;
     margin: 20px 0;
-    font-size: 12px;
+    font-size: 10px;
     font-family: "Microsoft YaHei", "微软雅黑", "宋体", sans-serif;
 }
 
@@ -276,6 +278,7 @@ input:checked+.toggle-slider:before {
     font-size: 14px;
     opacity: 0;
     transition: opacity 0.3s ease;
+    width: 40px;
 }
 
 #music-list li.playing .music-wave {

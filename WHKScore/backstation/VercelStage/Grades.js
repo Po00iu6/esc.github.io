@@ -613,16 +613,16 @@ function displayProgressAnalysis() {
         html += `
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
                 <div style="display: flex; align-items: baseline;">
-                    <div style="color: #ffffff; font-weight: bold; min-width: 60px; margin-right: 15px;">${subject.name}</div>
+                    <div style="color: #ffffff; font-weight: bold; min-width: 60px; margin-right: 10px;">${subject.name}</div>
                     <div style="font-size: 20px; font-weight: bold; color: #ffffff; margin-right: 8px;">
                         ${subject.current}
                     </div>
-                    <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6); min-width: 40px;">
+                    <div style="font-size: 14px; color: rgba(255, 255, 255, 0.6); min-width: 100px;">
                         上次：${subject.previous}
                     </div>
                     
                 </div>
-                <div style="display: flex; align-items: baseline; justify-content: flex-start; min-width: 120px;">
+                <div style="display: flex; align-items: baseline; justify-content: flex-start; min-width: 120px;margin-left: 5px;">
                     <div style="font-size: 18px; font-weight: bold; color: #${progressClass === 'progress-up' ? '00ff00' : 'ff0000'};">
                         ${arrow} ${Math.abs(subject.progress)}
                     </div>
