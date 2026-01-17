@@ -282,17 +282,18 @@ const MusicPlayer = {
     
     // 尝试播放音乐（需用户交互触发）
     tryPlay() {
+        // 无论是否正在播放，都确保音频元素已初始化
+        this.lazyInitAudio();
+        
+        // 确保音频源已设置
+        const currentMusic = this.playlist[this.currentIndex];
+        if (!this.audio.src || !this.audio.src.includes(currentMusic)) {
+            const randomParam = Math.random().toString(36).substring(2, 15);
+            this.audio.src = currentMusic + '?v=' + randomParam;
+        }
+        
+        // 如果还没有开始播放，尝试播放
         if (!this.isPlaying) {
-            // 延迟初始化音频元素
-            this.lazyInitAudio();
-            
-            // 设置当前音频源
-            const currentMusic = this.playlist[this.currentIndex];
-            if (!this.audio.src || !this.audio.src.includes(currentMusic)) {
-                const randomParam = Math.random().toString(36).substring(2, 15);
-                this.audio.src = currentMusic + '?v=' + randomParam;
-            }
-            
             this.audio.play().then(() => {
                 this.isPlaying = true;
                 this.updateButtonState();
@@ -300,7 +301,8 @@ const MusicPlayer = {
                 this.preloadNext(); // 预加载下一首
                 this.updateCurrentPlaying(); // 更新当前播放高亮
             }).catch(error => {
-                console.log('音乐播放被浏览器拦截，请用户交互后重试');
+                // 只在控制台记录错误，不影响用户体验
+                console.log('音乐播放初始化:', error.message);
             });
         }
     },
@@ -500,17 +502,43 @@ window.addEventListener('DOMContentLoaded', () => {
     MusicPlayer.generateMusicList();
     
     // 添加用户交互事件，尝试激活音乐
+    // 鼠标移动事件
     document.addEventListener('mousemove', () => {
         MusicPlayer.tryPlay();
     }, { once: true });
     
+    // 触摸事件
     document.addEventListener('touchstart', () => {
         MusicPlayer.tryPlay();
     }, { once: true });
     
+    // 点击事件
     document.addEventListener('click', () => {
         MusicPlayer.tryPlay();
     }, { once: true });
+    
+    // 滚动事件
+    document.addEventListener('scroll', () => {
+        MusicPlayer.tryPlay();
+    }, { once: true });
+    
+    // 键盘按键事件
+    document.addEventListener('keydown', () => {
+        MusicPlayer.tryPlay();
+    }, { once: true });
+    
+    // 鼠标悬停事件
+    document.addEventListener('mouseover', () => {
+        MusicPlayer.tryPlay();
+    }, { once: true });
+    
+    // 音乐开关点击事件也触发播放尝试
+    const toggle = document.getElementById('music-toggle');
+    if (toggle) {
+        toggle.addEventListener('click', () => {
+            MusicPlayer.tryPlay();
+        }, { once: true });
+    }
     
     // 3秒后尝试激活音乐
     setTimeout(() => {
@@ -518,7 +546,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 3000);
     
     // 绑定开关事件
-    const toggle = document.getElementById('music-toggle');
     if (toggle) {
         toggle.addEventListener('change', () => {
             MusicPlayer.togglePlay();
@@ -539,6 +566,33 @@ window.addEventListener('DOMContentLoaded', () => {
     if (notification) {
         notification.addEventListener('click', () => {
             MusicPlayer.toggleNotification();
+        });
+    }
+    
+    // 为音乐列表项添加点击事件，可以切换到对应歌曲
+    const musicList = document.getElementById('music-list');
+    if (musicList) {
+        musicList.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (li && li.dataset.index) {
+                const index = parseInt(li.dataset.index);
+                if (index !== MusicPlayer.currentIndex) {
+                    MusicPlayer.currentIndex = index;
+                    MusicPlayer.updateCurrentPlaying();
+                    // 直接播放选中的歌曲
+                    const currentMusic = MusicPlayer.playlist[MusicPlayer.currentIndex];
+                    const randomParam = Math.random().toString(36).substring(2, 15);
+                    MusicPlayer.audio.src = currentMusic + '?v=' + randomParam;
+                    MusicPlayer.audio.play().then(() => {
+                        MusicPlayer.isPlaying = true;
+                        MusicPlayer.updateButtonState();
+                        MusicPlayer.showNotification();
+                        MusicPlayer.preloadNext();
+                    }).catch(error => {
+                        console.error('播放选中歌曲失败:', error);
+                    });
+                }
+            }
         });
     }
 });
