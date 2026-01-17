@@ -253,7 +253,15 @@ input:checked+.toggle-slider:before {
     justify-content: space-between;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    padding: 0px 10px;
 }
+
+#music-list li:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    transform: translateX(5px);
+}
+
 
 /* 当前播放音乐高亮样式 */
 #music-list li.playing {

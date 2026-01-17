@@ -101,11 +101,13 @@ const backupExamData = [
     }
 ];
 
-// 页面加载完成后执行
-window.addEventListener('load', function() {
-    // 直接使用备选数据
-    useBackupData();
-});
+// // 页面加载完成后执行
+// window.addEventListener('load', function() {
+//     // 直接使用备选数据
+//     useBackupData();
+// });
+
+useBackupData();
 
 // 使用备选数据绘制成绩曲线
 function useBackupData() {

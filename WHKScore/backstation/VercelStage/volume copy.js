@@ -1,6 +1,6 @@
 // 音乐控制模块
 const MusicPlayer = {
-    // 音乐播放列表 - 使用远程CDN地址
+    // 音乐播放列表
     playlist: [
     "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/AURORA,HOYO-MiX---挪德卡莱-Nod-Krai.mp3",
     "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX,Aimer---未行之路-The-Road-Not-Taken.mp3",
@@ -56,7 +56,7 @@ const MusicPlayer = {
     // 获取音乐对应的封面图片路径
     getCoverPath: function(musicPath) {
         var baseName = musicPath.replace('https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/', '').replace('.mp3', '');
-        return 'music_cover/' + baseName + '.jpg';
+        return 'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music_cover/' + baseName + '.jpg';
     },
     
     // 当前播放索引
@@ -477,26 +477,6 @@ window.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function() {
         MusicPlayer.tryPlay();
     }, { once: true });
-    
-    // 滚动事件
-    document.addEventListener('scroll', function() {
-        MusicPlayer.tryPlay();
-    }, { once: true });
-    
-    // 键盘按键事件
-    document.addEventListener('keydown', function() {
-        MusicPlayer.tryPlay();
-    }, { once: true });
-    
-    // 鼠标悬停事件
-    document.addEventListener('mouseover', function() {
-        MusicPlayer.tryPlay();
-    }, { once: true });
-    
-    // 3秒后尝试激活音乐
-    setTimeout(function() {
-        MusicPlayer.tryPlay();
-    }, 3000);
     
     // 绑定开关事件
     var toggle = document.getElementById('music-toggle');
