@@ -62,9 +62,8 @@ const MusicPlayer = {
     // 当前播放索引
     currentIndex: -1,
     
-    // 音频元素 - 使用两个音频对象，一个播放当前歌曲，一个预加载下一首
+    // 音频元素 - 只使用一个音频对象
     audio: null,
-    nextAudio: null,
     
     // 播放状态
     isPlaying: false,
@@ -84,26 +83,19 @@ const MusicPlayer = {
     // 自动隐藏定时器
     autoHideTimer: null,
     
-    // 预加载状态
-    preloadedIndex: -1,
-    
     // 初始化音乐播放器
     init() {
-        // 立即初始化两个音频对象，加载2个音乐文件
+        // 初始化单个音频对象
         this.audio = new Audio();
-        this.nextAudio = new Audio();
         
         // 随机选择初始播放歌曲
         this.currentIndex = Math.floor(Math.random() * this.playlist.length);
-        this.preloadedIndex = -1;
         
         // 设置音量
         this.audio.volume = this.volume;
-        this.nextAudio.volume = this.volume;
         
         // 设置循环属性
         this.audio.loop = this.isLoopSingle;
-        this.nextAudio.loop = false;
         
         // 监听当前音频结束事件
         this.audio.addEventListener('ended', () => {
@@ -119,20 +111,9 @@ const MusicPlayer = {
             }
         });
         
-        // 添加播放进度监听器，在播放到80%时预加载下一首，确保有足够时间
-        this.audio.addEventListener('timeupdate', () => {
-            if (this.audio.duration > 0) {
-                // 当播放到80%时预加载下一首
-                if (this.audio.currentTime / this.audio.duration >= 0.8) {
-                    this.preloadNext();
-                }
-            }
-        });
-        
-        // 初始加载2个音乐文件：当前播放的和下一首要播放的
+        // 初始加载当前播放的音乐文件
         const randomParam = Math.random().toString(36).substring(2, 15);
         this.audio.src = this.playlist[this.currentIndex] + '?v=' + randomParam;
-        this.preloadNext(); // 预加载下一首
         
         // 不自动播放音乐，等待用户交互
     },
@@ -141,25 +122,6 @@ const MusicPlayer = {
     lazyInitAudio() {
         // 音频对象已经在init()中初始化，这里什么都不用做
         // 保留此方法是为了兼容之前的调用
-    },
-    
-    // 预加载下一首歌曲
-    preloadNext() {
-        const nextIndex = (this.currentIndex + 1) % this.playlist.length;
-        
-        // 如果下一首已经预加载过，跳过
-        if (this.preloadedIndex === nextIndex) {
-            return;
-        }
-        
-        // 预加载下一首歌曲
-        const nextMusic = this.playlist[nextIndex];
-        const randomParam = Math.random().toString(36).substring(2, 15);
-        this.nextAudio.src = nextMusic + '?v=' + randomParam;
-        this.nextAudio.preload = 'auto'; // 自动预加载完整音频
-        
-        this.preloadedIndex = nextIndex;
-        console.log('预加载完成:', nextMusic);
     },
     
     // 检查封面图片是否存在
@@ -287,7 +249,7 @@ const MusicPlayer = {
         
         // 确保音频源已设置
         const currentMusic = this.playlist[this.currentIndex];
-        if (!this.audio.src || !this.audio.src.includes(currentMusic)) {
+        if (!this.audio.src || !this.audio.src.includes(currentMusic.replace(/\?.*/, ''))) {
             const randomParam = Math.random().toString(36).substring(2, 15);
             this.audio.src = currentMusic + '?v=' + randomParam;
         }
@@ -298,11 +260,11 @@ const MusicPlayer = {
                 this.isPlaying = true;
                 this.updateButtonState();
                 this.showNotification(); // 显示播放通知
-                this.preloadNext(); // 预加载下一首
                 this.updateCurrentPlaying(); // 更新当前播放高亮
+                console.log('音乐播放成功:', currentMusic);
             }).catch(error => {
                 // 只在控制台记录错误，不影响用户体验
-                console.log('音乐播放初始化:', error.message);
+                console.log('音乐播放需要用户交互:', error.message);
             });
         }
     },
@@ -313,23 +275,33 @@ const MusicPlayer = {
         this.lazyInitAudio();
         
         if (this.isPlaying) {
+            // 暂停播放
             this.audio.pause();
+            this.isPlaying = false;
+            this.updateButtonState();
+            this.updateCurrentPlaying(); // 更新当前播放高亮
         } else {
             // 设置当前音频源
             const currentMusic = this.playlist[this.currentIndex];
-            if (!this.audio.src || !this.audio.src.includes(currentMusic)) {
+            if (!this.audio.src || !this.audio.src.includes(currentMusic.replace(/\?.*/, ''))) {
                 const randomParam = Math.random().toString(36).substring(2, 15);
                 this.audio.src = currentMusic + '?v=' + randomParam;
             }
             
+            // 尝试播放，只有成功后才更新状态
             this.audio.play().then(() => {
+                this.isPlaying = true;
                 this.showNotification(); // 恢复播放时显示通知
-                this.preloadNext(); // 预加载下一首
+                this.updateButtonState();
+                this.updateCurrentPlaying(); // 更新当前播放高亮
+                console.log('音乐播放成功:', currentMusic);
+            }).catch(error => {
+                console.log('音乐播放需要用户交互:', error.message);
+                // 播放失败，保持isPlaying为false
+                this.isPlaying = false;
+                this.updateButtonState();
             });
         }
-        this.isPlaying = !this.isPlaying;
-        this.updateButtonState();
-        this.updateCurrentPlaying(); // 更新当前播放高亮
     },
     
     // 播放下一首
@@ -337,35 +309,29 @@ const MusicPlayer = {
         // 延迟初始化音频元素
         this.lazyInitAudio();
         
-        // 使用预加载的音频对象播放下一首
+        // 更新播放索引
         this.currentIndex = (this.currentIndex + 1) % this.playlist.length;
         
-        // 交换音频对象
-        const tempAudio = this.audio;
-        this.audio = this.nextAudio;
-        this.nextAudio = tempAudio;
+        // 先更新当前播放高亮，提升用户体验
+        this.updateCurrentPlaying();
         
-        // 播放当前音频（之前预加载的）
+        // 设置当前音频源
+        const currentMusic = this.playlist[this.currentIndex];
+        const randomParam = Math.random().toString(36).substring(2, 15);
+        this.audio.src = currentMusic + '?v=' + randomParam;
+        
+        // 尝试播放
         this.audio.play().then(() => {
+            this.isPlaying = true;
             this.showNotification(); // 显示播放通知
-            this.preloadNext(); // 预加载新的下一首
-            this.updateCurrentPlaying(); // 更新当前播放高亮
+            this.updateButtonState();
+            console.log('播放下一首成功:', currentMusic);
         }).catch(error => {
             console.error('播放下一首失败:', error);
-            // 失败时回退到传统方式
-            const currentMusic = this.playlist[this.currentIndex];
-            const randomParam = Math.random().toString(36).substring(2, 15);
-            this.audio.src = currentMusic + '?v=' + randomParam;
-            this.audio.play().then(() => {
-                this.showNotification();
-                this.preloadNext();
-                this.updateCurrentPlaying(); // 更新当前播放高亮
-            });
+            // 播放失败，保持isPlaying为false
+            this.isPlaying = false;
+            this.updateButtonState();
         });
-        
-        this.isPlaying = true;
-        this.updateButtonState();
-        this.updateCurrentPlaying(); // 更新当前播放高亮
     },
     
     // 播放上一首
@@ -373,6 +339,7 @@ const MusicPlayer = {
         // 延迟初始化音频元素
         this.lazyInitAudio();
         
+        // 更新播放索引
         this.currentIndex = (this.currentIndex - 1 + this.playlist.length) % this.playlist.length;
         
         // 设置当前音频源
@@ -380,18 +347,21 @@ const MusicPlayer = {
         const randomParam = Math.random().toString(36).substring(2, 15);
         this.audio.src = currentMusic + '?v=' + randomParam;
         
-        // 播放当前音频
+        // 先更新当前播放高亮，提升用户体验
+        this.updateCurrentPlaying();
+        
+        // 尝试播放
         this.audio.play().then(() => {
+            this.isPlaying = true;
             this.showNotification(); // 显示播放通知
-            this.preloadNext(); // 预加载下一首
-            this.updateCurrentPlaying(); // 更新当前播放高亮
+            this.updateButtonState();
+            console.log('播放上一首成功:', currentMusic);
         }).catch(error => {
             console.error('播放上一首失败:', error);
+            // 播放失败，保持isPlaying为false
+            this.isPlaying = false;
+            this.updateButtonState();
         });
-        
-        this.isPlaying = true;
-        this.updateButtonState();
-        this.updateCurrentPlaying(); // 更新当前播放高亮
     },
     
     // 设置音量
@@ -400,9 +370,6 @@ const MusicPlayer = {
         if (this.audio) {
             this.audio.volume = volume;
         }
-        if (this.nextAudio) {
-            this.nextAudio.volume = volume;
-        }
     },
     
     // 切换循环单曲
@@ -410,9 +377,6 @@ const MusicPlayer = {
         this.isLoopSingle = !this.isLoopSingle;
         if (this.audio) {
             this.audio.loop = this.isLoopSingle;
-        }
-        if (this.nextAudio) {
-            this.nextAudio.loop = false;
         }
         if (this.isLoopSingle) {
             this.isLoopList = false;
@@ -426,9 +390,6 @@ const MusicPlayer = {
             this.isLoopSingle = false;
             if (this.audio) {
                 this.audio.loop = false;
-            }
-            if (this.nextAudio) {
-                this.nextAudio.loop = false;
             }
         }
     },
@@ -540,10 +501,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }, { once: true });
     }
     
-    // 3秒后尝试激活音乐
-    setTimeout(() => {
-        MusicPlayer.tryPlay();
-    }, 3000);
+    // 移除自动播放定时器，避免浏览器安全策略阻止
     
     // 绑定开关事件
     if (toggle) {
@@ -570,29 +528,28 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     
     // 为音乐列表项添加点击事件，可以切换到对应歌曲
-    const musicList = document.getElementById('music-list');
-    if (musicList) {
-        musicList.addEventListener('click', (e) => {
-            const li = e.target.closest('li');
-            if (li && li.dataset.index) {
-                const index = parseInt(li.dataset.index);
-                if (index !== MusicPlayer.currentIndex) {
-                    MusicPlayer.currentIndex = index;
-                    MusicPlayer.updateCurrentPlaying();
-                    // 直接播放选中的歌曲
-                    const currentMusic = MusicPlayer.playlist[MusicPlayer.currentIndex];
-                    const randomParam = Math.random().toString(36).substring(2, 15);
-                    MusicPlayer.audio.src = currentMusic + '?v=' + randomParam;
-                    MusicPlayer.audio.play().then(() => {
-                        MusicPlayer.isPlaying = true;
-                        MusicPlayer.updateButtonState();
-                        MusicPlayer.showNotification();
-                        MusicPlayer.preloadNext();
-                    }).catch(error => {
-                        console.error('播放选中歌曲失败:', error);
-                    });
+        const musicList = document.getElementById('music-list');
+        if (musicList) {
+            musicList.addEventListener('click', (e) => {
+                const li = e.target.closest('li');
+                if (li && li.dataset.index) {
+                    const index = parseInt(li.dataset.index);
+                    if (index !== MusicPlayer.currentIndex) {
+                        MusicPlayer.currentIndex = index;
+                        MusicPlayer.updateCurrentPlaying();
+                        // 直接播放选中的歌曲
+                        const currentMusic = MusicPlayer.playlist[MusicPlayer.currentIndex];
+                        const randomParam = Math.random().toString(36).substring(2, 15);
+                        MusicPlayer.audio.src = currentMusic + '?v=' + randomParam;
+                        MusicPlayer.audio.play().then(() => {
+                            MusicPlayer.isPlaying = true;
+                            MusicPlayer.updateButtonState();
+                            MusicPlayer.showNotification();
+                        }).catch(error => {
+                            console.error('播放选中歌曲失败:', error);
+                        });
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
 });
