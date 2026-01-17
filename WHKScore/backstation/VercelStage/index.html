@@ -17,6 +17,22 @@
     <link rel="stylesheet" href="verclestyle.css">
 </head>
 <body>
+    <!-- 音乐开关 -->
+    <div class="music-toggle-container">
+        <span class="music-label">BGM</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="music-toggle">
+            <span class="toggle-slider"></span>
+        </label>
+    </div>
+    
+    <!-- 音乐播放通知标签 -->
+    <div class="music-notification" id="music-notification">
+        <img class="music-thumbnail" id="music-thumbnail" src="" alt="Music Thumbnail" style="display: none;">
+        <div class="music-icon" id="music-icon">🎵</div>
+        <div class="close-notification" id="close-notification">^</div>
+    </div>
+    
     <div class="container">
         <h1>考试成绩查询与分析</h1>
         
@@ -49,6 +65,8 @@
     
     <!-- 引入Grades.js -->
     <script src="Grades.js"></script>
+    <!-- 引入音乐控制脚本 -->
+    <script src="volume.js"></script>
     
     <!-- 网页说明区域 -->
     <div class="container">

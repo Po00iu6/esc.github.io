@@ -103,3 +103,127 @@ h1 {
 #explanation li {
     margin: 5px 0;
 }
+
+/* 音乐开关样式 */
+.music-toggle-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.music-label {
+    font-size: 14px;
+    color: #8B949E;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #30363D;
+    transition: .4s;
+    border-radius: 20px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.toggle-slider {
+    background-color: #58A6FF;
+}
+
+input:focus+.toggle-slider {
+    box-shadow: 0 0 1px #58A6FF;
+}
+
+input:checked+.toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* 音乐播放通知标签样式 */
+.music-notification {
+    position: absolute;
+    top: -80px; /* 初始位置在屏幕上方 */
+    left: 120px; /* 位于音乐开关右侧 */
+    background-color: rgb(32, 33, 36);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: top 0.5s ease, opacity 0.5s ease;
+    opacity: 1;
+    z-index: 1000;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.music-notification.show {
+    top: 0; /* 完全显示 */
+    opacity: 1;
+}
+
+.music-notification.minimized {
+    top: -78px; /* 部分显示（留底部在顶部） */
+    opacity: 1;
+}
+
+.music-notification.hidden {
+    top: -80px; /* 完全隐藏 */
+    opacity: 0;
+}
+
+.music-icon {
+    font-size: 20px;
+}
+
+.music-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.close-notification {
+    font-size: 12px;
+    color: #58A6FF;
+    cursor: pointer;
+    background-color: rgb(42, 43, 46);
+    padding: 2px 15px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
