@@ -164,14 +164,12 @@ const MusicPlayer = {
     
     // 检查封面图片是否存在
     async checkCoverExists(coverPath) {
-        try {
-            // 直接返回true，跳过网络检查，因为我们知道封面已提取
-            console.log('检查封面路径:', coverPath);
-            return true;
-        } catch (error) {
-            console.log('检查封面图片失败:', error);
-            return false;
-        }
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(true);
+            img.onerror = () => resolve(false);
+            img.src = coverPath;
+        });
     },
     
     // 更新关闭按钮朝向
@@ -198,10 +196,19 @@ const MusicPlayer = {
             // 获取封面图片路径
             const coverPath = this.getCoverPath(currentMusic);
             
-            // 显示专辑封面，隐藏默认图标
-            musicThumbnail.src = coverPath;
-            musicThumbnail.style.display = 'block';
-            musicIcon.style.display = 'none';
+            // 检查封面图片是否存在
+            const coverExists = await this.checkCoverExists(coverPath);
+            
+            if (coverExists) {
+                // 封面存在，显示专辑封面，隐藏默认图标
+                musicThumbnail.src = coverPath;
+                musicThumbnail.style.display = 'block';
+                musicIcon.style.display = 'none';
+            } else {
+                // 封面不存在，显示默认图标，隐藏专辑封面
+                musicThumbnail.style.display = 'none';
+                musicIcon.style.display = 'block';
+            }
             
             // 清除之前的定时器
             if (this.autoHideTimer) {
