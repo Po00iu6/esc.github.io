@@ -1,0 +1,1368 @@
+/* 重置默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f5f5f5;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 手机容器 */
+.phone-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #000;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 手机屏幕 */
+.phone-screen {
+    width: 100%;
+    height: calc(100% - 50px);
+    background-color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 状态栏样式 */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20px;
+    background-color: #000;
+    color: #fff;
+    font-size: 12px;
+    padding: 0 10px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+}
+
+.status-left, .status-right {
+    display: flex;
+    align-items: center;
+}
+
+.status-icon {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+/* 屏幕通用样式 */
+.screen {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transform: translateX(0);
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 页面进入动画 */
+.screen.animate-in {
+    animation: slideIn 0.5s ease;
+}
+
+/* 页面退出动画 */
+.screen.animate-out {
+    animation: slideOut 0.5s ease;
+}
+
+/* 微信图标放大动画 */
+@keyframes appZoomIn {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(20);
+        opacity: 0.8;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+/* 主屏幕样式 */
+#home-screen {
+    background-image: url('bgi.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 0 0 20px;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.app-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    height: 120px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.app-item:active {
+    transform: scale(0.95);
+}
+
+.app-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    margin-bottom: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.wechat-icon {
+    /* 使用实际图片，移除渐变背景 */
+}
+
+.app-name {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 开屏页样式 */
+#splash-screen {
+    background-color: #07c160;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    opacity: 0;
+    transition: opacity 0.8s ease 0.3s;
+}
+
+#splash-screen.active {
+    opacity: 1;
+}
+
+.splash-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.8s ease 0.5s;
+}
+
+#splash-screen.active .splash-content {
+    opacity: 1;
+}
+
+.splash-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    transition: transform 2s ease-out;
+}
+
+#splash-screen.active .splash-image {
+    transform: scale(1);
+}
+
+.splash-text {
+    position: absolute;
+    bottom: 100px;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 1s ease 1s;
+}
+
+#splash-screen.active .splash-text {
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 导航栏样式 */
+.nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    background-color: #fff;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 0 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.nav-bar:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.nav-left {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    transform: scale(1);
+}
+
+.nav-left:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.nav-left:active {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(0.95);
+}
+
+.back-icon {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.2s ease;
+}
+
+.nav-left:hover .back-icon {
+    color: #07c160;
+}
+
+.nav-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    transition: color 0.2s ease;
+}
+
+.nav-right {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    transform: scale(1);
+    color: #333;
+}
+
+.nav-right:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #07c160;
+}
+
+.nav-right:active {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: scale(0.95);
+}
+
+/* 聊天列表样式 */
+#chat-list-screen {
+    background-color: #fff;
+}
+
+.chat-list {
+    overflow-y: auto;
+    height: calc(100% - 48px);
+}
+
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-item:active {
+    background-color: #f5f5f5;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
+    margin-right: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.chat-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.nickname {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.last-message {
+    font-size: 14px;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chat-item-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+.time {
+    font-size: 12px;
+    color: #ccc;
+    margin-bottom: 4px;
+}
+
+.unread-badge {
+    background-color: #f00;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 10px;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 6px;
+    margin-top: 4px;
+}
+
+.unread-badge:empty {
+    display: none;
+}
+
+/* 聊天界面样式 */
+#chat-screen {
+    background-color: #ece5dd;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    margin-bottom: 16px;
+    max-width: 70%;
+    animation: messageSlide 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.message.sent {
+    align-self: flex-end;
+}
+
+.message.received {
+    align-self: flex-start;
+}
+
+.message-bubble {
+    padding: 10px 14px;
+    border-radius: 18px;
+    position: relative;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 优化表情显示效果 */
+.message-bubble span.emoji {
+    font-size: 24px;
+    line-height: 1.2;
+    margin: 0 2px;
+}
+
+/* 纯表情消息优化 */
+.message-bubble.pure-emoji {
+    padding: 6px 10px;
+}
+
+.message-bubble.pure-emoji span.emoji {
+    font-size: 32px;
+}
+
+/* 图片消息样式 */
+.message-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.message-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.message-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-image-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 24px;
+}
+
+.message-image.sent {
+    align-self: flex-end;
+}
+
+.message-image.received {
+    align-self: flex-start;
+}
+
+.message.sent .message-bubble {
+    background-color: #dcf8c6;
+    border-bottom-right-radius: 4px;
+}
+
+.message.received .message-bubble {
+    background-color: #fff;
+    border-bottom-left-radius: 4px;
+}
+
+.message:hover .message-bubble {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.message-time {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+    align-self: flex-end;
+    margin-right: 8px;
+    padding-left: 16px;
+}
+
+.message.received .message-time {
+    align-self: flex-start;
+    margin-left: 8px;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 16px;
+}
+
+@keyframes messageSlide {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 聊天输入区域样式 */
+.chat-input-area {
+    background-color: #f0f0f0;
+    padding: 8px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.input-tools {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 8px 0;
+    margin-bottom: 8px;
+}
+
+.tool-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.tool-btn:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.input-container {
+    display: flex;
+    align-items: flex-end;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 8px 12px;
+    min-height: 40px;
+    max-height: 120px;
+}
+
+#message-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 0;
+    resize: none;
+    min-height: 24px;
+    max-height: 104px;
+    overflow-y: auto;
+    line-height: 24px;
+}
+
+#send-btn {
+    background-color: #07c160;
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-left: 8px;
+}
+
+.voice-btn {
+    background-color: #e6f7ff;
+    color: #1890ff;
+    border: 1px solid #91d5ff;
+    border-radius: 16px;
+    padding: 6px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    display: none;
+}
+
+.voice-btn.active {
+    background-color: #fff1f0;
+    color: #ff4d4f;
+    border-color: #ffccc7;
+}
+
+.voice-btn:hover {
+    opacity: 0.8;
+}
+
+/* 语音录制界面样式 */
+.voice-recording {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.voice-recording-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: rgba(255, 77, 79, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: pulse 1s infinite;
+}
+
+.voice-recording-wave {
+    font-size: 32px;
+    margin-bottom: 12px;
+    animation: wave 1s infinite;
+}
+
+.voice-recording-text {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.voice-recording-duration {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    margin-top: 4px;
+}
+
+.voice-recording-cancel {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.voice-recording-cancel:hover {
+    color: #fff;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes wave {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+#send-btn:active {
+    background-color: #06b355;
+}
+
+#send-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* 长按菜单样式 */
+.context-menu {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 8px;
+    padding: 8px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    display: none;
+    min-width: 120px;
+}
+
+.context-menu.show {
+    display: block;
+}
+
+.context-menu-item {
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.context-menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.context-menu-item:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 表情选择器样式 */
+.emoji-picker {
+    position: absolute;
+    bottom: 120px;
+    left: 0;
+    width: 100%;
+    height: 250px;
+    background-color: #fff;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 900;
+    display: none;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+}
+
+.emoji-picker.show {
+    display: flex;
+}
+
+.emoji-picker-header {
+    height: 48px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    overflow-x: auto;
+    white-space: nowrap;
+    background-color: #fafafa;
+}
+
+/* 表情搜索样式 */
+.emoji-search {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.emoji-search-input {
+    width: 100%;
+    height: 32px;
+    padding: 0 12px 0 32px;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    font-size: 14px;
+    outline: none;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.emoji-search-input:focus {
+    border-color: #07c160;
+    box-shadow: 0 0 0 2px rgba(7, 193, 96, 0.2);
+}
+
+.emoji-search-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 14px;
+    color: #999;
+}
+
+/* 表情分类样式 */
+.emoji-categories {
+    height: 36px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    background-color: #fafafa;
+    padding: 0 8px;
+    scrollbar-width: none; /* Firefox */
+}
+
+.emoji-categories::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+
+.emoji-category {
+    margin-right: 12px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.emoji-category:last-child {
+    margin-right: 0;
+}
+
+.emoji-category.active {
+    background-color: #e6f7ff;
+    color: #1890ff;
+}
+
+.emoji-category:hover {
+    background-color: #f5f5f5;
+}
+
+.emoji-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.emoji-item {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    transform: scale(1);
+    user-select: none;
+}
+
+.emoji-item:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+.emoji-item:active {
+    transform: scale(0.95);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 图片选择器样式 */
+.image-picker {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 400px;
+    background-color: #fff;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    animation: slideUp 0.3s ease;
+}
+
+.image-picker.show {
+    display: flex;
+}
+
+.image-picker-header {
+    height: 48px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+}
+
+.image-picker-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.image-picker-close {
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.image-picker-close:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.image-picker-tabs {
+    display: flex;
+    height: 40px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.image-picker-tab {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.image-picker-tab.active {
+    color: #07c160;
+    border-bottom: 2px solid #07c160;
+    font-weight: 500;
+}
+
+.image-picker-tab:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.image-picker-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.image-picker-album {
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.image-picker-album-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.image-picker-album-item:hover {
+    background-color: #f5f5f5;
+}
+
+.album-thumb {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ffa500 100%);
+    border-radius: 4px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.album-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.album-name {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.album-count {
+    font-size: 12px;
+    color: #999;
+}
+
+.image-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    padding: 0;
+    flex: 1;
+    display: none;
+}
+
+.image-picker-grid.active {
+    display: grid;
+}
+
+.image-picker-item {
+    aspect-ratio: 1;
+    background-color: #f5f5f5;
+    border-radius: 0;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.image-picker-item:hover {
+    transform: scale(1.02);
+    box-shadow: inset 0 0 0 2px rgba(7, 193, 96, 0.5);
+}
+
+.image-picker-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-picker-item .image-placeholder {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.image-picker-item .image-placeholder::before {
+    font-size: 28px;
+    line-height: 1;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* 手机底部按键样式 */
+.phone-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 50px;
+    background-color: #000;
+    border-top: 1px solid #333;
+    padding: 0 20px;
+}
+
+.button-item {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.button-item:active {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 调整微信图标位置 */
+.app-grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 0 0 20px;
+    height: 100%;
+}
+
+#wechat-app {
+    margin-bottom: 20px;
+}
+
+/* 适配不同屏幕尺寸 */
+@media (max-width: 375px) {
+    .app-item {
+        width: 80px;
+        height: 100px;
+    }
+    
+    .app-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .phone-buttons {
+        height: 45px;
+    }
+    
+    .button-item {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    /* 聊天界面响应式 */
+    .message {
+        max-width: 80%;
+    }
+    
+    .chat-input-area {
+        padding: 6px;
+    }
+    
+    .input-tools {
+        padding: 6px 0;
+        margin-bottom: 6px;
+    }
+    
+    .tool-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+    
+    #message-input {
+        font-size: 15px;
+    }
+    
+    #send-btn {
+        padding: 5px 14px;
+        font-size: 13px;
+    }
+    
+    /* 语音录制界面 */
+    .voice-recording {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .voice-recording-circle {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-height: 667px) {
+    .app-item {
+        height: 100px;
+    }
+    
+    .phone-buttons {
+        height: 45px;
+    }
+    
+    .button-item {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+    
+    /* 聊天界面响应式 */
+    .chat-messages {
+        padding: 12px;
+    }
+    
+    .message {
+        margin-bottom: 12px;
+    }
+    
+    .message-bubble {
+        padding: 8px 12px;
+    }
+    
+    /* 图片选择器 */
+    .image-picker {
+        height: 350px;
+    }
+}
+
+@media (max-height: 568px) {
+    /* 聊天界面响应式 */
+    .chat-messages {
+        padding: 10px;
+    }
+    
+    .message {
+        margin-bottom: 10px;
+    }
+    
+    .message-bubble {
+        padding: 7px 11px;
+        font-size: 15px;
+    }
+    
+    /* 图片选择器 */
+    .image-picker {
+        height: 300px;
+    }
+    
+    /* 表情选择器 */
+    .emoji-picker {
+        height: 200px;
+    }
+}
+
+/* 防止文本选择 */
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 加载指示器样式 */
+.loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.loading-indicator.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #07c160;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+.loading-text {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

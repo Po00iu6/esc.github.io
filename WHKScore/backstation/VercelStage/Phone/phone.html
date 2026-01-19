@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>模拟手机微信</title>
+    <link rel="stylesheet" href="phone.css">
+</head>
+<body>
+    <!-- 手机容器 -->
+    <div class="phone-container">
+        <!-- 手机屏幕 -->
+        <div class="phone-screen">
+        <!-- 加载指示器 -->
+        <!-- <div class="loading-indicator" id="loading-indicator">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">加载中...</div>
+        </div> -->
+            <!-- 状态栏 -->
+            <div class="status-bar">
+                <div class="status-left">
+                    <span class="status-time" id="status-time"></span>
+                </div>
+                <div class="status-right">
+                    <span class="status-icon">📶</span>
+                    <span class="status-icon">🔋</span>
+                </div>
+            </div>
+            <!-- 主屏幕 -->
+            <div id="home-screen" class="screen active">
+                <div class="app-grid">
+                    <div class="app-item" id="wechat-app">
+                        <img src="weixin.png" alt="微信" class="app-icon wechat-icon">
+                        <div class="app-name">微信</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 微信开屏页 -->
+            <div id="splash-screen" class="screen">
+                <div class="splash-content">
+                    <img src="start.webp" alt="微信开屏" class="splash-image">
+                    <!-- <div class="splash-text">微信</div> -->
+                </div>
+            </div>
+
+            <!-- 聊天列表页 -->
+            <div id="chat-list-screen" class="screen">
+                <div class="nav-bar">
+                    <div class="nav-title">微信</div>
+                    <div class="nav-right">+</div>
+                </div>
+                <div class="chat-list">
+                    <div class="chat-item" id="friend-item">
+                        <div class="avatar"><img src="Avatar.jpg" alt="荧 喵~" class="avatar-img"></div>
+                        <div class="chat-info">
+                            <div class="nickname">荧 喵~</div>
+                            <div class="last-message">点击开始聊天</div>
+                        </div>
+                        <div class="chat-item-right">
+                            <div class="time"></div>
+                            <div class="unread-badge" id="unread-badge">1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 聊天界面 -->
+            <div id="chat-screen" class="screen">
+                <div class="nav-bar">
+                    <div class="nav-left" id="back-btn">
+                        <span class="back-icon">←</span>
+                    </div>
+                    <div class="nav-title">荧 喵~</div>
+                    <div class="nav-right">...</div>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- 聊天消息会动态添加到这里 -->
+                </div>
+                <div class="chat-input-area">
+                    <div class="input-tools">
+                        <div class="tool-btn">😊</div>
+                        <div class="tool-btn">📷</div>
+                        <div class="tool-btn">🎤</div>
+                    </div>
+                    <div class="input-container">
+                        <textarea id="message-input" placeholder="输入消息..." rows="1"></textarea>
+                        <button id="send-btn">发送</button>
+                        <button class="voice-btn" id="voice-btn">按住说话</button>
+                    </div>
+                </div>
+                
+                <!-- 语音录制界面 -->
+                <div class="voice-recording" id="voice-recording" style="display: none;">
+                    <div class="voice-recording-circle">
+                        <div class="voice-recording-wave"></div>
+                        <div class="voice-recording-text">松开结束</div>
+                        <div class="voice-recording-duration" id="voice-recording-duration">00:00</div>
+                    </div>
+                    <div class="voice-recording-cancel">放弃发送</div>
+                </div>
+                
+                <!-- 长按菜单 -->
+                <div class="context-menu" id="context-menu">
+                    <!-- 文本消息菜单项 -->
+                    <div class="context-menu-item" id="copy-btn">复制</div>
+                    <div class="context-menu-item" id="delete-btn">删除</div>
+                    <!-- 图片消息菜单项 -->
+                    <div class="context-menu-item" id="view-image-btn" style="display: none;">查看大图</div>
+                    <div class="context-menu-item" id="save-image-btn" style="display: none;">保存图片</div>
+                    <div class="context-menu-item" id="forward-image-btn" style="display: none;">转发</div>
+                </div>
+                
+                <!-- 表情选择器 -->
+                <div class="emoji-picker" id="emoji-picker">
+                    <div class="emoji-picker-header">
+                        <!-- 搜索栏 -->
+                        <div class="emoji-search">
+                            <input type="text" id="emoji-search-input" placeholder="搜索表情..." class="emoji-search-input">
+                            <span class="emoji-search-icon">🔍</span>
+                        </div>
+                    </div>
+                    <!-- 分类标签 -->
+                    <div class="emoji-categories" id="emoji-categories">
+                        <div class="emoji-category active" data-category="recent">😀 常用</div>
+                        <div class="emoji-category" data-category="face">😊 表情</div>
+                        <div class="emoji-category" data-category="animal">🐶 动物</div>
+                        <div class="emoji-category" data-category="food">🍔 食物</div>
+                        <div class="emoji-category" data-category="activity">⚽ 活动</div>
+                        <div class="emoji-category" data-category="travel">✈️ 旅行</div>
+                        <div class="emoji-category" data-category="object">💡 物品</div>
+                        <div class="emoji-category" data-category="symbol">🔣 符号</div>
+                        <div class="emoji-category" data-category="flag">🚩 旗帜</div>
+                    </div>
+                    <div class="emoji-list" id="emoji-list">
+                        <!-- 表情会动态添加到这里 -->
+                    </div>
+                </div>
+                
+                <!-- 图片选择器 -->
+                <div class="image-picker" id="image-picker">
+                    <div class="image-picker-header">
+                        <div class="image-picker-title">选择图片</div>
+                        <div class="image-picker-close" id="image-picker-close">✕</div>
+                    </div>
+                    <div class="image-picker-tabs">
+                        <div class="image-picker-tab active">照片</div>
+                        <div class="image-picker-tab">视频</div>
+                    </div>
+                    <div class="image-picker-content">
+                        <div class="image-picker-album">
+                            <div class="image-picker-album-item">
+                                <div class="album-thumb"></div>
+                                <div class="album-info">
+                                    <div class="album-name">全部照片</div>
+                                    <div class="album-count">1,234</div>
+                                </div>
+                            </div>
+                            <div class="image-picker-album-item">
+                                <div class="album-thumb"></div>
+                                <div class="album-info">
+                                    <div class="album-name">相机胶卷</div>
+                                    <div class="album-count">567</div>
+                                </div>
+                            </div>
+                            <div class="image-picker-album-item">
+                                <div class="album-thumb"></div>
+                                <div class="album-info">
+                                    <div class="album-name">截图</div>
+                                    <div class="album-count">234</div>
+                                </div>
+                            </div>
+                            <div class="image-picker-album-item">
+                                <div class="album-thumb"></div>
+                                <div class="album-info">
+                                    <div class="album-name">收藏</div>
+                                    <div class="album-count">123</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image-picker-grid" id="image-picker-grid">
+                            <!-- 图片会动态添加到这里 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 手机底部按键 -->
+        <div class="phone-buttons">
+            <div class="button-item" id="back-button">〈</div>
+            <div class="button-item" id="home-button">◯</div>
+            <div class="button-item" id="multitask-button">≡</div>
+        </div>
+    </div>
+
+    <script src="phone.js"></script>
+</body>
+</html>

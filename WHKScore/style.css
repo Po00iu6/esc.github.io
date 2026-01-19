@@ -136,7 +136,8 @@ canvas {
 
 /* 分数概览 */
 .score-overview {
-    flex: 1 1 200px;
+    flex: 1 1 300px;
+    width: 80%;
     background: rgba(0, 0, 0, 0.3);
     padding: 20px;
     border-radius: 15px;
@@ -218,6 +219,7 @@ canvas {
     
     .profile-right {
         flex-direction: column;
+        width: 80%;
     }
     
     .profile-image-container {
@@ -233,3 +235,265 @@ canvas {
         font-size: 2.5em;
     }
 }
+
+/* 每周任务样式 */
+.weekly-task-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar-view {
+    flex: 1 1;
+    width: 80%;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.calendar-view h3 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.week-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.week-box {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width:60px;
+    text-align: left;
+    backdrop-filter: blur(10px);
+}
+
+.week-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
+                0 0 25px rgba(0, 255, 255, 0.4);
+    border-color: rgba(0, 255, 255, 0.6);
+}
+
+.week-box.current-week {
+    border: 1px solid white;
+}
+
+.week-number {
+    color: #c7d3db;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+}
+
+.week-date {
+    color: #8B949E;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.completion-rate {
+    color: #3FB950;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
+}
+
+.task-details {
+    flex: 1 1 ;
+    width: 80%;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(0, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.task-details h3 {
+    color: #e0e0e0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.no-selection {
+    color: #8B949E;
+    text-align: center;
+    padding: 50px 20px;
+    font-size: 1.1em;
+}
+
+.week-info {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.week-date-range {
+    color: #eeeeee;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.task-progress {
+    margin-top: 5px;
+}
+
+.progress-text {
+    color: #8B949E;
+    font-size: 1em;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.progress-bar-container {
+    background: rgba(0, 0, 0, 0.4);
+    height: 5px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.progress-bar {
+    background: #00ffae;
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    border-color: rgba(0, 255, 255, 0.5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.task-status {
+    margin-right: 15px;
+    font-size: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.task-status-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #3FB950;
+    text-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
+    font-size: 1.0em;
+    line-height: 40px;
+    text-align: center;
+}
+
+.status-check {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: #3FB950;
+    text-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
+    font-size: 0.6em;
+    line-height: 45px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.task-uncompleted {
+    color: #8B949E;
+    text-shadow: 0 0 10px rgba(139, 148, 158, 0.8);
+}
+
+
+.task-title {
+    color: #ffffff;
+    font-size: 1.1em;
+    flex: 1;
+}
+
+.task-title.completed-task {
+    color: #8B949E;
+    text-shadow: 0 0 5px rgba(139, 148, 158, 0.5);
+}
+
+.no-tasks {
+    color: #8B949E;
+    text-align: center;
+    padding: 50px 20px;
+    font-size: 1.2em;
+    font-style: italic;
+}
+
+/* 响应式设计 - 每周任务 */
+@media (max-width: 768px) {
+    .weekly-task-container {
+        flex-direction: column;
+    }
+    
+    /* .week-box {
+        width: 100%;
+        max-width: 200px;
+    } */
+    
+    .week-grid {
+        justify-content: center;
+    }
+}
+
