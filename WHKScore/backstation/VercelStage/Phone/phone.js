@@ -74,6 +74,25 @@ function switchScreen(toScreen, playAnimation = true) {
     }
 }
 
+// 聊天消息历史记录
+let chatHistory = {
+    'friend-item': {
+        messages: [],
+        lastMessage: '点击开始聊天',
+        lastTime: getCurrentTime()
+    }
+};
+
+// 更新好友列表显示
+function updateChatListItem() {
+    const friendItem = document.getElementById('friend-item');
+    const lastMessageElement = friendItem.querySelector('.last-message');
+    const timeElement = friendItem.querySelector('.time');
+    
+    lastMessageElement.textContent = chatHistory['friend-item'].lastMessage;
+    timeElement.textContent = chatHistory['friend-item'].lastTime;
+}
+
 // 发送消息函数
 function sendMessage() {
     let messageText = messageInput.value.trim();
@@ -100,6 +119,21 @@ function sendMessage() {
     // 添加到聊天消息区域
     chatMessages.appendChild(messageElement);
     
+    // 更新聊天历史
+    const currentTime = getCurrentTime();
+    chatHistory['friend-item'].messages.push({
+        text: messageText,
+        type: 'sent',
+        time: currentTime
+    });
+    
+    // 更新最近消息和时间
+    chatHistory['friend-item'].lastMessage = messageText;
+    chatHistory['friend-item'].lastTime = currentTime;
+    
+    // 更新好友列表显示
+    updateChatListItem();
+    
     // 清空输入框
     messageInput.value = '';
     
@@ -117,6 +151,21 @@ function sendMessage() {
         `;
         chatMessages.appendChild(replyElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // 更新聊天历史
+        const replyTime = getCurrentTime();
+        chatHistory['friend-item'].messages.push({
+            text: replyText,
+            type: 'received',
+            time: replyTime
+        });
+        
+        // 更新最近消息和时间
+        chatHistory['friend-item'].lastMessage = replyText;
+        chatHistory['friend-item'].lastTime = replyTime;
+        
+        // 更新好友列表显示
+        updateChatListItem();
     }, 1000);
 }
 
@@ -135,19 +184,51 @@ function sendImageMessage(imageUrl) {
     // 添加到聊天消息区域
     chatMessages.appendChild(messageElement);
     
+    // 更新聊天历史
+    const currentTime = getCurrentTime();
+    chatHistory['friend-item'].messages.push({
+        text: '[图片]',
+        type: 'sent',
+        time: currentTime,
+        isImage: true
+    });
+    
+    // 更新最近消息和时间
+    chatHistory['friend-item'].lastMessage = '[图片]';
+    chatHistory['friend-item'].lastTime = currentTime;
+    
+    // 更新好友列表显示
+    updateChatListItem();
+    
     // 滚动到底部
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
     // 模拟回复（这里可以根据需要扩展）
     setTimeout(() => {
+        const replyText = '收到你的图片啦~';
         const replyElement = document.createElement('div');
         replyElement.className = 'message received';
         replyElement.innerHTML = `
-            <div class="message-bubble">收到你的图片啦~</div>
+            <div class="message-bubble">${replyText}</div>
             <div class="message-time">${getCurrentTime()}</div>
         `;
         chatMessages.appendChild(replyElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // 更新聊天历史
+        const replyTime = getCurrentTime();
+        chatHistory['friend-item'].messages.push({
+            text: replyText,
+            type: 'received',
+            time: replyTime
+        });
+        
+        // 更新最近消息和时间
+        chatHistory['friend-item'].lastMessage = replyText;
+        chatHistory['friend-item'].lastTime = replyTime;
+        
+        // 更新好友列表显示
+        updateChatListItem();
     }, 1000);
 }
 
@@ -746,6 +827,23 @@ function init() {
         // 添加到聊天消息区域
         chatMessages.appendChild(messageElement);
         
+        // 更新聊天历史
+        const currentTime = getCurrentTime();
+        chatHistory['friend-item'].messages.push({
+            text: '[语音消息]',
+            type: 'sent',
+            time: currentTime,
+            isVoice: true,
+            duration: duration
+        });
+        
+        // 更新最近消息和时间
+        chatHistory['friend-item'].lastMessage = '[语音消息]';
+        chatHistory['friend-item'].lastTime = currentTime;
+        
+        // 更新好友列表显示
+        updateChatListItem();
+        
         // 滚动到底部
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
@@ -769,11 +867,12 @@ function init() {
         
         // 模拟回复（这里可以根据需要扩展）
         setTimeout(() => {
+            const replyDuration = Math.floor(Math.random() * 5) + 1;
             const replyElement = document.createElement('div');
             replyElement.className = 'message received';
             replyElement.innerHTML = `
                 <div class="message-bubble">
-                    <div class="voice-message" data-duration="${Math.floor(Math.random() * 5) + 1}">
+                    <div class="voice-message" data-duration="${replyDuration}">
                         <span class="voice-icon">▶️</span>
                         <div class="voice-wave">
                             <div class="voice-wave-bar"></div>
@@ -782,13 +881,30 @@ function init() {
                             <div class="voice-wave-bar"></div>
                             <div class="voice-wave-bar"></div>
                         </div>
-                        <span class="voice-duration">${Math.floor(Math.random() * 5) + 1}″</span>
+                        <span class="voice-duration">${replyDuration}″</span>
                     </div>
                 </div>
                 <div class="message-time">${getCurrentTime()}</div>
             `;
             chatMessages.appendChild(replyElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // 更新聊天历史
+            const replyTime = getCurrentTime();
+            chatHistory['friend-item'].messages.push({
+                text: '[语音消息]',
+                type: 'received',
+                time: replyTime,
+                isVoice: true,
+                duration: replyDuration
+            });
+            
+            // 更新最近消息和时间
+            chatHistory['friend-item'].lastMessage = '[语音消息]';
+            chatHistory['friend-item'].lastTime = replyTime;
+            
+            // 更新好友列表显示
+            updateChatListItem();
             
             // 添加回复语音的播放事件
             const replyVoiceMessage = replyElement.querySelector('.voice-message');
@@ -810,26 +926,27 @@ function init() {
         }, 1000);
     }
     
-    // 添加语音消息样式
-    const style = document.createElement('style');
-    style.textContent = `
+    
         .voice-message {
             display: flex;
             align-items: center;
             padding: 10px 12px;
             position: relative;
-            min-width: 80px;
-        }
-        
-        .voice-icon {
-            font-size: 18px;
-            margin-right: 8px;
-            transition: transform 0.2s ease;
+            min-width: 120px;
             cursor: pointer;
         }
         
-        .voice-message:hover .voice-icon {
-            transform: scale(1.1);
+        .voice-icon {
+            font-size: 16px;
+            margin-right: 12px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: transparent;
+            border: none;
+            outline: none;
         }
         
         .voice-message.sent {
@@ -838,7 +955,7 @@ function init() {
         
         .voice-message.sent .voice-icon {
             margin-right: 0;
-            margin-left: 8px;
+            margin-left: 12px;
         }
         
         .voice-message.sent .voice-wave {
@@ -850,6 +967,8 @@ function init() {
             align-items: flex-end;
             margin: 0 8px;
             height: 20px;
+            flex: 1;
+            min-width: 40px;
         }
         
         .voice-wave-bar {
@@ -857,26 +976,26 @@ function init() {
             background-color: #999;
             border-radius: 2px;
             margin: 0 1px;
-            animation: voiceWave 1s ease-in-out infinite;
+            animation: voiceWave 0.8s ease-in-out infinite;
         }
         
         .voice-wave-bar:nth-child(1) {
-            height: 8px;
+            height: 6px;
             animation-delay: 0s;
         }
         
         .voice-wave-bar:nth-child(2) {
-            height: 16px;
+            height: 12px;
             animation-delay: 0.1s;
         }
         
         .voice-wave-bar:nth-child(3) {
-            height: 12px;
+            height: 18px;
             animation-delay: 0.2s;
         }
         
         .voice-wave-bar:nth-child(4) {
-            height: 20px;
+            height: 22px;
             animation-delay: 0.3s;
         }
         
@@ -885,19 +1004,34 @@ function init() {
             animation-delay: 0.4s;
         }
         
+        .voice-wave-bar:nth-child(6) {
+            height: 10px;
+            animation-delay: 0.5s;
+        }
+        
+        .voice-wave-bar:nth-child(7) {
+            height: 16px;
+            animation-delay: 0.6s;
+        }
+        
         .voice-message.sent .voice-wave-bar {
-            background-color: #666;
+            background-color: #555;
         }
         
         .voice-duration {
             font-size: 12px;
             color: #666;
             min-width: 25px;
+            margin: 0 4px;
+        }
+        
+        .voice-message.sent .voice-duration {
+            color: #444;
         }
         
         @keyframes voiceWave {
             0%, 100% {
-                transform: scaleY(0.5);
+                transform: scaleY(0.4);
             }
             50% {
                 transform: scaleY(1);
@@ -910,6 +1044,46 @@ function init() {
         
         .voice-message.paused .voice-wave-bar {
             animation-play-state: paused;
+        }
+        
+        /* 播放按钮覆盖层 */
+        .voice-message::before {
+            content: '▶';
+            position: absolute;
+            top: 50%;
+            left: 8px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+            z-index: 1;
+        }
+        
+        .voice-message.sent::before {
+            left: auto;
+            right: 8px;
+        }
+        
+        /* 播放状态指示器 */
+        .voice-message.playing::before {
+            background-color: rgba(7, 193, 96, 0.2);
+            color: #07c160;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: translateY(-50%) scale(1);
+            }
+            50% {
+                transform: translateY(-50%) scale(1.1);
+            }
         }
     `;
     document.head.appendChild(style);

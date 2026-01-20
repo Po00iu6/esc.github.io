@@ -1,0 +1,159 @@
+/* 语音消息样式 */
+.voice-message {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    position: relative;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+.voice-icon {
+    font-size: 16px;
+    margin-right: 12px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.voice-message.sent {
+    flex-direction: row-reverse;
+}
+
+.voice-message.sent .voice-icon {
+    margin-right: 0;
+    margin-left: 12px;
+}
+
+.voice-message.sent .voice-wave {
+    flex-direction: row-reverse;
+}
+
+.voice-wave {
+    display: flex;
+    align-items: flex-end;
+    margin: 0 8px;
+    height: 20px;
+    flex: 1;
+    min-width: 40px;
+}
+
+.voice-wave-bar {
+    width: 3px;
+    background-color: #999;
+    border-radius: 2px;
+    margin: 0 1px;
+    animation: voiceWave 0.8s ease-in-out infinite;
+}
+
+.voice-wave-bar:nth-child(1) {
+    height: 6px;
+    animation-delay: 0s;
+}
+
+.voice-wave-bar:nth-child(2) {
+    height: 12px;
+    animation-delay: 0.1s;
+}
+
+.voice-wave-bar:nth-child(3) {
+    height: 18px;
+    animation-delay: 0.2s;
+}
+
+.voice-wave-bar:nth-child(4) {
+    height: 22px;
+    animation-delay: 0.3s;
+}
+
+.voice-wave-bar:nth-child(5) {
+    height: 14px;
+    animation-delay: 0.4s;
+}
+
+.voice-wave-bar:nth-child(6) {
+    height: 10px;
+    animation-delay: 0.5s;
+}
+
+.voice-wave-bar:nth-child(7) {
+    height: 16px;
+    animation-delay: 0.6s;
+}
+
+.voice-message.sent .voice-wave-bar {
+    background-color: #555;
+}
+
+.voice-duration {
+    font-size: 12px;
+    color: #666;
+    min-width: 25px;
+    margin: 0 4px;
+}
+
+.voice-message.sent .voice-duration {
+    color: #444;
+}
+
+@keyframes voiceWave {
+    0%, 100% {
+        transform: scaleY(0.4);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+.voice-message.playing .voice-wave-bar {
+    animation-play-state: running;
+}
+
+.voice-message.paused .voice-wave-bar {
+    animation-play-state: paused;
+}
+
+/* 播放按钮覆盖层 */
+.voice-message::before {
+    content: '▶';
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+    z-index: 1;
+}
+
+.voice-message.sent::before {
+    left: auto;
+    right: 8px;
+}
+
+/* 播放状态指示器 */
+.voice-message.playing::before {
+    background-color: rgba(7, 193, 96, 0.2);
+    color: #07c160;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        transform: translateY(-50%) scale(1.1);
+    }
+}
