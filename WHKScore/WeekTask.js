@@ -7,7 +7,7 @@ const weekTasks = {
         "startDate": "2026-01-19",
         "endDate": "2026-01-25",
         "tasks": [
-            { "title": "学完教材帮选必二", "completed": false },
+            { "title": "学完教材帮选必二", "completed": true },
             { "title": "数学领航计划大小本写完", "completed": false },
             { "title": "一化必刷100讲写到化学工艺流程", "completed": false },
             { "title": "做3张生物卷子", "completed": false }
