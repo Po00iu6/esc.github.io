@@ -33,7 +33,7 @@ const voiceRecordingDuration = document.getElementById('voice-recording-duration
 const voiceToolBtn = document.querySelector('.input-tools .tool-btn:nth-child(3)');
 
 // 页面切换函数
-function switchScreen(toScreen, playAnimation = true) {
+function switchScreen(toScreen, playAnimation = true, direction = 'forward') {
     // 获取当前活跃屏幕
     const currentScreen = document.querySelector('.screen.active');
     
@@ -44,25 +44,33 @@ function switchScreen(toScreen, playAnimation = true) {
     
     if (currentScreen) {
         if (playAnimation) {
-            // 添加退出动画
-            currentScreen.classList.add('animate-out');
+            // 添加退出动画，根据方向选择正向或反向
+            if (direction === 'forward') {
+                currentScreen.classList.add('animate-out');
+            } else {
+                currentScreen.classList.add('animate-out-reverse');
+            }
         }
         
         // 等待动画结束后隐藏当前屏幕
         setTimeout(() => {
             if (playAnimation) {
-                currentScreen.classList.remove('active', 'animate-out');
+                currentScreen.classList.remove('active', 'animate-out', 'animate-out-reverse');
             } else {
                 currentScreen.classList.remove('active');
             }
             
-            // 显示目标屏幕并添加进入动画
+            // 显示目标屏幕并添加进入动画，根据方向选择正向或反向
             if (playAnimation) {
-                toScreen.classList.add('active', 'animate-in');
+                if (direction === 'forward') {
+                    toScreen.classList.add('active', 'animate-in');
+                } else {
+                    toScreen.classList.add('active', 'animate-in-reverse');
+                }
                 
                 // 动画结束后移除动画类
                 setTimeout(() => {
-                    toScreen.classList.remove('animate-in');
+                    toScreen.classList.remove('animate-in', 'animate-in-reverse');
                 }, 500);
             } else {
                 toScreen.classList.add('active');
@@ -74,12 +82,15 @@ function switchScreen(toScreen, playAnimation = true) {
     }
 }
 
+
+
 // 聊天消息历史记录
 let chatHistory = {
     'friend-item': {
         messages: [],
         lastMessage: '点击开始聊天',
-        lastTime: getCurrentTime()
+        lastTime: getCurrentTime(),
+        lastTimestamp: null // 最后显示的时间戳
     }
 };
 
@@ -91,6 +102,37 @@ function updateChatListItem() {
     
     lastMessageElement.textContent = chatHistory['friend-item'].lastMessage;
     timeElement.textContent = chatHistory['friend-item'].lastTime;
+}
+
+// 检查是否需要显示时间戳（5分钟规则）
+function checkTimestampNeeded(currentTime) {
+    const chatData = chatHistory['friend-item'];
+    
+    // 如果没有消息或没有最后时间戳，需要显示时间戳
+    if (chatData.messages.length === 0 || !chatData.lastTimestamp) {
+        chatData.lastTimestamp = currentTime;
+        return true;
+    }
+    
+    // 解析时间字符串为分钟数
+    const parseTime = (timeStr) => {
+        const [hours, minutes] = timeStr.split(':').map(Number);
+        return hours * 60 + minutes;
+    };
+    
+    const currentMinutes = parseTime(currentTime);
+    const lastMinutes = parseTime(chatData.lastTimestamp);
+    
+    // 计算时间差（分钟）
+    const timeDiff = Math.abs(currentMinutes - lastMinutes);
+    
+    // 如果超过5分钟，显示时间戳
+    if (timeDiff >= 5) {
+        chatData.lastTimestamp = currentTime;
+        return true;
+    }
+    
+    return false;
 }
 
 // 发送消息函数
@@ -108,19 +150,39 @@ function sendMessage() {
     const isPureEmoji = emojiRegex.test(messageText) && messageText.replace(emojiRegex, '').trim() === '';
     const bubbleClass = isPureEmoji ? 'message-bubble pure-emoji' : 'message-bubble';
     
+    // 检查是否需要显示时间戳
+    const currentTime = getCurrentTime();
+    const shouldShowTimestamp = checkTimestampNeeded(currentTime);
+    
+    // 如果需要显示时间戳，先添加时间戳元素
+    if (shouldShowTimestamp) {
+        const timestampElement = document.createElement('div');
+        timestampElement.className = 'timestamp';
+        timestampElement.textContent = currentTime;
+        chatMessages.appendChild(timestampElement);
+    }
+    
     // 创建消息元素
     const messageElement = document.createElement('div');
     messageElement.className = 'message sent';
-    messageElement.innerHTML = `
-        <div class="${bubbleClass}">${processedText}</div>
-        <div class="message-time">${getCurrentTime()}</div>
+    
+    let messageHTML = `
+        <div class="message-content">
+            <div class="avatar">
+                <img src="wofang.jpg" alt="我方" class="avatar-img">
+            </div>
+            <div class="message-bubble-container">
+                <div class="${bubbleClass}">${processedText}</div>
+            </div>
+        </div>
     `;
+    
+    messageElement.innerHTML = messageHTML;
     
     // 添加到聊天消息区域
     chatMessages.appendChild(messageElement);
     
     // 更新聊天历史
-    const currentTime = getCurrentTime();
     chatHistory['friend-item'].messages.push({
         text: messageText,
         type: 'sent',
@@ -140,20 +202,52 @@ function sendMessage() {
     // 滚动到底部
     chatMessages.scrollTop = chatMessages.scrollHeight;
     
-    // 模拟回复（这里可以根据需要扩展）
+    // 模拟回复（根据关键词触发）
     setTimeout(() => {
-        const replyText = '收到你的消息啦~';
+        let replyText = '收到你的消息啦~';
+        
+        // 检查消息中是否包含关键词
+        const lowerCaseText = messageText.toLowerCase();
+        for (const [keyword, reply] of Object.entries(keywordReplies)) {
+            if (lowerCaseText.includes(keyword.toLowerCase())) {
+                replyText = reply;
+                break;
+            }
+        }
+        
+        const replyTime = getCurrentTime();
+        
+        // 检查是否需要显示时间戳
+        const shouldShowTimestamp = checkTimestampNeeded(replyTime);
+        
+        // 如果需要显示时间戳，先添加时间戳元素
+        if (shouldShowTimestamp) {
+            const timestampElement = document.createElement('div');
+            timestampElement.className = 'timestamp';
+            timestampElement.textContent = replyTime;
+            chatMessages.appendChild(timestampElement);
+        }
+        
         const replyElement = document.createElement('div');
         replyElement.className = 'message received';
-        replyElement.innerHTML = `
-            <div class="message-bubble">${replyText}</div>
-            <div class="message-time">${getCurrentTime()}</div>
+        
+        let replyHTML = `
+            <div class="message-content">
+                <div class="avatar">
+                    <img src="Avatar.jpg" alt="对方" class="avatar-img">
+                </div>
+                <div class="message-bubble-container">
+                    <div class="message-bubble">${replyText}</div>
+                </div>
+            </div>
         `;
+        
+        replyElement.innerHTML = replyHTML;
+        
         chatMessages.appendChild(replyElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
         // 更新聊天历史
-        const replyTime = getCurrentTime();
         chatHistory['friend-item'].messages.push({
             text: replyText,
             type: 'received',
@@ -171,21 +265,41 @@ function sendMessage() {
 
 // 发送图片消息函数
 function sendImageMessage(imageUrl) {
+    // 检查是否需要显示时间戳
+    const currentTime = getCurrentTime();
+    const shouldShowTimestamp = checkTimestampNeeded(currentTime);
+    
+    // 如果需要显示时间戳，先添加时间戳元素
+    if (shouldShowTimestamp) {
+        const timestampElement = document.createElement('div');
+        timestampElement.className = 'timestamp';
+        timestampElement.textContent = currentTime;
+        chatMessages.appendChild(timestampElement);
+    }
+    
     // 创建图片消息元素
     const messageElement = document.createElement('div');
     messageElement.className = 'message sent';
-    messageElement.innerHTML = `
-        <div class="message-image sent">
-            <img src="${imageUrl}" alt="图片消息">
+    
+    let messageHTML = `
+        <div class="message-content">
+            <div class="avatar">
+                <img src="wofang.jpg" alt="我方" class="avatar-img">
+            </div>
+            <div class="message-bubble-container">
+                <div class="message-image sent">
+                    <img src="${imageUrl}" alt="图片消息">
+                </div>
+            </div>
         </div>
-        <div class="message-time">${getCurrentTime()}</div>
     `;
+    
+    messageElement.innerHTML = messageHTML;
     
     // 添加到聊天消息区域
     chatMessages.appendChild(messageElement);
     
     // 更新聊天历史
-    const currentTime = getCurrentTime();
     chatHistory['friend-item'].messages.push({
         text: '[图片]',
         type: 'sent',
@@ -206,17 +320,38 @@ function sendImageMessage(imageUrl) {
     // 模拟回复（这里可以根据需要扩展）
     setTimeout(() => {
         const replyText = '收到你的图片啦~';
+        const replyTime = getCurrentTime();
+        
+        // 检查是否需要显示时间戳
+        const shouldShowTimestamp = checkTimestampNeeded(replyTime);
+        
         const replyElement = document.createElement('div');
         replyElement.className = 'message received';
-        replyElement.innerHTML = `
-            <div class="message-bubble">${replyText}</div>
-            <div class="message-time">${getCurrentTime()}</div>
+        
+        let replyHTML = '';
+        
+        // 如果需要显示时间戳，添加时间戳元素
+        if (shouldShowTimestamp) {
+            replyHTML += `<div class="timestamp">${replyTime}</div>`;
+        }
+        
+        replyHTML += `
+            <div class="message-content">
+                <div class="avatar">
+                    <img src="Avatar.jpg" alt="对方" class="avatar-img">
+                </div>
+                <div class="message-bubble-container">
+                    <div class="message-bubble">${replyText}</div>
+                </div>
+            </div>
         `;
+        
+        replyElement.innerHTML = replyHTML;
+        
         chatMessages.appendChild(replyElement);
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
         // 更新聊天历史
-        const replyTime = getCurrentTime();
         chatHistory['friend-item'].messages.push({
             text: replyText,
             type: 'received',
@@ -277,7 +412,7 @@ function init() {
         appClone.style.backgroundPosition = 'center';
         appClone.style.borderRadius = '16px';
         appClone.style.zIndex = '1000';
-        appClone.style.animation = 'appZoomIn 0.5s ease forwards';
+        appClone.style.animation = 'appZoomIn 0.2s ease forwards';
         
         // 添加到手机容器中
         document.querySelector('.phone-container').appendChild(appClone);
@@ -292,11 +427,11 @@ function init() {
             
             // 开屏页2秒后自动跳转到聊天列表
             setTimeout(() => {
-                switchScreen(chatListScreen);
+                switchScreen(chatListScreen, true, 'forward');
                 // 隐藏加载指示器
                 hideLoading();
             }, 2000);
-        }, 500);
+        }, 200);
     });
     
     // 好友项点击事件
@@ -305,21 +440,21 @@ function init() {
         if (unreadBadge) {
             unreadBadge.textContent = '';
         }
-        switchScreen(chatScreen);
+        switchScreen(chatScreen, true, 'forward');
     });
     
     // 返回按钮点击事件
     backBtn.addEventListener('click', () => {
-        switchScreen(chatListScreen);
+        switchScreen(chatListScreen, true, 'back');
     });
     
     // 底部返回键点击事件
     backButton.addEventListener('click', () => {
         const currentScreen = document.querySelector('.screen.active');
         if (currentScreen === chatScreen) {
-            switchScreen(chatListScreen);
+            switchScreen(chatListScreen, true, 'back');
         } else if (currentScreen === chatListScreen) {
-            switchScreen(homeScreen);
+            switchScreen(homeScreen, true, 'back');
         }
     });
     
@@ -330,7 +465,7 @@ function init() {
         if (currentScreen === homeScreen) {
             switchScreen(homeScreen, false);
         } else {
-            switchScreen(homeScreen);
+            switchScreen(homeScreen, true, 'back');
         }
     });
     
@@ -484,6 +619,88 @@ function init() {
     });
     
     // 表情功能
+    // 表情名称映射表，用于搜索
+    const emojiNames = {
+        '😀': '微笑', '😃': '开心', '😄': '大笑', '😁': '露齿笑', '😆': '笑出眼泪',
+        '😅': '汗笑', '🤣': '捧腹笑', '😂': '笑哭', '🙂': '微笑', '🙃': '倒脸',
+        '😉': '眨眼', '😊': '笑脸', '😇': '天使', '🥰': '爱心眼', '😍': '花痴',
+        '🤩': '星星眼', '😘': '飞吻', '😗': '亲吻', '😙': '亲吻', '😚': '亲吻',
+        '😋': '美味', '😛': '吐舌', '😝': '吐舌', '😜': '歪嘴', '🤪': '疯癫',
+        '🤨': '挑眉', '🧐': '思考', '🤓': '书呆子', '😎': '酷', '🤩': '惊喜',
+        '🥳': '派对', '😏': '得意', '😒': '无语', '😞': '难过', '😔': '伤心',
+        '😟': '担忧', '😕': '困惑', '🙁': '皱眉', '☹️': '皱眉', '😣': '痛苦',
+        '😖': '无奈', '😫': '疲惫', '😩': '崩溃', '🥺': '恳求', '😢': '哭泣',
+        '😭': '大哭', '😤': '生气', '😠': '愤怒', '😡': '暴怒', '🤬': '咒骂',
+        '🤯': '爆炸', '😳': '害羞', '🥵': '热', '🥶': '冷', '😱': '惊恐',
+        '😨': '害怕', '😰': '恐惧', '😥': '冷汗', '😓': '出汗', '🤗': '拥抱',
+        '🤔': '思考', '🤭': '捂嘴笑', '🤫': '安静', '🤥': '说谎', '😶': '无语',
+        '😐': '冷漠', '😑': '无语', '😬': '尴尬', '🙄': '白眼', '😯': '惊讶',
+        '😦': '震惊', '😧': '惊恐', '😮': '惊讶', '😲': '震惊', '🥱': '打哈欠',
+        '😴': '睡觉', '🤤': '流口水', '😪': '困倦', '😵': '眩晕', '🤐': '闭嘴',
+        '🥴': '醉了', '🤢': '恶心', '🤮': '呕吐', '🤧': '打喷嚏', '😷': '戴口罩',
+        '🤒': '发烧', '🤕': '受伤', '🐶': '狗', '🐱': '猫', '🐭': '老鼠',
+        '🐹': '仓鼠', '🐰': '兔子', '🦊': '狐狸', '🐻': '熊', '🐼': '熊猫',
+        '🐨': '考拉', '🐯': '老虎', '🦁': '狮子', '🐮': '牛', '🐷': '猪',
+        '🐽': '猪鼻子', '🐸': '青蛙', '🐵': '猴子', '🙈': '捂眼猴', '🙉': '捂耳猴',
+        '🙊': '捂嘴猴', '🐒': '猴子', '🐔': '鸡', '🐧': '企鹅', '🐦': '鸟',
+        '🐤': '小鸡', '🐣': '鸡蛋', '🐥': '小鸡', '🦆': '鸭子', '🦅': '鹰',
+        '🦉': '猫头鹰', '🦇': '蝙蝠', '🐺': '狼', '🐗': '野猪', '🐴': '马',
+        '🦄': '独角兽', '🐝': '蜜蜂', '🐛': '虫子', '🦋': '蝴蝶', '🐌': '蜗牛',
+        '🐞': '瓢虫', '🐜': '蚂蚁', '🦟': '蚊子', '🦗': '蟋蟀', '🕷️': '蜘蛛',
+        '🕸️': '蜘蛛网', '🦂': '蝎子', '🐢': '乌龟', '🐍': '蛇', '🦎': '蜥蜴',
+        '🦖': '恐龙', '🦕': '恐龙', '🐙': '章鱼', '🦑': '鱿鱼', '🦐': '虾',
+        '🦞': '龙虾', '🦀': '螃蟹', '🐡': '河豚', '🐠': '鱼', '🐟': '鱼',
+        '🐬': '海豚', '🐳': '鲸鱼', '🐋': '鲸鱼', '🦈': '鲨鱼', '🐊': '鳄鱼',
+        '🐅': '老虎', '🐆': '豹子', '🦓': '斑马', '🦍': '大猩猩', '🦧': '猩猩',
+        '🐘': '大象', '🦛': '河马', '🦏': '犀牛', '🐪': '骆驼', '🐫': '骆驼',
+        '🦒': '长颈鹿', '🦘': '袋鼠', '🐃': '牛', '🐂': '牛', '🐄': '奶牛',
+        '🐎': '马', '🐖': '猪', '🐏': '羊', '🐑': '羊', '🦙': '羊驼',
+        '🐐': '山羊', '🦌': '鹿', '🐕': '狗', '🐩': '狗', '🦮': '导盲犬',
+        '🐕‍🦺': '搜救犬', '🐈': '猫', '🐓': '鸡', '🦃': '火鸡', '🦚': '孔雀',
+        '🦜': '鹦鹉', '🦢': '天鹅', '🦩': '火烈鸟', '🕊️': '鸽子', '🐇': '兔子',
+        '🦝': '浣熊', '🦨': '臭鼬', '🦡': '獾', '🦦': '水獭', '🦥': '树懒',
+        '🐁': '老鼠', '🐀': '老鼠', '🐿️': '松鼠', '🦔': '刺猬', '🍎': '苹果',
+        '🍐': '梨', '🍊': '橘子', '🍋': '柠檬', '🍌': '香蕉', '🍉': '西瓜',
+        '🍇': '葡萄', '🍓': '草莓', '🫐': '蓝莓', '🍈': '甜瓜', '🍒': '樱桃',
+        '🍑': '桃子', '🥭': '芒果', '🍍': '菠萝', '🥥': '椰子', '🥝': '猕猴桃',
+        '🍅': '番茄', '🍆': '茄子', '🥑': '牛油果', '🥦': '西兰花', '🥬': '生菜',
+        '🥒': '黄瓜', '🌶️': '辣椒', '🫑': '甜椒', '🌽': '玉米', '🥕': '胡萝卜',
+        '🫒': '橄榄', '🧄': '大蒜', '🧅': '洋葱', '🥔': '土豆', '🍠': '红薯',
+        '🥐': '牛角包', '🥖': '法棍', '🍞': '面包', '🥨': '椒盐卷饼', '🥯': '贝果',
+        '🧀': '奶酪', '🥚': '鸡蛋', '🍳': '煎蛋', '🧈': '黄油', '🥞': '煎饼',
+        '🧇': '华夫饼', '🥓': '培根', '🥩': '牛排', '🍗': '鸡腿', '🍖': '肉',
+        '🦴': '骨头', '🌭': '热狗', '🍔': '汉堡', '🍟': '薯条', '🍕': '披萨',
+        '🫓': '饼', '🥪': '三明治', '🥙': '墨西哥卷饼', '🧆': '丸子', '🌮': '墨西哥卷饼',
+        '🌯': '卷饼', '🫔': '墨西哥卷饼', '🥗': '沙拉', '🥘': '炖菜', '🫕': '汤',
+        '🥫': '罐头', '🍝': '意大利面', '🍜': '面条', '🍲': '火锅', '🍛': '咖喱饭',
+        '🍣': '寿司', '🍱': '便当', '🥟': '饺子', '🦪': '生蚝', '🍤': '虾',
+        '🍙': '饭团', '🍚': '米饭', '🍘': '仙贝', '🍥': '鱼板', '🥠': '幸运饼干',
+        '🥮': '月饼', '🍢': '烤串', '🍡': '糖葫芦', '🍧': '刨冰', '🍨': '冰淇淋',
+        '🍦': '冰淇淋', '🥧': '派', '🧁': '杯子蛋糕', '🍰': '蛋糕', '🎂': '生日蛋糕',
+        '🍮': '布丁', '🍭': '棒棒糖', '🍬': '糖果', '🍫': '巧克力', '🍿': '爆米花',
+        '🧂': '盐', '🥤': '饮料', '🧃': '果汁', '🧋': '奶茶', '🍵': '茶',
+        '🍶': '清酒', '🍺': '啤酒', '🍻': '干杯', '🥂': '香槟', '🍷': '红酒',
+        '🥃': '威士忌', '🍸': '鸡尾酒', '🍹': '鸡尾酒', '🧉': '马黛茶', '🧊': '冰块',
+        '🍼': '奶瓶', '⚽': '足球', '🏀': '篮球', '🏈': '橄榄球', '⚾': '棒球',
+        '🥎': '垒球', '🎾': '网球', '🏐': '排球', '🏉': '橄榄球', '🥏': '飞盘',
+        '🎱': '台球', '🪀': '悠悠球', '🏓': '乒乓球', '🏸': '羽毛球', '🏒': '冰球',
+        '🏑': '曲棍球', '🥍': '长曲棍球', '🏏': '板球', '🪃': '飞镖', '🥅': '球门',
+        '⛳': '高尔夫', '🪁': '风筝', '🏹': '射箭', '🎣': '钓鱼', '🤿': '潜水',
+        '🥊': '拳击', '🥋': '武术', '🎽': '运动衫', '🛹': '滑板', '🛼': '旱冰鞋',
+        '🛷': '雪橇', '⛸️': '滑冰', '🥌': '冰壶', '🎿': '滑雪板', '⛷️': '滑雪',
+        '🏂': '单板滑雪', '🪂': '跳伞', '🏋️‍♂️': '举重', '🏋️‍♀️': '举重', '🤸‍♂️': '体操',
+        '🤸‍♀️': '体操', '🤼‍♂️': '摔跤', '🤼‍♀️': '摔跤', '🤺': '击剑', '🤾‍♂️': '手球',
+        '🤾‍♀️': '手球', '🏌️‍♂️': '高尔夫', '🏌️‍♀️': '高尔夫', '🏇': '赛马', '🧘‍♂️': '瑜伽',
+        '🧘‍♀️': '瑜伽', '🚴‍♂️': '骑自行车', '🚴‍♀️': '骑自行车', '🚵‍♂️': '山地自行车', '🚵‍♀️': '山地自行车',
+        '🚶‍♂️': '步行', '🚶‍♀️': '步行', '🧍‍♂️': '站立', '🧍‍♀️': '站立', '🧎‍♂️': '跪拜',
+        '🧎‍♀️': '跪拜', '🧏‍♂️': '耳聋', '🧏‍♀️': '耳聋', '🏃‍♂️': '跑步', '🏃‍♀️': '跑步',
+        '💃': '跳舞', '🕺': '跳舞', '🕴️': '模特步', '👯‍♂️': '跳舞', '👯‍♀️': '跳舞',
+        '🧖‍♂️': '桑拿', '🧖‍♀️': '桑拿', '🧗‍♂️': '攀岩', '🧗‍♀️': '攀岩', '🚣‍♂️': '划船',
+        '🚣‍♀️': '划船', '🏊‍♂️': '游泳', '🏊‍♀️': '游泳', '⛹️‍♂️': '打篮球', '⛹️‍♀️': '打篮球',
+        '🤽‍♂️': '水球', '🤽‍♀️': '水球', '🤸‍♂️': '体操', '🤸‍♀️': '体操', '🤹‍♂️': '杂耍',
+        '🤹‍♀️': '杂耍', '🧘‍♂️': '瑜伽', '🧘‍♀️': '瑜伽'
+    };
+    
     // 表情数据库，按类别分类
     const emojiDatabase = {
         recent: ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃'],
@@ -563,6 +780,31 @@ function init() {
         }
     });
     
+    // 表情搜索功能
+    emojiSearchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        if (!searchTerm) {
+            // 如果搜索框为空，显示当前分类的表情
+            const activeCategory = document.querySelector('.emoji-category.active');
+            const categoryName = activeCategory.dataset.category;
+            if (categoryName === 'recent') {
+                generateEmojiList(recentEmojis);
+            } else {
+                generateEmojiList(emojiDatabase[categoryName]);
+            }
+        } else {
+            // 搜索所有表情
+            const allEmojis = Object.values(emojiDatabase).flat();
+            // 根据表情名称搜索
+            const filteredEmojis = allEmojis.filter(emoji => {
+                const emojiName = emojiNames[emoji] || '';
+                return emojiName.toLowerCase().includes(searchTerm);
+            });
+            generateEmojiList(filteredEmojis);
+        }
+    });
+    
     // 表情分类切换事件
     emojiCategoryElements.forEach(category => {
         category.addEventListener('click', () => {
@@ -583,30 +825,6 @@ function init() {
                 generateEmojiList(emojiDatabase[categoryName]);
             }
         });
-    });
-    
-    // 表情搜索功能
-    emojiSearchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        
-        if (!searchTerm) {
-            // 如果搜索框为空，显示当前分类的表情
-            const activeCategory = document.querySelector('.emoji-category.active');
-            const categoryName = activeCategory.dataset.category;
-            if (categoryName === 'recent') {
-                generateEmojiList(recentEmojis);
-            } else {
-                generateEmojiList(emojiDatabase[categoryName]);
-            }
-        } else {
-            // 搜索所有表情
-            const allEmojis = Object.values(emojiDatabase).flat();
-            const filteredEmojis = allEmojis.filter(emoji => {
-                // 这里简单实现，实际项目中可以添加表情名称映射表进行搜索
-                return true; // 目前返回所有表情，后续可以扩展搜索逻辑
-            });
-            generateEmojiList(filteredEmojis);
-        }
     });
     
     // 初始化表情列表
@@ -804,31 +1022,53 @@ function init() {
     
     // 发送语音消息函数
     function sendVoiceMessage(duration) {
+        // 检查是否需要显示时间戳
+        const currentTime = getCurrentTime();
+        const shouldShowTimestamp = checkTimestampNeeded(currentTime);
+        
+        // 如果需要显示时间戳，先添加时间戳元素
+        if (shouldShowTimestamp) {
+            const timestampElement = document.createElement('div');
+            timestampElement.className = 'timestamp';
+            timestampElement.textContent = currentTime;
+            chatMessages.appendChild(timestampElement);
+        }
+        
         // 创建语音消息元素
         const messageElement = document.createElement('div');
         messageElement.className = 'message sent';
-        messageElement.innerHTML = `
-            <div class="message-bubble">
-                <div class="voice-message sent" data-duration="${duration}">
-                    <span class="voice-icon">▶️</span>
-                    <div class="voice-wave">
-                        <div class="voice-wave-bar"></div>
-                        <div class="voice-wave-bar"></div>
-                        <div class="voice-wave-bar"></div>
-                        <div class="voice-wave-bar"></div>
-                        <div class="voice-wave-bar"></div>
+        
+        let messageHTML = `
+            <div class="message-content">
+                <div class="avatar">
+                    <img src="wofang.jpg" alt="我方" class="avatar-img">
+                </div>
+                <div class="message-bubble-container">
+                    <div class="message-bubble">
+                        <div class="voice-message sent" data-duration="${duration}">
+                            <span class="voice-icon">▶️</span>
+                            <div class="voice-wave">
+                                <div class="voice-wave-bar"></div>
+                                <div class="voice-wave-bar"></div>
+                                <div class="voice-wave-bar"></div>
+                                <div class="voice-wave-bar"></div>
+                                <div class="voice-wave-bar"></div>
+                                <div class="voice-wave-bar"></div>
+                                <div class="voice-wave-bar"></div>
+                            </div>
+                            <span class="voice-duration">${duration}″</span>
+                        </div>
                     </div>
-                    <span class="voice-duration">${duration}″</span>
                 </div>
             </div>
-            <div class="message-time">${getCurrentTime()}</div>
         `;
+        
+        messageElement.innerHTML = messageHTML;
         
         // 添加到聊天消息区域
         chatMessages.appendChild(messageElement);
         
         // 更新聊天历史
-        const currentTime = getCurrentTime();
         chatHistory['friend-item'].messages.push({
             text: '[语音消息]',
             type: 'sent',
@@ -851,6 +1091,7 @@ function init() {
         const voiceMessage = messageElement.querySelector('.voice-message');
         const voiceIcon = voiceMessage.querySelector('.voice-icon');
         let isPlaying = false;
+        let playbackTimer = null;
         
         voiceMessage.addEventListener('click', () => {
             isPlaying = !isPlaying;
@@ -858,39 +1099,84 @@ function init() {
                 voiceIcon.textContent = '⏸️';
                 voiceMessage.classList.add('playing');
                 voiceMessage.classList.remove('paused');
+                
+                // 模拟播放进度
+                let progress = 0;
+                const totalDuration = parseInt(voiceMessage.dataset.duration);
+                playbackTimer = setInterval(() => {
+                    progress++;
+                    if (progress >= totalDuration) {
+                        // 播放结束
+                        clearInterval(playbackTimer);
+                        playbackTimer = null;
+                        isPlaying = false;
+                        voiceIcon.textContent = '▶️';
+                        voiceMessage.classList.remove('playing');
+                        voiceMessage.classList.add('paused');
+                    }
+                }, 1000);
             } else {
                 voiceIcon.textContent = '▶️';
                 voiceMessage.classList.add('paused');
                 voiceMessage.classList.remove('playing');
+                
+                // 停止播放进度
+                if (playbackTimer) {
+                    clearInterval(playbackTimer);
+                    playbackTimer = null;
+                }
             }
         });
         
         // 模拟回复（这里可以根据需要扩展）
         setTimeout(() => {
             const replyDuration = Math.floor(Math.random() * 5) + 1;
+            const replyTime = getCurrentTime();
+            
+            // 检查是否需要显示时间戳
+            const shouldShowTimestamp = checkTimestampNeeded(replyTime);
+            
+            // 如果需要显示时间戳，先添加时间戳元素
+            if (shouldShowTimestamp) {
+                const timestampElement = document.createElement('div');
+                timestampElement.className = 'timestamp';
+                timestampElement.textContent = replyTime;
+                chatMessages.appendChild(timestampElement);
+            }
+            
             const replyElement = document.createElement('div');
             replyElement.className = 'message received';
-            replyElement.innerHTML = `
-                <div class="message-bubble">
-                    <div class="voice-message" data-duration="${replyDuration}">
-                        <span class="voice-icon">▶️</span>
-                        <div class="voice-wave">
-                            <div class="voice-wave-bar"></div>
-                            <div class="voice-wave-bar"></div>
-                            <div class="voice-wave-bar"></div>
-                            <div class="voice-wave-bar"></div>
-                            <div class="voice-wave-bar"></div>
+            
+            let replyHTML = `
+                <div class="message-content">
+                    <div class="avatar">
+                        <img src="Avatar.jpg" alt="对方" class="avatar-img">
+                    </div>
+                    <div class="message-bubble-container">
+                        <div class="message-bubble">
+                            <div class="voice-message" data-duration="${replyDuration}">
+                                <span class="voice-icon">▶️</span>
+                                <div class="voice-wave">
+                                    <div class="voice-wave-bar"></div>
+                                    <div class="voice-wave-bar"></div>
+                                    <div class="voice-wave-bar"></div>
+                                    <div class="voice-wave-bar"></div>
+                                    <div class="voice-wave-bar"></div>
+                                    <div class="voice-wave-bar"></div>
+                                    <div class="voice-wave-bar"></div>
+                                </div>
+                                <span class="voice-duration">${replyDuration}″</span>
+                            </div>
                         </div>
-                        <span class="voice-duration">${replyDuration}″</span>
                     </div>
                 </div>
-                <div class="message-time">${getCurrentTime()}</div>
             `;
+            
+            replyElement.innerHTML = replyHTML;
             chatMessages.appendChild(replyElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             
             // 更新聊天历史
-            const replyTime = getCurrentTime();
             chatHistory['friend-item'].messages.push({
                 text: '[语音消息]',
                 type: 'received',
@@ -910,6 +1196,7 @@ function init() {
             const replyVoiceMessage = replyElement.querySelector('.voice-message');
             const replyVoiceIcon = replyVoiceMessage.querySelector('.voice-icon');
             let replyIsPlaying = false;
+            let replyPlaybackTimer = null;
             
             replyVoiceMessage.addEventListener('click', () => {
                 replyIsPlaying = !replyIsPlaying;
@@ -917,176 +1204,36 @@ function init() {
                     replyVoiceIcon.textContent = '⏸️';
                     replyVoiceMessage.classList.add('playing');
                     replyVoiceMessage.classList.remove('paused');
+                    
+                    // 模拟播放进度
+                    let progress = 0;
+                    const totalDuration = parseInt(replyVoiceMessage.dataset.duration);
+                    replyPlaybackTimer = setInterval(() => {
+                        progress++;
+                        if (progress >= totalDuration) {
+                            // 播放结束
+                            clearInterval(replyPlaybackTimer);
+                            replyPlaybackTimer = null;
+                            replyIsPlaying = false;
+                            replyVoiceIcon.textContent = '▶️';
+                            replyVoiceMessage.classList.remove('playing');
+                            replyVoiceMessage.classList.add('paused');
+                        }
+                    }, 1000);
                 } else {
                     replyVoiceIcon.textContent = '▶️';
                     replyVoiceMessage.classList.add('paused');
                     replyVoiceMessage.classList.remove('playing');
+                    
+                    // 停止播放进度
+                    if (replyPlaybackTimer) {
+                        clearInterval(replyPlaybackTimer);
+                        replyPlaybackTimer = null;
+                    }
                 }
             });
         }, 1000);
     }
-    
-    
-        .voice-message {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            position: relative;
-            min-width: 120px;
-            cursor: pointer;
-        }
-        
-        .voice-icon {
-            font-size: 16px;
-            margin-right: 12px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: transparent;
-            border: none;
-            outline: none;
-        }
-        
-        .voice-message.sent {
-            flex-direction: row-reverse;
-        }
-        
-        .voice-message.sent .voice-icon {
-            margin-right: 0;
-            margin-left: 12px;
-        }
-        
-        .voice-message.sent .voice-wave {
-            flex-direction: row-reverse;
-        }
-        
-        .voice-wave {
-            display: flex;
-            align-items: flex-end;
-            margin: 0 8px;
-            height: 20px;
-            flex: 1;
-            min-width: 40px;
-        }
-        
-        .voice-wave-bar {
-            width: 3px;
-            background-color: #999;
-            border-radius: 2px;
-            margin: 0 1px;
-            animation: voiceWave 0.8s ease-in-out infinite;
-        }
-        
-        .voice-wave-bar:nth-child(1) {
-            height: 6px;
-            animation-delay: 0s;
-        }
-        
-        .voice-wave-bar:nth-child(2) {
-            height: 12px;
-            animation-delay: 0.1s;
-        }
-        
-        .voice-wave-bar:nth-child(3) {
-            height: 18px;
-            animation-delay: 0.2s;
-        }
-        
-        .voice-wave-bar:nth-child(4) {
-            height: 22px;
-            animation-delay: 0.3s;
-        }
-        
-        .voice-wave-bar:nth-child(5) {
-            height: 14px;
-            animation-delay: 0.4s;
-        }
-        
-        .voice-wave-bar:nth-child(6) {
-            height: 10px;
-            animation-delay: 0.5s;
-        }
-        
-        .voice-wave-bar:nth-child(7) {
-            height: 16px;
-            animation-delay: 0.6s;
-        }
-        
-        .voice-message.sent .voice-wave-bar {
-            background-color: #555;
-        }
-        
-        .voice-duration {
-            font-size: 12px;
-            color: #666;
-            min-width: 25px;
-            margin: 0 4px;
-        }
-        
-        .voice-message.sent .voice-duration {
-            color: #444;
-        }
-        
-        @keyframes voiceWave {
-            0%, 100% {
-                transform: scaleY(0.4);
-            }
-            50% {
-                transform: scaleY(1);
-            }
-        }
-        
-        .voice-message.playing .voice-wave-bar {
-            animation-play-state: running;
-        }
-        
-        .voice-message.paused .voice-wave-bar {
-            animation-play-state: paused;
-        }
-        
-        /* 播放按钮覆盖层 */
-        .voice-message::before {
-            content: '▶';
-            position: absolute;
-            top: 50%;
-            left: 8px;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            background-color: rgba(0, 0, 0, 0.05);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-            color: #666;
-            z-index: 1;
-        }
-        
-        .voice-message.sent::before {
-            left: auto;
-            right: 8px;
-        }
-        
-        /* 播放状态指示器 */
-        .voice-message.playing::before {
-            background-color: rgba(7, 193, 96, 0.2);
-            color: #07c160;
-            animation: pulse 1s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                transform: translateY(-50%) scale(1);
-            }
-            50% {
-                transform: translateY(-50%) scale(1.1);
-            }
-        }
-    `;
-    document.head.appendChild(style);
 }
 
 // 页面加载完成后初始化
