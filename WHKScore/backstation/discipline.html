@@ -313,7 +313,14 @@
             <p>5. 连续堕落计算：如果中间有一天堕落值是0，则连续计数归零</p>
             <p>6. 堕落含义：熬夜、看黄片、导管或挖喷泉、无意义消磨时光......等对学习无意义的行为被计入堕落。</p>
             <p>7. 晚上 23:00 之前没有上床睡觉，一律算作堕落。</p>
+            <p>8. 周五、周六晚上 21:30 之前没有上床睡觉，一律算作堕落。</p>
             <p>想回到上一个页面？点击<a href="../demo.html" style="color: #58A6FF;">这里</a></p>
+            <p>
+                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1001194128&bvid=BV1tx4y1r7DR&cid=1453717507&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113882383256083&bvid=BV14rfHYhECG&cid=28051967190&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114069633765147&bvid=BV1RiPLeMEhS&cid=28587132905&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1701610686&bvid=BV1fK421s7mR&cid=1462646483&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+            </p>
             <div style="text-align: center; margin: 15px 0;">
                 <a href="prevent.html"
                     style="color: #58A6FF; text-decoration: none; font-size: 14px; padding: 5px 10px; border: 1px solid #58A6FF; border-radius: 5px; transition: all 0.3s ease;">查看朋友的考试成绩</a>
@@ -373,7 +380,7 @@
                         if (days.hasOwnProperty(day)) {
                             const isFallen = days[day];
 
-                            if (isFallen === 1) {
+                            if (isFallen >= 1) {
                                 currentStreak++;
                                 totalFallen++;
                             } else {
