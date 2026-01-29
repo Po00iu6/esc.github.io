@@ -14,6 +14,62 @@
         <div class="date-display" id="dateDisplay"></div>
         <div class="time-display" id="timeDisplay"></div>
     </div>
+    
+    <!-- 计时功能区域 -->
+    <div class="timer-section">
+        <!-- 折叠按钮 -->
+        <div class="timer-header">
+            <h2 class="timer-title">专注计时</h2>
+            <button class="toggle-btn" id="toggleTimer">
+                <span class="toggle-icon">▼</span>
+            </button>
+        </div>
+        
+        <!-- 折叠内容 -->
+        <div class="timer-content" id="timerContent">
+            <div class="timer-settings">
+                <!-- 时间设置 -->
+                <div class="time-setting">
+                    <label for="startTime">开始时间:</label>
+                    <input type="time" id="startTime" class="time-input">
+                </div>
+                
+                <div class="time-setting">
+                    <label for="endTime">结束时间:</label>
+                    <input type="time" id="endTime" class="time-input">
+                </div>
+                
+                <!-- 音频设置 -->
+                <div class="audio-setting">
+                    <label for="startSound">开始音:</label>
+                    <select id="startSound" class="audio-select">
+                        <option value="">请选择开始音</option>
+                        <!-- 音频选项将通过JavaScript动态添加 -->
+                    </select>
+                </div>
+                
+                <div class="audio-setting">
+                    <label for="endSound">结束音:</label>
+                    <select id="endSound" class="audio-select">
+                        <option value="">请选择结束音</option>
+                        <!-- 音频选项将通过JavaScript动态添加 -->
+                    </select>
+                </div>
+            </div>
+            
+            <!-- 控制按钮 -->
+            <div class="timer-controls">
+                <button id="startTimer" class="control-btn start-btn">开始计时</button>
+                <button id="stopTimer" class="control-btn stop-btn">停止计时</button>
+                <button id="resetTimer" class="control-btn reset-btn">重置</button>
+            </div>
+            
+            <!-- 计时状态显示 -->
+            <div class="timer-status" id="timerStatus">
+                就绪
+            </div>
+        </div>
+    </div>
     <script src="atn.js"></script>
 </body>
 </html>

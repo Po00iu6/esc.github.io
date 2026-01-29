@@ -40,6 +40,28 @@
             font-size: 14px;
             color: #8B949E;
         }
+        
+        /* 生成月报按钮样式 */
+        .report-button-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        
+        .generate-report-btn {
+            background-color: #58A6FF;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .generate-report-btn:hover {
+            background-color: #316DCA;
+        }
 
         .toggle-switch {
             position: relative;
@@ -257,6 +279,145 @@
             border-radius: 6px;
             font-size: 14px;
         }
+        
+        /* 月报海报样式 */
+        .report-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0, 0, 0);
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .report-poster {
+            /* 海报宽高比：标准海报比例 2:3 */
+            width: 500px;
+            height: 850px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 0;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 0 30px rgba(88, 166, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .report-poster::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+        }
+        
+        .report-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .report-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #58A6FF;
+            text-align: center;
+        }
+        
+        .report-month {
+            font-size: 16px;
+            color: #8B949E;
+            text-align: center;
+        }
+        
+        .report-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .report-section {
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        
+        .report-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #58A6FF;
+        }
+        
+        .report-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .report-stat-value {
+            font-weight: bold;
+            color: #3FB950;
+        }
+        
+        .report-highlight {
+            background-color: rgba(168, 85, 247, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #A855F7;
+        }
+        
+        .report-highlight h4 {
+            font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        .report-highlight p {
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0;
+        }
+        
+        .report-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #8B949E;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .close-report-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        .close-report-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 
@@ -268,6 +429,11 @@
             <input type="checkbox" id="music-toggle">
             <span class="toggle-slider"></span>
         </label>
+    </div>
+    
+    <!-- 生成月报按钮 -->
+    <div class="report-button-container">
+        <button class="generate-report-btn" onclick="generateMonthlyReport()">生成月报</button>
     </div>
 
     <div class="container">
@@ -315,12 +481,12 @@
             <p>7. 晚上 23:00 之前没有上床睡觉，一律算作堕落。</p>
             <p>8. 周五、周六晚上 21:30 之前没有上床睡觉，一律算作堕落。</p>
             <p>想回到上一个页面？点击<a href="../demo.html" style="color: #58A6FF;">这里</a></p>
-            <p>
-                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1001194128&bvid=BV1tx4y1r7DR&cid=1453717507&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
-                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=113882383256083&bvid=BV14rfHYhECG&cid=28051967190&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
-                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=114069633765147&bvid=BV1RiPLeMEhS&cid=28587132905&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
-                <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1701610686&bvid=BV1fK421s7mR&cid=1462646483&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
-            </p>
+            <!-- <p>
+                <iframe loading="lazy" src="//player.bilibili.com/player.html?isOutside=true&aid=1001194128&bvid=BV1tx4y1r7DR&cid=1453717507&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+                <iframe loading="lazy" src="//player.bilibili.com/player.html?isOutside=true&aid=113882383256083&bvid=BV14rfHYhECG&cid=28051967190&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+                <iframe loading="lazy" src="//player.bilibili.com/player.html?isOutside=true&aid=114069633765147&bvid=BV1RiPLeMEhS&cid=28587132905&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+                <iframe loading="lazy" src="//player.bilibili.com/player.html?isOutside=true&aid=1701610686&bvid=BV1fK421s7mR&cid=1462646483&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" autoplay="0"></iframe>
+            </p> -->
             <div style="text-align: center; margin: 15px 0;">
                 <a href="prevent.html"
                     style="color: #58A6FF; text-decoration: none; font-size: 14px; padding: 5px 10px; border: 1px solid #58A6FF; border-radius: 5px; transition: all 0.3s ease;">查看朋友的考试成绩</a>
@@ -573,6 +739,175 @@
             startRealTimeClock();
         });
     </script>
+    
+    <!-- 月报模态框 -->
+    <div class="report-modal" id="report-modal">
+        <div class="report-poster" id="report-poster">
+            <button class="close-report-btn" onclick="closeReport()">×</button>
+            <div class="report-header">
+                <div class="report-title">堕落月报</div>
+                <div class="report-month" id="report-month"></div>
+            </div>
+            <div class="report-content" id="report-content">
+                <!-- 月报内容将通过JavaScript动态生成 -->
+            </div>
+            <div class="report-footer">
+                <p>© 2026 ESC. All rights reserved.</p>
+                <p>记录成长，拒绝堕落</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 生成月报
+        function generateMonthlyReport() {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1;
+            const currentDay = now.getDate();
+            
+            // 确定要生成的月份：如果本月过了总天数的二分之一上取整，生成本月的，否则生成上个月的
+            let targetYear, targetMonth;
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+            const halfDays = Math.ceil(daysInMonth / 2);
+            
+            if (currentDay < halfDays) {
+                // 本月未过二分之一，生成上个月的
+                if (currentMonth === 1) {
+                    targetYear = currentYear - 1;
+                    targetMonth = 12;
+                } else {
+                    targetYear = currentYear;
+                    targetMonth = currentMonth - 1;
+                }
+            } else {
+                // 本月已过二分之一，生成本月的
+                targetYear = currentYear;
+                targetMonth = currentMonth;
+            }
+            
+            const targetMonthStr = `${targetYear}-${String(targetMonth).padStart(2, '0')}`;
+            
+            // 检查目标月份是否有数据
+            if (!dateData[targetMonthStr]) {
+                alert('该月份暂无数据');
+                return;
+            }
+            
+            // 计算该月的统计数据
+            const monthData = dateData[targetMonthStr];
+            const totalDays = Object.keys(monthData).length;
+            let fallenDays = 0;
+            let maxStreak = 0;
+            let currentStreak = 0;
+            
+            for (const day in monthData) {
+                if (monthData[day] === 1) {
+                    fallenDays++;
+                    currentStreak++;
+                    if (currentStreak > maxStreak) {
+                        maxStreak = currentStreak;
+                    }
+                } else {
+                    currentStreak = 0;
+                }
+            }
+            
+            const nonFallenDays = totalDays - fallenDays;
+            const fallenRate = ((fallenDays / totalDays) * 100).toFixed(1);
+            
+            // 生成月报内容
+            const reportContent = document.getElementById('report-content');
+            reportContent.innerHTML = `
+                <div class="report-section">
+                    <div class="report-section-title">月度概览</div>
+                    <div class="report-stat">
+                        <span>月份</span>
+                        <span class="report-stat-value">${targetYear}年${targetMonth}月</span>
+                    </div>
+                    <div class="report-stat">
+                        <span>总天数</span>
+                        <span class="report-stat-value">${totalDays} 天</span>
+                    </div>
+                    <div class="report-stat">
+                        <span>堕落天数</span>
+                        <span class="report-stat-value">${fallenDays} 天</span>
+                    </div>
+                    <div class="report-stat">
+                        <span>未堕落天数</span>
+                        <span class="report-stat-value">${nonFallenDays} 天</span>
+                    </div>
+                    <div class="report-stat">
+                        <span>堕落率</span>
+                        <span class="report-stat-value">${fallenRate}%</span>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <div class="report-section-title">详细统计</div>
+                    <div class="report-stat">
+                        <span>最长连续堕落天数</span>
+                        <span class="report-stat-value">${maxStreak} 天</span>
+                    </div>
+                    <div class="report-stat">
+                        <span>平均每天状态</span>
+                        <span class="report-stat-value">${fallenDays > nonFallenDays ? '堕落' : '自律'}</span>
+                    </div>
+                </div>
+                
+                <div class="report-highlight">
+                    <h4>月度总结</h4>
+                    <p>${generateSummary(fallenDays, nonFallenDays, maxStreak)}</p>
+                </div>
+                
+                <div class="report-section">
+                    <div class="report-section-title">月度目标</div>
+                    <p>1. 减少堕落天数，争取达到90%以上的自律率</p>
+                    <p>2. 打破最长连续堕落记录，保持良好状态</p>
+                    <p>3. 培养健康的生活习惯，早睡早起</p>
+                </div>
+            `;
+            
+            // 设置月报月份
+            document.getElementById('report-month').textContent = `${targetYear}年${targetMonth}月`;
+            
+            // 显示月报
+            document.getElementById('report-modal').style.display = 'flex';
+        }
+        
+        // 生成总结
+        function generateSummary(fallenDays, nonFallenDays, maxStreak) {
+            if (fallenDays === 0) {
+                return '恭喜！本月完全自律，没有任何堕落记录。继续保持这种良好的状态，你正在成为更好的自己！';
+            } else if (fallenDays < nonFallenDays) {
+                if (maxStreak <= 2) {
+                    return '本月整体表现良好，自律天数多于堕落天数。虽然有少量堕落记录，但连续堕落天数较短，说明你能够及时调整自己的状态。继续努力，争取达到更高的自律水平！';
+                } else {
+                    return '本月自律天数多于堕落天数，但存在较长时间的连续堕落。需要注意避免连续堕落的情况，及时调整自己的状态，保持良好的生活习惯。';
+                }
+            } else {
+                if (maxStreak >= 7) {
+                    return '本月堕落天数较多，且存在较长时间的连续堕落。需要高度重视，反思自己的行为，制定有效的改进计划，尽快走出堕落状态，回归自律的生活。';
+                } else {
+                    return '本月堕落天数较多，需要反思自己的行为。虽然连续堕落天数不是很长，但整体状态不佳。建议制定详细的计划，逐步改善自己的生活习惯。';
+                }
+            }
+        }
+        
+        // 关闭月报
+        function closeReport() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('report-modal');
+            if (event.target === modal) {
+                closeReport();
+            }
+        }
+    </script>
+    
     <!-- 页尾 -->
     <footer
         style="background-color: #0b0e1400; padding: 20px; text-align: center; color: #8B949E; font-size: 12px; margin-top: 40px; width: 100%;">
