@@ -9,7 +9,7 @@ const weekTasks = {
         "tasks": [
             { "title": "学完教材帮选必二", "completed": true },
             { "title": "数学领航计划大小本写完<p style='color:red;'>（超时完成2026-01-26）</p>", "completed": true },
-            { "title": "一化必刷100讲写到化学工艺流程", "completed": false },
+            { "title": "一化必刷100讲写到化学工艺流程", "completed": true },
             { "title": "做3张生物卷子<p style='color:red;'>（超时完成2026-01-27）</p>", "completed": true }
         ]
     },

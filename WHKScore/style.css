@@ -435,8 +435,8 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    color: #3FB950;
-    text-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
+    color: #00ff22;
+    text-shadow: 0 0 10px rgba(0, 255, 34, 0.8);
     font-size: 1.0em;
     line-height: 40px;
     text-align: center;
@@ -448,8 +448,8 @@ canvas {
     left: 0;
     width: 100%;
     height: 100%;
-    color: #3FB950;
-    text-shadow: 0 0 10px rgba(63, 185, 80, 0.8);
+    color: #00ff22;
+    text-shadow: 0 0 10px rgba(0, 255, 34, 0.8);
     font-size: 0.6em;
     line-height: 45px;
     text-align: center;
