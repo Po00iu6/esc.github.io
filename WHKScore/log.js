@@ -154,7 +154,8 @@ const logs = [
                     'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/c0e3a7c10de7dda013036203603d388b_3467804807615218503.jpg'
                 ],
                 answers: [
-                    
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/ccf01d82257d1601e7b2c600456f1898_7629484024897477817.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/a016e738006959f61567510bc6f0edad_1004156014653076632.jpg'
                 ]
             },
             'math': {
@@ -165,7 +166,10 @@ const logs = [
                     'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/3e3249ad6c311f2ae789e3097ef8a51d_2920395737864455267.jpg'
                 ],
                 answers: [
-                    
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/32572609a351e5d7509814c44b538d89_2647457058955858843.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/f29d558369e0cb8a18849a3215e83658_1616787043203503096.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/dc27f1f28c1da883478ba8e2ec8e6b5d_3225124377826261912.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/b17d24abeab4dc3768f64c93b08555fc_5363480270943021975.jpg'
                 ]
             },
             'english': {
@@ -180,7 +184,12 @@ const logs = [
                     'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/526ea984b9ab02b13565c68e23deb5f6_6236614213711897215.jpg'
                 ],
                 answers: [
-                    
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/6152314f7cb6db579746be7a08bf7426_5387394283179237701.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/251d3c0a7b80ef139ca28f0c0750aa39_1818673453716998858.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/7578b6f47042ec0e17191bc903aaee02_7832275129670872626.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/38ab43b94511cc512544b482c13c1afd_6641104198519400838.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/712d18873ac170363d269842e611d22b_9151650386790195756.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/e63691768609553c3946959ce762731d_9034530243866185139.jpg'
                 ]
             },
             'physics': {
@@ -193,7 +202,10 @@ const logs = [
                     'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/12451008f6e674b4bfaf2654c60cae39_3044033557020650752.jpg'
                 ],
                 answers: [
-                    
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/3ce8d202258fcfde3e51f23ed4c32449_6630839143309532639.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/3e1be8dea8c522997ab73a2c6f1e5612_3602483082319919018.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/d2fa08faf3aa5a5906104a4342bafbd1_1035735185783245155.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/1e7813098b558f0db8329e192b6b4dab_2406954909734470839.jpg'
                 ]
             },
             'chemistry': {
@@ -206,7 +218,8 @@ const logs = [
                     'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/6b9111947afe32e3e2091306323d50a3_1446127739273782248.jpg'  
                 ],
                 answers: [
-                    
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/49124bfc413e2537d76a82adcba49bf5_1947282892211045170.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/0118a6412b5cc26d8a55c535cbfe0d44_1049044603074301119.jpg'
                 ]
             },
             'biology': {
@@ -219,7 +232,8 @@ const logs = [
                     'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/6f58b0fdf05e5c263de1125d43960fae_3176321949774730363.jpg'
                 ],
                 answers: [
-                    
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/728c615c7ad6023feb79eecc10be0055_5676918561306582832.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/1fecec97e40be60630b21a14af3d6ed1_5041615116877750100.jpg'
                 ]
             }
         }
