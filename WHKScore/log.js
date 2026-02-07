@@ -244,6 +244,8 @@ const logs = [
 document.addEventListener('DOMContentLoaded', function() {
     // 生成日志列表
     const leftPane = document.getElementById('leftPane');
+    // 按照id从大到小排序
+    logs.sort((a, b) => b.id - a.id);
     logs.forEach(log => {
         const logItem = document.createElement('div');
         logItem.className = 'log-item';
