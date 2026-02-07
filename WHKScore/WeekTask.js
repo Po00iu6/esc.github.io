@@ -251,6 +251,18 @@ function showWeekTasks(week) {
         return;
     }
     
+    // 移除所有周的选中样式
+    const allWeekBoxes = document.querySelectorAll('.week-box');
+    allWeekBoxes.forEach(box => {
+        box.classList.remove('selected-week');
+    });
+    
+    // 为当前选中的周添加选中样式
+    const selectedWeekBox = document.querySelector(`[data-week="${week}"]`);
+    if (selectedWeekBox) {
+        selectedWeekBox.classList.add('selected-week');
+    }
+    
     // 对任务进行排序：未完成的任务在前面，已完成的任务在后面
     const sortedTasks = [...weekData.tasks].sort((a, b) => {
         // 未完成任务（false）排在前面，已完成任务（true）排在后面

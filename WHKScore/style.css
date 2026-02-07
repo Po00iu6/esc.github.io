@@ -294,6 +294,17 @@ canvas {
     border: 1px solid white;
 }
 
+.week-box.selected-week {
+    background: url('https://upload-bbs.miyoushe.com/upload/2026/02/07/198629752/3812b2d1d4452e2d30f1aa9748825fb1_8012554235641871355.png') center/cover no-repeat;
+    position: relative;
+}
+
+
+.week-box.selected-week .week-number {
+    position: relative;
+    z-index: 2;
+}
+
 .week-number {
     color: #c7d3db;
     font-weight: bold;
