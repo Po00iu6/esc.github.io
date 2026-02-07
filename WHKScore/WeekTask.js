@@ -33,18 +33,26 @@ const weekTasks = {
         "startDate": "2026-02-09",
         "endDate": "2026-02-15",
         "tasks": [
+            { "title": "早上6点起床去跑步，跑三圈回来", "completed": false },
+            { "title": "刷《必刷题高考物理合订本》，一直刷到中午吃饭", "completed": false },
+            { "title": "吃完饭刷百词斩，1000个", "completed": false },
+            { "title": "之后刷生物遗传学《上分专项》，刷到晚上吃饭", "completed": false },
+            { "title": "吃完饭继续刷《必刷题高考物理合订本》，一直刷到21:00上床睡觉", "completed": false },
+            { "title": "<p>寒假保持每天都要这样，过年期间可稍作调整，但<p style='color:red;display:inline;'>物理必刷题</p>和<p style='color:red;display:inline;'>百词斩</p>每天必须完成！</p>", "completed": false }
         ]
     },
     "5": {
         "startDate": "2026-02-16",
         "endDate": "2026-02-22",
         "tasks": [
+            { "title": "同 第 4 周 的任务", "completed": false }
         ]
     },
     "6": {
         "startDate": "2026-02-23",
         "endDate": "2026-02-29",
         "tasks": [
+            { "title": "同 第 4 周 的任务", "completed": false }
         ]
     },
     "7": {
