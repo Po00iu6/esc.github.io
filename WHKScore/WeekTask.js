@@ -26,6 +26,7 @@ const weekTasks = {
         "startDate": "2026-02-02",
         "endDate": "2026-02-08",
         "tasks": [
+            { "title": "背百词斩，一天1000个", "completed": false }
         ]
     },
     "4": {

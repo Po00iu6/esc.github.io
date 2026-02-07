@@ -135,6 +135,95 @@ const logs = [
             }
         }
     },
+    {
+        id: 2,
+        title: '未命名',
+        date: '2026-2-5',
+        evaluation: '<p>考前1天感冒，头痛欲裂，但还是考完了。数学感觉状态良好。语文作文也是成功写满了，但是选择题错一半对一半。物理实在是错的太亏了，这个寒假要好好刷物理！化学和生物都差不多吧，希望赋分高一点。一般来说，第一天考的简单，那么第二天考的卷子肯定会很难，所以英语这次就很难啊，痛失估计得有30多分！</p><img style="width:200px" src="https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/a545cb9395d03493b34c798d2f4f42f3_826194632702822619.jpg"><p>那个，关于我上500这件事......</p><img style="width:200px" src="https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/3f6abc7b90650a8defc28c931c65786c_5818876088877116171.jpg">',
+        // 每个科目的试卷和答案图片链接列表
+        subjects: {
+            'chinese': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/2023036c26766370321282e738637afe_841549539276664844.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/a224012a7b3ca905a6ad5585c100ce1d_4653809479021817754.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/cf9fed5d95a7fb91d5260c42fb12ae72_4928552626836064669.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/005e5294ad948354928b8faf4108ad20_2717509641106520221.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/47e09853a1c429b86186585ce105bfbb_7663451470534441944.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/6fc54ca2a19c821482e474cf5d11c4a4_7422833143767159214.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/c246b7a2e141d83271ab0b452cbcd589_8843028366445555604.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/c0e3a7c10de7dda013036203603d388b_3467804807615218503.jpg'
+                ],
+                answers: [
+                    
+                ]
+            },
+            'math': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/851ba09d2bcf9d573501a078c634937e_8112485746171867254.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/be85e46c2b34c4e1050dcf113bef778c_3279830839764421519.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/7c3bd7deb2a71eeeb3652c5813e31b3b_1698573788349972801.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/3e3249ad6c311f2ae789e3097ef8a51d_2920395737864455267.jpg'
+                ],
+                answers: [
+                    
+                ]
+            },
+            'english': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/70bd31e83ec024564aac65ff83074a2b_5211588093093112514.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/80737826b08932f3baaf370943074552_7274445816359296807.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/a018212dd10fa6f0fbef1b5122bab9f7_1202730606245361901.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/54106be9205343ce40dad6b1dc90df3d_8738388687791840310.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/ef26087ef02882670f9c7d27aafd084c_3390303811850667990.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/4f54b3a3e48215878a5ed78032ef4d3d_6629550324113995495.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/824add46cce48ae0cbfed49485d7681f_5709446907664073617.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/526ea984b9ab02b13565c68e23deb5f6_6236614213711897215.jpg'
+                ],
+                answers: [
+                    
+                ]
+            },
+            'physics': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/f197e25e49c42020b60d655d10996b36_4969105803281645560.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/073146486d7ce4482f4b6e8ecbb5c907_6078776546303429918.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/57105cd824ecd100f448262b34a136b3_4103088680207258714.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/69aac4a7b00e6bf0208181f28d1ed4dc_7721611631619159593.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/5ba029cea74821c1c88c5fb58464ef3b_8041460555615695303.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/12451008f6e674b4bfaf2654c60cae39_3044033557020650752.jpg'
+                ],
+                answers: [
+                    
+                ]
+            },
+            'chemistry': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/9c4f8b6f49da9229100f88420339d9b5_196001363674635621.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/ac6905678f73884330f240748f90e985_5686763554084131124.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/c82929226521b0643296e3d2b39fc843_9209209711969979543.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/67a5135332918498eb99dea2f6650493_7291474321059109124.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/e6295892d7e786a123dc1010b692f546_4329725849344629367.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/6b9111947afe32e3e2091306323d50a3_1446127739273782248.jpg'  
+                ],
+                answers: [
+                    
+                ]
+            },
+            'biology': {
+                examPapers: [
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/ecf14fb134c16111a204ae020e3c6cc1_3812377135382315801.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/a291059b71614bf080dd9f8eb0cc12de_3872195457126421178.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/aade40f3e8daefd8459ca0af0912526e_4167460322904437806.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/c76400740d2cef77ade05cc9afdd403e_2829485281492166499.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/a7ec4d8ca2badee8ad5936942ba63cea_7156665760415586739.jpg',
+                    'https://upload-bbs.miyoushe.com/upload/2026/02/07/449184704/6f58b0fdf05e5c263de1125d43960fae_3176321949774730363.jpg'
+                ],
+                answers: [
+                    
+                ]
+            }
+        }
+    }
 ];
 
 // 页面加载完成后初始化日志
