@@ -61,6 +61,19 @@ function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadi
 // 静态数据作为备选方案
 const backupExamData = [
     {
+        exam: '2026年2月期末考试',
+        date: '2026-02-04',
+        scores: {
+            total: 537,
+            chinese: 94,
+            math: 128.5,
+            english: 86,
+            physics: 69.5,
+            chemistry: 80,
+            biology: 79
+        }
+    },
+    {
         exam: '2025年12月份月考--高三',
         date: '2025-12-01',
         scores: {
