@@ -33,7 +33,7 @@ const weekTasks = {
         "startDate": "2026-02-09",
         "endDate": "2026-02-15",
         "tasks": [
-            { "title": "<s>早上6点起床去跑步，跑三圈回来<s><p>早上6点仰卧起坐20个</p>", "completed": false },
+            { "title": "<s>早上6点起床去跑步，跑三圈回来</s><p>早上6点仰卧起坐20个</p>", "completed": false },
             { "title": "刷《必刷题高考物理合订本》，一直刷到中午吃饭", "completed": false },
             { "title": "吃完饭刷百词斩，1000个", "completed": false },
             { "title": "之后刷生物遗传学《上分专项》，刷到晚上吃饭", "completed": false },
