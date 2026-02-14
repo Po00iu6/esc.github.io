@@ -683,6 +683,24 @@
                         return parseInt(a) - parseInt(b);
                     });
 
+                    // 计算当月第一天是星期几（1-7，1表示周一，7表示周日）
+                    const firstDay = dayKeys[0];
+                    const firstDate = new Date(`${month}-${firstDay}`);
+                    let firstDayOfWeek = firstDate.getDay();
+                    // 调整为1-7，1表示周一，7表示周日
+                    if (firstDayOfWeek === 0) {
+                        firstDayOfWeek = 7;
+                    }
+
+                    // 在月份开头添加空的div占格
+                    for (let i = 1; i < firstDayOfWeek; i++) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'day';
+                        emptyDiv.style.opacity = 0;
+                        emptyDiv.style.pointerEvents = 'none';
+                        daysDiv.appendChild(emptyDiv);
+                    }
+
                     // 遍历当月的所有天数（按顺序）
                     dayKeys.forEach(day => {
                         if (days.hasOwnProperty(day)) {
@@ -718,6 +736,24 @@
                             daysDiv.appendChild(dayDiv);
                         }
                     });
+
+                    // 计算当月最后一天是星期几
+                    const lastDay = dayKeys[dayKeys.length - 1];
+                    const lastDate = new Date(`${month}-${lastDay}`);
+                    let lastDayOfWeek = lastDate.getDay();
+                    // 调整为1-7，1表示周一，7表示周日
+                    if (lastDayOfWeek === 0) {
+                        lastDayOfWeek = 7;
+                    }
+
+                    // 在月份结尾添加空的div占格，确保一行只有七个方格
+                    for (let i = lastDayOfWeek + 1; i <= 7; i++) {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.className = 'day';
+                        emptyDiv.style.opacity = 0;
+                        emptyDiv.style.pointerEvents = 'none';
+                        daysDiv.appendChild(emptyDiv);
+                    }
 
                     monthDiv.appendChild(daysDiv);
                     container.appendChild(monthDiv);
