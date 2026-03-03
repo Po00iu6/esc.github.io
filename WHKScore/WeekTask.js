@@ -59,6 +59,7 @@ const weekTasks = {
         "startDate": "2026-03-01",
         "endDate": "2026-03-07",
         "tasks": [
+            { "title": "补完寒假作业，在老师的威压下存活！", "completed": false }
         ]
     },
     "8": {
