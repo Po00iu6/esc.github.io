@@ -2,52 +2,52 @@
 const MusicPlayer = {
     // 音乐播放列表 - 使用远程CDN地址
     playlist: [
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/AURORA,HOYO-MiX---挪德卡莱-Nod-Krai.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX,Aimer---未行之路-The-Road-Not-Taken.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---Da-Capo.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---凋萎于昔时之花-Marcescent-Floret.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---回家的路-The-Long-Way-Home-(伴奏).mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---埠上风光-What-a-Delightful-Scenery.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---寒星遥遥-Lustrous-Stars.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---春尽水如天-Into-the-Yonder-and-Water.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---柔风的欢愿-Que-le-vent-soit-doux.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---流光过隙-Passage-of-an-Era.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---深夕映繁星-Nocturnal-Illumination.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---清润玉响-A-Mild-Tale-Untold.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---温情的遥忆-A-Memorable-Fancy.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---漫徊繁荫之原-Across-the-Meadows.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---灯如明月在中天-Moonlit-Lanterns.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---煦风染细浪-Mellow-Alize.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---王山遗威-Guhuas-Legacy.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---竹林溪涧-Dweller-of-Bamboo-Groves.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---繁沸之港-The-Bustling-Port-Market.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---纵然时岁流转-Throughout-the-Flow-of-Years.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---花与树的女儿们-Maidens-of-Sanctity.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---轻漪的节音-Ondulations-du-rythme.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---轻语如露-Whispering-Dewdrops.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---银鸥的回旋-Tourdion-of-Silver-Seagulls.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---陌路新交-Incontro꞉-Bellezza-e-Rosula.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---领航人的倦憩-Pilots-Rest.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/HOYO-MiX---饫沃坡野-Bounty-of-the-Fertile-Slopes.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/《回家的路》.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/一梦千宵.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/下一个远方.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/别让我担心.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/周深---Rubia.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/如果突然想起我.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/希林娜依高,HOYO-MiX---烬火-Emberfire.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/张杰,HOYO-MiX---经过.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/我不曾忘记.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/提瓦特民谣.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/知更鸟,HOYO-MiX,Chevy---希望有羽毛和翅膀.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/茶理理,TetraCalyx,Hanser---Moon-Halo.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/让风告诉你.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/鈴木愛理,HOYO-MiX---尘间星旅-Star-Odyssey.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/陈致逸,HOYO-MiX---商港的闲暇-Relaxation-in-Liyue.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/陈致逸,HOYO-MiX---杯中明月-Moon-in-Ones-Cup.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/陈致逸,HOYO-MiX---皎洁的笑颜-Moonlike-Smile.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/陈致逸,HOYO-MiX---银白的希望-Fragile-Fantasy.mp3",
-    "https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/黄龄,HOYO-MiX---TruE.mp3"
+    "music/AURORA,HOYO-MiX---挪德卡莱-Nod-Krai.mp3",
+    "music/HOYO-MiX,Aimer---未行之路-The-Road-Not-Taken.mp3",
+    "music/HOYO-MiX---Da-Capo.mp3",
+    "music/HOYO-MiX---凋萎于昔时之花-Marcescent-Floret.mp3",
+    "music/HOYO-MiX---回家的路-The-Long-Way-Home-(伴奏).mp3",
+    "music/HOYO-MiX---埠上风光-What-a-Delightful-Scenery.mp3",
+    "music/HOYO-MiX---寒星遥遥-Lustrous-Stars.mp3",
+    "music/HOYO-MiX---春尽水如天-Into-the-Yonder-and-Water.mp3",
+    "music/HOYO-MiX---柔风的欢愿-Que-le-vent-soit-doux.mp3",
+    "music/HOYO-MiX---流光过隙-Passage-of-an-Era.mp3",
+    "music/HOYO-MiX---深夕映繁星-Nocturnal-Illumination.mp3",
+    "music/HOYO-MiX---清润玉响-A-Mild-Tale-Untold.mp3",
+    "music/HOYO-MiX---温情的遥忆-A-Memorable-Fancy.mp3",
+    "music/HOYO-MiX---漫徊繁荫之原-Across-the-Meadows.mp3",
+    "music/HOYO-MiX---灯如明月在中天-Moonlit-Lanterns.mp3",
+    "music/HOYO-MiX---煦风染细浪-Mellow-Alize.mp3",
+    "music/HOYO-MiX---王山遗威-Guhuas-Legacy.mp3",
+    "music/HOYO-MiX---竹林溪涧-Dweller-of-Bamboo-Groves.mp3",
+    "music/HOYO-MiX---繁沸之港-The-Bustling-Port-Market.mp3",
+    "music/HOYO-MiX---纵然时岁流转-Throughout-the-Flow-of-Years.mp3",
+    "music/HOYO-MiX---花与树的女儿们-Maidens-of-Sanctity.mp3",
+    "music/HOYO-MiX---轻漪的节音-Ondulations-du-rythme.mp3",
+    "music/HOYO-MiX---轻语如露-Whispering-Dewdrops.mp3",
+    "music/HOYO-MiX---银鸥的回旋-Tourdion-of-Silver-Seagulls.mp3",
+    "music/HOYO-MiX---陌路新交-Incontro꞉-Bellezza-e-Rosula.mp3",
+    "music/HOYO-MiX---领航人的倦憩-Pilots-Rest.mp3",
+    "music/HOYO-MiX---饫沃坡野-Bounty-of-the-Fertile-Slopes.mp3",
+    "music/《回家的路》.mp3",
+    "music/一梦千宵.mp3",
+    "music/下一个远方.mp3",
+    "music/别让我担心.mp3",
+    "music/周深---Rubia.mp3",
+    "music/如果突然想起我.mp3",
+    "music/希林娜依高,HOYO-MiX---烬火-Emberfire.mp3",
+    "music/张杰,HOYO-MiX---经过.mp3",
+    "music/我不曾忘记.mp3",
+    "music/提瓦特民谣.mp3",
+    "music/知更鸟,HOYO-MiX,Chevy---希望有羽毛和翅膀.mp3",
+    "music/茶理理,TetraCalyx,Hanser---Moon-Halo.mp3",
+    "music/让风告诉你.mp3",
+    "music/鈴木愛理,HOYO-MiX---尘间星旅-Star-Odyssey.mp3",
+    "music/陈致逸,HOYO-MiX---商港的闲暇-Relaxation-in-Liyue.mp3",
+    "music/陈致逸,HOYO-MiX---杯中明月-Moon-in-Ones-Cup.mp3",
+    "music/陈致逸,HOYO-MiX---皎洁的笑颜-Moonlike-Smile.mp3",
+    "music/陈致逸,HOYO-MiX---银白的希望-Fragile-Fantasy.mp3",
+    "music/黄龄,HOYO-MiX---TruE.mp3"
 ],
     
     // 音乐缩略图映射 - 使用预提取的封面图片
@@ -55,8 +55,8 @@ const MusicPlayer = {
     
     // 获取音乐对应的封面图片路径
     getCoverPath: function(musicPath) {
-        var baseName = musicPath.replace('https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/', '').replace('.mp3', '');
-        return 'https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music_cover/' + baseName + '.jpg';
+        var baseName = musicPath.replace('music/', '').replace('.mp3', '');
+        return 'music_cover/' + baseName + '.jpg';
     },
     
     // 当前播放索引
@@ -410,7 +410,7 @@ const MusicPlayer = {
         for (var i = 0; i < this.playlist.length; i++) {
             var musicPath = this.playlist[i];
             // 提取音乐名称
-            var musicName = musicPath.replace('https://static-mp-54c94446-e6a2-431f-84c4-ed0d181ae263.next.bspapp.com/music/music/', '').replace('.mp3', '');
+            var musicName = musicPath.replace('music/', '').replace('.mp3', '');
             
             var li = document.createElement('li');
             li.textContent = musicName;
