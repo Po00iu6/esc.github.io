@@ -11,7 +11,7 @@ let labels = [
     '2026年2月期末考试',
     '2026年3月学情检测',
 ]
-//{ name: "王海鸣", totalScore: 441, chinese: 103, math: 78, english: 73, physics: 42, chemistry: 70, biology: 75 },
+
 let whkzcj = [0,352,426,471,432,458,482,473.5,441];
 let yw = [0,79,75,91,102,94,94,85,103];
 let sx = [0,45,86,80,78,90,89,107.5,78];
