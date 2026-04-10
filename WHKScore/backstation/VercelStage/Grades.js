@@ -61,6 +61,19 @@ function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadi
 // 静态数据作为备选方案
 const backupExamData = [
     {
+        exam: '2026年4月7日部分校高考适应性考试',
+        date: '2026-04-07',
+        scores: {
+            total: 530,
+            chinese: 91,
+            math: 112,
+            english: 117,
+            physics: 68,
+            chemistry: 68,
+            biology: 74
+        }
+    },
+    {
         exam: '2026年3月学情检测',
         date: '2026-03-24',
         scores: {
