@@ -16,11 +16,9 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
 
 .bgi {
@@ -52,9 +50,14 @@ body {
 
 .container {
     width: 100%;
-    max-width: 800px;
-    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .time-display {
@@ -257,26 +260,310 @@ body {
     border: 1px solid rgba(88, 166, 255, 0.2);
 }
 
+/* 倒计时功能板块样式 */
+.timer-container {
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    background-color: #1a1b1d;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.timer-container.flashing {
+    animation: flash 0.5s ease-in-out infinite;
+}
+
+@keyframes flash {
+    0%, 100% {
+        background-color: #1a1b1d;
+    }
+    50% {
+        background-color: #da3633;
+    }
+}
+
+.timer-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.timer-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+.timer-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.1em;
+}
+
+.timer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.timer-btn {
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+}
+
+.timer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.timer-btn:active {
+    transform: translateY(0);
+}
+
+.start-btn {
+    background-color: #238636;
+    color: white;
+}
+
+.start-btn:hover {
+    background-color: #2ea043;
+}
+
+.pause-btn {
+    background-color: #8b949e;
+    color: white;
+}
+
+.pause-btn:hover {
+    background-color: #6e7681;
+}
+
+.reset-btn {
+    background-color: #da3633;
+    color: white;
+}
+
+.reset-btn:hover {
+    background-color: #f85149;
+}
+
+.timer-status {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--accent-color);
+    font-weight: 500;
+    padding: 12px;
+    background-color: rgba(88, 166, 255, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    margin-bottom: 30px;
+}
+
+.timer-status.running {
+    background-color: rgba(35, 134, 54, 0.1);
+    border-color: rgba(35, 134, 54, 0.3);
+    color: #3fb950;
+}
+
+.timer-status.paused {
+    background-color: rgba(139, 148, 158, 0.1);
+    border-color: rgba(139, 148, 158, 0.3);
+    color: #8b949e;
+}
+
+.timer-status.finished {
+    background-color: rgba(218, 54, 51, 0.1);
+    border-color: rgba(218, 54, 51, 0.3);
+    color: #da3633;
+}
+
+/* 计时记录列表样式 */
+.timer-records {
+    margin-top: 30px;
+}
+
+.timer-records h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#recordList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+#recordList li {
+    padding: 12px 15px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+#recordList li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.record-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: left;
+}
+
+.record-time {
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    font-family: 'Courier New', monospace;
+}
+
+.record-description {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    opacity: 0.8;
+}
+
+.record-date {
+    font-size: 0.8rem;
+    color: #8b949e;
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background-color: #161b22;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 30px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 1rem;
+    color: var(--text-color);
+    opacity: 0.8;
+    margin-bottom: 20px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-color);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+}
+
+.modal-content input::placeholder {
+    color: #8b949e;
+}
+
+.confirm-btn {
+    padding: 12px 40px;
+    background-color: #58a6ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.confirm-btn:hover {
+    background-color: #316dca;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+}
+
+.confirm-btn:active {
+    transform: translateY(0);
+}
+
 /* 响应式调整 */
 @media (max-width: 768px) {
-    .timer-section {
-        bottom: 10px;
+    .timer-container {
         padding: 15px;
-        width: 95%;
+        margin-top: 10px;
     }
     
-    .timer-settings {
-        grid-template-columns: 1fr;
-        gap: 12px;
+    .timer-display {
+        font-size: 2.5rem;
     }
     
     .timer-controls {
-        flex-direction: column;
-        align-items: center;
+        gap: 10px;
     }
     
-    .control-btn {
-        width: 100%;
-        max-width: 200px;
+    .timer-btn {
+        padding: 10px 20px;
+        min-width: 80px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-content {
+        padding: 20px;
+        width: 95%;
     }
 }

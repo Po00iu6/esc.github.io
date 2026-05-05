@@ -15,6 +15,40 @@
         <div class="time-display" id="timeDisplay"></div>
     </div>
     
+    <!-- 倒计时功能板块 -->
+    <div class="timer-container" id="timerContainer">
+        <div class="timer-header">
+            <h2>专注倒计时</h2>
+            <div class="timer-display" id="timerDisplay">120:00</div>
+        </div>
+        
+        <div class="timer-controls">
+            <button class="timer-btn start-btn" id="startBtn">开始</button>
+            <button class="timer-btn pause-btn" id="pauseBtn">暂停</button>
+            <button class="timer-btn reset-btn" id="resetBtn">重置</button>
+        </div>
+        
+        <div class="timer-status" id="timerStatus">准备开始</div>
+        
+        <!-- 计时记录列表 -->
+        <div class="timer-records">
+            <h3>计时记录</h3>
+            <ul id="recordList">
+                <!-- 记录将通过JavaScript动态生成 -->
+            </ul>
+        </div>
+        
+        <!-- 结束弹窗 -->
+        <div class="modal-overlay" id="modalOverlay" style="display: none;">
+            <div class="modal-content">
+                <h3>计时结束！</h3>
+                <p>恭喜你完成了本次专注时间！</p>
+                <input type="text" id="recordInput" placeholder="添加本次计时的描述...">
+                <button class="confirm-btn" id="confirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+    
     <script src="atn.js"></script>
 </body>
 </html>
