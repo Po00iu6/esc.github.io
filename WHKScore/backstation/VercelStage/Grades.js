@@ -62,7 +62,7 @@ function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadi
 const backupExamData = [
     {
         exam: '2026年5月学情检测',
-        data: '2026-5-06',
+        date: '2026-05-06',
         scores: {
             total: 541,
             chinese: 109,
