@@ -60,6 +60,20 @@ function getPointStyles(data, maxRadius = 5, maxColor = '#ffa200ff', defaultRadi
 
 // 静态数据作为备选方案
 const backupExamData = [
+    //{ name: "大风机关", totalScore: 573, chinese: 105, math: 130, english: 110, physics: 65, chemistry: 81, biology: 82 },
+    {
+        exam: '2026年5月高三全真模拟',
+        date: '2026-05-29',
+        scores: {
+            total: 573,
+            chinese: 105,
+            math: 130,
+            english: 110,
+            physics: 65,
+            chemistry: 81,
+            biology: 82
+        }
+    },
     {
         exam: '2026年5月学情检测',
         date: '2026-05-06',
